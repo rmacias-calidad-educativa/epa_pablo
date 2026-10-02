@@ -1,0 +1,102 @@
+Prueba,Sede,Grado_num,competencia,Estudiantes,Promedio_dimension
+Matemáticas,COT,8,Razonamiento,31,65.59139784946237
+Matemáticas,COT,8,Resolución de problemas,31,55.24193548387097
+Matemáticas,COT,9,Comunicación,37,66.21621621621621
+Matemáticas,COT,9,Razonamiento,37,66.21621621621621
+Matemáticas,COT,9,Resolución de problemas,37,76.35135135135135
+Matemáticas,COT,10,Argumentación,22,36.36363636363637
+Matemáticas,COT,10,Formulación y ejecución,22,41.47727272727273
+Matemáticas,COT,10,Interpretación y representación,22,45.454545454545446
+Matemáticas,MOS,3,Comunicación,95,62.63157894736842
+Matemáticas,MOS,3,Razonamiento,95,53.1578947368421
+Matemáticas,MOS,3,Resolución de problemas,95,55.473684210526315
+Matemáticas,MOS,4,Comunicación,97,56.529209621993125
+Matemáticas,MOS,4,Razonamiento,97,55.84192439862542
+Matemáticas,MOS,4,Resolución de problemas,97,46.00515463917526
+Matemáticas,MOS,5,Comunicación,93,37.096774193548384
+Matemáticas,MOS,5,Razonamiento,94,60.16548463356974
+Matemáticas,MOS,5,Resolución de problemas,94,41.641337386018236
+Matemáticas,MOS,6,Comunicación,110,60.45454545454545
+Matemáticas,MOS,6,Razonamiento,110,75.45454545454545
+Matemáticas,MOS,6,Resolución de problemas,111,55.18018018018018
+Matemáticas,MOS,7,Comunicación,84,66.49659863945578
+Matemáticas,MOS,7,Razonamiento,84,54.96031746031746
+Matemáticas,MOS,7,Resolución de problemas,84,57.142857142857146
+Matemáticas,MOS,8,Comunicación,80,56.666666666666664
+Matemáticas,MOS,8,Razonamiento,80,70.83333333333334
+Matemáticas,MOS,8,Resolución de problemas,80,57.03125
+Matemáticas,MOS,9,Comunicación,65,58.97435897435897
+Matemáticas,MOS,9,Razonamiento,65,65.12820512820512
+Matemáticas,MOS,9,Resolución de problemas,65,74.61538461538461
+Matemáticas,MOS,10,Argumentación,50,48.0
+Matemáticas,MOS,10,Formulación y ejecución,50,37.75
+Matemáticas,MOS,10,Interpretación y representación,50,46.285714285714285
+Matemáticas,MOS,11,Argumentación,51,63.529411764705884
+Matemáticas,MOS,11,Formulación y ejecución,51,40.44117647058823
+Matemáticas,MOS,11,Interpretación y representación,51,43.69747899159663
+Matemáticas,TUN,3,Comunicación,28,55.357142857142854
+Matemáticas,TUN,3,Razonamiento,28,50.0
+Matemáticas,TUN,3,Resolución de problemas,28,51.42857142857143
+Matemáticas,TUN,4,Comunicación,18,53.7037037037037
+Matemáticas,TUN,4,Razonamiento,18,56.48148148148148
+Matemáticas,TUN,4,Resolución de problemas,18,44.44444444444444
+Matemáticas,TUN,5,Comunicación,41,50.609756097560975
+Matemáticas,TUN,5,Razonamiento,41,65.58265582655827
+Matemáticas,TUN,5,Resolución de problemas,41,42.857142857142854
+Matemáticas,TUN,6,Comunicación,40,56.666666666666664
+Matemáticas,TUN,6,Razonamiento,40,77.91666666666667
+Matemáticas,TUN,6,Resolución de problemas,40,56.875
+Matemáticas,TUN,7,Comunicación,34,67.6470588235294
+Matemáticas,TUN,7,Razonamiento,34,57.35294117647059
+Matemáticas,TUN,7,Resolución de problemas,34,61.76470588235294
+Matemáticas,TUN,8,Comunicación,40,59.58333333333333
+Matemáticas,TUN,8,Razonamiento,40,69.58333333333334
+Matemáticas,TUN,8,Resolución de problemas,40,60.3125
+Matemáticas,TUN,9,Comunicación,36,61.111111111111114
+Matemáticas,TUN,9,Razonamiento,36,69.44444444444444
+Matemáticas,TUN,9,Resolución de problemas,36,76.04166666666667
+Matemáticas,TUN,10,Argumentación,47,54.04255319148936
+Matemáticas,TUN,10,Formulación y ejecución,47,44.148936170212764
+Matemáticas,TUN,10,Interpretación y representación,47,46.200607902735555
+Matemáticas,USAQ,3,Comunicación,23,57.608695652173914
+Matemáticas,USAQ,3,Razonamiento,22,41.666666666666664
+Matemáticas,USAQ,3,Resolución de problemas,24,44.583333333333336
+Matemáticas,USAQ,4,Comunicación,51,43.464052287581694
+Matemáticas,USAQ,4,Razonamiento,51,50.98039215686274
+Matemáticas,USAQ,4,Resolución de problemas,52,39.90384615384615
+Matemáticas,USAQ,5,Comunicación,40,42.5
+Matemáticas,USAQ,5,Razonamiento,40,55.0
+Matemáticas,USAQ,5,Resolución de problemas,39,44.688644688644686
+Matemáticas,USAQ,6,Comunicación,60,60.833333333333336
+Matemáticas,USAQ,6,Razonamiento,60,74.44444444444444
+Matemáticas,USAQ,6,Resolución de problemas,60,50.625
+Matemáticas,USAQ,7,Comunicación,54,63.49206349206349
+Matemáticas,USAQ,7,Razonamiento,54,51.5432098765432
+Matemáticas,USAQ,7,Resolución de problemas,54,53.43915343915344
+Matemáticas,USAQ,8,Comunicación,62,44.08602150537634
+Matemáticas,USAQ,8,Razonamiento,62,58.33333333333333
+Matemáticas,USAQ,8,Resolución de problemas,62,55.04032258064516
+Matemáticas,ZIPA,3,Comunicación,54,59.25925925925926
+Matemáticas,ZIPA,3,Razonamiento,54,43.51851851851852
+Matemáticas,ZIPA,3,Resolución de problemas,54,52.407407407407405
+Matemáticas,ZIPA,4,Comunicación,53,50.0
+Matemáticas,ZIPA,4,Razonamiento,53,52.83018867924528
+Matemáticas,ZIPA,4,Resolución de problemas,53,44.81132075471698
+Matemáticas,ZIPA,5,Comunicación,68,43.75
+Matemáticas,ZIPA,5,Razonamiento,68,65.359477124183
+Matemáticas,ZIPA,5,Resolución de problemas,68,43.27731092436974
+Matemáticas,ZIPA,6,Comunicación,73,51.36986301369863
+Matemáticas,ZIPA,6,Razonamiento,73,65.75342465753425
+Matemáticas,ZIPA,6,Resolución de problemas,73,46.57534246575342
+Matemáticas,ZIPA,7,Comunicación,65,69.45054945054945
+Matemáticas,ZIPA,7,Razonamiento,65,58.2051282051282
+Matemáticas,ZIPA,7,Resolución de problemas,65,61.318681318681314
+Matemáticas,ZIPA,8,Comunicación,72,56.01851851851851
+Matemáticas,ZIPA,8,Razonamiento,72,71.75925925925927
+Matemáticas,ZIPA,8,Resolución de problemas,72,69.44444444444444
+Matemáticas,ZIPA,9,Comunicación,50,66.33333333333333
+Matemáticas,ZIPA,9,Razonamiento,50,68.0
+Matemáticas,ZIPA,9,Resolución de problemas,50,77.0
+Matemáticas,ZIPA,10,Argumentación,36,53.333333333333336
+Matemáticas,ZIPA,10,Formulación y ejecución,36,42.708333333333336
+Matemáticas,ZIPA,10,Interpretación y representación,36,50.79365079365079
