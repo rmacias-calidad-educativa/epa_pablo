@@ -574,7 +574,11 @@ def render_levels_vs_network(
                 zmid=0,
                 zmin=-max_abs,
                 zmax=max_abs,
-                colorscale="RdBu_r",
+                colorscale=[
+                    [0.0, "#C93C3C"],
+                    [0.5, "#F7F7F7"],
+                    [1.0, "#2E8B57"],
+                ],
                 text=labels.values,
                 texttemplate="%{text}",
                 hovertemplate=(
@@ -585,7 +589,7 @@ def render_levels_vs_network(
             )
         )
         fig.update_layout(
-            title="Diferencia de cada sede frente a la RED",
+            title="Contraste frente a la RED · rojo = por debajo · verde = por encima",
             height=max(360, 55 * len(delta.index) + 140),
             margin=dict(l=18, r=18, t=65, b=25),
         )
