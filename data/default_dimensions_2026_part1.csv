@@ -1,0 +1,111 @@
+Prueba,Sede,Grado_num,competencia,Estudiantes,Promedio_dimension
+Ciencias naturales,BAQ,6,Conocimiento científico,13,55.128205128205124
+Ciencias naturales,BAQ,6,Explicación de fenómenos,14,47.32142857142857
+Ciencias naturales,BAQ,6,Indagación,14,42.857142857142854
+Ciencias naturales,BAQ,7,Conocimiento científico,50,68.33333333333333
+Ciencias naturales,BAQ,7,Explicación de fenómenos,50,58.857142857142854
+Ciencias naturales,BAQ,7,Indagación,50,63.714285714285715
+Ciencias naturales,BAQ,8,Conocimiento científico,56,67.26190476190476
+Ciencias naturales,BAQ,8,Explicación de fenómenos,56,63.61607142857143
+Ciencias naturales,BAQ,8,Indagación,56,50.765306122448976
+Ciencias naturales,COT,5,Conocimiento científico,37,63.7065637065637
+Ciencias naturales,COT,5,Explicación de fenómenos,37,58.55855855855855
+Ciencias naturales,COT,5,Indagación,37,57.14285714285714
+Ciencias naturales,COT,6,Conocimiento científico,32,64.0625
+Ciencias naturales,COT,6,Explicación de fenómenos,32,65.625
+Ciencias naturales,COT,6,Indagación,32,62.94642857142857
+Ciencias naturales,COT,7,Conocimiento científico,35,68.0952380952381
+Ciencias naturales,COT,7,Explicación de fenómenos,35,53.06122448979592
+Ciencias naturales,COT,7,Indagación,35,60.0
+Ciencias naturales,COT,8,Conocimiento científico,31,72.58064516129032
+Ciencias naturales,COT,8,Explicación de fenómenos,31,65.3225806451613
+Ciencias naturales,COT,8,Indagación,31,47.004608294930875
+Ciencias naturales,COT,9,Conocimiento científico,37,42.084942084942085
+Ciencias naturales,COT,9,Explicación de fenómenos,37,59.909909909909906
+Ciencias naturales,COT,9,Indagación,37,65.63706563706563
+Ciencias naturales,COT,10,Conocimiento científico,22,56.060606060606055
+Ciencias naturales,COT,10,Explicación de fenómenos,22,64.93506493506493
+Ciencias naturales,COT,10,Indagación,22,72.72727272727273
+Ciencias naturales,MOS,5,Conocimiento científico,88,53.8961038961039
+Ciencias naturales,MOS,5,Explicación de fenómenos,87,50.383141762452105
+Ciencias naturales,MOS,5,Indagación,88,50.649350649350644
+Ciencias naturales,MOS,6,Conocimiento científico,111,58.85885885885886
+Ciencias naturales,MOS,6,Explicación de fenómenos,111,54.5045045045045
+Ciencias naturales,MOS,6,Indagación,111,53.925353925353924
+Ciencias naturales,MOS,7,Conocimiento científico,72,63.42592592592593
+Ciencias naturales,MOS,7,Explicación de fenómenos,73,55.772994129158505
+Ciencias naturales,MOS,7,Indagación,72,58.92857142857143
+Ciencias naturales,MOS,8,Conocimiento científico,80,72.91666666666666
+Ciencias naturales,MOS,8,Explicación de fenómenos,80,67.5
+Ciencias naturales,MOS,8,Indagación,80,53.75
+Ciencias naturales,MOS,9,Conocimiento científico,66,49.56709956709956
+Ciencias naturales,MOS,9,Explicación de fenómenos,66,56.31313131313131
+Ciencias naturales,MOS,9,Indagación,66,64.06926406926407
+Ciencias naturales,MOS,10,Conocimiento científico,51,50.98039215686274
+Ciencias naturales,MOS,10,Explicación de fenómenos,51,53.501400560224084
+Ciencias naturales,MOS,10,Indagación,51,55.18207282913165
+Ciencias naturales,MOS,11,Conocimiento científico,50,46.66666666666666
+Ciencias naturales,MOS,11,Explicación de fenómenos,50,50.0
+Ciencias naturales,MOS,11,Indagación,50,62.75
+Ciencias naturales,TUN,5,Conocimiento científico,41,62.717770034843205
+Ciencias naturales,TUN,5,Explicación de fenómenos,41,57.72357723577235
+Ciencias naturales,TUN,5,Indagación,41,57.14285714285714
+Ciencias naturales,TUN,6,Conocimiento científico,38,67.54385964912281
+Ciencias naturales,TUN,6,Explicación de fenómenos,38,60.526315789473685
+Ciencias naturales,TUN,6,Indagación,38,61.2781954887218
+Ciencias naturales,TUN,7,Conocimiento científico,33,68.18181818181819
+Ciencias naturales,TUN,7,Explicación de fenómenos,33,58.441558441558435
+Ciencias naturales,TUN,7,Indagación,33,76.19047619047619
+Ciencias naturales,TUN,8,Conocimiento científico,41,73.98373983739837
+Ciencias naturales,TUN,8,Explicación de fenómenos,41,66.46341463414635
+Ciencias naturales,TUN,8,Indagación,41,52.61324041811846
+Ciencias naturales,TUN,9,Conocimiento científico,36,50.39682539682539
+Ciencias naturales,TUN,9,Explicación de fenómenos,36,58.333333333333336
+Ciencias naturales,TUN,9,Indagación,36,67.85714285714285
+Ciencias naturales,TUN,10,Conocimiento científico,44,62.121212121212125
+Ciencias naturales,TUN,10,Explicación de fenómenos,44,69.15584415584415
+Ciencias naturales,TUN,10,Indagación,44,77.92207792207792
+Ciencias naturales,USAQ,5,Conocimiento científico,41,63.066202090592334
+Ciencias naturales,USAQ,5,Explicación de fenómenos,41,53.65853658536585
+Ciencias naturales,USAQ,5,Indagación,41,53.65853658536585
+Ciencias naturales,USAQ,6,Conocimiento científico,29,53.44827586206897
+Ciencias naturales,USAQ,6,Explicación de fenómenos,29,56.89655172413793
+Ciencias naturales,USAQ,6,Indagación,29,55.172413793103445
+Ciencias naturales,USAQ,7,Conocimiento científico,51,64.37908496732027
+Ciencias naturales,USAQ,7,Explicación de fenómenos,51,56.582633053221286
+Ciencias naturales,USAQ,7,Indagación,51,57.98319327731092
+Ciencias naturales,USAQ,8,Conocimiento científico,59,56.497175141242934
+Ciencias naturales,USAQ,8,Explicación de fenómenos,56,54.24107142857143
+Ciencias naturales,USAQ,8,Indagación,57,41.854636591478695
+Ciencias naturales,ZIPA,5,Conocimiento científico,67,58.84861407249467
+Ciencias naturales,ZIPA,5,Explicación de fenómenos,67,52.985074626865675
+Ciencias naturales,ZIPA,5,Indagación,67,54.79744136460554
+Ciencias naturales,ZIPA,6,Conocimiento científico,74,52.702702702702695
+Ciencias naturales,ZIPA,6,Explicación de fenómenos,74,50.50675675675676
+Ciencias naturales,ZIPA,6,Indagación,74,47.2972972972973
+Ciencias naturales,ZIPA,7,Conocimiento científico,65,71.7948717948718
+Ciencias naturales,ZIPA,7,Explicación de fenómenos,65,65.27472527472528
+Ciencias naturales,ZIPA,7,Indagación,65,67.9120879120879
+Ciencias naturales,ZIPA,8,Conocimiento científico,74,79.05405405405405
+Ciencias naturales,ZIPA,8,Explicación de fenómenos,74,76.6891891891892
+Ciencias naturales,ZIPA,8,Indagación,74,58.68725868725869
+Ciencias naturales,ZIPA,9,Conocimiento científico,48,66.96428571428571
+Ciencias naturales,ZIPA,9,Explicación de fenómenos,48,66.31944444444444
+Ciencias naturales,ZIPA,9,Indagación,48,74.70238095238095
+Ciencias naturales,ZIPA,10,Conocimiento científico,35,59.047619047619044
+Ciencias naturales,ZIPA,10,Explicación de fenómenos,35,71.0204081632653
+Ciencias naturales,ZIPA,10,Indagación,35,72.65306122448979
+Ciencias sociales,BAQ,6,Argumentación en contextos ciudadanos,10,57.5
+Ciencias sociales,BAQ,6,Conocimientos,10,66.0
+Ciencias sociales,BAQ,6,Multiperspectivismo,10,48.33333333333333
+Ciencias sociales,BAQ,6,pensamiento sistémico,10,52.0
+Ciencias sociales,BAQ,7,Argumentación en contextos ciudadanos,50,66.5
+Ciencias sociales,BAQ,7,Conocimientos,50,59.33333333333333
+Ciencias sociales,BAQ,7,Multiperspectivismo,49,62.44897959183673
+Ciencias sociales,BAQ,7,pensamiento sistémico,50,71.6
+Ciencias sociales,BAQ,8,Argumentación en contextos ciudadanos,56,51.78571428571428
+Ciencias sociales,BAQ,8,Conocimientos,56,60.714285714285715
+Ciencias sociales,BAQ,8,Multiperspectivismo,56,50.357142857142854
+Ciencias sociales,BAQ,8,pensamiento sistémico,56,47.02380952380952
+Ciencias sociales,COT,5,Argumentación en contextos ciudadanos,39,46.153846153846146
+Ciencias sociales,COT,5,Conocimientos,39,56.41025641025641
