@@ -1,0 +1,815 @@
+Prueba,Sede,Grado_num,Nivel,colegio_de_origen,Estudiantes,Ranking
+Ciencias sociales,BAQ,6,Progreso limitado,COLEGIO SAN JOSE,1,1
+Ciencias sociales,BAQ,6,Emergente,COLEGIO CRECER Y APRENDER,1,1
+Ciencias sociales,BAQ,6,Emergente,COLEGIO DEL SAGRADO CORAZÓN,1,2
+Ciencias sociales,BAQ,6,Emergente,INNOVA SCHOOLS PORTAL DE GENOVÉS,1,3
+Ciencias sociales,BAQ,6,En aceleración,CENTRO DOCENTE NUESTRA SEÑORA DEL BUEN CONSEJO,1,1
+Ciencias sociales,BAQ,6,En aceleración,COLEGIO BIFFI LA SALLE,1,2
+Ciencias sociales,BAQ,6,En aceleración,COLEGIO BOSTON FLEXIBLE,1,3
+Ciencias sociales,BAQ,6,En aceleración,COLEGIO CRECER Y APRENDER,1,4
+Ciencias sociales,BAQ,6,En aceleración,COLEGIO DEL SAGRADO CORAZÓN,1,5
+Ciencias sociales,BAQ,6,Avanzado,COLEGIO COLON,1,1
+Ciencias sociales,BAQ,7,Progreso limitado,COLEGIO AMERICANO DE BARRANQUILLA,2,1
+Ciencias sociales,BAQ,7,Progreso limitado,CENTRO EDUCATIVO SAGRADO CORAZÓN DE JESUS,1,2
+Ciencias sociales,BAQ,7,Progreso limitado,COLEGIO COLON,1,3
+Ciencias sociales,BAQ,7,Progreso limitado,CORPORACION EDUCATIVA COLEGIO ITALIANO GALILEO GALILEI,1,4
+Ciencias sociales,BAQ,7,Progreso limitado,GALILEO ITALIANO,1,5
+Ciencias sociales,BAQ,7,Emergente,COLEGIO LICEO DE CERVANTES,2,1
+Ciencias sociales,BAQ,7,Emergente,CENTRO EDUCATIVO BOSTON INTERNACIONAL,1,2
+Ciencias sociales,BAQ,7,Emergente,CENTRO EDUCATIVO SAGRADO CORAZÓN DE JESUS,1,3
+Ciencias sociales,BAQ,7,Emergente,COLEGIO AMERICANO DE BARRANQUILLA,1,4
+Ciencias sociales,BAQ,7,Emergente,COLEGIO BIFFI LA SALLE,1,5
+Ciencias sociales,BAQ,7,Emergente,COLEGIO COLON,1,6
+Ciencias sociales,BAQ,7,Emergente,COLEGIO GIMNASIO CHRISTOPHORO COLOMBO,1,7
+Ciencias sociales,BAQ,7,Emergente,COLEGIO NUESTRA SEÑORA DE NAZARETH,1,8
+Ciencias sociales,BAQ,7,Emergente,INSTITUTO SAN PEDRO CLAVER,1,9
+Ciencias sociales,BAQ,7,En aceleración,CENTRO EDUCATIVO BOSTON INTERNACIONAL,3,1
+Ciencias sociales,BAQ,7,En aceleración,COLEGIO COLON,2,2
+Ciencias sociales,BAQ,7,En aceleración,COLEGIO DE LA SAGRADA FAMILIA,2,3
+Ciencias sociales,BAQ,7,En aceleración,CENTRO DOCENTE NUESTRA SEÑORA DEL BUEN CONSEJO,1,4
+Ciencias sociales,BAQ,7,En aceleración,COLEGIO BIFFI LA SALLE,1,5
+Ciencias sociales,BAQ,7,En aceleración,COLEGIO DEL SAGRADO CORAZÓN,1,6
+Ciencias sociales,BAQ,7,En aceleración,COLEGIO MIXTO ADONIS,1,7
+Ciencias sociales,BAQ,7,En aceleración,COLEGIO SAN FRANCISCO,1,8
+Ciencias sociales,BAQ,7,En aceleración,INSTITUCIÓN EDUCATIVA DISTRITAL TÉCNICA JESUS MAESTRO,1,9
+Ciencias sociales,BAQ,7,Avanzado,CENTRO EDUCATIVO BOSTON INTERNACIONAL,2,1
+Ciencias sociales,BAQ,7,Avanzado,COLEGIO BIFFI LA SALLE,2,2
+Ciencias sociales,BAQ,7,Avanzado,COLEGIO BOSTON FLEXIBLE,2,3
+Ciencias sociales,BAQ,7,Avanzado,COLEGIO COLON,2,4
+Ciencias sociales,BAQ,7,Avanzado,COLEGIO METROPOLITANO DE SOLEDAD 2000 LTDA,2,5
+Ciencias sociales,BAQ,7,Avanzado,COLEGIO PINAR DEL PRADO,2,6
+Ciencias sociales,BAQ,7,Avanzado,CENTRO DOCENTE NUESTRA SEÑORA DEL BUEN CONSEJO,1,7
+Ciencias sociales,BAQ,7,Avanzado,COLEGIO DEL SAGRADO CORAZÓN,1,8
+Ciencias sociales,BAQ,7,Avanzado,COLEGIO GUILLERMO CAREY,1,9
+Ciencias sociales,BAQ,7,Avanzado,COLEGIO MONTERROSALES BILINGUE,1,10
+Ciencias sociales,BAQ,8,Progreso limitado,CENTRO EDUCATIVO BILINGUE COLEGIO ANGLO AMERICANO,1,1
+Ciencias sociales,BAQ,8,Progreso limitado,COLEGIO AMERICANO DE BARRANQUILLA,1,2
+Ciencias sociales,BAQ,8,Progreso limitado,COLEGIO LYNDON B JOHNSON,1,3
+Ciencias sociales,BAQ,8,Emergente,COLEGIO DEL SAGRADO CORAZÓN,5,1
+Ciencias sociales,BAQ,8,Emergente,CENTRO DOCENTE NUESTRA SEÑORA DEL BUEN CONSEJO,3,2
+Ciencias sociales,BAQ,8,Emergente,COLEGIO AMERICANO DE BARRANQUILLA,3,3
+Ciencias sociales,BAQ,8,Emergente,COLEGIO BOSTON FLEXIBLE,2,4
+Ciencias sociales,BAQ,8,Emergente,COLEGIO SAN FRANCISCO,2,5
+Ciencias sociales,BAQ,8,Emergente,CORPORACION EDUCATIVA COLEGIO ITALIANO GALILEO GALILEI,2,6
+Ciencias sociales,BAQ,8,Emergente,BIFFI LA SALLE,1,7
+Ciencias sociales,BAQ,8,Emergente,CENTRO EDUCATIVO SAGRADO CORAZÓN DE JESUS,1,8
+Ciencias sociales,BAQ,8,Emergente,COLEGIO COLOMBO ESPANOL DE BARRANQUILLA,1,9
+Ciencias sociales,BAQ,8,Emergente,COLEGIO COLON,1,10
+Ciencias sociales,BAQ,8,En aceleración,COLEGIO DEL SAGRADO CORAZÓN,2,1
+Ciencias sociales,BAQ,8,En aceleración,COLEGIO AMERICANO DE BARRANQUILLA,1,2
+Ciencias sociales,BAQ,8,En aceleración,COLEGIO COLOMBO ESPANOL DE BARRANQUILLA,1,3
+Ciencias sociales,BAQ,8,En aceleración,COLEGIO EUCARISTICO DE LA MERCED,1,4
+Ciencias sociales,BAQ,8,En aceleración,COLEGIO LICEO DE CERVANTES,1,5
+Ciencias sociales,BAQ,8,En aceleración,COLEGIO MARIA AUXILIADORA NORTE,1,6
+Ciencias sociales,BAQ,8,En aceleración,COLEGIO MONTERROSALES BILINGUE,1,7
+Ciencias sociales,BAQ,8,En aceleración,COLEGIO SAN FRANCISCO,1,8
+Ciencias sociales,BAQ,8,En aceleración,FUNDACION COLEGIO CRISTIANO EL SALVADOR,1,9
+Ciencias sociales,BAQ,8,En aceleración,GIMNASIO EL PARAÍSO,1,10
+Ciencias sociales,BAQ,8,Avanzado,COLEGIO BIFFI LA SALLE,1,1
+Ciencias sociales,BAQ,8,Avanzado,COLEGIO BOSTON FLEXIBLE,1,2
+Ciencias sociales,BAQ,8,Avanzado,COLEGIO DE LA SAGRADA FAMILIA,1,3
+Ciencias sociales,BAQ,8,Avanzado,COLEGIO DEL SAGRADO CORAZÓN CALLE 74,1,4
+Ciencias sociales,BAQ,8,Avanzado,COLEGIO RETOS,1,5
+Ciencias sociales,BAQ,8,Avanzado,COLEGIO SAN FRANCISCO,1,6
+Ciencias sociales,BAQ,8,Avanzado,COLEGIO SAN JOSE HERMANITAS DE LA ANUNCIACIÓN,1,7
+Ciencias sociales,BAQ,8,Avanzado,ESCUELA TALLER SOPHIA,1,8
+Ciencias sociales,BAQ,8,Avanzado,INSTITUCIÓN EDUCATIVA JORGE NICOLAS ABELLO,1,9
+Ciencias sociales,COT,5,Progreso limitado,GEORGE WASHINGTON CAMPESTRE,1,1
+Ciencias sociales,COT,5,Progreso limitado,GIMNASIO ACADÉMICO CERVANTES,1,2
+Ciencias sociales,COT,5,Progreso limitado,LICEO CAMPESTRE MONTPELLIER,1,3
+Ciencias sociales,COT,5,Emergente,COLEGIO MAYOR DE INGLATERRA,2,1
+Ciencias sociales,COT,5,Emergente,COLEGIO AGUSTÍN NIETO CABALLERO,1,2
+Ciencias sociales,COT,5,Emergente,COLEGIO CAMPESTRE PRINCIPADO DE MONACO,1,3
+Ciencias sociales,COT,5,Emergente,COLEGIO EL DIVINO NIÑO,1,4
+Ciencias sociales,COT,5,Emergente,COLEGIO GIMNASIO REINO DE CASTILLA,1,5
+Ciencias sociales,COT,5,Emergente,COLEGIO NUESTRA SEÑORA DEL ROSARIO CAMPESTRE,1,6
+Ciencias sociales,COT,5,Emergente,FERVAN CAMPESTRE,1,7
+Ciencias sociales,COT,5,Emergente,GIMNASIO ARRAYANES BILINGUE,1,8
+Ciencias sociales,COT,5,Emergente,GIMNASIO CAMPESTRE OXFORD,1,9
+Ciencias sociales,COT,5,Emergente,GIMNASIO CAMPESTRE SAN FRANCISCO DE SALES,1,10
+Ciencias sociales,COT,5,En aceleración,CELESTIN FREINET TRILINGUE,1,1
+Ciencias sociales,COT,5,En aceleración,CENTRO EDUCATIVO SCALAS,1,2
+Ciencias sociales,COT,5,En aceleración,COLEGIO AGUSTÍN NIETO CABALLERO,1,3
+Ciencias sociales,COT,5,En aceleración,COLEGIO BILINGUE LERNER Y KLEIN,1,4
+Ciencias sociales,COT,5,En aceleración,COLEGIO CAMPESTRE SAN CARLOS DE COTA,1,5
+Ciencias sociales,COT,5,En aceleración,COLEGIO FONTAN CAPITAL,1,6
+Ciencias sociales,COT,5,En aceleración,COLEGIO GIMNASIO LOS ALAMOS,1,7
+Ciencias sociales,COT,5,En aceleración,COLEGIO MONTERROSALES BILINGUE,1,8
+Ciencias sociales,COT,5,En aceleración,GIMNASIO CAMPESTRE OXFORD,1,9
+Ciencias sociales,COT,5,En aceleración,LICEO CAMPESTRE THOMAS DE IRIARTE,1,10
+Ciencias sociales,COT,5,Avanzado,GIMNASIO LOS ARRAYANES BILINGUE,1,1
+Ciencias sociales,COT,5,Avanzado,LICEO SAN BASILIO MAGNO,1,2
+Ciencias sociales,COT,6,Emergente,COLEGIO REFOUS,1,1
+Ciencias sociales,COT,6,Emergente,GIMNASIO MODERNO GENERACION DEL FUTURO,1,2
+Ciencias sociales,COT,6,Emergente,LICEO DE LOS ANDES,1,3
+Ciencias sociales,COT,6,Emergente,LICEO EDAD DE ORO,1,4
+Ciencias sociales,COT,6,En aceleración,ABEKA ACADEMY,1,1
+Ciencias sociales,COT,6,En aceleración,COLEGIO AMERICANO DE BOGOTÁ,1,2
+Ciencias sociales,COT,6,En aceleración,COLEGIO CANAPRO,1,3
+Ciencias sociales,COT,6,En aceleración,COLEGIO COLSUBSIDIO CIUDADELA,1,4
+Ciencias sociales,COT,6,En aceleración,COLEGIO ITEC,1,5
+Ciencias sociales,COT,6,En aceleración,GIMNASIO CAMPESTRE OXFORD,1,6
+Ciencias sociales,COT,6,En aceleración,GIMNASIO CRISTIANO DE CUNDINAMARCA,1,7
+Ciencias sociales,COT,6,En aceleración,GIMNASIO KAIPORÉ CENTRO DE DESARROLLO TEMPRANO,1,8
+Ciencias sociales,COT,6,En aceleración,GIMNASIO WILLIAM MACKINLEY,1,9
+Ciencias sociales,COT,6,En aceleración,GP CREATIVE BILINGUAL SCHOOL GIMNASIO PSICOPEDAGICO,1,10
+Ciencias sociales,COT,6,Avanzado,CELESTIN FREINET SEDE NORTE,1,1
+Ciencias sociales,COT,6,Avanzado,CENTRO EDUCATIVO LOMBARDIA,1,2
+Ciencias sociales,COT,6,Avanzado,COLEGIO AGUSTÍNIANO SUBA,1,3
+Ciencias sociales,COT,6,Avanzado,COLEGIO PROVINMA,1,4
+Ciencias sociales,COT,6,Avanzado,CONCENTRACIÓN URBANA CAMILO TORRES,1,5
+Ciencias sociales,COT,6,Avanzado,GIMNASIO CAMPESTRE SAN FRANCISCO DE SALES,1,6
+Ciencias sociales,COT,6,Avanzado,GIMNASIO LAS PALMAS,1,7
+Ciencias sociales,COT,6,Avanzado,GIMNASIO WILLIAM MACKINLEY,1,8
+Ciencias sociales,COT,6,Avanzado,LICEO CAMPESTRE MONTPELLIER,1,9
+Ciencias sociales,COT,6,Avanzado,LICEO DE COLOMBIA BILINGUE,1,10
+Ciencias sociales,COT,7,Progreso limitado,COLEGIO LUIS MARIANO,1,1
+Ciencias sociales,COT,7,Progreso limitado,LICEO CAMPESTRE THOMAS DE IRIARTE,1,2
+Ciencias sociales,COT,7,Emergente,COLEGIO CAMPESTRE PRINCIPADO DE MONACO,1,1
+Ciencias sociales,COT,7,Emergente,GIMNASIO CAMPESTRE LOS ALISOS,1,2
+Ciencias sociales,COT,7,Emergente,INSTITUCIÓN EDUCATIVA DEPARTAMENTAL ENRIQUE PARDO P,1,3
+Ciencias sociales,COT,7,Emergente,SUMMERHILSCHOOL,1,4
+Ciencias sociales,COT,7,En aceleración,COLEGIO BILINGÜE SAN JUAN DE ÁVILA,1,1
+Ciencias sociales,COT,7,En aceleración,COLEGIO MARIA AUXILIADORA CHIA,1,2
+Ciencias sociales,COT,7,En aceleración,COLEGIO MONTEMOREL,1,3
+Ciencias sociales,COT,7,En aceleración,COLEGIO REFOUS,1,4
+Ciencias sociales,COT,7,En aceleración,GIMNASIO HONTANAR,1,5
+Ciencias sociales,COT,7,En aceleración,LICEO CAMPESTRE THOMAS DE IRIARTE,1,6
+Ciencias sociales,COT,7,En aceleración,ULCA,1,7
+Ciencias sociales,COT,7,Avanzado,COLEGIO PSICOPEDAGÓGICO CAMPESTRE,2,1
+Ciencias sociales,COT,7,Avanzado,LICEO CAMPESTRE THOMAS DE IRIARTE,2,2
+Ciencias sociales,COT,7,Avanzado,CELESTIN FREINET SEDE TRILINGUE,1,3
+Ciencias sociales,COT,7,Avanzado,CENTRO EDUCATIVO SCALAS,1,4
+Ciencias sociales,COT,7,Avanzado,COLEGIO BILINGÜE EL BOSQUE,1,5
+Ciencias sociales,COT,7,Avanzado,COLEGIO CAMPESTRE MONTECERVINO,1,6
+Ciencias sociales,COT,7,Avanzado,COLEGIO MARIA AUXILIADORA CHIA,1,7
+Ciencias sociales,COT,7,Avanzado,COLEGIO MONTEMOREL,1,8
+Ciencias sociales,COT,7,Avanzado,COLEGIO NUESTRA SEÑORA DEL ROSARIO CAMPESTRE,1,9
+Ciencias sociales,COT,7,Avanzado,COLEGIO NUEVA YORK,1,10
+Ciencias sociales,COT,8,Progreso limitado,LICEO CAMPESTRE THOMAS DE IRIARTE,2,1
+Ciencias sociales,COT,8,Emergente,CELESTIN FREINET SEDE NORTE COTA,1,1
+Ciencias sociales,COT,8,Emergente,COLEGIO MARÍA INMACULADA SCHOLL,1,2
+Ciencias sociales,COT,8,Emergente,COLEGIO MONTEMOREL,1,3
+Ciencias sociales,COT,8,Emergente,GIMNASIO CAMPESTRE VALSENALES,1,4
+Ciencias sociales,COT,8,Emergente,INSTITUCIÓN EDUCATIVA DEPARTAMENTAL ENRIQUE PARDO PARRA,1,5
+Ciencias sociales,COT,8,En aceleración,COLEGIO AUSTRALIANO CAMPESTRE,1,1
+Ciencias sociales,COT,8,En aceleración,COLEGIO BILINGÜE MAXIMINO POITIERS,1,2
+Ciencias sociales,COT,8,En aceleración,COLEGIO EL MINUTO DE DIOS,1,3
+Ciencias sociales,COT,8,En aceleración,COLEGIO PIERRE DE FERMAT,1,4
+Ciencias sociales,COT,8,En aceleración,COLEGIO REFOUS,1,5
+Ciencias sociales,COT,8,En aceleración,COLEGIO REOFUS,1,6
+Ciencias sociales,COT,8,En aceleración,COLEGIO SUPERIOR AMERICANO SAS,1,7
+Ciencias sociales,COT,8,En aceleración,ESCUELA PEDAGÓGICA EXPERIMENTAL,1,8
+Ciencias sociales,COT,8,En aceleración,GIMASIO CAMPESTRE ESCALEMOS,1,9
+Ciencias sociales,COT,8,En aceleración,GIMNASIO CAMPESTRE EDUCACIÓN DINÁMICA,1,10
+Ciencias sociales,COT,8,Avanzado,COLEGIO MONTERROSALES CICLOS,2,1
+Ciencias sociales,COT,8,Avanzado,COLEGIO ABRAHAM MASLOW,1,2
+Ciencias sociales,COT,8,Avanzado,COLEGIO REFOUS,1,3
+Ciencias sociales,COT,8,Avanzado,COLEGIO UNICAB VIRTUAL,1,4
+Ciencias sociales,COT,8,Avanzado,CORAZONISTA,1,5
+Ciencias sociales,COT,8,Avanzado,ESCUELA PEDAGOGICA EXPERIMENTAL,1,6
+Ciencias sociales,COT,8,Avanzado,GIMNASIO CRISTIANO JIREH,1,7
+Ciencias sociales,COT,8,Avanzado,GIMNASIO EL SHADAI,1,8
+Ciencias sociales,COT,8,Avanzado,LICEO CAMPESTRE THOMAS DE IRIARTE,1,9
+Ciencias sociales,COT,8,Avanzado,SUMMEHILL SCHOOL,1,10
+Ciencias sociales,COT,9,Progreso limitado,COLEGIO CAMPESTRE MAYOR DE INGLATERRA,1,1
+Ciencias sociales,COT,9,Emergente,COLEGIO BILINGUE JOSE MAX LEON,1,1
+Ciencias sociales,COT,9,Emergente,COLEGIO NUESTRA SEÑORA DE NAZARETH,1,2
+Ciencias sociales,COT,9,Emergente,COLEGIO NUESTRA SEÑORA DEL ROSARIO CAMPESTRE,1,3
+Ciencias sociales,COT,9,Emergente,FORTALEZA CEIF WILLIAM MACKINLEY,1,4
+Ciencias sociales,COT,9,Emergente,GIMNACIO CAMPESTRE SAN FRANCISCO DE SALES,1,5
+Ciencias sociales,COT,9,Emergente,GIMNASIO CAMPESTRE SAN FRANCISCO DE SALES,1,6
+Ciencias sociales,COT,9,Emergente,NUEVA YORK,1,7
+Ciencias sociales,COT,9,Emergente,PROYECTO EDUCATIVO FORTALEZA CEIF,1,8
+Ciencias sociales,COT,9,En aceleración,LICEO CAMPESTRE THOMAS DE IRIARTE,2,1
+Ciencias sociales,COT,9,En aceleración,SUMMERHILL SCHOOL,2,2
+Ciencias sociales,COT,9,En aceleración,"ABEKA HOMESCHOOL ( PENSACOLA - FLORIDA, ESTADOS UN",1,3
+Ciencias sociales,COT,9,En aceleración,COLEGIO BILINGUE JOSE MAX LEON,1,4
+Ciencias sociales,COT,9,En aceleración,COLEGIO CAMPESTRE SAN CARLOS DE COTA,1,5
+Ciencias sociales,COT,9,En aceleración,COLEGIO EUCARÍSTICO VILLA GUADALUPE,1,6
+Ciencias sociales,COT,9,En aceleración,COLEGIO MAYOR JOSE CELESTINO MUTIS,1,7
+Ciencias sociales,COT,9,En aceleración,GIMNASIO EL HONTANAR,1,8
+Ciencias sociales,COT,9,En aceleración,LICEO JUAN RAMÓN JIMÉNEZ,1,9
+Ciencias sociales,COT,9,En aceleración,SUMMEHILL SCHOOL,1,10
+Ciencias sociales,COT,9,Avanzado,COLEGIO AGUSTINIANO CIUDAD SALITRE,1,1
+Ciencias sociales,COT,9,Avanzado,COLEGIO CAMPESTRE MONTECERVINO,1,2
+Ciencias sociales,COT,9,Avanzado,COLEGIO EL MINUTO DE DIOS,1,3
+Ciencias sociales,COT,9,Avanzado,COLEGIO MAYOR JOSÉ CELESTINO MUTIS,1,4
+Ciencias sociales,COT,9,Avanzado,COLEGIO NUESTRA SEÑORA DEL ROSARIO CAMPESTRE,1,5
+Ciencias sociales,COT,9,Avanzado,GIMNASIO CAMPESTRE OXFORD,1,6
+Ciencias sociales,COT,9,Avanzado,GIMNASIO CANTABRIA,1,7
+Ciencias sociales,COT,9,Avanzado,GIMNASIO SAN ANGELO,1,8
+Ciencias sociales,COT,9,Avanzado,GIMNASIO SAN FRANCISCO DE SALES,1,9
+Ciencias sociales,COT,9,Avanzado,LICEO DEL CARIBE,1,10
+Ciencias sociales,COT,10,Emergente,AUSTRALIANO CAMPESTRE BILINGUE,1,1
+Ciencias sociales,COT,10,Emergente,COLEGIO CANAPRO,1,2
+Ciencias sociales,COT,10,Emergente,GIMNASIO CAMPESTRE LOS SAUCES,1,3
+Ciencias sociales,COT,10,Emergente,MINUTO DE DIOS SIGLO XXI,1,4
+Ciencias sociales,COT,10,En aceleración,LICEO DE LOS ANDES,3,1
+Ciencias sociales,COT,10,En aceleración,GIMNASIO CAMPESTRE OXFORD,2,2
+Ciencias sociales,COT,10,En aceleración,LICEO CAMPESTRE THOMAS DE IRIARTE,2,3
+Ciencias sociales,COT,10,En aceleración,COLEGIO ABRAHAM MASLOW,1,4
+Ciencias sociales,COT,10,En aceleración,COLEGIO PADRE MANYANET CHIA,1,5
+Ciencias sociales,COT,10,En aceleración,COLEGIO REFOUS,1,6
+Ciencias sociales,COT,10,En aceleración,MONTEHELENA BILINGUAL SCHOOL,1,7
+Ciencias sociales,COT,10,En aceleración,ULCA,1,8
+Ciencias sociales,COT,10,Avanzado,COLEGIO NUESTRA SEÑORA DEL ROSARIO CAMPESTRE,1,1
+Ciencias sociales,COT,10,Avanzado,COLEGIO SUPERIOR AMERICANO,1,2
+Ciencias sociales,COT,10,Avanzado,GIMNASIO LOS ANGELES,1,3
+Ciencias sociales,COT,10,Avanzado,GIMNASIO LOS ARRAYANES,1,4
+Ciencias sociales,COT,10,Avanzado,SOCIEDAD EDUCATIVA LICEO DE LOS ANDES,1,5
+Ciencias sociales,COT,10,Avanzado,SUMERHILL SCHOOL,1,6
+Ciencias sociales,MOS,5,Progreso limitado,ANTONIO VAN UDEN,1,1
+Ciencias sociales,MOS,5,Progreso limitado,COLEGIO BILINGÜE PIO XII CAMPESTRE,1,2
+Ciencias sociales,MOS,5,Progreso limitado,COLEGIO MAYOR DE SAN BARTOLOME,1,3
+Ciencias sociales,MOS,5,Progreso limitado,FUNDACIÓN GINMASION LOS SAUCES,1,4
+Ciencias sociales,MOS,5,Progreso limitado,GIMNASIO CAMPESTRE LOS SAUCES,1,5
+Ciencias sociales,MOS,5,Progreso limitado,IDIM,1,6
+Ciencias sociales,MOS,5,Progreso limitado,INNOVA SCHOOLS,1,7
+Ciencias sociales,MOS,5,Progreso limitado,INSTITUTO PEDAGOGICO NACIONAL,1,8
+Ciencias sociales,MOS,5,Progreso limitado,LICEO SEGOVIA,1,9
+Ciencias sociales,MOS,5,Emergente,COLEGIO PEDAGÓGICO INGLES,1,1
+Ciencias sociales,MOS,5,Emergente,COLEGIO SUPERIOR AMERICANO,1,2
+Ciencias sociales,MOS,5,Emergente,COLEGIO TECNOLOGICO DE SUBA,1,3
+Ciencias sociales,MOS,5,Emergente,GIMNASIO GREEN HILLS,1,4
+Ciencias sociales,MOS,5,Emergente,INNOVA SCHOOLS,1,5
+Ciencias sociales,MOS,5,Emergente,INSTITUCIÓN EDUCATIVA GENERAL ENRIQUE CAICEDO,1,6
+Ciencias sociales,MOS,5,Emergente,LICEO CAMPESTRE EL BOSQUE,1,7
+Ciencias sociales,MOS,5,En aceleración,COLEGIO GIMNASIO CAMBRIDGE,1,1
+Ciencias sociales,MOS,6,Progreso limitado,COLEGIO CIUDAD PATIO BONITO,1,1
+Ciencias sociales,MOS,6,Progreso limitado,COLEGIO DE LA UNIVERSIDAD LIBRE,1,2
+Ciencias sociales,MOS,6,Progreso limitado,GIMNASIO BRITANICO SAS,1,3
+Ciencias sociales,MOS,6,Progreso limitado,INNOVA SCHOOLS,1,4
+Ciencias sociales,MOS,6,Progreso limitado,INSTITUCIÓN EDUCATIVA LA PRIMAVERA,1,5
+Ciencias sociales,MOS,6,Progreso limitado,INSTITUTO DIVERSIFICADO ALBERT EINSTEIN,1,6
+Ciencias sociales,MOS,6,Progreso limitado,LICEO CAMPESTRE SIGLO XXI,1,7
+Ciencias sociales,MOS,6,Emergente,INNOVA SCHOOLS,2,1
+Ciencias sociales,MOS,6,Emergente,CENTRO LESTONNAC COMPAÑIA DE MARIA,1,2
+Ciencias sociales,MOS,6,Emergente,COLEGIO BILINGÜE LERNER & KLEIN,1,3
+Ciencias sociales,MOS,6,Emergente,COLEGIO MONTE ROSALES,1,4
+Ciencias sociales,MOS,6,Emergente,COLEGIO NUESTRA SEÑORA DE NAZARETH,1,5
+Ciencias sociales,MOS,6,Emergente,COLEGIO NUESTRA SEÑORA DEL ROSARIO FUNZA,1,6
+Ciencias sociales,MOS,6,Emergente,COLEGIO PEDAGÓGICO INGLES,1,7
+Ciencias sociales,MOS,6,Emergente,GIMNASIO BILINGÜE CAMPESTRE MARIE CURIE,1,8
+Ciencias sociales,MOS,6,Emergente,GIMNASIO FORMADORES DE EXCELENCIA EMPRENDIMIENTO Y LIDERAZGO FEEL,1,9
+Ciencias sociales,MOS,6,Emergente,GIMNASIO PEDAGÓGICO NOVA ESTRELLA,1,10
+Ciencias sociales,MOS,6,En aceleración,COLEGIO BILINGUE CIUDAD MONTES,1,1
+Ciencias sociales,MOS,6,En aceleración,COLEGIO COLOMBO INGLES DEL HUILA Y CIA LTDA,1,2
+Ciencias sociales,MOS,6,En aceleración,COLEGIO INGLES NUEVA INGLATERRA,1,3
+Ciencias sociales,MOS,6,En aceleración,GIMNASIO CONTEMPORANEO MOTESSORI,1,4
+Ciencias sociales,MOS,6,En aceleración,GIMNASIO FEEL,1,5
+Ciencias sociales,MOS,6,En aceleración,INNOVA SCHOOLS,1,6
+Ciencias sociales,MOS,6,En aceleración,INST. EDU. DEPTAL. MARÍA TERESA ORTÍZ,1,7
+Ciencias sociales,MOS,6,En aceleración,INSTITUTO DIVERSIFICADO ALBERT EINSTEIN,1,8
+Ciencias sociales,MOS,6,En aceleración,LERNER KLEIN,1,9
+Ciencias sociales,MOS,6,En aceleración,LICEO CAMPESTRE EL NOGAL,1,10
+Ciencias sociales,MOS,6,Avanzado,COLEGIO NAVAL,1,1
+Ciencias sociales,MOS,6,Avanzado,COLEGIO SANTA LUISA,1,2
+Ciencias sociales,MOS,6,Avanzado,GIMNASIO FORMADORES DE EXCELENCIA EMPRENDIMIENTO Y LIDERAZGO FEEL,1,3
+Ciencias sociales,MOS,6,Avanzado,GIMNASIO NUEVO MODELIA,1,4
+Ciencias sociales,MOS,6,Avanzado,INSTITUCIÓN EDUCATIVA NOGALES COUNTRY SCHOOL,1,5
+Ciencias sociales,MOS,6,Avanzado,INSTITUTO DIVERSIFICADO ALBERT EINSTEIN -SAET LTDA,1,6
+Ciencias sociales,MOS,6,Avanzado,LICEO MODERNO IMCREA,1,7
+Ciencias sociales,MOS,6,Avanzado,LICEO PESTALOZZIANO,1,8
+Ciencias sociales,MOS,7,Progreso limitado,COLEGIO MONTERROSALES CICLOS,1,1
+Ciencias sociales,MOS,7,Progreso limitado,INSTITUTO DIVERSIFICADO ALBERT EINSTEIN- SAET LTDA,1,2
+Ciencias sociales,MOS,7,Progreso limitado,LICEO CAMPESTRE NUEVO PACTO,1,3
+Ciencias sociales,MOS,7,Progreso limitado,LICEO LAS BRISAS,1,4
+Ciencias sociales,MOS,7,Progreso limitado,LICEO MAYOR ANDINO,1,5
+Ciencias sociales,MOS,7,Emergente,COLEGIO CAFAM,1,1
+Ciencias sociales,MOS,7,Emergente,COLEGIO DISTRITAL SAN JOSE DE CASTILLA,1,2
+Ciencias sociales,MOS,7,Emergente,COLEGIO MIXTO DE INTEGRACIÓN MODERNA,1,3
+Ciencias sociales,MOS,7,Emergente,COLEGIO SANTA ANA DE FONTIBON SAS,1,4
+Ciencias sociales,MOS,7,Emergente,COLEGIO TERESITA DE LISEUX,1,5
+Ciencias sociales,MOS,7,Emergente,GIMNASIO REAL DE LA SABANA,1,6
+Ciencias sociales,MOS,7,Emergente,INNOVA SCHOOL,1,7
+Ciencias sociales,MOS,7,Emergente,INNOVA SCHOOLS HOME,1,8
+Ciencias sociales,MOS,7,Emergente,INSTITUTO DIVERSIFICADO ALBERT EINSTEIN,1,9
+Ciencias sociales,MOS,7,Emergente,LICEO CAMPESTRE SIGLO XXI,1,10
+Ciencias sociales,MOS,7,En aceleración,INSTITUCIÓN EDUCATIVA NOGALES COUNTRY SCHOOL,1,1
+Ciencias sociales,MOS,7,En aceleración,INSTITUTO DIVERSIFICADO ALBERT EINSTEIN,1,2
+Ciencias sociales,MOS,7,En aceleración,LICEO HACIENDA CASA BLANCA,1,3
+Ciencias sociales,MOS,7,En aceleración,MIMOSITOS LICEO INFANTIL,1,4
+Ciencias sociales,MOS,7,Avanzado,COLEGIO CAFETAL BILINGUE,1,1
+Ciencias sociales,MOS,7,Avanzado,COLEGIO MAYOR DE INGLATERRA,1,2
+Ciencias sociales,MOS,7,Avanzado,COLEGIO SICOPEDAGÓGICO DE FONTIBÓN,1,3
+Ciencias sociales,MOS,7,Avanzado,INSTITUTO DIVERSIFICADO ALBERT EINSTEIN,1,4
+Ciencias sociales,MOS,7,Avanzado,LICEO HACIENDA CASABLANCA,1,5
+Ciencias sociales,MOS,7,Avanzado,NUEVO MODELIA,1,6
+Ciencias sociales,MOS,8,Progreso limitado,COLEGIO NUESTRA SEÑORA DEL ROSARIO FUNZA,1,1
+Ciencias sociales,MOS,8,Progreso limitado,GIMNASIO INDOAMERICANO,1,2
+Ciencias sociales,MOS,8,Progreso limitado,HTTPS://INTIHUASI.ORG/,1,3
+Ciencias sociales,MOS,8,Progreso limitado,INNOVA,1,4
+Ciencias sociales,MOS,8,Emergente,COLEGIO CAMPESTRE SAN NICOLAS DE TOLENTINO,1,1
+Ciencias sociales,MOS,8,Emergente,COLEGIO DE FORMACION INTEGRAL SEMBRADORES DE PAZ,1,2
+Ciencias sociales,MOS,8,Emergente,COLEGIO GIOVANNI ANTONIO FARINA,1,3
+Ciencias sociales,MOS,8,Emergente,COLEGIO SAGRADOS CORAZONES DE MONQUERA,1,4
+Ciencias sociales,MOS,8,Emergente,COLEGIO SUPERIOR AMERICANO,1,5
+Ciencias sociales,MOS,8,Emergente,COLEGIO TALLER PSICOPEDAGÓGICO DE LOS ANDES,1,6
+Ciencias sociales,MOS,8,Emergente,GIMNASIO CAMPESTRE VALSENALES,1,7
+Ciencias sociales,MOS,8,Emergente,GIMNASIO CATOLICO SAN NICOLAS DE BARI,1,8
+Ciencias sociales,MOS,8,Emergente,GIMNASIO CRISTIANO DE CUNDINAMARCA,1,9
+Ciencias sociales,MOS,8,Emergente,GIMNASIO LOS ROBLES,1,10
+Ciencias sociales,MOS,8,En aceleración,COLEGIO BILINGUE SAN JUAN DE DIOS,1,1
+Ciencias sociales,MOS,8,En aceleración,COLEGIO INSTITUTO TÉCNICO INTERNACIONAL INSTITUCIÓN EDUCATIVA DISTRITAL,1,2
+Ciencias sociales,MOS,8,En aceleración,COLEGIO SALESIANO SAN JOSÉ MOSQUERA,1,3
+Ciencias sociales,MOS,8,En aceleración,COLEGIO SAN JOSE,1,4
+Ciencias sociales,MOS,8,En aceleración,COLEGIO VATICANO,1,5
+Ciencias sociales,MOS,8,En aceleración,FREINETSKOLAN MIMER,1,6
+Ciencias sociales,MOS,8,En aceleración,GIMNASIO BILINGUE CAMPESTRE MARIE CURIE,1,7
+Ciencias sociales,MOS,8,En aceleración,GIMNASIO CRISTIANO DE CUNDINAMARCA,1,8
+Ciencias sociales,MOS,8,En aceleración,GIMNASIO LOS PINOS,1,9
+Ciencias sociales,MOS,8,En aceleración,I.E.D ROGELIO SALMONA,1,10
+Ciencias sociales,MOS,8,Avanzado,GIMNASIO CULTURAL EL ARTE DEL FUTURO,1,1
+Ciencias sociales,MOS,8,Avanzado,GIMNASIO GREEN HILLS,1,2
+Ciencias sociales,MOS,8,Avanzado,LICEO CAMPESTRE FACATATIVÁ,1,3
+Ciencias sociales,MOS,8,Avanzado,LICEO CAMPESTRE NUEVO PACTO,1,4
+Ciencias sociales,MOS,8,Avanzado,LICEO HACIENDA CASABLANCA,1,5
+Ciencias sociales,MOS,8,Avanzado,ROBERTO VELANDIA,1,6
+Ciencias sociales,MOS,9,Progreso limitado,GIMNASIO MODERNO SAN FRANCISCO EL TINTAL,1,1
+Ciencias sociales,MOS,9,Progreso limitado,SAGRADOS CORAZONES,1,2
+Ciencias sociales,MOS,9,Emergente,COLEGIO MILITAR CORONEL JUAN JOSE RONDON,1,1
+Ciencias sociales,MOS,9,Emergente,COLEGIO SAN PEDRO,1,2
+Ciencias sociales,MOS,9,En aceleración,COLEGIO BILINGUE MAXIMINO POITIERS,1,1
+Ciencias sociales,MOS,9,En aceleración,COLEGIO DE FORMACIÓN INTEGRAL MUNDO NUEVO,1,2
+Ciencias sociales,MOS,9,En aceleración,GIMNASIO REAL DE LA SABANA,1,3
+Ciencias sociales,MOS,9,En aceleración,INSTITUCIÓN EDUCATIVA DEPARTAMENTAL FIDEL LEON TRIANA,1,4
+Ciencias sociales,MOS,9,En aceleración,INSTITUTO RENATO DESCARTES,1,5
+Ciencias sociales,MOS,9,En aceleración,LICEO HACIENDA CASABLANCA MINUTOS DE DIOS,1,6
+Ciencias sociales,MOS,9,Avanzado,COLEGIO LA PRESENTACIÓN,1,1
+Ciencias sociales,MOS,9,Avanzado,COLEGIO NUESTRA SEÑORA DEL ROSARIO,1,2
+Ciencias sociales,MOS,9,Avanzado,EL GIMNASIO CAMPESTRE DEL RODADERO S.A.S,1,3
+Ciencias sociales,MOS,9,Avanzado,INNOVA SCHOOL,1,4
+Ciencias sociales,MOS,9,Avanzado,INSTITUTO INFANTIL Y JUVENIL INJUV,1,5
+Ciencias sociales,MOS,9,Avanzado,JAIRO MOSQUERA MORENO SECUNDARIA Y MEDIA,1,6
+Ciencias sociales,MOS,9,Avanzado,LA FRATERNIDAD,1,7
+Ciencias sociales,MOS,9,Avanzado,LICEO LATINO AMERICANO,1,8
+Ciencias sociales,MOS,9,Avanzado,MIGUEL ANTONIO CARO,1,9
+Ciencias sociales,MOS,10,Progreso limitado,INSTITUTO SALESIANO SAN JOSE,1,1
+Ciencias sociales,MOS,10,Progreso limitado,LICEO SIMÓN BOLÍVAR,1,2
+Ciencias sociales,MOS,10,Emergente,COLEGIO FRANCISCO JOSÉ DE CALDAS,1,1
+Ciencias sociales,MOS,10,Emergente,INNOVA HOME,1,2
+Ciencias sociales,MOS,10,Emergente,INSTITUTO COOPERATIVO AGROINDUSTRIAL HERNAN ECHAVARRIA OLOZAGA,1,3
+Ciencias sociales,MOS,10,Emergente,LICEO CAMPESTRE THOMAS DE IRIARTE,1,4
+Ciencias sociales,MOS,10,Emergente,NUEVO COLEGIO SAN JUAN BAUTISTA,1,5
+Ciencias sociales,MOS,10,En aceleración,CEHO,1,1
+Ciencias sociales,MOS,10,En aceleración,LICEO CAMPESTRE THOMAS DE IRIARTE,1,2
+Ciencias sociales,MOS,10,Avanzado,COLEGIO MINUTO DE DIOS CIUDAD VERDE,1,1
+Ciencias sociales,MOS,10,Avanzado,GIMNASIO LOS ROBLES,1,2
+Ciencias sociales,TUN,5,Progreso limitado,CENTRO EDUCATIVO SEMILLITAS DE AMOR,1,1
+Ciencias sociales,TUN,5,Progreso limitado,COLEGIO BILINGÜE SAN VIATOR TUNJA,1,2
+Ciencias sociales,TUN,5,Progreso limitado,COLEGIO CRISTIANO FILADELFIA TUNJA,1,3
+Ciencias sociales,TUN,5,Progreso limitado,COLEGIO GALILEO GALILEI,1,4
+Ciencias sociales,TUN,5,Progreso limitado,COLEGIO MONTERROSALES CICLOS,1,5
+Ciencias sociales,TUN,5,Progreso limitado,COLEGIO SAN VIATOR TUNJA,1,6
+Ciencias sociales,TUN,5,Progreso limitado,GIMNASIO VILLA FONTANA,1,7
+Ciencias sociales,TUN,5,Progreso limitado,GIMNASIO VIZCAYA,1,8
+Ciencias sociales,TUN,5,Emergente,CENTRO EDUCATIVO HOWARD GARDNER,2,1
+Ciencias sociales,TUN,5,Emergente,COLEGIO NUEVA GRANADA,2,2
+Ciencias sociales,TUN,5,Emergente,GIMNASIO GALILEO GALILEI,2,3
+Ciencias sociales,TUN,5,Emergente,COLEGIO ANDINO,1,4
+Ciencias sociales,TUN,5,Emergente,COLEGIO ANDINO DE TUNJA,1,5
+Ciencias sociales,TUN,5,Emergente,COLEGIO CRISTIANO MANANTIAL,1,6
+Ciencias sociales,TUN,5,Emergente,COLEGIO DE LA PRESENTACIÓN,1,7
+Ciencias sociales,TUN,5,Emergente,COLEGIO GIMNASIO SANTANDER TUNJA,1,8
+Ciencias sociales,TUN,5,Emergente,COLEGIO LA SALLE,1,9
+Ciencias sociales,TUN,5,Emergente,COLEGIO SAN VIATOR,1,10
+Ciencias sociales,TUN,5,En aceleración,GIMNASIO CAMPESTRE DEL NORTE,3,1
+Ciencias sociales,TUN,5,En aceleración,COLEGIO ANDINO DE TUNJA,1,2
+Ciencias sociales,TUN,5,En aceleración,COLEGIO DE BOYACÁ,1,3
+Ciencias sociales,TUN,5,En aceleración,COLEGIO LOS ANGELES,1,4
+Ciencias sociales,TUN,5,En aceleración,COLEGIO TODDLERS ANTES JARDIN INFANTIL TODDLERS,1,5
+Ciencias sociales,TUN,5,En aceleración,COUNTRY BILINGUAL SCHOOL,1,6
+Ciencias sociales,TUN,5,En aceleración,FILADELFIA,1,7
+Ciencias sociales,TUN,5,En aceleración,POLEGIO PARROQUIAL SAN MIGUEL,1,8
+Ciencias sociales,TUN,5,Avanzado,INSTITUCION EDUCATIVA TECNICA INDUSTRIAL TURMEQUE,1,1
+Ciencias sociales,TUN,6,Progreso limitado,COLEGIO GABRIEL GARCIA MARQUEZ,1,1
+Ciencias sociales,TUN,6,Progreso limitado,COLEGIO NUEVA GRANADA,1,2
+Ciencias sociales,TUN,6,Emergente,CENTRO PEDAGÓGICO MANDALA,1,1
+Ciencias sociales,TUN,6,Emergente,COLEGIO ABRAHAM LINCOLN,1,2
+Ciencias sociales,TUN,6,Emergente,FUNDACION PEDAGOGICA RAYUELA,1,3
+Ciencias sociales,TUN,6,Emergente,GIMNASIO CAMPESTRE DEL NORTE,1,4
+Ciencias sociales,TUN,6,Emergente,GIMNASIO CAMPESTRE SEMILLERO DEL SABER,1,5
+Ciencias sociales,TUN,6,Emergente,LICEO CRISTIANO SAN PABLO,1,6
+Ciencias sociales,TUN,6,Emergente,LICEO SANTA INES,1,7
+Ciencias sociales,TUN,6,Emergente,OXFORD BILINGUAL SCHOOL,1,8
+Ciencias sociales,TUN,6,En aceleración,GIMNASIO MODERNO LOS PINOS SAS,2,1
+Ciencias sociales,TUN,6,En aceleración,AMERICAN SCHOOL SAINT FRANCIS,1,2
+Ciencias sociales,TUN,6,En aceleración,COLEGIO ABRAHAM LINCOLN,1,3
+Ciencias sociales,TUN,6,En aceleración,COLEGIO AMERICANO DE BOGOTA,1,4
+Ciencias sociales,TUN,6,En aceleración,COLEGIO MONTERROSALES CICLOS,1,5
+Ciencias sociales,TUN,6,En aceleración,GIMNASIO CAMBRIDGE TUNJA,1,6
+Ciencias sociales,TUN,6,En aceleración,GIMNASIO CAMPESTRE SANTO DOMINGO,1,7
+Ciencias sociales,TUN,6,En aceleración,GIMNASIO EDUCATIVO OVIDIO DECROLY,1,8
+Ciencias sociales,TUN,6,En aceleración,GIMNASIO GALILEO GALILEI,1,9
+Ciencias sociales,TUN,6,En aceleración,GIMNASIO INFANTIL CHIQUILANDIA,1,10
+Ciencias sociales,TUN,6,Avanzado,GIMNASIO VILLA FONTANA,2,1
+Ciencias sociales,TUN,6,Avanzado,CENTRO DE EDUCACIÓN ACTIVA JOHN DEWEY,1,2
+Ciencias sociales,TUN,6,Avanzado,COLEGIO MONTERROSALES HOMESCHOOL,1,3
+Ciencias sociales,TUN,6,Avanzado,COLEGIO NUEVA GRANADA,1,4
+Ciencias sociales,TUN,6,Avanzado,COLEGIO REINA DE LA PAZ,1,5
+Ciencias sociales,TUN,6,Avanzado,COLEGIO SAN VIATOR,1,6
+Ciencias sociales,TUN,6,Avanzado,FUNDACIÓN PEDAGÓGICA RAYUELA,1,7
+Ciencias sociales,TUN,6,Avanzado,GABRIEL GARCIA MARQUEZ,1,8
+Ciencias sociales,TUN,6,Avanzado,GIMNASIO CAMPESTRE NORTE,1,9
+Ciencias sociales,TUN,6,Avanzado,GIMNASIO COMFACASANARE,1,10
+Ciencias sociales,TUN,7,Progreso limitado,COLEGIO ANDINO DE TUNJA,1,1
+Ciencias sociales,TUN,7,Progreso limitado,COLEGIO DE BOYACA,1,2
+Ciencias sociales,TUN,7,Progreso limitado,GIMNASIO GALILEO GALILEI,1,3
+Ciencias sociales,TUN,7,Emergente,GIMNASIO VILLA FONTANA,2,1
+Ciencias sociales,TUN,7,Emergente,CENTRO EDUCATIVO COLEGIO SENSERITOS,1,2
+Ciencias sociales,TUN,7,Emergente,COLEGIO SAN JOSÉ DE LA SALLE,1,3
+Ciencias sociales,TUN,7,Emergente,I.E.T. PEDRO JOSÉ SARMIENTO,1,4
+Ciencias sociales,TUN,7,Emergente,LICEO SANTA INÉS,1,5
+Ciencias sociales,TUN,7,En aceleración,GIMNASIO VILLA FONTANA,2,1
+Ciencias sociales,TUN,7,En aceleración,CENTRO PEDAGÓGICO MANDALA,1,2
+Ciencias sociales,TUN,7,En aceleración,COLEGIO ABRAHAM LINCOLN,1,3
+Ciencias sociales,TUN,7,En aceleración,COLEGIO ANDINO DE TUNJA,1,4
+Ciencias sociales,TUN,7,En aceleración,COLEGIO GIMASIO SANTANDER TUNJA,1,5
+Ciencias sociales,TUN,7,En aceleración,COLEGIO JESUS EUCARISTIA,1,6
+Ciencias sociales,TUN,7,En aceleración,COLEGIO PARROQUIAL SAN MIGUEL,1,7
+Ciencias sociales,TUN,7,En aceleración,COLEGIO SAN VIATOR TUNJA,1,8
+Ciencias sociales,TUN,7,En aceleración,GIMNASIO CAMPESTRE DEL NORTE,1,9
+Ciencias sociales,TUN,7,En aceleración,IMMANUEL CHRISTIAN BILINGUAL SCHOOL,1,10
+Ciencias sociales,TUN,7,Avanzado,GIMNASIO CAMPESTRE DEL NORTE,2,1
+Ciencias sociales,TUN,7,Avanzado,CENTRO PEDAGÓGICO MANDALA,1,2
+Ciencias sociales,TUN,7,Avanzado,COLEGIO ANDINO,1,3
+Ciencias sociales,TUN,7,Avanzado,COLEGIO COOPERATIVO REYES PATRIA,1,4
+Ciencias sociales,TUN,7,Avanzado,COLEGIO PARROQUIAL LA ASUNCION,1,5
+Ciencias sociales,TUN,7,Avanzado,DON BOSCO V,1,6
+Ciencias sociales,TUN,7,Avanzado,FUNDACIÓN PEDAGÓGICA RAYUELA,1,7
+Ciencias sociales,TUN,7,Avanzado,GIMNACIO VILLA FONTANA,1,8
+Ciencias sociales,TUN,7,Avanzado,LICEO SANTA INÉS,1,9
+Ciencias sociales,TUN,7,Avanzado,SAN VIATOR TUNJA,1,10
+Ciencias sociales,TUN,8,Progreso limitado,CENTRO PEDAGÓGICO MANDALA,1,1
+Ciencias sociales,TUN,8,Progreso limitado,CLERIGOS SAN VIATOR TUNJA,1,2
+Ciencias sociales,TUN,8,Progreso limitado,COLEGIO SAN VIATOR TUNJA,1,3
+Ciencias sociales,TUN,8,Progreso limitado,GIMNASIO GALILEO GALILEI,1,4
+Ciencias sociales,TUN,8,Progreso limitado,SAINT NICOLAS SCHOOL,1,5
+Ciencias sociales,TUN,8,Emergente,ACE EMPOWER ACADEMY SAN JOSÉ CALIDORNIA EEUU,1,1
+Ciencias sociales,TUN,8,Emergente,COGIO DE LA PRESENTACIÓN TUNJA,1,2
+Ciencias sociales,TUN,8,Emergente,COLEGIO ABRAHAM LINCOLN,1,3
+Ciencias sociales,TUN,8,Emergente,COLEGIO CARDENAL SANCHA,1,4
+Ciencias sociales,TUN,8,Emergente,COLEGIO SALESIANO MALDONADO TUNJA,1,5
+Ciencias sociales,TUN,8,Emergente,COLEGIO SAN VIATOR,1,6
+Ciencias sociales,TUN,8,Emergente,INSTITUCIÓN EDUCATIVA COUNTRY BILINGUAL SCHOOL,1,7
+Ciencias sociales,TUN,8,Emergente,LICEO SANTA INES,1,8
+Ciencias sociales,TUN,8,Emergente,OXFORD BILINGUAL SCHOOL,1,9
+Ciencias sociales,TUN,8,En aceleración,COLEGIO NUEVA INGLATERRA CAMPESTRE,2,1
+Ciencias sociales,TUN,8,En aceleración,GIMNASIO VILLA FONTANA,2,2
+Ciencias sociales,TUN,8,En aceleración,COLEGIO DE LA PRESENTACIÓN,1,3
+Ciencias sociales,TUN,8,En aceleración,COLEGIO SAN VIATOR TUNJA,1,4
+Ciencias sociales,TUN,8,En aceleración,COPUNTRY BILINGUAL SCHOOL,1,5
+Ciencias sociales,TUN,8,En aceleración,COUNTRY BILINGUAL SCHOOL,1,6
+Ciencias sociales,TUN,8,En aceleración,GIMNASIO CAMPESTRE DEL NORTE,1,7
+Ciencias sociales,TUN,8,En aceleración,INSTITUCIÓN EDUCATIVA GIMNASIO AGUSTÍNIANO DE TUNJA,1,8
+Ciencias sociales,TUN,8,En aceleración,NUEVO COLEGIO SAN JUAN BAUTISTA,1,9
+Ciencias sociales,TUN,8,Avanzado,LICEO SANTA INES,3,1
+Ciencias sociales,TUN,8,Avanzado,AMERICAN SCHOOL SAINT FRANCES,1,2
+Ciencias sociales,TUN,8,Avanzado,COLEGIO ANDINO DE TUNJA,1,3
+Ciencias sociales,TUN,8,Avanzado,COLEGIO CAMPESTRE HISPANO INGLES,1,4
+Ciencias sociales,TUN,8,Avanzado,COLEGIO COMFABOY TUNJA,1,5
+Ciencias sociales,TUN,8,Avanzado,COLEGIO DE BOYACÁ,1,6
+Ciencias sociales,TUN,8,Avanzado,COLEGIO UNICAB VIRTUAL,1,7
+Ciencias sociales,TUN,8,Avanzado,COLEGIO VILLA FONTANA,1,8
+Ciencias sociales,TUN,8,Avanzado,GIMNASIO VILLA FONTANA,1,9
+Ciencias sociales,TUN,8,Avanzado,GIMNASIO VIZCAYA,1,10
+Ciencias sociales,TUN,9,Progreso limitado,COLEGIO LEV VIGOTSKY,1,1
+Ciencias sociales,TUN,9,Emergente,COLEGIO LEV VYGOTSKY,1,1
+Ciencias sociales,TUN,9,Emergente,COLEGIO SALESIANO MALDONADO TUNJA,1,2
+Ciencias sociales,TUN,9,Emergente,COLEGIO SAN VIATOR TUNJA,1,3
+Ciencias sociales,TUN,9,Emergente,COLEGIO SERGIO CAMARGO,1,4
+Ciencias sociales,TUN,9,Emergente,GIMNASIO CAMPESTRE DEL NORTE,1,5
+Ciencias sociales,TUN,9,Emergente,GIMNASIO CAMPESTRE DEL NORTE DE TUNJA,1,6
+Ciencias sociales,TUN,9,Emergente,GIMNASIO LOS OCOBOS,1,7
+Ciencias sociales,TUN,9,En aceleración,GIMNASIO CAMPESTRE DEL NORTE,3,1
+Ciencias sociales,TUN,9,En aceleración,COLEGIO ANDINO DE TUNJA,2,2
+Ciencias sociales,TUN,9,En aceleración,FUNDACIÓN PEDAGÓGICA RAYUELA,2,3
+Ciencias sociales,TUN,9,En aceleración,AMERICAN SCHOOL SAINT FRANCES,1,4
+Ciencias sociales,TUN,9,En aceleración,COLEGIO BILINGÜE SAN VIATOR TUNJA,1,5
+Ciencias sociales,TUN,9,En aceleración,COLEGIO LOS ANGELES,1,6
+Ciencias sociales,TUN,9,En aceleración,FUNDACIÓN PEDAGÓGICA RAYUELA TUNJA,1,7
+Ciencias sociales,TUN,9,En aceleración,GIMANSIO CAMPESTRE DEL NORTE,1,8
+Ciencias sociales,TUN,9,En aceleración,INSTITUCIÓN TÉCNICA EDUCATIVA JAIRO ALBARRACÍN BARRERA,1,9
+Ciencias sociales,TUN,9,En aceleración,NORMAL,1,10
+Ciencias sociales,TUN,9,Avanzado,CENTRO PEDAGÓGICO MANDALA,2,1
+Ciencias sociales,TUN,9,Avanzado,COLEGIO DE LA PRESENTACIÓN,1,2
+Ciencias sociales,TUN,9,Avanzado,COLEGIO MILITAR JUAN JOSE RENDON,1,3
+Ciencias sociales,TUN,9,Avanzado,GIMNASIO CAMPESTRE DEL NORTE,1,4
+Ciencias sociales,TUN,9,Avanzado,INSTITUCIÓN DE EDUCACIÓN FORMAL COMFABOY,1,5
+Ciencias sociales,TUN,9,Avanzado,INSTITUCIÓN EDUCATIVA ANTONIO JOSE SANDOVAL GOMEZ,1,6
+Ciencias sociales,TUN,9,Avanzado,INSTITUCIÓN EDUCATIVA MANUEL ANTONIO FLOREZ,1,7
+Ciencias sociales,TUN,9,Avanzado,LA PRESENTACIÓN TUNJA,1,8
+Ciencias sociales,TUN,9,Avanzado,NUEVA GRANADA,1,9
+Ciencias sociales,TUN,9,Avanzado,SAN VIATOR TUNJA,1,10
+Ciencias sociales,TUN,10,Progreso limitado,COLEGIO SAN VIATOR TUNJA,1,1
+Ciencias sociales,TUN,10,Emergente,COLEGIO ANDINO DE TUNJA,2,1
+Ciencias sociales,TUN,10,Emergente,COLEGIO MONTESSORI,1,2
+Ciencias sociales,TUN,10,Emergente,COLEGIO SAN VIATOR TUNJA,1,3
+Ciencias sociales,TUN,10,Emergente,GIMNASIO CAMPESTRE DEL NORTE,1,4
+Ciencias sociales,TUN,10,En aceleración,COLEGIO LOS ANGELES TUNJA,2,1
+Ciencias sociales,TUN,10,En aceleración,UNICAB,2,2
+Ciencias sociales,TUN,10,En aceleración,ABRAHAM LINCOLN SCHOOL,1,3
+Ciencias sociales,TUN,10,En aceleración,AMERICAN SCHOOL,1,4
+Ciencias sociales,TUN,10,En aceleración,CIBERCOLEGIO UCN,1,5
+Ciencias sociales,TUN,10,En aceleración,COLEGIO BILINGUE SAN VIATOR TUNJA,1,6
+Ciencias sociales,TUN,10,En aceleración,COLEGIO COOPERATIVO REYES PATRIA,1,7
+Ciencias sociales,TUN,10,En aceleración,COLEGIO DE BOYACA,1,8
+Ciencias sociales,TUN,10,En aceleración,COLEGIO DE BOYACÁ,1,9
+Ciencias sociales,TUN,10,En aceleración,COLEGIO DE LA PRESENTACION TUNJA,1,10
+Ciencias sociales,TUN,10,Avanzado,AMERICAN SCHOOL SAINT FRANCES,2,1
+Ciencias sociales,TUN,10,Avanzado,GIMNASIO CAMPESTRE DEL NORTE,2,2
+Ciencias sociales,TUN,10,Avanzado,COLEGIO ANDINO DE TUNJA,1,3
+Ciencias sociales,TUN,10,Avanzado,COLEGIO DE LA PRESENTACION,1,4
+Ciencias sociales,TUN,10,Avanzado,COLEGIO LA PRESENTACIÓN,1,5
+Ciencias sociales,TUN,10,Avanzado,COLEGIO LOS ANGELES,1,6
+Ciencias sociales,TUN,10,Avanzado,COLEGIO SALESIANO DE LEON XIII,1,7
+Ciencias sociales,TUN,10,Avanzado,COUNTRY BILLINGUAL SCHOOL,1,8
+Ciencias sociales,TUN,10,Avanzado,GIMNASIO GALILEO GALILEI,1,9
+Ciencias sociales,TUN,10,Avanzado,GIMNASIO VILLA FONTANA,1,10
+Ciencias sociales,USAQ,5,Progreso limitado,COLEGIO CAMPESTRE SAN JOSE ANTIGUO SIERVAS DE SAN JOSE,1,1
+Ciencias sociales,USAQ,5,Progreso limitado,COLEGIO EUGENIA RAVASCO,1,2
+Ciencias sociales,USAQ,5,Progreso limitado,COLEGIO HAPE HABILIDADES DEL PENSAMIENTO,1,3
+Ciencias sociales,USAQ,5,Progreso limitado,COLEGIO MARIA INMACULADA,1,4
+Ciencias sociales,USAQ,5,Progreso limitado,COLEGIO NUESTRA SEÑORA DE NAZARETH,1,5
+Ciencias sociales,USAQ,5,Progreso limitado,COLEGIO STELLA MATUTINA,1,6
+Ciencias sociales,USAQ,5,Progreso limitado,GIMNASIO LOS ANDES,1,7
+Ciencias sociales,USAQ,5,Progreso limitado,GIMNASIO SANTA CRISTINA DE TOSCANA,1,8
+Ciencias sociales,USAQ,5,Progreso limitado,MARIA INMACULADA,1,9
+Ciencias sociales,USAQ,5,Emergente,COLEGIO MARIA AUXILIADORA NORTE,5,1
+Ciencias sociales,USAQ,5,Emergente,COLEGIO CALASANZ,1,2
+Ciencias sociales,USAQ,5,Emergente,COLEGIO GEORGE WASHINGTON,1,3
+Ciencias sociales,USAQ,5,Emergente,COLEGIO JOSE EUSTASIO RIVERA,1,4
+Ciencias sociales,USAQ,5,Emergente,COLEGIO RENFORT,1,5
+Ciencias sociales,USAQ,5,Emergente,COLEGIO SANTA MARIANA DE JESUS,1,6
+Ciencias sociales,USAQ,5,Emergente,FUNDACION COLEGIO EMILIO VALENZUELA,1,7
+Ciencias sociales,USAQ,5,Emergente,GIMNASIO CAMPESTRE ESCALEMOS,1,8
+Ciencias sociales,USAQ,5,Emergente,GIMNASIO LOS ARRAYANES BILINGÜE,1,9
+Ciencias sociales,USAQ,5,Emergente,GIMNASIO NUEVA ESCOCIA,1,10
+Ciencias sociales,USAQ,5,En aceleración,COLEGIO AGUSTÍN NIETO CABALLERO,2,1
+Ciencias sociales,USAQ,5,En aceleración,COLEGIO BILINGÜE MAXIMINO POITIERS,1,2
+Ciencias sociales,USAQ,5,En aceleración,COLEGIO CLAUSTRO MODERNO,1,3
+Ciencias sociales,USAQ,5,En aceleración,COLEGIO DE LAS RR ESCLAVAS SAGRADO CORAZÓN DE JESUS,1,4
+Ciencias sociales,USAQ,5,En aceleración,COLEGIO MARGARITA BOSCO,1,5
+Ciencias sociales,USAQ,5,En aceleración,GIMNASIO JOSE JOAQUIN CASAS,1,6
+Ciencias sociales,USAQ,5,En aceleración,GIMNASIO LOS ARRAYANES BILINGÜE,1,7
+Ciencias sociales,USAQ,5,En aceleración,INSTITUCIÓN EDUCATIVA DISTRITAL PRADO VERANIEGO,1,8
+Ciencias sociales,USAQ,5,En aceleración,INSTITUCIÓN EDUCATIVA PUENTE AMARILLO FRANCISCO TORRES LEON,1,9
+Ciencias sociales,USAQ,5,En aceleración,LICEO ROCELY,1,10
+Ciencias sociales,USAQ,5,Avanzado,COLEGIO DE NUESTRA SEÑORA DEL BUEN CONSEJO,1,1
+Ciencias sociales,USAQ,6,Progreso limitado,COLEGIO EL MINUTO DE DIOS,1,1
+Ciencias sociales,USAQ,6,Progreso limitado,INSTITUTO DE INTEGRACIÓN CULTURAL IDIC,1,2
+Ciencias sociales,USAQ,6,Progreso limitado,LICEO ANDRES DIAZ VENERO DE LEIVA,1,3
+Ciencias sociales,USAQ,6,Emergente,COLEGIO MARIA AUXILIADORA NORTE,2,1
+Ciencias sociales,USAQ,6,Emergente,COLEGIO BILINGUE SAN JUAN DE AVILA,1,2
+Ciencias sociales,USAQ,6,Emergente,COLEGIO DEL SANTO ANGEL,1,3
+Ciencias sociales,USAQ,6,Emergente,COLEGIO DIVINO SALVADOR,1,4
+Ciencias sociales,USAQ,6,Emergente,GIMNASIO ANTONIO ARBOLEDA,1,5
+Ciencias sociales,USAQ,6,Emergente,INNOVA USAQUÉN 170,1,6
+Ciencias sociales,USAQ,6,En aceleración,COLEGIO MARIA AUXILIADORA NORTE,2,1
+Ciencias sociales,USAQ,6,En aceleración,COLEGIO MONTEHELENA BILINGÜE SEDE PRINCIPAL,2,2
+Ciencias sociales,USAQ,6,En aceleración,COLEGIO SANTIAGO ALBERIONE,2,3
+Ciencias sociales,USAQ,6,En aceleración,COLEGIO BACHILLERATO PATRIA,1,4
+Ciencias sociales,USAQ,6,En aceleración,COLEGIO BILINGUE SAN JUAN DE AVILA,1,5
+Ciencias sociales,USAQ,6,En aceleración,COLEGIO BILINGÜE MAXIMINO POITIERS,1,6
+Ciencias sociales,USAQ,6,En aceleración,COLEGIO DE LA SAGRADA FAMILIA,1,7
+Ciencias sociales,USAQ,6,En aceleración,COLEGIO GEORGE WASHINGTON SCHOOL,1,8
+Ciencias sociales,USAQ,6,En aceleración,COLEGIO MARIA INMACULADA,1,9
+Ciencias sociales,USAQ,6,En aceleración,COLEGIO MAYOR JOSE CELESTINO MUTIS,1,10
+Ciencias sociales,USAQ,6,Avanzado,COLEGIO MARIA AUXILIADORA NORTE,3,1
+Ciencias sociales,USAQ,6,Avanzado,GIMNASIO JOSE JOAQUIN CASAS,2,2
+Ciencias sociales,USAQ,6,Avanzado,CELESTIN FREINET DEL NORTE,1,3
+Ciencias sociales,USAQ,6,Avanzado,CENTRO EDUCATIVO INFANCIA DE JESUS,1,4
+Ciencias sociales,USAQ,6,Avanzado,COLEGIO AGUSTÍNIANO CIUDAD SALITRE,1,5
+Ciencias sociales,USAQ,6,Avanzado,COLEGIO BILINGÜE MAXIMINO POITIERS,1,6
+Ciencias sociales,USAQ,6,Avanzado,COLEGIO COLSUBSIDIO NORTE,1,7
+Ciencias sociales,USAQ,6,Avanzado,COLEGIO CORAZÓNISTA HERMANOS DEL SAGRADO CORA,1,8
+Ciencias sociales,USAQ,6,Avanzado,COLEGIO DE LAS RR ESCLAVAS SAGRADO CORAZÓN DE JESUS,1,9
+Ciencias sociales,USAQ,6,Avanzado,COLEGIO MARIA INMACULADA,1,10
+Ciencias sociales,USAQ,7,Emergente,COLEGIO MONTEHELENA BILINGÜE SEDE PRINCIPAL,1,1
+Ciencias sociales,USAQ,7,Emergente,COLEGIO NUESTRA SEÑORA DE LAS MERCEDES,1,2
+Ciencias sociales,USAQ,7,Emergente,COLEGIO RENFORT,1,3
+Ciencias sociales,USAQ,7,Emergente,EXTERNADO DEL SUR PSICOPEDAGÓGICO,1,4
+Ciencias sociales,USAQ,7,Emergente,GIMNASIO LOS ARRAYANES BILINGUE,1,5
+Ciencias sociales,USAQ,7,En aceleración,GIMNASIO LOS ANDES,2,1
+Ciencias sociales,USAQ,7,En aceleración,COLEGIO AGUSTÍNIANO NORTE,1,2
+Ciencias sociales,USAQ,7,En aceleración,COLEGIO CORAZÓNISTA HERMANOS DEL SAGRADO CORA,1,3
+Ciencias sociales,USAQ,7,En aceleración,COLEGIO FRANCISCANO DEL VIRREY SOLIS,1,4
+Ciencias sociales,USAQ,7,En aceleración,COLEGIO GEORGE WASHINGTON SCHOOL,1,5
+Ciencias sociales,USAQ,7,En aceleración,GIMNASIO NUEVA ESCOCIA,1,6
+Ciencias sociales,USAQ,7,En aceleración,SUMMEHILL SCHOOL,1,7
+Ciencias sociales,USAQ,7,Avanzado,GIMNASIO LOS ARRAYANES BILINGUE,2,1
+Ciencias sociales,USAQ,7,Avanzado,LICEO LA SABANA,2,2
+Ciencias sociales,USAQ,7,Avanzado,COLEGIO GEORGE WASHINGTON,1,3
+Ciencias sociales,USAQ,7,Avanzado,COLEGIO LA INMACULADA,1,4
+Ciencias sociales,USAQ,7,Avanzado,COLEGIO LAUSANA,1,5
+Ciencias sociales,USAQ,7,Avanzado,COLEGIO MARIA INMACULADA,1,6
+Ciencias sociales,USAQ,7,Avanzado,COLEGIO MONTERROSALES BILINGUE,1,7
+Ciencias sociales,USAQ,7,Avanzado,FUNDACION COLEGIO EMILIO VALENZUELA,1,8
+Ciencias sociales,USAQ,7,Avanzado,FUNDACION EDUCATIVA COLEGIO WESLEYANO DEL NORTE,1,9
+Ciencias sociales,USAQ,7,Avanzado,GIMNASIO EL HONTANAR,1,10
+Ciencias sociales,USAQ,8,Emergente,COLEGIO COFREM,1,1
+Ciencias sociales,USAQ,8,Emergente,COLEGIO EUCARISTICO,1,2
+Ciencias sociales,USAQ,8,Emergente,COLEGIO GEORGE WASHINGTON SCHOOL,1,3
+Ciencias sociales,USAQ,8,Emergente,COLEGIO GIOVANNI PASCOLI,1,4
+Ciencias sociales,USAQ,8,Emergente,COLEGIO SANTA ANGELA MERICI,1,5
+Ciencias sociales,USAQ,8,Emergente,COLEGIO WALDORF EL MAESTRO,1,6
+Ciencias sociales,USAQ,8,Emergente,GIMNASIO CAMPESTRE LOS ARRAYANES,1,7
+Ciencias sociales,USAQ,8,Emergente,GIMNASIO CAMPESTRE MERYLAND BILINGUE,1,8
+Ciencias sociales,USAQ,8,Emergente,GIMNASIO VALLEGRANDE,1,9
+Ciencias sociales,USAQ,8,Emergente,LICEO DE COLOMBIA BILINGUE,1,10
+Ciencias sociales,USAQ,8,En aceleración,COLEGIO BILINGÜE MAXIMINO POITIERS,2,1
+Ciencias sociales,USAQ,8,En aceleración,COLEGIO MARIA AUXILIADORA NORTE,2,2
+Ciencias sociales,USAQ,8,En aceleración,INNOVA USAQUÉN 170,2,3
+Ciencias sociales,USAQ,8,En aceleración,LICEO MODERNO CAMPESTRE,2,4
+Ciencias sociales,USAQ,8,En aceleración,COLEGIO CAMPESTRE SAN JOSE ANTIGUO SIERVAS DE SAN JOSE,1,5
+Ciencias sociales,USAQ,8,En aceleración,COLEGIO GEORGE WASHINGTON SCHOOL,1,6
+Ciencias sociales,USAQ,8,En aceleración,COLEGIO JOSE MANUEL MARROQUIN,1,7
+Ciencias sociales,USAQ,8,En aceleración,COLEGIO MONTERROSALES CICLOS,1,8
+Ciencias sociales,USAQ,8,En aceleración,COLEGIO SAN JOSE,1,9
+Ciencias sociales,USAQ,8,En aceleración,COLEGIO VIRTUAL SIGLO XXI,1,10
+Ciencias sociales,USAQ,8,Avanzado,GIMNASIO SAN ANGELO,2,1
+Ciencias sociales,USAQ,8,Avanzado,B LEARNING LECAM (VIRTUAL),1,2
+Ciencias sociales,USAQ,8,Avanzado,COLEGIO DE NUESTRA SEÑORA DEL ROSARIO,1,3
+Ciencias sociales,USAQ,8,Avanzado,COLEGIO DEL ROSARIO DE SANTO DOMINGO,1,4
+Ciencias sociales,USAQ,8,Avanzado,COLEGIO MARIA AUXILIADORA NORTE,1,5
+Ciencias sociales,USAQ,8,Avanzado,COLEGIO MARIA INMACULADA,1,6
+Ciencias sociales,USAQ,8,Avanzado,LICEO LUNITA DE CHIA,1,7
+Ciencias sociales,USAQ,8,Avanzado,LICEO SEGOVIA,1,8
+Ciencias sociales,USAQ,8,Avanzado,NEIL ARMSTRONG SCHOOL,1,9
+Ciencias sociales,ZIPA,5,Progreso limitado,GIMNASIO CAMPESTRE ICAV,2,1
+Ciencias sociales,ZIPA,5,Progreso limitado,ANTOINE DE SAINT - EXUPERY,1,2
+Ciencias sociales,ZIPA,5,Progreso limitado,ASPAEN CARTAGENA DE INDIAS,1,3
+Ciencias sociales,ZIPA,5,Progreso limitado,COLEGIO BILINGUE CAMPESTRE COLOMBO BRITANICO,1,4
+Ciencias sociales,ZIPA,5,Progreso limitado,COLEGIO BRITÁNICO DE ZIPAQUIRÁ,1,5
+Ciencias sociales,ZIPA,5,Progreso limitado,COLEGIO CAMPESTRE ARTES Y LETRAS,1,6
+Ciencias sociales,ZIPA,5,Progreso limitado,COLEGIO DOUGLAS BROWN DE ZIPAQUIRÁ,1,7
+Ciencias sociales,ZIPA,5,Progreso limitado,COLEGIO LA BUENA SEMILLA,1,8
+Ciencias sociales,ZIPA,5,Progreso limitado,COLEGIO LICEO CATEDRAL HIGH SCHOOL,1,9
+Ciencias sociales,ZIPA,5,Progreso limitado,COLEGIO MONTEMAYOR SCHOOL,1,10
+Ciencias sociales,ZIPA,5,Emergente,COLEGIO BILINGUE CAMPESTRE COLOMBO BRITANICO,3,1
+Ciencias sociales,ZIPA,5,Emergente,GIMNASIO INTEGRAL GENIOS DEL ZIPA,2,2
+Ciencias sociales,ZIPA,5,Emergente,BOSQUES DE SHERWOOD,1,3
+Ciencias sociales,ZIPA,5,Emergente,COLEGIO ANTOINE DE SAINT EXUPERY  SEDE PRINCIPAL,1,4
+Ciencias sociales,ZIPA,5,Emergente,COLEGIO BILINGÜE CAMPESTRE COLOMBO BRITÁNICO,1,5
+Ciencias sociales,ZIPA,5,Emergente,COLEGIO BRITANICO ZIPAQUIRA,1,6
+Ciencias sociales,ZIPA,5,Emergente,COLEGIO CAMPESTRE ARTES Y LETRAS,1,7
+Ciencias sociales,ZIPA,5,Emergente,COLEGIO CAMPETRE ARTES Y LETRAS,1,8
+Ciencias sociales,ZIPA,5,Emergente,COLEGIO COLOMBO BRITANICO,1,9
+Ciencias sociales,ZIPA,5,Emergente,COLEGIO COLOMBO BRITANICO DE ZIPAQUIRA,1,10
+Ciencias sociales,ZIPA,5,En aceleración,COLEGIO BILINGUE CAMPESTRE COLOMBO BRITANICO,3,1
+Ciencias sociales,ZIPA,5,En aceleración,COLEGIO CAMPESTRE ARTES Y LETRAS,2,2
+Ciencias sociales,ZIPA,5,En aceleración,ATELIED,1,3
+Ciencias sociales,ZIPA,5,En aceleración,BILINGUE CAMPESTRE COLOMBO BRITANICO DE ZIPAQUIRA,1,4
+Ciencias sociales,ZIPA,5,En aceleración,CAMPBELL SCHOOL,1,5
+Ciencias sociales,ZIPA,5,En aceleración,COLEGIO ANTONIE DE SAINTEEXUPERY,1,6
+Ciencias sociales,ZIPA,5,En aceleración,COLEGIO CAMPESTRE COLOMBO BRITANICO ZIPAQUIRA,1,7
+Ciencias sociales,ZIPA,5,En aceleración,COLEGIO NUESTRA SEÑORA DE LUXEMBURGO,1,8
+Ciencias sociales,ZIPA,5,En aceleración,GIMNASIO CAMPESTRE LOS LAURELES BILINGUE,1,9
+Ciencias sociales,ZIPA,5,En aceleración,GIMNASIO MONTREAL,1,10
+Ciencias sociales,ZIPA,5,Avanzado,COLEGIO BILINGÜE COLOMBO BRITÁNICO,1,1
+Ciencias sociales,ZIPA,5,Avanzado,LICEO SAMANIEGO,1,2
+Ciencias sociales,ZIPA,5,Avanzado,SANTA FE DE BOGOTÁ,1,3
+Ciencias sociales,ZIPA,6,Progreso limitado,ARNULFO BRICEÑO CONTRERAS,1,1
+Ciencias sociales,ZIPA,6,Progreso limitado,CAMPBELL SCHOOL,1,2
+Ciencias sociales,ZIPA,6,Progreso limitado,CENTRO EDUCATIVO MI BELLA INFANCIA,1,3
+Ciencias sociales,ZIPA,6,Progreso limitado,COLEGIO ANTOINE DE SAINT EXUPERY  SEDE PRINCIPAL,1,4
+Ciencias sociales,ZIPA,6,Progreso limitado,COLEGIO ANTOINE DE SAINT EXUPÉRY,1,5
+Ciencias sociales,ZIPA,6,Progreso limitado,COLEGIO BILINGUE CAMPESTRE COLOMBO BRITÁNICO,1,6
+Ciencias sociales,ZIPA,6,Progreso limitado,COLEGIO DOUGLAS BROWN,1,7
+Ciencias sociales,ZIPA,6,Progreso limitado,COLEGIO JOSE ANTONIO GALÁN,1,8
+Ciencias sociales,ZIPA,6,Progreso limitado,COLEGIO SANTA CECILIA DE TUNJUELITO,1,9
+Ciencias sociales,ZIPA,6,Progreso limitado,COLOMBO BRITÁNICO DE ZIPAQUIRA,1,10
+Ciencias sociales,ZIPA,6,Emergente,CAMPBELL SCHOOL,2,1
+Ciencias sociales,ZIPA,6,Emergente,COLEGIO ANTOINE DE SAINT EXUPER,1,2
+Ciencias sociales,ZIPA,6,Emergente,COLEGIO BILINGUE CEDAM,1,3
+Ciencias sociales,ZIPA,6,Emergente,COLEGIO BILINGUE COLOMBO BRITANICO,1,4
+Ciencias sociales,ZIPA,6,Emergente,COLEGIO BILINGÜE CAMPESTRE COLOMBO BRITANICO,1,5
+Ciencias sociales,ZIPA,6,Emergente,COLEGIO CAMPESTRE ARTES Y LETRAS,1,6
+Ciencias sociales,ZIPA,6,Emergente,COLEGIO CAMPESTRE SAN NICOLAS SAS,1,7
+Ciencias sociales,ZIPA,6,Emergente,COLEGIO DIVINO NIÑO,1,8
+Ciencias sociales,ZIPA,6,Emergente,COLEGIO MAYOR DE LOS ANDES,1,9
+Ciencias sociales,ZIPA,6,Emergente,COLEGIO PADRE MANYANET,1,10
+Ciencias sociales,ZIPA,6,En aceleración,CAMPBELL SCHOOL,1,1
+Ciencias sociales,ZIPA,6,En aceleración,COLEGIO ADVENTISTA,1,2
+Ciencias sociales,ZIPA,6,En aceleración,COLEGIO CAMPESTRE GENIOS DEL ZIPA,1,3
+Ciencias sociales,ZIPA,6,En aceleración,COLEGIO DE LA PRESENTACIÓN DE ZIPAQUIRA,1,4
+Ciencias sociales,ZIPA,6,En aceleración,COLEGIO FUNDACIÓN COLOMBIA,1,5
+Ciencias sociales,ZIPA,6,En aceleración,COLEGIO LA PRESENTACIÓN ZIPAQUIRÁ,1,6
+Ciencias sociales,ZIPA,6,En aceleración,COLEGIO LICEO CATEDRAL HIGH SCHOOL,1,7
+Ciencias sociales,ZIPA,6,En aceleración,COLEGIO MONTEMAYOR SCHOOL,1,8
+Ciencias sociales,ZIPA,6,En aceleración,COLEGIO SAN ALBERTO MAGNI,1,9
+Ciencias sociales,ZIPA,6,En aceleración,COLOMBO BRITANICO,1,10
+Ciencias sociales,ZIPA,6,Avanzado,COLEGIO BILINGUE CAMPESTRE COLOMBO BRITANICO,1,1
+Ciencias sociales,ZIPA,6,Avanzado,COLEGIO BILINGUE COLOMBO BRITANICO,1,2
+Ciencias sociales,ZIPA,6,Avanzado,COLEGIO CAMPESTRE ARTES Y LETRAS,1,3
+Ciencias sociales,ZIPA,6,Avanzado,COLEGIO CAMPESTRE COLOMBO BRITANICO,1,4
+Ciencias sociales,ZIPA,6,Avanzado,COLEGIO COLOMBO BRITANICO,1,5
+Ciencias sociales,ZIPA,6,Avanzado,COLEGIO COLOMBO BRITANICO ZIPAQUIRA,1,6
+Ciencias sociales,ZIPA,6,Avanzado,COLEGIO DE LA PRESENTACIÓN DE ZIPAQUIRA,1,7
+Ciencias sociales,ZIPA,6,Avanzado,COLEGIO LA PRESENTACIÓN ZIPAQUIRÁ,1,8
+Ciencias sociales,ZIPA,6,Avanzado,COLEGIO NUESTRA SEÑORA DE LUXEMBURGO,1,9
+Ciencias sociales,ZIPA,6,Avanzado,COLEGIO PADRE MANYANET DE CHÍA,1,10
+Ciencias sociales,ZIPA,7,Progreso limitado,GIMNASIO INTEGRAL GENIOS DEL ZIPA,1,1
+Ciencias sociales,ZIPA,7,Emergente,COLEGIO BILINGUE CAMPESTRE COLOMBO BRITÁNICO ZIPAQ,1,1
+Ciencias sociales,ZIPA,7,Emergente,COLEGIO BRITÁNICO DE ZIPAQUIRÁ,1,2
+Ciencias sociales,ZIPA,7,Emergente,COLEGIO CAMPESTRE ARTES Y LETRAS,1,3
+Ciencias sociales,ZIPA,7,Emergente,COLEGIO COOPERATIVO DE COGUA,1,4
+Ciencias sociales,ZIPA,7,Emergente,COLEGIO CORAZONISTA,1,5
+Ciencias sociales,ZIPA,7,Emergente,GIMNASIO PSICOPEDAGÓGICO LAS VILLAS,1,6
+Ciencias sociales,ZIPA,7,En aceleración,GIMNASIO CAMPESTRE ICAV,3,1
+Ciencias sociales,ZIPA,7,En aceleración,GIMNASIO CAMPESTRE SANTA SOFIA,2,2
+Ciencias sociales,ZIPA,7,En aceleración,CENTRO EDUCATIVO KERUB,1,3
+Ciencias sociales,ZIPA,7,En aceleración,COLEGIO BILINGUE JOSE ALLAMANO,1,4
+Ciencias sociales,ZIPA,7,En aceleración,COLEGIO BILINGÜE CAMPESTRE COLOMBO BRITANICO,1,5
+Ciencias sociales,ZIPA,7,En aceleración,COLEGIO CAMPESTRE BILINGUE COLOMBO BRITANICO DE ZI,1,6
+Ciencias sociales,ZIPA,7,En aceleración,COLEGIO CRISTIANO DECOLOMBIA (ANTIGUO CARLOS V),1,7
+Ciencias sociales,ZIPA,7,En aceleración,COLEGIO DE LA PRESENTACIÓN DE ZIPAQUIRA,1,8
+Ciencias sociales,ZIPA,7,En aceleración,COLEGIO DE LA REAL LEGION BRITANICA,1,9
+Ciencias sociales,ZIPA,7,En aceleración,COLEGIO FUNDACIÓN SOCIAL ALBERTO MERANI,1,10
+Ciencias sociales,ZIPA,7,Avanzado,COLEGIO NUESTRA SEÑORA DE LUXEMBURGO,2,1
+Ciencias sociales,ZIPA,7,Avanzado,ESCUELA EXPERIENCIAL LA SEMILLA,2,2
+Ciencias sociales,ZIPA,7,Avanzado,GIMNASIO NUEVA ESCOCIA,2,3
+Ciencias sociales,ZIPA,7,Avanzado,GIMNASIO PEDAGÓGICO SAN MATTHEW,2,4
+Ciencias sociales,ZIPA,7,Avanzado,ASPAEN GIMNASIO CARTAGENA DE INDIAS,1,5
+Ciencias sociales,ZIPA,7,Avanzado,COLEGIO BILINGUE CAMPESTRE COLOMBO BRITÀNICO,1,6
+Ciencias sociales,ZIPA,7,Avanzado,COLEGIO CAMPESTRE ARTES Y LETRAS,1,7
+Ciencias sociales,ZIPA,7,Avanzado,COLEGIO CAMPESTRE ICAV,1,8
+Ciencias sociales,ZIPA,7,Avanzado,COLEGIO COLOMBO BRITANICO,1,9
+Ciencias sociales,ZIPA,7,Avanzado,COLEGIO DOUGLAS BROWN DE ZIPAQUIRA,1,10
+Ciencias sociales,ZIPA,8,Progreso limitado,COLEGIO LICEO CATEDRAL HIGH SCHOOL,1,1
+Ciencias sociales,ZIPA,8,Emergente,GIMNASIO CAMPESTRE ICAV,2,1
+Ciencias sociales,ZIPA,8,Emergente,COLEGIO CAMPESTRE MONTECERVINO MONTECERVINO,1,2
+Ciencias sociales,ZIPA,8,Emergente,COLEGIO FUNDACIÓN SOCIAL ALBERTO MERANI,1,3
+Ciencias sociales,ZIPA,8,Emergente,COLEGIO LA PRESENTACIÓN DE ZIPAQUIRÁ,1,4
+Ciencias sociales,ZIPA,8,Emergente,COLEGIO MAYOR ALFEREZ REAL,1,5
+Ciencias sociales,ZIPA,8,Emergente,ESCUELA RURAL LA PLAZUELA,1,6
+Ciencias sociales,ZIPA,8,Emergente,EXTERNADO CARO Y CUERVO,1,7
+Ciencias sociales,ZIPA,8,Emergente,GENIOS DEL ZIPA,1,8
+Ciencias sociales,ZIPA,8,Emergente,GIMNASIO INTEGRAL GENIOS DEL ZIPA,1,9
+Ciencias sociales,ZIPA,8,Emergente,GIMNASIO LOS ARRAYANES BILINGUE,1,10
+Ciencias sociales,ZIPA,8,En aceleración,COLEGIO DE LA PRESENTACIÓN DE ZIPAQUIRA,2,1
+Ciencias sociales,ZIPA,8,En aceleración,COLEGIO ANTONIO NARIÑO HH CORAZONISTAS,1,2
+Ciencias sociales,ZIPA,8,En aceleración,COLEGIO MONTEMAYOR SCHOOL,1,3
+Ciencias sociales,ZIPA,8,En aceleración,COLEGIO MONTERROSALES CICLOS,1,4
+Ciencias sociales,ZIPA,8,En aceleración,COLEGIO REFOUS,1,5
+Ciencias sociales,ZIPA,8,En aceleración,GIMNASIO CAMPESTRE SANTA SOFIA,1,6
+Ciencias sociales,ZIPA,8,En aceleración,GIMNASIO LOS ARRAYANES,1,7
+Ciencias sociales,ZIPA,8,En aceleración,INSTITUCIÓN EDUCATIVA DEPARTAMENTAL DE BACHILLERATO TÉCNICO COMERCIAL,1,8
+Ciencias sociales,ZIPA,8,En aceleración,INSTITUCIÓN EDUCATIVA DEPARTAMENTAL PABLO VI,1,9
+Ciencias sociales,ZIPA,8,Avanzado,GIMNASIO INTEGRAL GENIOS DEL ZIPA,6,1
+Ciencias sociales,ZIPA,8,Avanzado,GIMNASIO CAMPESTRE SANTA SOFÍA,4,2
+Ciencias sociales,ZIPA,8,Avanzado,COLEGIO BILINGUE CAMPESTRE COLOMBO BRITANICO,3,3
+Ciencias sociales,ZIPA,8,Avanzado,GIMNASIO CAMPESTRE SANTA SOFIA,3,4
+Ciencias sociales,ZIPA,8,Avanzado,COLEGIO FRANCISCO JOSE DE CALDAS,2,5
+Ciencias sociales,ZIPA,8,Avanzado,GIMNASIO CAMPESTRE ICAV,2,6
+Ciencias sociales,ZIPA,8,Avanzado,GIMNASIO SABANA NORTE,2,7
+Ciencias sociales,ZIPA,8,Avanzado,INSTITUCION EDUCATIVA SAN ALBERTO MAGNO,2,8
+Ciencias sociales,ZIPA,8,Avanzado,LICEO CATEDRAL HIGH SCHOOL,2,9
+Ciencias sociales,ZIPA,8,Avanzado,COLEGIO CAFETAL BILINGUE,1,10
+Ciencias sociales,ZIPA,9,Emergente,ACHARA MONTESSORI SCHOOL CHIA,1,1
+Ciencias sociales,ZIPA,9,Emergente,GIMNASIO CAMPESTRE SANTA SOFIA,1,2
+Ciencias sociales,ZIPA,9,Emergente,LICEO CAMPESTRE DE ARTES Y LETRAS,1,3
+Ciencias sociales,ZIPA,9,Emergente,LICEO CATEDRAL HIGH SCHOOL,1,4
+Ciencias sociales,ZIPA,9,En aceleración,COLEGIO BILINGUE CAMPESTRE COLOMBO BRITANICO,1,1
+Ciencias sociales,ZIPA,9,En aceleración,COLEGIO FRANCISCO JOSE DE CALDAS,1,2
+Ciencias sociales,ZIPA,9,En aceleración,GIMNASIO SABANA NORTE,1,3
+Ciencias sociales,ZIPA,9,En aceleración,LICEO CAMPESTRE DE LAS AMÉRICAS,1,4
+Ciencias sociales,ZIPA,9,En aceleración,MONTE MAYOR SCHOOL,1,5
+Ciencias sociales,ZIPA,9,En aceleración,MONTERROSALES,1,6
+Ciencias sociales,ZIPA,9,Avanzado,GIMNASIO CAMPESTRE SANTA SOFIA,3,1
+Ciencias sociales,ZIPA,9,Avanzado,GIMNASIO SABANA NORTE,3,2
+Ciencias sociales,ZIPA,9,Avanzado,COLEGIO MONTEMAYOR SCHOOL,2,3
+Ciencias sociales,ZIPA,9,Avanzado,LICEO CATEDRAL HIGH SCHOOL,2,4
+Ciencias sociales,ZIPA,9,Avanzado,SAN ALBERTO MAGNO,2,5
+Ciencias sociales,ZIPA,9,Avanzado,SANTA SOFIA,2,6
+Ciencias sociales,ZIPA,9,Avanzado,COLEGIO BILINGUE CAMPESTRE COLOMBO BRITANICO,1,7
+Ciencias sociales,ZIPA,9,Avanzado,COLEGIO BILINGUE COLOMBO BRITANICO ZIPAQUIRA,1,8
+Ciencias sociales,ZIPA,9,Avanzado,COLEGIO CAMPESTRE COLOMBO BRITANICO,1,9
+Ciencias sociales,ZIPA,9,Avanzado,COLEGIO CAMPESTRE GENIOS DEL ZIPA,1,10
+Ciencias sociales,ZIPA,10,Progreso limitado,COLEGIO BILINGUE CAMPESTRE COLOBO BRITANICO,1,1
+Ciencias sociales,ZIPA,10,Progreso limitado,COLEGIO PADRE MANYANETH,1,2
+Ciencias sociales,ZIPA,10,Emergente,COLEGIO COLOMBO AMERICANO,1,1
+Ciencias sociales,ZIPA,10,Emergente,GENIOS DEL ZIPA,1,2
+Ciencias sociales,ZIPA,10,Emergente,INSTITUTO PEDAGOGICO ESACALEMOS,1,3
+Ciencias sociales,ZIPA,10,Emergente,ZION SCHOOL,1,4
+Ciencias sociales,ZIPA,10,En aceleración,COLEGIO BILINGÜE CAMPESTRE COLOMBO BRITANICO,1,1
+Ciencias sociales,ZIPA,10,En aceleración,COLEGIO COLOMBO BRITÁNICO ZIPAQUIRÁ,1,2
+Ciencias sociales,ZIPA,10,En aceleración,COLEGIO EL ROSARIO,1,3
+Ciencias sociales,ZIPA,10,En aceleración,COLEGIO PADRE MANYANET DE CHÍA,1,4
+Ciencias sociales,ZIPA,10,En aceleración,GIMNASIO CAMPESTRE ICAV,1,5
+Ciencias sociales,ZIPA,10,En aceleración,GIMNASIO CAMPESTRE SANTA SOFIA,1,6
+Ciencias sociales,ZIPA,10,En aceleración,GIMNASIO CSMPESTRE SANTA SOFIA,1,7
+Ciencias sociales,ZIPA,10,En aceleración,GIMNASIO LOS ARRAYANES,1,8
+Ciencias sociales,ZIPA,10,En aceleración,GIMNASIO LOS ARRAYANES BILINGUE,1,9
+Ciencias sociales,ZIPA,10,En aceleración,INSTITUCION EDUCATIVA SAN ALBERTO MAGNO,1,10
+Ciencias sociales,ZIPA,10,Avanzado,GIMNASIO CAMPESTRE SANTA SOFIA,5,1
+Ciencias sociales,ZIPA,10,Avanzado,COLEGIO DE LA PRESENTACIÓN DE ZIPAQUIRA,2,2
+Ciencias sociales,ZIPA,10,Avanzado,COLEGIO BILINGUE CAMPESTRE COLOMBO BRITANICO,1,3
+Ciencias sociales,ZIPA,10,Avanzado,COLEGIO BILINGÜE COLOMBO BRITÁNICO,1,4
+Ciencias sociales,ZIPA,10,Avanzado,COLEGIO BILINGÜE COLOMBO BRITÁNICO ZIPAQUIRÁ,1,5
+Ciencias sociales,ZIPA,10,Avanzado,COLEGIO CAMPESTRE SANTA SOFIA,1,6
+Ciencias sociales,ZIPA,10,Avanzado,COLEGIO COLOMBO BRITÁNICO ZIPAQUIRA,1,7
+Ciencias sociales,ZIPA,10,Avanzado,COLEGIO DE LAS RR ESCLAVAS SAGRADO CORAZÓN DE JESUS,1,8
+Ciencias sociales,ZIPA,10,Avanzado,COLEGIO FRANCISCO JOSE DE CALDAS,1,9
+Ciencias sociales,ZIPA,10,Avanzado,GIMANASIO SANTA SOFIA,1,10
