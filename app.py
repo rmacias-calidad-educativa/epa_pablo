@@ -134,10 +134,15 @@ def read_default_data():
             columns={"competencia": "Dimension"}
         )
 
-    top10_path = Path("data/default_top10_origin_2026.csv")
+    top10_grade_files = sorted(
+        Path("data").glob("top10_origin_by_grade_*.csv")
+    )
     top10_origin = (
-        pd.read_csv(top10_path)
-        if top10_path.exists()
+        pd.concat(
+            [pd.read_csv(path) for path in top10_grade_files],
+            ignore_index=True,
+        )
+        if top10_grade_files
         else pd.DataFrame()
     )
 
@@ -931,10 +936,10 @@ def render_top10_origin_by_level(
     top10_public: pd.DataFrame | None,
 ):
     st.divider()
-    st.subheader("Top 10 colegios de origen por nivel de desempeño")
+    st.subheader("Colegios de origen por nivel de desempeño")
     st.caption(
-        "Pertenencia = número de estudiantes únicos que provienen de cada colegio "
-        "de origen dentro del nivel de desempeño seleccionado."
+        "Filtra por grado y por colegio de origen dentro de la prueba actual. "
+        "La distribución usa estudiantes únicos."
     )
 
     if aggregated:
@@ -944,18 +949,71 @@ def render_top10_origin_by_level(
             )
             return
 
-        ranking = top10_public[
+        base = top10_public[
             top10_public["Prueba"].astype(str) == test_name
         ].copy()
-        if ranking.empty:
+
+        if base.empty:
             st.info("No hay información de colegios de origen para esta prueba.")
             return
 
-        st.caption(
-            "La vista precargada corresponde al total de la RED en 2026. "
-            "Al cargar el Excel completo, el ranking responde también a los filtros "
-            "de sede y grado seleccionados."
+        grade_options = sorted(
+            [int(g) for g in base["Grado_num"].dropna().unique()]
         )
+
+        c1, c2 = st.columns([1, 2])
+        with c1:
+            selected_origin_grades = st.multiselect(
+                "Grado",
+                grade_options,
+                default=grade_options,
+                format_func=lambda g: f"{g}°",
+                key=f"origin_grades_{test_name}",
+            )
+
+        filtered = base.copy()
+        if selected_origin_grades:
+            filtered = filtered[
+                filtered["Grado_num"].isin(selected_origin_grades)
+            ]
+
+        school_options = sorted(
+            filtered["colegio_de_origen"]
+            .dropna()
+            .astype(str)
+            .unique()
+        )
+
+        with c2:
+            selected_schools = st.multiselect(
+                "Colegio de origen",
+                school_options,
+                placeholder="Todos los colegios",
+                key=f"origin_schools_{test_name}",
+            )
+
+        if selected_schools:
+            filtered = filtered[
+                filtered["colegio_de_origen"].isin(selected_schools)
+            ]
+
+        if filtered.empty:
+            st.warning("Los filtros seleccionados no dejan colegios para analizar.")
+            return
+
+        ranking = (
+            filtered.groupby(
+                ["Nivel", "colegio_de_origen"],
+                as_index=False,
+            )["Estudiantes"]
+            .sum()
+        )
+
+        st.caption(
+            "En la versión precargada, el filtro se construye con los colegios "
+            "que aparecen entre los 10 de mayor frecuencia dentro de cada grado y nivel."
+        )
+
     else:
         if (
             "colegio_de_origen" not in data.columns
@@ -974,21 +1032,135 @@ def render_top10_origin_by_level(
             st.info("No hay información de colegio de origen en los filtros actuales.")
             return
 
+        grade_options = sorted(
+            [int(g) for g in student["Grado_num"].dropna().unique()]
+        )
+
+        c1, c2 = st.columns([1, 2])
+        with c1:
+            selected_origin_grades = st.multiselect(
+                "Grado",
+                grade_options,
+                default=grade_options,
+                format_func=lambda g: f"{g}°",
+                key=f"origin_grades_{test_name}",
+            )
+
+        filtered_students = student.copy()
+        if selected_origin_grades:
+            filtered_students = filtered_students[
+                filtered_students["Grado_num"].isin(selected_origin_grades)
+            ]
+
+        school_options = sorted(
+            filtered_students["colegio_de_origen"]
+            .dropna()
+            .astype(str)
+            .unique()
+        )
+
+        with c2:
+            selected_schools = st.multiselect(
+                "Colegio de origen",
+                school_options,
+                placeholder="Todos los colegios",
+                key=f"origin_schools_{test_name}",
+            )
+
+        if selected_schools:
+            filtered_students = filtered_students[
+                filtered_students["colegio_de_origen"].isin(selected_schools)
+            ]
+
+        if filtered_students.empty:
+            st.warning("Los filtros seleccionados no dejan colegios para analizar.")
+            return
+
         ranking = (
-            student.groupby(
+            filtered_students.groupby(
                 ["Nivel", "colegio_de_origen"],
                 as_index=False,
             )
             .agg(Estudiantes=("IdentiEstudiante", "nunique"))
         )
-        ranking["Ranking"] = (
-            ranking.groupby("Nivel")["Estudiantes"]
-            .rank(method="first", ascending=False)
-            .astype(int)
-        )
-        ranking = ranking[
-            ranking["Ranking"] <= 10
+
+    # Distribución de los colegios seleccionados entre los cuatro niveles.
+    if selected_schools:
+        selected_distribution = ranking[
+            ranking["colegio_de_origen"].isin(selected_schools)
         ].copy()
+
+        if not selected_distribution.empty:
+            totals = (
+                selected_distribution.groupby("colegio_de_origen")["Estudiantes"]
+                .transform("sum")
+            )
+            selected_distribution["Porcentaje"] = np.where(
+                totals > 0,
+                selected_distribution["Estudiantes"] / totals * 100,
+                0,
+            )
+            selected_distribution["Etiqueta"] = (
+                selected_distribution["Porcentaje"]
+                .map(lambda x: f"{x:.0f}%" if x >= 5 else "")
+            )
+
+            st.markdown("#### Distribución de los colegios seleccionados")
+            fig = px.bar(
+                selected_distribution,
+                x="Porcentaje",
+                y="colegio_de_origen",
+                color="Nivel",
+                orientation="h",
+                barmode="stack",
+                category_orders={"Nivel": LEVEL_ORDER},
+                color_discrete_map=LEVEL_COLORS,
+                text="Etiqueta",
+                hover_data={
+                    "Estudiantes": True,
+                    "Porcentaje": ":.1f",
+                    "Etiqueta": False,
+                },
+                labels={
+                    "Porcentaje": "",
+                    "colegio_de_origen": "",
+                    "Nivel": "Nivel",
+                },
+            )
+            fig.update_xaxes(
+                range=[0, 100],
+                showticklabels=False,
+                showgrid=False,
+                ticks="",
+                title=None,
+            )
+            fig.update_yaxes(
+                showgrid=False,
+                ticks="",
+                title=None,
+            )
+            fig.update_layout(
+                height=max(280, 58 * len(selected_schools) + 120),
+                plot_bgcolor="rgba(0,0,0,0)",
+                margin=dict(l=10, r=20, t=30, b=10),
+                legend_title_text="Nivel",
+            )
+            fig.update_traces(textposition="inside")
+            st.plotly_chart(fig, use_container_width=True)
+
+    st.markdown("#### Top 10 colegios con mayor número de estudiantes en cada nivel")
+
+    # Recalcular el ranking después de aplicar los filtros locales.
+    ranking = ranking.sort_values(
+        ["Nivel", "Estudiantes", "colegio_de_origen"],
+        ascending=[True, False, True],
+    )
+    ranking["Ranking"] = (
+        ranking.groupby("Nivel")["Estudiantes"]
+        .rank(method="first", ascending=False)
+        .astype(int)
+    )
+    ranking = ranking[ranking["Ranking"] <= 10].copy()
 
     rows = [
         ("Progreso limitado", "Emergente"),
@@ -1012,20 +1184,12 @@ def render_top10_origin_by_level(
                     ascending=[True, False],
                 )
 
-                total_level = d["Estudiantes"].sum()
-                d["Pct_top10"] = np.where(
-                    total_level > 0,
-                    d["Estudiantes"] / total_level * 100,
-                    0,
-                )
-
                 fig = px.bar(
                     d,
                     x="Estudiantes",
                     y="colegio_de_origen",
                     orientation="h",
                     text="Estudiantes",
-                    custom_data=["Pct_top10"],
                     title=level,
                     labels={
                         "Estudiantes": "",
@@ -1038,8 +1202,7 @@ def render_top10_origin_by_level(
                     cliponaxis=False,
                     hovertemplate=(
                         "<b>%{y}</b><br>"
-                        "Estudiantes: %{x}<br>"
-                        "Participación entre el top 10: %{customdata[0]:.1f}%"
+                        "Estudiantes: %{x}"
                         "<extra></extra>"
                     ),
                 )
