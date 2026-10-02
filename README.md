@@ -168,3 +168,43 @@ La visual principal es una gráfica de líneas donde:
 - cada línea = una de las seis sedes/colegios;
 - filtro = una prueba a la vez, con opción de año;
 - tooltip = estudiantes ≤50%, estudiantes >50%, total y porcentaje ≤50%.
+
+
+## Lectura de niveles y contraste con la red
+
+En cada una de las cinco hojas se hace explícita la equivalencia:
+
+- **≤50% = Progreso limitado + Emergente**
+- **>50% = En aceleración + Avanzado**
+
+Después de la gráfica principal se presenta una barra 100% apilada para cada sede con los cuatro niveles de desempeño:
+
+1. Progreso limitado
+2. Emergente
+3. En aceleración
+4. Avanzado
+
+Cada sede se contrasta con una barra adicional denominada **RED**, que representa el comportamiento conjunto de las seis sedes para los mismos grados seleccionados. También se muestra la diferencia en puntos porcentuales de cada nivel frente a la RED.
+
+## Dimensiones de evaluación
+
+Al final de cada hoja se presenta el comportamiento de las dimensiones/competencias de evaluación a través de los grados. El usuario puede alternar entre:
+
+- **RED**, que combina las seis sedes;
+- una sede específica.
+
+Las cifras sobre los puntos corresponden al porcentaje promedio de acierto de la dimensión.
+
+Para evitar que las omisiones de respuesta inflen artificialmente el porcentaje, el denominador esperado de una dimensión se estima como el máximo número de ítems observados para esa dimensión dentro de la misma prueba original.
+
+En **Inglés**, los valores `Pre A1`, `A1`, `A2` y `B1` no se presentan como dimensiones porque corresponden a niveles de dominio y no a dimensiones de evaluación.
+
+## Datos públicos precargados
+
+El repositorio incluye resúmenes agregados y anonimizados de **2026** para:
+
+- estudiantes ≤50% y >50% por sede, grado y prueba;
+- distribución de los cuatro niveles de desempeño;
+- desempeño por dimensión de evaluación.
+
+Estos archivos no contienen nombres ni identificaciones individuales.
