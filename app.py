@@ -1166,7 +1166,7 @@ def render_top10_origin_by_level(
                 "Sede",
                 available_sites,
                 default=available_sites,
-                key=f"origin_sites_{test_name}",
+                key=f"origin_sites_{view_key}_{test_name}",
                 help="Sede de llegada del estudiante.",
             )
 
@@ -1185,7 +1185,7 @@ def render_top10_origin_by_level(
                 grade_options,
                 default=grade_options,
                 format_func=lambda g: f"{g}°",
-                key=f"origin_grades_{test_name}",
+                key=f"origin_grades_{view_key}_{test_name}",
             )
 
         if selected_origin_grades:
