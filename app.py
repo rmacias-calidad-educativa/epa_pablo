@@ -10,7 +10,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 import streamlit as st
 
-from processing import aggregate_group, build_attempt_table
+from processing import aggregate_group, build_attempt_table, normalize_area
 from ui import (
     LEVEL_COLORS,
     LEVEL_ORDER,
@@ -18,6 +18,13 @@ from ui import (
     dataframe_download,
     multiselect_filter,
 )
+
+CORE_TESTS = [
+    "Ciencias naturales",
+    "Ciencias sociales",
+    "Matemáticas",
+    "Lenguaje",
+]
 
 
 st.set_page_config(
@@ -52,7 +59,8 @@ def read_excel(file_bytes: bytes) -> pd.DataFrame:
 
 @st.cache_data(show_spinner=False)
 def process_data(raw: pd.DataFrame) -> pd.DataFrame:
-    return build_attempt_table(raw)
+    data = build_attempt_table(raw)
+    return data[data["QuizName"].isin(CORE_TESTS)].copy()
 
 
 def pct(x):
@@ -62,237 +70,167 @@ def pct(x):
 def num(x, digits=1):
     return f"{x:.{digits}f}" if pd.notna(x) else "—"
 
-def render_site_test_matrix(source: pd.DataFrame, key_prefix: str, aggregated: bool = False):
-    """Matriz prueba × sede con conteos ≤50 y >50."""
-    st.subheader("Las 6 sedes × pruebas")
-    st.caption(
-        "Filas = pruebas, columnas = sedes. El color representa el % de estudiantes en ≤50%. "
-        "Cada celda muestra cuántos están en ≤50% y cuántos en >50%."
-    )
-
-    years = sorted(
-        [int(y) for y in source["Año"].dropna().unique()]
-    ) if "Año" in source.columns else []
-    year_options = ["Todos"] + years
-    selected_year = st.selectbox(
-        "Año",
-        year_options,
-        index=len(year_options) - 1,
-        key=f"{key_prefix}_year",
-    )
-
-    grade_source = source.copy()
-    if selected_year != "Todos" and "Año" in grade_source.columns:
-        grade_source = grade_source[grade_source["Año"] == selected_year]
-
-    grade_values = sorted(
-        [int(g) for g in grade_source["Grado_num"].dropna().unique()]
-    )
-    grade_options = ["Todos"] + [f"{g}°" for g in grade_values]
-    selected_grade = st.selectbox(
-        "Grado",
-        grade_options,
-        key=f"{key_prefix}_grade",
-    )
+def render_grade_line_chart(
+    source: pd.DataFrame,
+    key_prefix: str,
+    aggregated: bool = False,
+):
+    """Trayectoria por grado del número de estudiantes con ≤50%."""
+    sites = ["BAQ", "COT", "MOS", "TUN", "USAQ", "ZIPA"]
 
     d = source.copy()
-    if selected_year != "Todos" and "Año" in d.columns:
-        d = d[d["Año"] == selected_year]
-    if selected_grade != "Todos":
-        grade_num = int(selected_grade.replace("°", ""))
-        d = d[d["Grado_num"] == grade_num]
-
-    if d.empty:
-        st.info("No hay registros para la combinación seleccionada.")
+    if "QuizName" in d.columns:
+        d["Prueba"] = d["QuizName"].apply(normalize_area)
+    elif "Area" in d.columns:
+        d["Prueba"] = d["Area"].apply(normalize_area)
+    else:
+        st.info("No hay una columna de prueba disponible.")
         return
 
-    sites = ["BAQ", "COT", "MOS", "TUN", "USAQ", "ZIPA"]
+    d = d[d["Prueba"].isin(CORE_TESTS)].copy()
+    if d.empty:
+        st.info("No hay datos para las cuatro pruebas definidas.")
+        return
+
+    st.subheader("Trayectoria de estudiantes con ≤50% a lo largo de los grados")
+    st.caption(
+        "Cada línea representa una de las seis sedes/colegios. "
+        "Selecciona una prueba para evitar saturación visual. "
+        "El eje Y muestra la cantidad de estudiantes con 50% o menos de aciertos."
+    )
+
+    c1, c2 = st.columns([1.3, 1])
+    with c1:
+        selected_test = st.selectbox(
+            "Prueba",
+            CORE_TESTS,
+            key=f"{key_prefix}_test",
+        )
+
+    years = (
+        sorted([int(y) for y in d["Año"].dropna().unique()])
+        if "Año" in d.columns
+        else []
+    )
+    with c2:
+        selected_year = st.selectbox(
+            "Año",
+            ["Todos"] + years,
+            index=len(years),
+            key=f"{key_prefix}_year",
+        )
+
+    d = d[d["Prueba"] == selected_test].copy()
+    if selected_year != "Todos" and "Año" in d.columns:
+        d = d[d["Año"] == selected_year]
+
+    if d.empty:
+        st.info("No hay registros para la prueba y el año seleccionados.")
+        return
 
     if aggregated:
         grouped = (
-            d.groupby(["QuizName", "Sede"], as_index=False)
+            d.groupby(["Grado_num", "Sede"], as_index=False)
             .agg(
                 Estudiantes=("Estudiantes", "sum"),
-                Debajo_igual_50=("Debajo_igual_50", "sum"),
-                Encima_50=("Encima_50", "sum"),
+                Menor_igual_50=("Debajo_igual_50", "sum"),
+                Mayor_50=("Encima_50", "sum"),
             )
         )
     else:
+        # Clasificación a nivel de estudiante, prueba y grado.
+        student_test = (
+            d.groupby(
+                ["IdentiEstudiante", "Sede", "Grado_num"],
+                as_index=False,
+            )
+            .agg(Porcentaje=("Porcentaje_acierto", "mean"))
+        )
+        student_test["Menor_igual_50"] = student_test["Porcentaje"] <= 50
         grouped = (
-            d.groupby(["QuizName", "Sede"], as_index=False)
+            student_test.groupby(["Grado_num", "Sede"], as_index=False)
             .agg(
                 Estudiantes=("IdentiEstudiante", "nunique"),
-                Debajo_igual_50=("Grupo_50", lambda x: (x == "≤50%").sum()),
-                Encima_50=("Grupo_50", lambda x: (x == ">50%").sum()),
+                Menor_igual_50=("Menor_igual_50", "sum"),
             )
         )
+        grouped["Mayor_50"] = (
+            grouped["Estudiantes"] - grouped["Menor_igual_50"]
+        )
 
-    grouped["Total"] = grouped["Debajo_igual_50"] + grouped["Encima_50"]
     grouped["Pct_50_o_menos"] = np.where(
-        grouped["Total"] > 0,
-        grouped["Debajo_igual_50"] / grouped["Total"] * 100,
+        grouped["Estudiantes"] > 0,
+        grouped["Menor_igual_50"] / grouped["Estudiantes"] * 100,
         np.nan,
     )
+    grouped["Grado"] = (
+        grouped["Grado_num"].astype(int).astype(str) + "°"
+    )
 
-    total_under = int(grouped["Debajo_igual_50"].sum())
-    total_above = int(grouped["Encima_50"].sum())
-    total = total_under + total_above
-    pct_under = total_under / total * 100 if total else np.nan
+    total_under = int(grouped["Menor_igual_50"].sum())
+    total_above = int(grouped["Mayor_50"].sum())
+    total_students = total_under + total_above
 
     k1, k2, k3, k4 = st.columns(4)
-    k1.metric("≤50%", f"{total_under:,}".replace(",", "."))
-    k2.metric(">50%", f"{total_above:,}".replace(",", "."))
-    k3.metric("% ≤50%", f"{pct_under:.1f}%" if total else "—")
-    k4.metric("Pruebas visibles", grouped["QuizName"].nunique())
+    k1.metric("Estudiantes ≤50%", f"{total_under:,}".replace(",", "."))
+    k2.metric("Estudiantes >50%", f"{total_above:,}".replace(",", "."))
+    k3.metric(
+        "% ≤50%",
+        f"{total_under / total_students * 100:.1f}%"
+        if total_students else "—",
+    )
+    k4.metric("Prueba", selected_test)
 
-    tests = (
-        grouped.groupby("QuizName")["Total"]
-        .sum()
-        .sort_values(ascending=True)
-        .index
-        .tolist()
+    fig = px.line(
+        grouped.sort_values(["Sede", "Grado_num"]),
+        x="Grado_num",
+        y="Menor_igual_50",
+        color="Sede",
+        markers=True,
+        category_orders={"Sede": sites},
+        hover_data={
+            "Grado_num": False,
+            "Grado": True,
+            "Estudiantes": True,
+            "Menor_igual_50": True,
+            "Mayor_50": True,
+            "Pct_50_o_menos": ":.1f",
+        },
+        labels={
+            "Grado_num": "Grado",
+            "Menor_igual_50": "Estudiantes ≤50%",
+            "Sede": "Sede/colegio",
+            "Mayor_50": "Estudiantes >50%",
+            "Pct_50_o_menos": "% ≤50%",
+        },
+        title=f"Estudiantes con ≤50% por grado y sede | {selected_test}",
     )
-
-    pct_pivot = (
-        grouped.pivot(index="QuizName", columns="Sede", values="Pct_50_o_menos")
-        .reindex(index=tests, columns=sites)
+    grades = sorted(
+        [int(g) for g in grouped["Grado_num"].dropna().unique()]
     )
-    under_pivot = (
-        grouped.pivot(index="QuizName", columns="Sede", values="Debajo_igual_50")
-        .reindex(index=tests, columns=sites)
+    fig.update_xaxes(
+        tickmode="array",
+        tickvals=grades,
+        ticktext=[f"{g}°" for g in grades],
     )
-    above_pivot = (
-        grouped.pivot(index="QuizName", columns="Sede", values="Encima_50")
-        .reindex(index=tests, columns=sites)
-    )
-
-    text_matrix = []
-    for test in tests:
-        row = []
-        for site in sites:
-            lo = under_pivot.loc[test, site]
-            hi = above_pivot.loc[test, site]
-            if pd.isna(lo) and pd.isna(hi):
-                row.append("—")
-            else:
-                row.append(f"{int(0 if pd.isna(lo) else lo)} ≤50 | {int(0 if pd.isna(hi) else hi)} >50")
-        text_matrix.append(row)
-
-    fig = go.Figure(
-        data=go.Heatmap(
-            z=pct_pivot.values,
-            x=sites,
-            y=tests,
-            zmin=0,
-            zmax=100,
-            colorscale="RdYlGn_r",
-            text=text_matrix,
-            texttemplate="%{text}",
-            hovertemplate=(
-                "Sede: %{x}<br>Prueba: %{y}<br>"
-                "% ≤50: %{z:.1f}%<br>%{text}<extra></extra>"
-            ),
-            colorbar=dict(title="% ≤50"),
-        )
-    )
+    fig.update_yaxes(rangemode="tozero", dtick=1)
     fig.update_layout(
-        title="Mapa de estudiantes ≤50% y >50% por sede y prueba",
-        xaxis_title="Sede",
-        yaxis_title="",
-        height=max(520, 32 * len(tests) + 180),
+        height=620,
+        legend_title_text="Sede/colegio",
+        hovermode="x unified",
     )
     st.plotly_chart(fig, use_container_width=True)
 
-    selected_test = st.selectbox(
-        "Explorar una prueba en detalle",
-        sorted(grouped["QuizName"].unique()),
-        key=f"{key_prefix}_test",
+    st.caption(
+        "El conteo es de estudiantes, no de intentos. "
+        "En el tooltip puedes ver también cuántos estudiantes quedaron >50% "
+        "y el porcentaje ≤50% para cada sede y grado."
     )
-    detail = grouped[grouped["QuizName"] == selected_test].copy()
-    detail = detail.set_index("Sede").reindex(sites, fill_value=0).reset_index()
 
-    fig = go.Figure()
-    fig.add_bar(
-        x=detail["Sede"],
-        y=detail["Debajo_igual_50"],
-        name="≤50%",
-        text=detail["Debajo_igual_50"],
-        textposition="auto",
-    )
-    fig.add_bar(
-        x=detail["Sede"],
-        y=detail["Encima_50"],
-        name=">50%",
-        text=detail["Encima_50"],
-        textposition="auto",
-    )
-    fig.update_layout(
-        barmode="group",
-        title=f"Cantidad de estudiantes por sede | {selected_test}",
-        xaxis_title="Sede",
-        yaxis_title="Estudiantes",
-    )
-    st.plotly_chart(fig, use_container_width=True)
-
-    # Histórico de la prueba seleccionada a través de los años.
-    history_source = source[source["QuizName"] == selected_test].copy()
-    if selected_grade != "Todos":
-        grade_num = int(selected_grade.replace("°", ""))
-        history_source = history_source[history_source["Grado_num"] == grade_num]
-
-    if "Año" in history_source.columns and history_source["Año"].nunique() > 1:
-        if aggregated:
-            history = (
-                history_source.groupby(["Año", "Sede"], as_index=False)
-                .agg(
-                    Debajo_igual_50=("Debajo_igual_50", "sum"),
-                    Encima_50=("Encima_50", "sum"),
-                )
-            )
-        else:
-            history = (
-                history_source.groupby(["Año", "Sede"], as_index=False)
-                .agg(
-                    Debajo_igual_50=("Grupo_50", lambda x: (x == "≤50%").sum()),
-                    Encima_50=("Grupo_50", lambda x: (x == ">50%").sum()),
-                )
-            )
-
-        history_long = history.melt(
-            id_vars=["Año", "Sede"],
-            value_vars=["Debajo_igual_50", "Encima_50"],
-            var_name="Grupo",
-            value_name="Estudiantes",
-        )
-        history_long["Grupo"] = history_long["Grupo"].map(
-            {
-                "Debajo_igual_50": "≤50%",
-                "Encima_50": ">50%",
-            }
-        )
-        history_long["Año"] = history_long["Año"].astype(str)
-
-        fig = px.bar(
-            history_long,
-            x="Año",
-            y="Estudiantes",
-            color="Grupo",
-            facet_col="Sede",
-            facet_col_wrap=3,
-            barmode="group",
-            text="Estudiantes",
-            category_orders={"Sede": sites, "Grupo": ["≤50%", ">50%"]},
-            title=f"Histórico anual por sede | {selected_test}",
-        )
-        fig.for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1]))
-        fig.update_yaxes(matches=None, showticklabels=True)
-        fig.update_layout(height=650, legend_title_text="Resultado")
-        st.plotly_chart(fig, use_container_width=True)
-
-    if selected_year == 2025 and total < 30:
+    if selected_year == 2025 and total_students < 30:
         st.info(
-            "En 2025 hay muy pocos registros en la base actual. Interpreta esa vista como "
-            "referencia descriptiva, no como comparación estable con 2026."
+            "La base actual tiene muy pocos registros de 2025. "
+            "Interpreta esa trayectoria únicamente de forma descriptiva."
         )
 
 
@@ -309,9 +247,9 @@ with st.expander("Reglas de cálculo", expanded=False):
 - **Emergente:** >25% a 50%.
 - **En aceleración:** >50% a 75%.
 - **Avanzado:** >75% a 100%.
-- **Denominador general:** 20 ítems.
-- **Inglés 9° y 10°:** 22 ítems.
-- **Inglés 11°:** 25 ítems.
+- **Pruebas visibles:** Ciencias naturales, Ciencias sociales, Matemáticas y Lenguaje.
+- **Denominador:** 20 ítems en las cuatro pruebas.
+- El grado se analiza como una dimensión independiente y no forma parte del nombre de la prueba.
 - Si una pregunta no fue contestada y por eso no aparece en la exportación, **se conserva en el denominador esperado**.
         """
     )
@@ -329,6 +267,8 @@ if uploaded is None:
         st.stop()
 
     summary_data = pd.read_csv(default_path)
+    summary_data["Area"] = summary_data["Area"].apply(normalize_area)
+    summary_data = summary_data[summary_data["Area"].isin(CORE_TESTS)].copy()
     st.success(
         "Mostrando la base precargada anonimizada. "
         "Puedes cargar el Excel completo arriba para habilitar el análisis individual."
@@ -389,9 +329,13 @@ if uploaded is None:
     temporal_path = Path("data/default_temporal_summary.csv")
     if temporal_path.exists():
         temporal_data = pd.read_csv(temporal_path)
-        render_site_test_matrix(
+        temporal_data["QuizName"] = temporal_data["QuizName"].apply(normalize_area)
+        temporal_data = temporal_data[
+            temporal_data["QuizName"].isin(CORE_TESTS)
+        ].copy()
+        render_grade_line_chart(
             temporal_data,
-            key_prefix="default_matrix",
+            key_prefix="default_grade_line",
             aggregated=True,
         )
         st.divider()
@@ -554,7 +498,15 @@ areas = multiselect_filter("Área", data, "Area", "f_area")
 test_source = data.copy()
 if areas:
     test_source = test_source[test_source["Area"].astype(str).isin(areas)]
-pruebas = multiselect_filter("Prueba", test_source, "QuizName", "f_prueba")
+available_tests = [
+    test for test in CORE_TESTS
+    if test in test_source["QuizName"].dropna().astype(str).unique()
+]
+pruebas = st.sidebar.multiselect(
+    "Prueba",
+    available_tests,
+    key="f_prueba",
+)
 
 has_course = (
     "Curso" in data.columns
@@ -595,9 +547,9 @@ c5.metric("Cobertura", pct(coverage))
 c6.metric("Ítems no observados", f"{int(missing_items):,}".replace(",", "."))
 
 st.divider()
-render_site_test_matrix(
+render_grade_line_chart(
     filtered,
-    key_prefix="full_matrix",
+    key_prefix="full_grade_line",
     aggregated=False,
 )
 st.divider()
