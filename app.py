@@ -26,6 +26,7 @@ TESTS = [
     "Inglés",
 ]
 SITES = ["BAQ", "COT", "MOS", "TUN", "USAQ", "ZIPA"]
+ANTIGUEDAD_SITES = ["COT", "MOS", "TUN", "ZIPA"]
 LEVEL_ORDER = [
     "Nivel 1",
     "Nivel 2",
@@ -99,21 +100,57 @@ def process_raw(raw: pd.DataFrame):
             & (dimensions["Prueba"].isin(TESTS))
         ].copy()
 
-    return attempts, dimensions
+    age_attempts = attempts[
+        attempts["Sede"].astype(str).isin(ANTIGUEDAD_SITES)
+        & (
+            pd.to_numeric(
+                attempts["AntiguedadBS"],
+                errors="coerce",
+            )
+            <= 1
+        )
+    ].copy()
+
+    if (
+        not dimensions.empty
+        and "AntiguedadBS" in dimensions.columns
+    ):
+        age_dimensions = dimensions[
+            dimensions["Sede"].astype(str).isin(ANTIGUEDAD_SITES)
+            & (
+                pd.to_numeric(
+                    dimensions["AntiguedadBS"],
+                    errors="coerce",
+                )
+                <= 1
+            )
+        ].copy()
+    else:
+        raw_age = raw[
+            raw["Sede"].astype(str).isin(ANTIGUEDAD_SITES)
+            & (
+                pd.to_numeric(
+                    raw["AntiguedadBS"],
+                    errors="coerce",
+                )
+                <= 1
+            )
+        ].copy()
+        age_dimensions = build_dimension_table(raw_age)
+        if not age_dimensions.empty:
+            age_dimensions = age_dimensions[
+                (age_dimensions["Año"] == YEAR)
+                & (age_dimensions["Prueba"].isin(TESTS))
+            ].copy()
+
+    return attempts, dimensions, age_attempts, age_dimensions
 
 
 @st.cache_data(show_spinner=False)
 def read_default_data():
     temporal_path = Path("data/default_temporal_summary.csv")
     if not temporal_path.exists():
-        return (
-            pd.DataFrame(),
-            pd.DataFrame(),
-            pd.DataFrame(),
-            pd.DataFrame(),
-            pd.DataFrame(),
-            pd.DataFrame(),
-        )
+        return tuple(pd.DataFrame() for _ in range(8))
 
     temporal = pd.read_csv(temporal_path)
     temporal["Prueba"] = temporal["QuizName"].apply(normalize_area)
@@ -161,25 +198,47 @@ def read_default_data():
         else pd.DataFrame()
     )
     if not top10_origin.empty and "Nivel" in top10_origin.columns:
-        top10_origin["Nivel"] = top10_origin["Nivel"].replace(LEGACY_LEVEL_MAP)
+        top10_origin["Nivel"] = top10_origin["Nivel"].replace(
+            LEGACY_LEVEL_MAP
+        )
 
-    newcomer_path = Path("data/default_newcomers_mos_tun_2026.csv")
-    newcomers = (
-        pd.read_csv(newcomer_path)
-        if newcomer_path.exists()
+    age_temporal_path = Path("data/antiguedad_temporal_2026.csv")
+    age_temporal = (
+        pd.read_csv(age_temporal_path)
+        if age_temporal_path.exists()
+        else pd.DataFrame()
+    )
+    if not age_temporal.empty:
+        age_temporal = age_temporal[
+            age_temporal["Prueba"].isin(TESTS)
+        ].copy()
+
+    age_levels_path = Path("data/antiguedad_levels_2026.csv")
+    age_levels = (
+        pd.read_csv(age_levels_path)
+        if age_levels_path.exists()
+        else pd.DataFrame()
+    )
+    if not age_levels.empty and "Nivel" in age_levels.columns:
+        age_levels["Nivel"] = age_levels["Nivel"].replace(
+            LEGACY_LEVEL_MAP
+        )
+
+    age_dimensions_path = Path("data/antiguedad_dimensions_2026.csv")
+    age_dimensions = (
+        pd.read_csv(age_dimensions_path)
+        if age_dimensions_path.exists()
         else pd.DataFrame()
     )
 
-    newcomer_levels_path = Path(
-        "data/default_newcomer_levels_mos_tun_2026.csv"
-    )
-    newcomer_levels = (
-        pd.read_csv(newcomer_levels_path)
-        if newcomer_levels_path.exists()
+    age_top10_path = Path("data/antiguedad_top10_2026.csv")
+    age_top10 = (
+        pd.read_csv(age_top10_path)
+        if age_top10_path.exists()
         else pd.DataFrame()
     )
-    if not newcomer_levels.empty and "Nivel" in newcomer_levels.columns:
-        newcomer_levels["Nivel"] = newcomer_levels["Nivel"].replace(
+    if not age_top10.empty and "Nivel" in age_top10.columns:
+        age_top10["Nivel"] = age_top10["Nivel"].replace(
             LEGACY_LEVEL_MAP
         )
 
@@ -188,8 +247,10 @@ def read_default_data():
         levels,
         dimensions,
         top10_origin,
-        newcomers,
-        newcomer_levels,
+        age_temporal,
+        age_levels,
+        age_dimensions,
+        age_top10,
     )
 
 
@@ -287,7 +348,6 @@ def render_main_line(
     d: pd.DataFrame,
     aggregated: bool,
     level_summary: pd.DataFrame | None = None,
-    newcomer_summary: pd.DataFrame | None = None,
     test_name: str | None = None,
 ):
     if aggregated:
@@ -366,24 +426,19 @@ def render_main_line(
             if level not in level_pivot.columns:
                 level_pivot[level] = 0
 
-        level_pivot["Total_niveles"] = (
-            level_pivot[LEVEL_ORDER].sum(axis=1)
-        )
-        level_pivot["Pct_Progreso_limitado"] = np.where(
+        level_pivot["Total_niveles"] = level_pivot[LEVEL_ORDER].sum(axis=1)
+        level_pivot["Pct_Nivel_1"] = np.where(
             level_pivot["Total_niveles"] > 0,
-            level_pivot["Nivel 1"]
-            / level_pivot["Total_niveles"] * 100,
+            level_pivot["Nivel 1"] / level_pivot["Total_niveles"] * 100,
             0,
         )
-        level_pivot["Pct_Emergente"] = np.where(
+        level_pivot["Pct_Nivel_2"] = np.where(
             level_pivot["Total_niveles"] > 0,
-            level_pivot["Nivel 2"]
-            / level_pivot["Total_niveles"] * 100,
+            level_pivot["Nivel 2"] / level_pivot["Total_niveles"] * 100,
             0,
         )
-        level_pivot["Pct_PL_E"] = (
-            level_pivot["Pct_Progreso_limitado"]
-            + level_pivot["Pct_Emergente"]
+        level_pivot["Pct_Nivel1_2"] = (
+            level_pivot["Pct_Nivel_1"] + level_pivot["Pct_Nivel_2"]
         )
 
         grouped = grouped.merge(
@@ -391,20 +446,19 @@ def render_main_line(
                 [
                     "Sede",
                     "Grado_num",
-                    "Pct_Progreso_limitado",
-                    "Pct_Emergente",
-                    "Pct_PL_E",
+                    "Pct_Nivel_1",
+                    "Pct_Nivel_2",
+                    "Pct_Nivel1_2",
                 ]
             ],
             on=["Sede", "Grado_num"],
             how="left",
         )
     else:
-        grouped["Pct_Progreso_limitado"] = np.nan
-        grouped["Pct_Emergente"] = np.nan
-        grouped["Pct_PL_E"] = grouped["Pct_50_o_menos"]
+        grouped["Pct_Nivel_1"] = np.nan
+        grouped["Pct_Nivel_2"] = np.nan
+        grouped["Pct_Nivel1_2"] = grouped["Pct_50_o_menos"]
 
-    grouped["Grado"] = grouped["Grado_num"].apply(grade_label)
     grouped["Etiqueta_Pct_50"] = grouped["Pct_50_o_menos"].map(
         lambda x: "" if pd.isna(x) else f"{x:.0f}%"
     )
@@ -442,9 +496,9 @@ def render_main_line(
         text="Etiqueta_Pct_50",
         category_orders={"Sede": SITES},
         custom_data=[
-            "Pct_Progreso_limitado",
-            "Pct_Emergente",
-            "Pct_PL_E",
+            "Pct_Nivel_1",
+            "Pct_Nivel_2",
+            "Pct_Nivel1_2",
         ],
         labels={
             "Sede": "Sede",
@@ -477,120 +531,7 @@ def render_main_line(
             "<extra></extra>"
         ),
     )
-
-    # Contraste de estudiantes con 1 año o menos de antigüedad en MOS y TUN.
-    newcomer_plot = pd.DataFrame()
-
-    if aggregated:
-        if (
-            newcomer_summary is not None
-            and not newcomer_summary.empty
-            and test_name is not None
-        ):
-            newcomer_plot = newcomer_summary[
-                newcomer_summary["Prueba"].astype(str) == test_name
-            ].copy()
-            newcomer_plot = newcomer_plot[
-                newcomer_plot["Sede"].isin(
-                    grouped["Sede"].astype(str).unique()
-                )
-                & newcomer_plot["Grado_num"].isin(
-                    grouped["Grado_num"].unique()
-                )
-            ]
-    else:
-        newcomer_students = student[
-            student["Sede"].isin(["MOS", "TUN"])
-        ].copy()
-        newcomer_students["Es_nuevo"] = (
-            newcomer_students["AntiguedadBS"] <= 1
-        )
-        if not newcomer_students.empty:
-            newcomer_plot = (
-                newcomer_students.groupby(
-                    ["Sede", "Grado_num"],
-                    as_index=False,
-                )
-                .apply(
-                    lambda g: pd.Series({
-                        "Nuevos_1_o_menos": int(g["Es_nuevo"].sum()),
-                        "Nuevos_Nivel1_2": int(
-                            (
-                                g["Es_nuevo"]
-                                & g["Menor_igual_50"]
-                            ).sum()
-                        ),
-                    }),
-                    include_groups=False,
-                )
-            )
-            newcomer_plot["Pct_Nuevos_en_Nivel1_2"] = np.where(
-                newcomer_plot["Nuevos_1_o_menos"] > 0,
-                newcomer_plot["Nuevos_Nivel1_2"]
-                / newcomer_plot["Nuevos_1_o_menos"] * 100,
-                np.nan,
-            )
-
-    if not newcomer_plot.empty:
-        site_colors = {
-            trace.name: trace.line.color
-            for trace in fig.data
-            if trace.name in ["MOS", "TUN"]
-        }
-
-        for site in ["MOS", "TUN"]:
-            nd = newcomer_plot[
-                newcomer_plot["Sede"].astype(str) == site
-            ].copy()
-            if nd.empty:
-                continue
-
-            nd = nd.sort_values("Grado_num")
-            fig.add_trace(
-                go.Scatter(
-                    x=nd["Grado_num"],
-                    y=nd["Pct_Nuevos_en_Nivel1_2"],
-                    mode="lines+markers+text",
-                    name=f"{site} · ≤1 año",
-                    line=dict(
-                        dash="dot",
-                        width=2.5,
-                        color=site_colors.get(site),
-                    ),
-                    marker=dict(
-                        size=8,
-                        symbol="circle-open",
-                        color=site_colors.get(site),
-                    ),
-                    text=nd["Pct_Nuevos_en_Nivel1_2"].map(
-                        lambda x: "" if pd.isna(x) else f"{x:.0f}%"
-                    ),
-                    textposition="bottom center",
-                    textfont=dict(size=11),
-                    customdata=np.column_stack([
-                        nd["Nuevos_1_o_menos"],
-                        nd["Pct_Nuevos_en_Nivel1_2"],
-                        nd["Nuevos_Nivel1_2"],
-                    ]),
-                    hovertemplate=(
-                        f"<b>{site} · ≤1 año de antigüedad</b><br>"
-                        "% en Nivel 1 + Nivel 2: %{y:.1f}%<br>"
-                        "Total con ≤1 año: %{customdata[0]:.0f}<br>"
-                        "Estudiantes con ≤1 año en Nivel 1 + Nivel 2: "
-                        "%{customdata[2]:.0f}"
-                        "<extra></extra>"
-                    ),
-                    cliponaxis=False,
-                )
-            )
-
     st.plotly_chart(fig, use_container_width=True)
-
-    if not newcomer_plot.empty:
-        st.caption(
-            "Línea punteada: porcentaje de estudiantes de MOS y TUN con "
-            "1 año o menos de antigüedad que se encuentran en Nivel 1 + Nivel 2."
-        )
 
 
 def level_counts_by_site_from_raw(data: pd.DataFrame) -> pd.DataFrame:
@@ -606,23 +547,21 @@ def render_levels_by_site_vs_network(
     network_data: pd.DataFrame,
     aggregated: bool,
     level_summary: pd.DataFrame | None,
-    newcomer_levels_summary: pd.DataFrame | None,
     test_name: str,
     selected_sites: list[str],
     selected_grades: list[int],
 ):
     st.subheader("Vista 1 · Distribución de los 4 niveles por colegio/sede")
     st.caption(
-        "Cada fila representa una sede/colegio. Para MOS y TUN se agrega una fila "
-        "adicional con estudiantes de 1 año o menos de antigüedad. La fila RED muestra "
-        "el comportamiento global de las seis sedes para la misma prueba y los mismos "
-        "grados seleccionados."
+        "Cada fila representa una sede/colegio. La fila RED muestra el "
+        "comportamiento global de las sedes incluidas en esta vista para la "
+        "misma prueba y los mismos grados seleccionados."
     )
 
     if aggregated:
         if level_summary is None or level_summary.empty:
             st.info(
-                "La base pública precargada aún no contiene el desglose de los cuatro niveles."
+                "La base precargada no contiene el desglose de los cuatro niveles."
             )
             return
 
@@ -639,30 +578,6 @@ def render_levels_by_site_vs_network(
             .sum()
         )
 
-        newcomer_counts = pd.DataFrame()
-        if (
-            newcomer_levels_summary is not None
-            and not newcomer_levels_summary.empty
-        ):
-            nb = newcomer_levels_summary[
-                newcomer_levels_summary["Prueba"].astype(str) == test_name
-            ].copy()
-            if selected_grades:
-                nb = nb[nb["Grado_num"].isin(selected_grades)]
-            nb = nb[
-                nb["Sede"].isin(
-                    [s for s in selected_sites if s in ["MOS", "TUN"]]
-                )
-            ]
-            if not nb.empty:
-                newcomer_counts = (
-                    nb.groupby(["Sede", "Nivel"], as_index=False)["Estudiantes"]
-                    .sum()
-                )
-                newcomer_counts["Sede"] = (
-                    newcomer_counts["Sede"].astype(str) + " · ≤1 año"
-                )
-
         network_counts = (
             base.groupby("Nivel", as_index=False)["Estudiantes"]
             .sum()
@@ -670,26 +585,6 @@ def render_levels_by_site_vs_network(
         )
     else:
         site_counts = level_counts_by_site_from_raw(site_data)
-
-        newcomer_students = build_student_level(site_data)
-        newcomer_students = newcomer_students[
-            newcomer_students["Sede"].isin(["MOS", "TUN"])
-            & (newcomer_students["AntiguedadBS"] <= 1)
-        ].copy()
-        if newcomer_students.empty:
-            newcomer_counts = pd.DataFrame()
-        else:
-            newcomer_counts = (
-                newcomer_students.groupby(
-                    ["Sede", "Nivel"],
-                    as_index=False,
-                )
-                .agg(Estudiantes=("IdentiEstudiante", "nunique"))
-            )
-            newcomer_counts["Sede"] = (
-                newcomer_counts["Sede"].astype(str) + " · ≤1 año"
-            )
-
         network_counts = (
             level_counts_by_site_from_raw(network_data)
             .groupby("Nivel", as_index=False)["Estudiantes"]
@@ -697,28 +592,16 @@ def render_levels_by_site_vs_network(
             .assign(Sede="RED")
         )
 
-    parts = [site_counts]
-    if not newcomer_counts.empty:
-        parts.append(newcomer_counts)
-    parts.append(network_counts)
-    counts = pd.concat(parts, ignore_index=True)
+    counts = pd.concat([site_counts, network_counts], ignore_index=True)
     if counts.empty:
         st.info("No hay datos de niveles para los filtros seleccionados.")
         return
 
-    newcomer_entity_set = set(
-        newcomer_counts["Sede"].astype(str).unique()
-    ) if not newcomer_counts.empty else set()
-
-    entities = []
-    for site in SITES:
-        if site not in selected_sites:
-            continue
-        entities.append(site)
-        newcomer_label = f"{site} · ≤1 año"
-        if newcomer_label in newcomer_entity_set:
-            entities.append(newcomer_label)
-    entities.append("RED")
+    entities = [
+        site for site in SITES
+        if site in selected_sites
+        and site in counts["Sede"].astype(str).unique()
+    ] + ["RED"]
 
     full = pd.MultiIndex.from_product(
         [entities, LEVEL_ORDER],
@@ -815,7 +698,7 @@ def render_levels_by_site_vs_network(
                 values="Diferencia_vs_RED",
             )
             .reindex(
-                index=[entity for entity in entities if entity != "RED"],
+                index=[site for site in entities if site != "RED"],
                 columns=LEVEL_ORDER,
             )
         )
@@ -853,7 +736,10 @@ def render_levels_by_site_vs_network(
             )
         )
         fig.update_layout(
-            title="Contraste por colegio/sede frente a la RED · rojo = por debajo · verde = por encima",
+            title=(
+                "Contraste por colegio/sede frente a la RED · "
+                "rojo = por debajo · verde = por encima"
+            ),
             height=max(360, 55 * len(delta.index) + 140),
             margin=dict(l=18, r=18, t=65, b=25),
         )
@@ -880,7 +766,7 @@ def render_levels_vs_network(
     st.subheader("Vista 2 · Distribución de los 4 niveles por grado")
     st.caption(
         "Cada fila representa un grado. La fila RED muestra el comportamiento "
-        "global de las seis sedes para la misma prueba y los mismos grados seleccionados."
+        "global de las sedes incluidas en esta vista para la misma prueba y los mismos grados seleccionados."
     )
 
     if aggregated:
@@ -1169,6 +1055,7 @@ def render_top10_origin_by_level(
     test_name: str,
     aggregated: bool,
     top10_public: pd.DataFrame | None,
+    view_key: str,
 ):
     st.divider()
     st.subheader("Colegios de origen por nivel de desempeño")
@@ -1201,7 +1088,7 @@ def render_top10_origin_by_level(
                 "Sede",
                 available_sites,
                 default=available_sites,
-                key=f"origin_sites_{test_name}",
+                key=f"origin_sites_{view_key}_{test_name}",
                 help="Sede de llegada del estudiante.",
             )
 
@@ -1220,7 +1107,7 @@ def render_top10_origin_by_level(
                 grade_options,
                 default=grade_options,
                 format_func=lambda g: f"{g}°",
-                key=f"origin_grades_{test_name}",
+                key=f"origin_grades_{view_key}_{test_name}",
             )
 
         if selected_origin_grades:
@@ -1418,6 +1305,7 @@ def render_dimensions(
     selected_sites: list[str],
     selected_grades: list[int],
     aggregated: bool,
+    view_key: str,
 ):
     st.divider()
     st.subheader("Dimensiones de evaluación")
@@ -1455,9 +1343,9 @@ def render_dimensions(
     reference = st.selectbox(
         "Vista de dimensiones",
         ["RED"] + available_sites,
-        key=f"dimension_reference_{test_name}",
+        key=f"dimension_reference_{view_key}_{test_name}",
         help=(
-            "RED combina las seis sedes. Selecciona una sede para ver "
+            "RED combina las sedes incluidas en esta vista. Selecciona una sede para ver "
             "el comportamiento de sus dimensiones a través de los grados."
         ),
     )
@@ -1565,34 +1453,37 @@ def render_test_page(
     dimensions: pd.DataFrame,
     levels_public: pd.DataFrame,
     top10_public: pd.DataFrame,
-    newcomer_public: pd.DataFrame,
-    newcomer_levels_public: pd.DataFrame,
     test_name: str,
     aggregated: bool,
+    view_key: str,
+    cohort_caption: str,
 ):
     st.markdown(f"## {test_name}")
-    st.caption(f"Resultados de {test_name} · Año fijo: {YEAR}")
+    st.caption(
+        f"Resultados de {test_name} · Año fijo: {YEAR} · {cohort_caption}"
+    )
     render_threshold_note()
 
     test_all = attempts[
         attempts["Prueba"].astype(str) == test_name
     ].copy()
     if test_all.empty:
-        st.info(f"No hay datos de {test_name} para {YEAR}.")
+        st.info(f"No hay datos de {test_name} para esta vista.")
         return
 
     c1, c2 = st.columns([1.2, 1.4])
     with c1:
         available_sites = [
-            s for s in SITES
-            if s in test_all["Sede"].dropna().astype(str).unique()
+            site for site in SITES
+            if site in test_all["Sede"].dropna().astype(str).unique()
         ]
         selected_sites = st.multiselect(
             "Sedes/colegios",
             available_sites,
             default=available_sites,
-            key=f"sites_{test_name}",
+            key=f"sites_{view_key}_{test_name}",
         )
+
     with c2:
         grades = sorted(
             [int(g) for g in test_all["Grado_num"].dropna().unique()]
@@ -1602,7 +1493,7 @@ def render_test_page(
             grades,
             default=grades,
             format_func=lambda g: f"{g}°",
-            key=f"grades_{test_name}",
+            key=f"grades_{view_key}_{test_name}",
         )
 
     grade_filtered_network = test_all.copy()
@@ -1625,7 +1516,6 @@ def render_test_page(
         site_filtered,
         aggregated=aggregated,
         level_summary=levels_public,
-        newcomer_summary=newcomer_public,
         test_name=test_name,
     )
 
@@ -1635,7 +1525,6 @@ def render_test_page(
         network_data=grade_filtered_network,
         aggregated=aggregated,
         level_summary=levels_public,
-        newcomer_levels_summary=newcomer_levels_public,
         test_name=test_name,
         selected_sites=selected_sites,
         selected_grades=selected_grades,
@@ -1665,6 +1554,7 @@ def render_test_page(
         selected_sites=selected_sites,
         selected_grades=selected_grades,
         aggregated=aggregated,
+        view_key=view_key,
     )
 
     render_top10_origin_by_level(
@@ -1672,22 +1562,21 @@ def render_test_page(
         test_name=test_name,
         aggregated=aggregated,
         top10_public=top10_public,
+        view_key=view_key,
     )
 
 
 st.title("📊 Estado de llegada 2026")
 st.caption(
-    "Cinco hojas independientes. Cada hoja corresponde a una prueba y "
-    "mantiene su propio análisis por sede, grado, niveles y dimensiones."
+    "Dos ventanas complementarias: análisis general y análisis por antigüedad."
 )
 
 uploaded = st.file_uploader(
     "Cargar Excel completo (opcional)",
     type=["xlsx", "xls"],
     help=(
-        "La base precargada permite la lectura principal. "
-        "El Excel completo habilita análisis individuales, colegio de origen "
-        "y dimensiones cuando el resumen público no esté disponible."
+        "La base precargada permite ambas ventanas. "
+        "El Excel completo habilita también los análisis individuales."
     ),
 )
 
@@ -1696,11 +1585,17 @@ aggregated = uploaded is None
 if uploaded is not None:
     try:
         raw = read_excel(uploaded.getvalue())
-        attempts, dimensions = process_raw(raw)
+        (
+            attempts,
+            dimensions,
+            age_attempts,
+            age_dimensions,
+        ) = process_raw(raw)
+
         levels_public = pd.DataFrame()
         top10_public = pd.DataFrame()
-        newcomer_public = pd.DataFrame()
-        newcomer_levels_public = pd.DataFrame()
+        age_levels_public = pd.DataFrame()
+        age_top10_public = pd.DataFrame()
     except Exception as exc:
         st.error(f"No fue posible procesar el Excel: {exc}")
         st.stop()
@@ -1710,24 +1605,61 @@ else:
         levels_public,
         dimensions,
         top10_public,
-        newcomer_public,
-        newcomer_levels_public,
+        age_attempts,
+        age_levels_public,
+        age_dimensions,
+        age_top10_public,
     ) = read_default_data()
+
     if attempts.empty:
         st.info("Carga el Excel para visualizar los resultados.")
         st.stop()
 
-tabs = st.tabs(TESTS)
+view_general, view_age = st.tabs(
+    ["Análisis general", "Análisis por antigüedad ≤1 año"]
+)
 
-for tab, test_name in zip(tabs, TESTS):
-    with tab:
-        render_test_page(
-            attempts=attempts,
-            dimensions=dimensions,
-            levels_public=levels_public,
-            top10_public=top10_public,
-            newcomer_public=newcomer_public,
-            newcomer_levels_public=newcomer_levels_public,
-            test_name=test_name,
-            aggregated=aggregated,
-        )
+with view_general:
+    st.caption(
+        "Vista general de resultados por prueba, sede, grado, niveles, "
+        "dimensiones y colegio de origen."
+    )
+    general_tabs = st.tabs(TESTS)
+    for tab, test_name in zip(general_tabs, TESTS):
+        with tab:
+            render_test_page(
+                attempts=attempts,
+                dimensions=dimensions,
+                levels_public=levels_public,
+                top10_public=top10_public,
+                test_name=test_name,
+                aggregated=aggregated,
+                view_key="general",
+                cohort_caption="Todos los estudiantes",
+            )
+
+with view_age:
+    st.info(
+        "Esta ventana analiza exclusivamente estudiantes de COT, MOS, TUN y ZIPA "
+        "con 1 año o menos de antigüedad. Todas las gráficas, distribuciones y "
+        "comparaciones se recalculan dentro de esta cohorte."
+    )
+
+    if age_attempts.empty:
+        st.warning("No hay datos disponibles para la cohorte de antigüedad.")
+    else:
+        age_tabs = st.tabs(TESTS)
+        for tab, test_name in zip(age_tabs, TESTS):
+            with tab:
+                render_test_page(
+                    attempts=age_attempts,
+                    dimensions=age_dimensions,
+                    levels_public=age_levels_public,
+                    top10_public=age_top10_public,
+                    test_name=test_name,
+                    aggregated=aggregated,
+                    view_key="antiguedad",
+                    cohort_caption=(
+                        "COT, MOS, TUN y ZIPA · 1 año o menos de antigüedad"
+                    ),
+                )
