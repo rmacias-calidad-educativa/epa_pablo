@@ -1,0 +1,111 @@
+Prueba,Sede,Grado_num,competencia,Estudiantes,Promedio_dimension
+Inglés,COT,9,A2,33,63.869463869463864
+Inglés,COT,9,Pre A1,33,85.45454545454545
+Inglés,COT,10,A1,21,79.36507936507937
+Inglés,COT,10,A2,21,76.55677655677655
+Inglés,COT,10,B1,21,95.23809523809524
+Inglés,COT,10,Pre A1,21,75.0
+Inglés,MOS,9,A1,63,84.12698412698413
+Inglés,MOS,9,A2,63,68.4981684981685
+Inglés,MOS,9,Pre A1,63,86.66666666666667
+Inglés,MOS,10,A1,44,78.53535353535354
+Inglés,MOS,10,A2,44,70.27972027972028
+Inglés,MOS,10,B1,44,86.36363636363636
+Inglés,MOS,10,Pre A1,44,72.72727272727273
+Inglés,MOS,11,A1,46,88.40579710144927
+Inglés,MOS,11,A2,47,77.17601547388782
+Inglés,MOS,11,B1,47,75.28641571194763
+Inglés,MOS,11,Pre A1,47,87.23404255319149
+Inglés,TUN,9,A1,36,73.61111111111111
+Inglés,TUN,9,A2,36,59.82905982905983
+Inglés,TUN,9,Pre A1,36,82.22222222222223
+Inglés,TUN,10,A1,45,77.53086419753086
+Inglés,TUN,10,A2,45,74.52991452991454
+Inglés,TUN,10,B1,45,88.88888888888889
+Inglés,TUN,10,Pre A1,45,72.22222222222223
+Inglés,ZIPA,9,A1,47,84.57446808510639
+Inglés,ZIPA,9,A2,47,70.04909983633388
+Inglés,ZIPA,9,Pre A1,47,88.51063829787235
+Inglés,ZIPA,10,A1,36,76.85185185185185
+Inglés,ZIPA,10,A2,36,72.00854700854701
+Inglés,ZIPA,10,B1,36,88.88888888888889
+Inglés,ZIPA,10,Pre A1,36,77.08333333333333
+Lenguaje,BAQ,3,Comprensión lectora,58,42.8448275862069
+Lenguaje,BAQ,4,Comprensión lectora,67,47.83582089552239
+Lenguaje,BAQ,5,Comprensión lectora,3,50.0
+Lenguaje,BAQ,6,Comprensión lectora,30,58.166666666666664
+Lenguaje,BAQ,7,Comprensión lectora,48,61.5625
+Lenguaje,BAQ,8,Comprensión lectora,59,59.152542372881356
+Lenguaje,COT,3,Comprensión lectora,26,49.42307692307692
+Lenguaje,COT,4,Comprensión lectora,28,50.714285714285715
+Lenguaje,COT,5,Comprensión lectora,38,55.26315789473684
+Lenguaje,COT,6,Comprensión lectora,32,64.375
+Lenguaje,COT,7,Comprensión lectora,35,63.857142857142854
+Lenguaje,COT,8,Comprensión lectora,31,60.645161290322584
+Lenguaje,COT,9,Comprensión lectora,37,67.97297297297297
+Lenguaje,COT,10,Comprensión lectora,22,52.72727272727273
+Lenguaje,MOS,3,Comprensión lectora,92,40.76086956521739
+Lenguaje,MOS,4,Comprensión lectora,91,52.252747252747255
+Lenguaje,MOS,5,Comprensión lectora,90,41.166666666666664
+Lenguaje,MOS,6,Comprensión lectora,109,53.11926605504587
+Lenguaje,MOS,7,Comprensión lectora,70,56.57142857142857
+Lenguaje,MOS,8,Comprensión lectora,79,61.20253164556962
+Lenguaje,MOS,9,Comprensión lectora,64,61.40625
+Lenguaje,MOS,10,Comprensión lectora,49,43.97959183673469
+Lenguaje,MOS,11,Comprensión lectora,50,62.7
+Lenguaje,TUN,3,Comprensión lectora,28,40.535714285714285
+Lenguaje,TUN,4,Comprensión lectora,17,51.76470588235294
+Lenguaje,TUN,5,Comprensión lectora,41,50.36585365853659
+Lenguaje,TUN,6,Comprensión lectora,40,62.875
+Lenguaje,TUN,7,Comprensión lectora,34,60.0
+Lenguaje,TUN,8,Comprensión lectora,40,64.375
+Lenguaje,TUN,9,Comprensión lectora,36,65.0
+Lenguaje,TUN,10,Comprensión lectora,47,49.46808510638298
+Lenguaje,USAQ,3,Comprensión lectora,17,26.470588235294116
+Lenguaje,USAQ,4,Comprensión lectora,56,49.464285714285715
+Lenguaje,USAQ,5,Comprensión lectora,42,53.57142857142857
+Lenguaje,USAQ,6,Comprensión lectora,57,56.40350877192982
+Lenguaje,USAQ,7,Comprensión lectora,52,65.76923076923077
+Lenguaje,USAQ,8,Comprensión lectora,57,58.333333333333336
+Lenguaje,ZIPA,3,Comprensión lectora,54,45.18518518518518
+Lenguaje,ZIPA,4,Comprensión lectora,55,53.36363636363637
+Lenguaje,ZIPA,5,Comprensión lectora,68,51.61764705882353
+Lenguaje,ZIPA,6,Comprensión lectora,75,55.93333333333333
+Lenguaje,ZIPA,7,Comprensión lectora,65,66.61538461538461
+Lenguaje,ZIPA,8,Comprensión lectora,74,64.79729729729729
+Lenguaje,ZIPA,9,Comprensión lectora,50,66.4
+Lenguaje,ZIPA,10,Comprensión lectora,34,54.705882352941174
+Matemáticas,BAQ,3,Comunicación,56,46.875
+Matemáticas,BAQ,3,Razonamiento,57,43.5672514619883
+Matemáticas,BAQ,3,Resolución de problemas,56,50.535714285714285
+Matemáticas,BAQ,4,Comunicación,68,48.529411764705884
+Matemáticas,BAQ,4,Razonamiento,67,49.75124378109452
+Matemáticas,BAQ,4,Resolución de problemas,67,41.23134328358209
+Matemáticas,BAQ,5,Comunicación,7,50.0
+Matemáticas,BAQ,5,Razonamiento,8,55.55555555555555
+Matemáticas,BAQ,5,Resolución de problemas,7,46.93877551020408
+Matemáticas,BAQ,6,Comunicación,40,58.75
+Matemáticas,BAQ,6,Razonamiento,40,75.41666666666666
+Matemáticas,BAQ,6,Resolución de problemas,40,47.8125
+Matemáticas,BAQ,7,Comunicación,51,66.66666666666667
+Matemáticas,BAQ,7,Razonamiento,51,62.745098039215684
+Matemáticas,BAQ,7,Resolución de problemas,51,60.78431372549019
+Matemáticas,BAQ,8,Comunicación,60,52.77777777777778
+Matemáticas,BAQ,8,Razonamiento,60,68.88888888888889
+Matemáticas,BAQ,8,Resolución de problemas,60,58.75
+Matemáticas,COT,3,Comunicación,26,62.5
+Matemáticas,COT,3,Razonamiento,26,48.717948717948715
+Matemáticas,COT,3,Resolución de problemas,26,52.69230769230769
+Matemáticas,COT,4,Comunicación,28,54.76190476190476
+Matemáticas,COT,4,Razonamiento,28,57.142857142857146
+Matemáticas,COT,4,Resolución de problemas,28,48.214285714285715
+Matemáticas,COT,5,Comunicación,38,39.473684210526315
+Matemáticas,COT,5,Razonamiento,38,65.78947368421052
+Matemáticas,COT,5,Resolución de problemas,38,44.3609022556391
+Matemáticas,COT,6,Comunicación,32,57.291666666666664
+Matemáticas,COT,6,Razonamiento,32,69.79166666666667
+Matemáticas,COT,6,Resolución de problemas,32,57.421875
+Matemáticas,COT,7,Comunicación,35,67.3469387755102
+Matemáticas,COT,7,Razonamiento,35,56.666666666666664
+Matemáticas,COT,7,Resolución de problemas,35,56.326530612244895
+Matemáticas,COT,8,Comunicación,31,51.61290322580645
