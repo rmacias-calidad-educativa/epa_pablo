@@ -149,3 +149,22 @@ Los patrones son **descriptivos, no causales**, y deben interpretarse junto con 
 ### Nota sobre años disponibles
 
 La fuente actual contiene registros de 2025 y 2026, pero 2025 tiene una cantidad muy reducida de observaciones frente a 2026. La aplicación muestra una advertencia cuando se consulta ese periodo.
+
+
+## Taxonomía de pruebas
+
+Para la visualización analítica, los nombres de prueba se homogeneizan y el grado se trata como una dimensión independiente:
+
+- **Ciencias naturales**: agrupa los registros etiquetados como Ciencias.
+- **Ciencias sociales**: agrupa Competencias ciudadanas, Pensamiento ciudadano y Sociales y ciudadanas.
+- **Matemáticas**: agrupa todas las pruebas de Matemáticas.
+- **Lenguaje**: agrupa todas las pruebas de Lenguaje.
+
+El grado no aparece dentro del rótulo de la prueba. Por ejemplo, `MATEMÁTICAS 7°` se visualiza como **Matemáticas**, mientras el grado 7° aparece en el eje correspondiente.
+
+La visual principal es una gráfica de líneas donde:
+- eje X = grado;
+- eje Y = número de estudiantes con ≤50% de aciertos;
+- cada línea = una de las seis sedes/colegios;
+- filtro = una prueba a la vez, con opción de año;
+- tooltip = estudiantes ≤50%, estudiantes >50%, total y porcentaje ≤50%.
