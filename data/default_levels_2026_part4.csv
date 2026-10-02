@@ -1,0 +1,131 @@
+Prueba,Sede,Grado_num,Nivel,Estudiantes
+Lenguaje,TUN,9,Avanzado,8
+Lenguaje,TUN,9,Emergente,6
+Lenguaje,TUN,9,En aceleración,22
+Lenguaje,TUN,10,Avanzado,3
+Lenguaje,TUN,10,Emergente,24
+Lenguaje,TUN,10,En aceleración,16
+Lenguaje,TUN,10,Progreso limitado,4
+Lenguaje,USAQ,3,Avanzado,1
+Lenguaje,USAQ,3,Emergente,4
+Lenguaje,USAQ,3,En aceleración,1
+Lenguaje,USAQ,3,Progreso limitado,11
+Lenguaje,USAQ,4,Avanzado,3
+Lenguaje,USAQ,4,Emergente,22
+Lenguaje,USAQ,4,En aceleración,24
+Lenguaje,USAQ,4,Progreso limitado,7
+Lenguaje,USAQ,5,Avanzado,3
+Lenguaje,USAQ,5,Emergente,15
+Lenguaje,USAQ,5,En aceleración,22
+Lenguaje,USAQ,5,Progreso limitado,2
+Lenguaje,USAQ,6,Avanzado,7
+Lenguaje,USAQ,6,Emergente,11
+Lenguaje,USAQ,6,En aceleración,32
+Lenguaje,USAQ,6,Progreso limitado,7
+Lenguaje,USAQ,7,Avanzado,18
+Lenguaje,USAQ,7,Emergente,10
+Lenguaje,USAQ,7,En aceleración,20
+Lenguaje,USAQ,7,Progreso limitado,4
+Lenguaje,USAQ,8,Avanzado,12
+Lenguaje,USAQ,8,Emergente,16
+Lenguaje,USAQ,8,En aceleración,23
+Lenguaje,USAQ,8,Progreso limitado,6
+Lenguaje,ZIPA,3,Avanzado,3
+Lenguaje,ZIPA,3,Emergente,29
+Lenguaje,ZIPA,3,En aceleración,11
+Lenguaje,ZIPA,3,Progreso limitado,11
+Lenguaje,ZIPA,4,Avanzado,6
+Lenguaje,ZIPA,4,Emergente,17
+Lenguaje,ZIPA,4,En aceleración,24
+Lenguaje,ZIPA,4,Progreso limitado,8
+Lenguaje,ZIPA,5,Avanzado,3
+Lenguaje,ZIPA,5,Emergente,23
+Lenguaje,ZIPA,5,En aceleración,33
+Lenguaje,ZIPA,5,Progreso limitado,9
+Lenguaje,ZIPA,6,Avanzado,9
+Lenguaje,ZIPA,6,Emergente,26
+Lenguaje,ZIPA,6,En aceleración,34
+Lenguaje,ZIPA,6,Progreso limitado,6
+Lenguaje,ZIPA,7,Avanzado,18
+Lenguaje,ZIPA,7,Emergente,11
+Lenguaje,ZIPA,7,En aceleración,36
+Lenguaje,ZIPA,8,Avanzado,16
+Lenguaje,ZIPA,8,Emergente,15
+Lenguaje,ZIPA,8,En aceleración,42
+Lenguaje,ZIPA,8,Progreso limitado,1
+Lenguaje,ZIPA,9,Avanzado,13
+Lenguaje,ZIPA,9,Emergente,4
+Lenguaje,ZIPA,9,En aceleración,32
+Lenguaje,ZIPA,9,Progreso limitado,1
+Lenguaje,ZIPA,10,Avanzado,2
+Lenguaje,ZIPA,10,Emergente,12
+Lenguaje,ZIPA,10,En aceleración,18
+Lenguaje,ZIPA,10,Progreso limitado,2
+Matemáticas,BAQ,3,Avanzado,4
+Matemáticas,BAQ,3,Emergente,19
+Matemáticas,BAQ,3,En aceleración,22
+Matemáticas,BAQ,3,Progreso limitado,12
+Matemáticas,BAQ,4,Avanzado,2
+Matemáticas,BAQ,4,Emergente,30
+Matemáticas,BAQ,4,En aceleración,25
+Matemáticas,BAQ,4,Progreso limitado,11
+Matemáticas,BAQ,5,Avanzado,1
+Matemáticas,BAQ,5,Emergente,4
+Matemáticas,BAQ,5,En aceleración,2
+Matemáticas,BAQ,5,Progreso limitado,1
+Matemáticas,BAQ,6,Avanzado,6
+Matemáticas,BAQ,6,Emergente,14
+Matemáticas,BAQ,6,En aceleración,20
+Matemáticas,BAQ,7,Avanzado,8
+Matemáticas,BAQ,7,Emergente,11
+Matemáticas,BAQ,7,En aceleración,32
+Matemáticas,BAQ,8,Avanzado,7
+Matemáticas,BAQ,8,Emergente,17
+Matemáticas,BAQ,8,En aceleración,36
+Matemáticas,COT,3,Avanzado,3
+Matemáticas,COT,3,Emergente,14
+Matemáticas,COT,3,En aceleración,7
+Matemáticas,COT,3,Progreso limitado,2
+Matemáticas,COT,4,Avanzado,3
+Matemáticas,COT,4,Emergente,13
+Matemáticas,COT,4,En aceleración,10
+Matemáticas,COT,4,Progreso limitado,2
+Matemáticas,COT,5,Avanzado,2
+Matemáticas,COT,5,Emergente,17
+Matemáticas,COT,5,En aceleración,18
+Matemáticas,COT,5,Progreso limitado,1
+Matemáticas,COT,6,Avanzado,7
+Matemáticas,COT,6,Emergente,10
+Matemáticas,COT,6,En aceleración,14
+Matemáticas,COT,6,Progreso limitado,1
+Matemáticas,COT,7,Avanzado,4
+Matemáticas,COT,7,Emergente,8
+Matemáticas,COT,7,En aceleración,23
+Matemáticas,COT,8,Avanzado,3
+Matemáticas,COT,8,Emergente,14
+Matemáticas,COT,8,En aceleración,14
+Matemáticas,COT,9,Avanzado,11
+Matemáticas,COT,9,Emergente,6
+Matemáticas,COT,9,En aceleración,20
+Matemáticas,COT,10,Emergente,12
+Matemáticas,COT,10,En aceleración,6
+Matemáticas,COT,10,Progreso limitado,4
+Matemáticas,MOS,3,Avanzado,13
+Matemáticas,MOS,3,Emergente,28
+Matemáticas,MOS,3,En aceleración,43
+Matemáticas,MOS,3,Progreso limitado,11
+Matemáticas,MOS,4,Avanzado,5
+Matemáticas,MOS,4,Emergente,47
+Matemáticas,MOS,4,En aceleración,41
+Matemáticas,MOS,4,Progreso limitado,4
+Matemáticas,MOS,5,Avanzado,1
+Matemáticas,MOS,5,Emergente,39
+Matemáticas,MOS,5,En aceleración,44
+Matemáticas,MOS,5,Progreso limitado,10
+Matemáticas,MOS,6,Avanzado,27
+Matemáticas,MOS,6,Emergente,29
+Matemáticas,MOS,6,En aceleración,50
+Matemáticas,MOS,6,Progreso limitado,5
+Matemáticas,MOS,7,Avanzado,14
+Matemáticas,MOS,7,Emergente,21
+Matemáticas,MOS,7,En aceleración,44
