@@ -1,0 +1,131 @@
+Prueba,Sede,Grado_num,Nivel,Estudiantes
+Ciencias naturales,BAQ,6,Avanzado,1
+Ciencias naturales,BAQ,6,Emergente,8
+Ciencias naturales,BAQ,6,En aceleración,4
+Ciencias naturales,BAQ,6,Progreso limitado,1
+Ciencias naturales,BAQ,7,Avanzado,11
+Ciencias naturales,BAQ,7,Emergente,10
+Ciencias naturales,BAQ,7,En aceleración,26
+Ciencias naturales,BAQ,7,Progreso limitado,3
+Ciencias naturales,BAQ,8,Avanzado,10
+Ciencias naturales,BAQ,8,Emergente,16
+Ciencias naturales,BAQ,8,En aceleración,27
+Ciencias naturales,BAQ,8,Progreso limitado,3
+Ciencias naturales,COT,5,Avanzado,6
+Ciencias naturales,COT,5,Emergente,8
+Ciencias naturales,COT,5,En aceleración,21
+Ciencias naturales,COT,5,Progreso limitado,2
+Ciencias naturales,COT,6,Avanzado,8
+Ciencias naturales,COT,6,Emergente,6
+Ciencias naturales,COT,6,En aceleración,16
+Ciencias naturales,COT,6,Progreso limitado,2
+Ciencias naturales,COT,7,Avanzado,5
+Ciencias naturales,COT,7,Emergente,6
+Ciencias naturales,COT,7,En aceleración,22
+Ciencias naturales,COT,7,Progreso limitado,2
+Ciencias naturales,COT,8,Avanzado,6
+Ciencias naturales,COT,8,Emergente,10
+Ciencias naturales,COT,8,En aceleración,14
+Ciencias naturales,COT,8,Progreso limitado,1
+Ciencias naturales,COT,9,Avanzado,5
+Ciencias naturales,COT,9,Emergente,15
+Ciencias naturales,COT,9,En aceleración,16
+Ciencias naturales,COT,9,Progreso limitado,1
+Ciencias naturales,COT,10,Avanzado,3
+Ciencias naturales,COT,10,Emergente,4
+Ciencias naturales,COT,10,En aceleración,15
+Ciencias naturales,MOS,5,Avanzado,5
+Ciencias naturales,MOS,5,Emergente,38
+Ciencias naturales,MOS,5,En aceleración,37
+Ciencias naturales,MOS,5,Progreso limitado,8
+Ciencias naturales,MOS,6,Avanzado,19
+Ciencias naturales,MOS,6,Emergente,39
+Ciencias naturales,MOS,6,En aceleración,43
+Ciencias naturales,MOS,6,Progreso limitado,10
+Ciencias naturales,MOS,7,Avanzado,16
+Ciencias naturales,MOS,7,Emergente,20
+Ciencias naturales,MOS,7,En aceleración,29
+Ciencias naturales,MOS,7,Progreso limitado,8
+Ciencias naturales,MOS,8,Avanzado,22
+Ciencias naturales,MOS,8,Emergente,18
+Ciencias naturales,MOS,8,En aceleración,36
+Ciencias naturales,MOS,8,Progreso limitado,4
+Ciencias naturales,MOS,9,Avanzado,10
+Ciencias naturales,MOS,9,Emergente,18
+Ciencias naturales,MOS,9,En aceleración,32
+Ciencias naturales,MOS,9,Progreso limitado,6
+Ciencias naturales,MOS,10,Avanzado,7
+Ciencias naturales,MOS,10,Emergente,17
+Ciencias naturales,MOS,10,En aceleración,19
+Ciencias naturales,MOS,10,Progreso limitado,8
+Ciencias naturales,MOS,11,Avanzado,2
+Ciencias naturales,MOS,11,Emergente,21
+Ciencias naturales,MOS,11,En aceleración,25
+Ciencias naturales,MOS,11,Progreso limitado,2
+Ciencias naturales,TUN,5,Avanzado,3
+Ciencias naturales,TUN,5,Emergente,9
+Ciencias naturales,TUN,5,En aceleración,27
+Ciencias naturales,TUN,5,Progreso limitado,2
+Ciencias naturales,TUN,6,Avanzado,8
+Ciencias naturales,TUN,6,Emergente,8
+Ciencias naturales,TUN,6,En aceleración,20
+Ciencias naturales,TUN,6,Progreso limitado,2
+Ciencias naturales,TUN,7,Avanzado,11
+Ciencias naturales,TUN,7,Emergente,8
+Ciencias naturales,TUN,7,En aceleración,14
+Ciencias naturales,TUN,8,Avanzado,13
+Ciencias naturales,TUN,8,Emergente,10
+Ciencias naturales,TUN,8,En aceleración,15
+Ciencias naturales,TUN,8,Progreso limitado,3
+Ciencias naturales,TUN,9,Avanzado,2
+Ciencias naturales,TUN,9,Emergente,11
+Ciencias naturales,TUN,9,En aceleración,23
+Ciencias naturales,TUN,10,Avanzado,16
+Ciencias naturales,TUN,10,Emergente,7
+Ciencias naturales,TUN,10,En aceleración,20
+Ciencias naturales,TUN,10,Progreso limitado,1
+Ciencias naturales,USAQ,5,Avanzado,2
+Ciencias naturales,USAQ,5,Emergente,13
+Ciencias naturales,USAQ,5,En aceleración,25
+Ciencias naturales,USAQ,5,Progreso limitado,1
+Ciencias naturales,USAQ,6,Avanzado,6
+Ciencias naturales,USAQ,6,Emergente,12
+Ciencias naturales,USAQ,6,En aceleración,9
+Ciencias naturales,USAQ,6,Progreso limitado,2
+Ciencias naturales,USAQ,7,Avanzado,11
+Ciencias naturales,USAQ,7,Emergente,17
+Ciencias naturales,USAQ,7,En aceleración,20
+Ciencias naturales,USAQ,7,Progreso limitado,3
+Ciencias naturales,USAQ,8,Avanzado,7
+Ciencias naturales,USAQ,8,Emergente,24
+Ciencias naturales,USAQ,8,En aceleración,21
+Ciencias naturales,USAQ,8,Progreso limitado,7
+Ciencias naturales,ZIPA,5,Avanzado,4
+Ciencias naturales,ZIPA,5,Emergente,19
+Ciencias naturales,ZIPA,5,En aceleración,40
+Ciencias naturales,ZIPA,5,Progreso limitado,4
+Ciencias naturales,ZIPA,6,Avanzado,5
+Ciencias naturales,ZIPA,6,Emergente,32
+Ciencias naturales,ZIPA,6,En aceleración,30
+Ciencias naturales,ZIPA,6,Progreso limitado,7
+Ciencias naturales,ZIPA,7,Avanzado,22
+Ciencias naturales,ZIPA,7,Emergente,13
+Ciencias naturales,ZIPA,7,En aceleración,30
+Ciencias naturales,ZIPA,8,Avanzado,29
+Ciencias naturales,ZIPA,8,Emergente,9
+Ciencias naturales,ZIPA,8,En aceleración,35
+Ciencias naturales,ZIPA,8,Progreso limitado,1
+Ciencias naturales,ZIPA,9,Avanzado,17
+Ciencias naturales,ZIPA,9,Emergente,6
+Ciencias naturales,ZIPA,9,En aceleración,25
+Ciencias naturales,ZIPA,10,Avanzado,11
+Ciencias naturales,ZIPA,10,Emergente,6
+Ciencias naturales,ZIPA,10,En aceleración,17
+Ciencias naturales,ZIPA,10,Progreso limitado,1
+Ciencias sociales,BAQ,6,Avanzado,1
+Ciencias sociales,BAQ,6,Emergente,3
+Ciencias sociales,BAQ,6,En aceleración,5
+Ciencias sociales,BAQ,6,Progreso limitado,1
+Ciencias sociales,BAQ,7,Avanzado,21
+Ciencias sociales,BAQ,7,Emergente,10
+Ciencias sociales,BAQ,7,En aceleración,13
