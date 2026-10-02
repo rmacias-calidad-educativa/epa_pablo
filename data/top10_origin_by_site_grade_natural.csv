@@ -1,0 +1,799 @@
+Prueba,Sede,Grado_num,Nivel,colegio_de_origen,Estudiantes,Ranking
+Ciencias naturales,BAQ,6,Progreso limitado,INSTITUTO DISTRITAL DE EXPERIENCIAS PEDAGÓGICAS IDEP,1,1
+Ciencias naturales,BAQ,6,Emergente,COLEGIO DEL SAGRADO CORAZÓN,2,1
+Ciencias naturales,BAQ,6,Emergente,COLEGIO BIFFI LA SALLE,1,2
+Ciencias naturales,BAQ,6,Emergente,COLEGIO DE MARIA AUXILIADORA,1,3
+Ciencias naturales,BAQ,6,Emergente,COLEGIO NUESTRA SEÑORA DE LOURDES,1,4
+Ciencias naturales,BAQ,6,Emergente,COLEGIO SAN JOSE,1,5
+Ciencias naturales,BAQ,6,Emergente,GIMNASIO INFANTIL LOS ALPES,1,6
+Ciencias naturales,BAQ,6,Emergente,INNOVA SCHOOLS PORTAL DE GENOVÉS,1,7
+Ciencias naturales,BAQ,6,En aceleración,COLEGIO CRECER Y APRENDER,2,1
+Ciencias naturales,BAQ,6,En aceleración,CENTRO DOCENTE NUESTRA SEÑORA DEL BUEN CONSEJO,1,2
+Ciencias naturales,BAQ,6,En aceleración,COLEGIO BOSTON FLEXIBLE,1,3
+Ciencias naturales,BAQ,6,Avanzado,COLEGIO COLON,1,1
+Ciencias naturales,BAQ,7,Progreso limitado,CENTRO EDUCATIVO SAGRADO CORAZÓN DE JESUS,1,1
+Ciencias naturales,BAQ,7,Progreso limitado,COLEGIO BIFFI LA SALLE,1,2
+Ciencias naturales,BAQ,7,Progreso limitado,CORPORACION EDUCATIVA COLEGIO ITALIANO GALILEO GALILEI,1,3
+Ciencias naturales,BAQ,7,Emergente,COLEGIO COLON,2,1
+Ciencias naturales,BAQ,7,Emergente,CENTRO EDUCATIVO SAGRADO CORAZÓN DE JESUS,1,2
+Ciencias naturales,BAQ,7,Emergente,COLEGIO AMERICANO DE BARRANQUILLA,1,3
+Ciencias naturales,BAQ,7,Emergente,COLEGIO BIFFI LA SALLE,1,4
+Ciencias naturales,BAQ,7,Emergente,COLEGIO GIMNASIO CHRISTOPHORO COLOMBO,1,5
+Ciencias naturales,BAQ,7,Emergente,COLEGIO LICEO DE CERVANTES,1,6
+Ciencias naturales,BAQ,7,Emergente,COLEGIO METROPOLITANO DE SOLEDAD 2000 LTDA,1,7
+Ciencias naturales,BAQ,7,Emergente,CORPORACION EDUCATIVA COLEGIO ITALIANO GALILEO GALILEI,1,8
+Ciencias naturales,BAQ,7,Emergente,GALILEO ITALIANO,1,9
+Ciencias naturales,BAQ,7,En aceleración,CENTRO EDUCATIVO BOSTON INTERNACIONAL,4,1
+Ciencias naturales,BAQ,7,En aceleración,COLEGIO AMERICANO DE BARRANQUILLA,2,2
+Ciencias naturales,BAQ,7,En aceleración,COLEGIO COLON,2,3
+Ciencias naturales,BAQ,7,En aceleración,COLEGIO DE LA SAGRADA FAMILIA,2,4
+Ciencias naturales,BAQ,7,En aceleración,COLEGIO DEL SAGRADO CORAZÓN,2,5
+Ciencias naturales,BAQ,7,En aceleración,COLEGIO PINAR DEL PRADO,2,6
+Ciencias naturales,BAQ,7,En aceleración,COLEGIO BIFFI LA SALLE,1,7
+Ciencias naturales,BAQ,7,En aceleración,COLEGIO BOSTON FLEXIBLE,1,8
+Ciencias naturales,BAQ,7,En aceleración,COLEGIO GUILLERMO CAREY,1,9
+Ciencias naturales,BAQ,7,En aceleración,COLEGIO LICEO DE CERVANTES,1,10
+Ciencias naturales,BAQ,7,Avanzado,CENTRO DOCENTE NUESTRA SEÑORA DEL BUEN CONSEJO,2,1
+Ciencias naturales,BAQ,7,Avanzado,CENTRO EDUCATIVO BOSTON INTERNACIONAL,2,2
+Ciencias naturales,BAQ,7,Avanzado,COLEGIO COLON,2,3
+Ciencias naturales,BAQ,7,Avanzado,COLEGIO BIFFI LA SALLE,1,4
+Ciencias naturales,BAQ,7,Avanzado,COLEGIO BOSTON FLEXIBLE,1,5
+Ciencias naturales,BAQ,7,Avanzado,COLEGIO MONTERROSALES BILINGUE,1,6
+Ciencias naturales,BAQ,7,Avanzado,COLEGIO NUESTRA SEÑORA DEL BUEN CONSEJO,1,7
+Ciencias naturales,BAQ,7,Avanzado,INNOVA NIZA,1,8
+Ciencias naturales,BAQ,8,Progreso limitado,COLEGIO BOSTON FLEXIBLE,1,1
+Ciencias naturales,BAQ,8,Progreso limitado,CORPORACION EDUCATIVA COLEGIO ITALIANO GALILEO GALILEI,1,2
+Ciencias naturales,BAQ,8,Emergente,COLEGIO DEL SAGRADO CORAZÓN,4,1
+Ciencias naturales,BAQ,8,Emergente,COLEGIO AMERICANO DE BARRANQUILLA,2,2
+Ciencias naturales,BAQ,8,Emergente,BIFFI LA SALLE,1,3
+Ciencias naturales,BAQ,8,Emergente,CENTRO DOCENTE NUESTRA SEÑORA DEL BUEN CONSEJO,1,4
+Ciencias naturales,BAQ,8,Emergente,CENTRO EDUCATIVO BILINGUE COLEGIO ANGLO AMERICANO,1,5
+Ciencias naturales,BAQ,8,Emergente,COLEGIO COLOMBO ESPANOL DE BARRANQUILLA,1,6
+Ciencias naturales,BAQ,8,Emergente,COLEGIO LYNDON B JOHNSON,1,7
+Ciencias naturales,BAQ,8,Emergente,COLEGIO SAN FRANCISCO,1,8
+Ciencias naturales,BAQ,8,Emergente,CORPORACION EDUCATIVA COLEGIO ITALIANO GALILEO GALILEI,1,9
+Ciencias naturales,BAQ,8,Emergente,GIMNASIO BILINGUE ALTAMAR DE CARTAGENA,1,10
+Ciencias naturales,BAQ,8,En aceleración,CENTRO DOCENTE NUESTRA SEÑORA DEL BUEN CONSEJO,2,1
+Ciencias naturales,BAQ,8,En aceleración,COLEGIO BOSTON FLEXIBLE,2,2
+Ciencias naturales,BAQ,8,En aceleración,COLEGIO DEL SAGRADO CORAZÓN,2,3
+Ciencias naturales,BAQ,8,En aceleración,COLEGIO SAN FRANCISCO,2,4
+Ciencias naturales,BAQ,8,En aceleración,CENTRO EDUCATIVO SAGRADO CORAZÓN DE JESUS,1,5
+Ciencias naturales,BAQ,8,En aceleración,COLEGIO AMERICANO DE BARRANQUILLA,1,6
+Ciencias naturales,BAQ,8,En aceleración,COLEGIO BIFFI LA SALLE,1,7
+Ciencias naturales,BAQ,8,En aceleración,COLEGIO COLOMBO ESPANOL DE BARRANQUILLA,1,8
+Ciencias naturales,BAQ,8,En aceleración,COLEGIO COLON,1,9
+Ciencias naturales,BAQ,8,En aceleración,COLEGIO DEL SAGRADO CORAZÓN CALLE 74,1,10
+Ciencias naturales,BAQ,8,Avanzado,COLEGIO AMERICANO DE BARRANQUILLA,2,1
+Ciencias naturales,BAQ,8,Avanzado,COLEGIO DE LA SAGRADA FAMILIA,1,2
+Ciencias naturales,BAQ,8,Avanzado,COLEGIO DEL SAGRADO CORAZÓN,1,3
+Ciencias naturales,BAQ,8,Avanzado,COLEGIO RETOS,1,4
+Ciencias naturales,BAQ,8,Avanzado,COLEGIO SAN FRANCISCO,1,5
+Ciencias naturales,BAQ,8,Avanzado,COLEGIO SAN JOSE,1,6
+Ciencias naturales,BAQ,8,Avanzado,COLEGIO SAN JOSE HERMANITAS DE LA ANUNCIACIÓN,1,7
+Ciencias naturales,BAQ,8,Avanzado,FUNDACION COLEGIO CRISTIANO EL SALVADOR,1,8
+Ciencias naturales,BAQ,8,Avanzado,IMMANUEL COLLAGE,1,9
+Ciencias naturales,COT,5,Progreso limitado,COLEGIO GIMNASIO REINO DE CASTILLA,1,1
+Ciencias naturales,COT,5,Progreso limitado,GIMNASIO CAMPESTRE SAN FRANCISCO DE SALES,1,2
+Ciencias naturales,COT,5,Emergente,COLEGIO EL DIVINO NIÑO,1,1
+Ciencias naturales,COT,5,Emergente,COLEGIO MAYOR DE INGLATERRA,1,2
+Ciencias naturales,COT,5,Emergente,GEORGE WASHINGTON CAMPESTRE,1,3
+Ciencias naturales,COT,5,Emergente,GIMNASIO ARRAYANES BILINGUE,1,4
+Ciencias naturales,COT,5,Emergente,GIMNASIO CAMPESTRE OXFORD,1,5
+Ciencias naturales,COT,5,Emergente,LICEO CAMPESTRE MONTPELLIER,1,6
+Ciencias naturales,COT,5,Emergente,MONTEHELENA,1,7
+Ciencias naturales,COT,5,En aceleración,COLEGIO AGUSTÍN NIETO CABALLERO,2,1
+Ciencias naturales,COT,5,En aceleración,CELESTIN FREINET TRILINGUE,1,2
+Ciencias naturales,COT,5,En aceleración,COLEGIO BILINGUE LERNER Y KLEIN,1,3
+Ciencias naturales,COT,5,En aceleración,COLEGIO CAMPESTRE PRINCIPADO DE MONACO,1,4
+Ciencias naturales,COT,5,En aceleración,COLEGIO MAYOR DE INGLATERRA,1,5
+Ciencias naturales,COT,5,En aceleración,COLEGIO NUESTRA SEÑORA DEL ROSARIO CAMPESTRE,1,6
+Ciencias naturales,COT,5,En aceleración,FERVAN CAMPESTRE,1,7
+Ciencias naturales,COT,5,En aceleración,GIMNASIO ACADÉMICO CERVANTES,1,8
+Ciencias naturales,COT,5,En aceleración,GIMNASIO CAMPESTRE OXFORD,1,9
+Ciencias naturales,COT,5,En aceleración,GIMNASIO INGLES CAMPESTRE,1,10
+Ciencias naturales,COT,5,Avanzado,CENTRO EDUCATIVO SCALAS,1,1
+Ciencias naturales,COT,5,Avanzado,COLEGIO CAMPESTRE SAN CARLOS DE COTA,1,2
+Ciencias naturales,COT,5,Avanzado,COLEGIO GIMNASIO LOS ALAMOS,1,3
+Ciencias naturales,COT,5,Avanzado,COLEGIO MONTERROSALES BILINGUE,1,4
+Ciencias naturales,COT,5,Avanzado,LICEO SAN BASILIO MAGNO,1,5
+Ciencias naturales,COT,5,Avanzado,RAINBOW,1,6
+Ciencias naturales,COT,6,Progreso limitado,GP CREATIVE BILINGUAL SCHOOL GIMNASIO PSICOPEDAGICO,1,1
+Ciencias naturales,COT,6,Progreso limitado,LICEO EDAD DE ORO,1,2
+Ciencias naturales,COT,6,Emergente,COLEGIO ITEC,1,1
+Ciencias naturales,COT,6,Emergente,GIMNASIO CAMPESTRE OXFORD,1,2
+Ciencias naturales,COT,6,Emergente,GIMNASIO CAMPESTRE PARA LA EDUCACION INTEGRAL GICEI,1,3
+Ciencias naturales,COT,6,Emergente,GIMNASIO LAS PALMAS,1,4
+Ciencias naturales,COT,6,Emergente,GIMNASIO MODERNO GENERACION DEL FUTURO,1,5
+Ciencias naturales,COT,6,Emergente,GIMNASIO WILLIAM MACKINLEY,1,6
+Ciencias naturales,COT,6,En aceleración,ABEKA ACADEMY,1,1
+Ciencias naturales,COT,6,En aceleración,COLEGIO AGUSTÍNIANO SUBA,1,2
+Ciencias naturales,COT,6,En aceleración,COLEGIO AMERICANO DE BOGOTÁ,1,3
+Ciencias naturales,COT,6,En aceleración,COLEGIO CANAPRO,1,4
+Ciencias naturales,COT,6,En aceleración,COLEGIO COLSUBSIDIO CIUDADELA,1,5
+Ciencias naturales,COT,6,En aceleración,COLEGIO PROVINMA,1,6
+Ciencias naturales,COT,6,En aceleración,COLEGIO REFOUS,1,7
+Ciencias naturales,COT,6,En aceleración,CONCENTRACIÓN URBANA CAMILO TORRES,1,8
+Ciencias naturales,COT,6,En aceleración,GIMNASIO CAMPESTRE SAN FRANCISCO DE SALES,1,9
+Ciencias naturales,COT,6,En aceleración,GIMNASIO CRISTIANO DE CUNDINAMARCA,1,10
+Ciencias naturales,COT,6,Avanzado,CELESTIN FREINET SEDE NORTE,1,1
+Ciencias naturales,COT,6,Avanzado,CENTRO EDUCATIVO LOMBARDIA,1,2
+Ciencias naturales,COT,6,Avanzado,GIMNASIO WILLIAM MACKINLEY,1,3
+Ciencias naturales,COT,6,Avanzado,LICEO CAMPESTRE MONTPELLIER,1,4
+Ciencias naturales,COT,6,Avanzado,LICEO SAN BASILIO MAGNO,1,5
+Ciencias naturales,COT,6,Avanzado,OAKLAND COLEGIO CAMPESTRE,1,6
+Ciencias naturales,COT,6,Avanzado,WESLEYANO DEL NORTE,1,7
+Ciencias naturales,COT,6,Avanzado,ZION SCHOOL,1,8
+Ciencias naturales,COT,7,Progreso limitado,COLEGIO LUIS MARIANO,1,1
+Ciencias naturales,COT,7,Progreso limitado,LICEO CAMPESTRE THOMAS DE IRIARTE,1,2
+Ciencias naturales,COT,7,Emergente,COLEGIO MARIA AUXILIADORA CHIA,1,1
+Ciencias naturales,COT,7,Emergente,COLEGIO MONTEMOREL,1,2
+Ciencias naturales,COT,7,Emergente,GIMNASIO CAMPESTRE LOS ALISOS,1,3
+Ciencias naturales,COT,7,Emergente,INSTITUCIÓN EDUCATIVA DEPARTAMENTAL ENRIQUE PARDO P,1,4
+Ciencias naturales,COT,7,Emergente,LICEO CAMPESTRE THOMAS DE IRIARTE,1,5
+Ciencias naturales,COT,7,Emergente,SUMMERHILSCHOOL,1,6
+Ciencias naturales,COT,7,En aceleración,LICEO CAMPESTRE THOMAS DE IRIARTE,2,1
+Ciencias naturales,COT,7,En aceleración,CELESTIN FREINET SEDE TRILINGUE,1,2
+Ciencias naturales,COT,7,En aceleración,COLEGIO BILINGÜE EL BOSQUE,1,3
+Ciencias naturales,COT,7,En aceleración,COLEGIO BILINGÜE SAN JUAN DE ÁVILA,1,4
+Ciencias naturales,COT,7,En aceleración,COLEGIO CAMPESTRE MONTECERVINO,1,5
+Ciencias naturales,COT,7,En aceleración,COLEGIO CAMPESTRE PRINCIPADO DE MONACO,1,6
+Ciencias naturales,COT,7,En aceleración,COLEGIO MARIA AUXILIADORA CHIA,1,7
+Ciencias naturales,COT,7,En aceleración,COLEGIO NUESTRA SEÑORA DEL ROSARIO CAMPESTRE,1,8
+Ciencias naturales,COT,7,En aceleración,COLEGIO NUEVA YORK,1,9
+Ciencias naturales,COT,7,En aceleración,COLEGIO NUEVO CAMPESTRE,1,10
+Ciencias naturales,COT,7,Avanzado,CENTRO EDUCATIVO SCALAS,1,1
+Ciencias naturales,COT,7,Avanzado,COLEGIO MONTEMOREL,1,2
+Ciencias naturales,COT,7,Avanzado,COLEGIO PSICOPEDAGÓGICO CAMPESTRE,1,3
+Ciencias naturales,COT,7,Avanzado,LICEO PSICOPEDAGÓGICO DECROLY,1,4
+Ciencias naturales,COT,7,Avanzado,SUMMEHILL SCHOOL,1,5
+Ciencias naturales,COT,8,Progreso limitado,LICEO CAMPESTRE THOMAS DE IRIARTE,1,1
+Ciencias naturales,COT,8,Emergente,COLEGIO AUSTRALIANO CAMPESTRE,1,1
+Ciencias naturales,COT,8,Emergente,COLEGIO MARÍA INMACULADA SCHOLL,1,2
+Ciencias naturales,COT,8,Emergente,COLEGIO MONTEMOREL,1,3
+Ciencias naturales,COT,8,Emergente,COLEGIO SUPERIOR AMERICANO SAS,1,4
+Ciencias naturales,COT,8,Emergente,GIMASIO CAMPESTRE ESCALEMOS,1,5
+Ciencias naturales,COT,8,Emergente,GIMNASIO CAMPESTRE VALSENALES,1,6
+Ciencias naturales,COT,8,Emergente,GIMNASIO CRISTIANO JIREH,1,7
+Ciencias naturales,COT,8,Emergente,GIMNASIO NUEVA ESCOCIA,1,8
+Ciencias naturales,COT,8,Emergente,INSTITUCIÓN EDUCATIVA DEPARTAMENTAL ENRIQUE PARDO PARRA,1,9
+Ciencias naturales,COT,8,Emergente,LICEO CAMPESTRE THOMAS DE IRIARTE,1,10
+Ciencias naturales,COT,8,En aceleración,CELESTIN FREINET SEDE NORTE COTA,1,1
+Ciencias naturales,COT,8,En aceleración,COLEGIO BILINGÜE MAXIMINO POITIERS,1,2
+Ciencias naturales,COT,8,En aceleración,COLEGIO EL MINUTO DE DIOS,1,3
+Ciencias naturales,COT,8,En aceleración,COLEGIO MONTERROSALES CICLOS,1,4
+Ciencias naturales,COT,8,En aceleración,COLEGIO PIERRE DE FERMAT,1,5
+Ciencias naturales,COT,8,En aceleración,COLEGIO REFOUS,1,6
+Ciencias naturales,COT,8,En aceleración,COLEGIO REOFUS,1,7
+Ciencias naturales,COT,8,En aceleración,COLEGIO UNICAB VIRTUAL,1,8
+Ciencias naturales,COT,8,En aceleración,ESCUELA PEDAGÓGICA EXPERIMENTAL,1,9
+Ciencias naturales,COT,8,En aceleración,GIMNASIO EL SHADAI,1,10
+Ciencias naturales,COT,8,Avanzado,COLEGIO ABRAHAM MASLOW,1,1
+Ciencias naturales,COT,8,Avanzado,COLEGIO MONTERROSALES CICLOS,1,2
+Ciencias naturales,COT,8,Avanzado,COLEGIO REFOUS,1,3
+Ciencias naturales,COT,8,Avanzado,CORAZONISTA,1,4
+Ciencias naturales,COT,8,Avanzado,ESCUELA PEDAGOGICA EXPERIMENTAL,1,5
+Ciencias naturales,COT,8,Avanzado,GIMNASIO CAMPESTRE EDUCACIÓN DINÁMICA,1,6
+Ciencias naturales,COT,9,Progreso limitado,FORTALEZA CEIF WILLIAM MACKINLEY,1,1
+Ciencias naturales,COT,9,Emergente,COLEGIO NUESTRA SEÑORA DEL ROSARIO CAMPESTRE,2,1
+Ciencias naturales,COT,9,Emergente,"ABEKA HOMESCHOOL ( PENSACOLA - FLORIDA, ESTADOS UN",1,2
+Ciencias naturales,COT,9,Emergente,COLEGIO BILINGUE JOSE MAX LEON,1,3
+Ciencias naturales,COT,9,Emergente,COLEGIO CAMPESTRE MAYOR DE INGLATERRA,1,4
+Ciencias naturales,COT,9,Emergente,COLEGIO CAMPESTRE MONTECERVINO,1,5
+Ciencias naturales,COT,9,Emergente,COLEGIO EUCARÍSTICO VILLA GUADALUPE,1,6
+Ciencias naturales,COT,9,Emergente,COLEGIO MAYOR JOSE CELESTINO MUTIS,1,7
+Ciencias naturales,COT,9,Emergente,COLEGIO MAYOR JOSÉ CELESTINO MUTIS,1,8
+Ciencias naturales,COT,9,Emergente,COLEGIO NUESTRA SEÑORA DE NAZARETH,1,9
+Ciencias naturales,COT,9,Emergente,GIMNACIO CAMPESTRE SAN FRANCISCO DE SALES,1,10
+Ciencias naturales,COT,9,En aceleración,COLEGIO AGUSTINIANO CIUDAD SALITRE,1,1
+Ciencias naturales,COT,9,En aceleración,COLEGIO BILING OXFORD,1,2
+Ciencias naturales,COT,9,En aceleración,COLEGIO BILINGUE JOSE MAX LEON,1,3
+Ciencias naturales,COT,9,En aceleración,COLEGIO CAMPESTRE SAN CARLOS DE COTA,1,4
+Ciencias naturales,COT,9,En aceleración,COLEGIO EL MINUTO DE DIOS,1,5
+Ciencias naturales,COT,9,En aceleración,GIMNASIO CAMPESTRE OXFORD,1,6
+Ciencias naturales,COT,9,En aceleración,GIMNASIO CANTABRIA,1,7
+Ciencias naturales,COT,9,En aceleración,GIMNASIO EL HONTANAR,1,8
+Ciencias naturales,COT,9,En aceleración,GIMNASIO SAN FRANCISCO DE SALES,1,9
+Ciencias naturales,COT,9,En aceleración,LICEO JUAN RAMÓN JIMÉNEZ,1,10
+Ciencias naturales,COT,9,Avanzado,GIMNASIO SAN ANGELO,1,1
+Ciencias naturales,COT,9,Avanzado,LICEO CAMPESTRE THOMAS DE IRIARTE,1,2
+Ciencias naturales,COT,9,Avanzado,LICEO DEL CARIBE,1,3
+Ciencias naturales,COT,9,Avanzado,SUMMEHILL SCHOOL,1,4
+Ciencias naturales,COT,9,Avanzado,SUMMERHILL SCHOOL,1,5
+Ciencias naturales,COT,10,Emergente,COLEGIO CANAPRO,1,1
+Ciencias naturales,COT,10,Emergente,COLEGIO REFOUS,1,2
+Ciencias naturales,COT,10,Emergente,GIMNASIO CAMPESTRE LOS SAUCES,1,3
+Ciencias naturales,COT,10,Emergente,LICEO CAMPESTRE THOMAS DE IRIARTE,1,4
+Ciencias naturales,COT,10,En aceleración,GIMNASIO CAMPESTRE OXFORD,2,1
+Ciencias naturales,COT,10,En aceleración,LICEO DE LOS ANDES,2,2
+Ciencias naturales,COT,10,En aceleración,AUSTRALIANO CAMPESTRE BILINGUE,1,3
+Ciencias naturales,COT,10,En aceleración,COLEGIO ABRAHAM MASLOW,1,4
+Ciencias naturales,COT,10,En aceleración,COLEGIO NUESTRA SEÑORA DEL ROSARIO CAMPESTRE,1,5
+Ciencias naturales,COT,10,En aceleración,COLEGIO PADRE MANYANET CHIA,1,6
+Ciencias naturales,COT,10,En aceleración,GIMNASIO LOS ANGELES,1,7
+Ciencias naturales,COT,10,En aceleración,GIMNASIO LOS ARRAYANES,1,8
+Ciencias naturales,COT,10,En aceleración,LICEO CAMPESTRE THOMAS DE IRIARTE,1,9
+Ciencias naturales,COT,10,En aceleración,MINUTO DE DIOS SIGLO XXI,1,10
+Ciencias naturales,COT,10,Avanzado,COLEGIO SUPERIOR AMERICANO,1,1
+Ciencias naturales,COT,10,Avanzado,LICEO DE LOS ANDES,1,2
+Ciencias naturales,COT,10,Avanzado,SOCIEDAD EDUCATIVA LICEO DE LOS ANDES,1,3
+Ciencias naturales,MOS,5,Progreso limitado,COLEGIO TECNOLOGICO DE SUBA,1,1
+Ciencias naturales,MOS,5,Progreso limitado,SUMMEHILL SCHOOL,1,2
+Ciencias naturales,MOS,5,Emergente,ANTONIO VAN UDEN,1,1
+Ciencias naturales,MOS,5,Emergente,COLEGIO BILINGÜE PIO XII CAMPESTRE,1,2
+Ciencias naturales,MOS,5,Emergente,COLEGIO MAYOR DE SAN BARTOLOME,1,3
+Ciencias naturales,MOS,5,Emergente,COLEGIO PEDAGÓGICO INGLES,1,4
+Ciencias naturales,MOS,5,Emergente,COLEGIO SUPERIOR AMERICANO,1,5
+Ciencias naturales,MOS,5,Emergente,FUNDACIÓN GINMASION LOS SAUCES,1,6
+Ciencias naturales,MOS,5,Emergente,GIMNASIO GREEN HILLS,1,7
+Ciencias naturales,MOS,5,Emergente,IDIM,1,8
+Ciencias naturales,MOS,5,Emergente,INNOVA SCHOOLS,1,9
+Ciencias naturales,MOS,5,Emergente,LICEO LOS ALCÁZARES,1,10
+Ciencias naturales,MOS,5,En aceleración,COLEGIO AMERICANO DE BOGOTA,1,1
+Ciencias naturales,MOS,5,En aceleración,COLEGIO GIMNASIO CAMBRIDGE,1,2
+Ciencias naturales,MOS,5,En aceleración,COLEGIO NUESTRA SEÑORA DE LA SABIDURÍA,1,3
+Ciencias naturales,MOS,5,En aceleración,GIMNASIO CAMPESTRE LOS SAUCES,1,4
+Ciencias naturales,MOS,5,En aceleración,INNOVA SCHOOLS,1,5
+Ciencias naturales,MOS,5,En aceleración,INSTITUCIÓN EDUCATIVA GENERAL ENRIQUE CAICEDO,1,6
+Ciencias naturales,MOS,5,En aceleración,INSTITUTO PEDAGOGICO NACIONAL,1,7
+Ciencias naturales,MOS,5,En aceleración,LICEO CAMPESTRE EL BOSQUE,1,8
+Ciencias naturales,MOS,5,En aceleración,LICEO SEGOVIA,1,9
+Ciencias naturales,MOS,6,Progreso limitado,INNOVA SCHOOLS,1,1
+Ciencias naturales,MOS,6,Progreso limitado,JOSE MANUEL RESTREPO,1,2
+Ciencias naturales,MOS,6,Progreso limitado,LICEO CAMPESTRE SIGLO XXI,1,3
+Ciencias naturales,MOS,6,Emergente,INSTITUTO DIVERSIFICADO ALBERT EINSTEIN,2,1
+Ciencias naturales,MOS,6,Emergente,CENTRO LESTONNAC COMPAÑIA DE MARIA,1,2
+Ciencias naturales,MOS,6,Emergente,COLEGIO BILINGUE CIUDAD MONTES,1,3
+Ciencias naturales,MOS,6,Emergente,COLEGIO BILINGÜE LERNER & KLEIN,1,4
+Ciencias naturales,MOS,6,Emergente,COLEGIO CIUDAD PATIO BONITO,1,5
+Ciencias naturales,MOS,6,Emergente,COLEGIO COLOMBO INGLES DEL HUILA Y CIA LTDA,1,6
+Ciencias naturales,MOS,6,Emergente,COLEGIO DE LA UNIVERSIDAD LIBRE,1,7
+Ciencias naturales,MOS,6,Emergente,COLEGIO NUESTRA SEÑORA DE NAZARETH,1,8
+Ciencias naturales,MOS,6,Emergente,COLEGIO NUESTRA SEÑORA DEL ROSARIO FUNZA,1,9
+Ciencias naturales,MOS,6,Emergente,GIMNASIO BRITANICO SAS,1,10
+Ciencias naturales,MOS,6,En aceleración,INNOVA SCHOOLS,2,1
+Ciencias naturales,MOS,6,En aceleración,COLEGIO INGLES NUEVA INGLATERRA,1,2
+Ciencias naturales,MOS,6,En aceleración,COLEGIO MONTE ROSALES,1,3
+Ciencias naturales,MOS,6,En aceleración,COLEGIO NAVAL,1,4
+Ciencias naturales,MOS,6,En aceleración,COLEGIO PEDAGÓGICO INGLES,1,5
+Ciencias naturales,MOS,6,En aceleración,GIMNASIO BILINGÜE CAMPESTRE MARIE CURIE,1,6
+Ciencias naturales,MOS,6,En aceleración,GIMNASIO FEEL,1,7
+Ciencias naturales,MOS,6,En aceleración,GIMNASIO FORMADORES DE EXCELENCIA EMPRENDIMIENTO Y LIDERAZGO FEEL,1,8
+Ciencias naturales,MOS,6,En aceleración,INST. EDU. DEPTAL. MARÍA TERESA ORTÍZ,1,9
+Ciencias naturales,MOS,6,En aceleración,INSTITUTO DIVERSIFICADO ALBERT EINSTEIN -SAET LTDA,1,10
+Ciencias naturales,MOS,6,Avanzado,COLEGIO SANTA LUISA,1,1
+Ciencias naturales,MOS,6,Avanzado,GIMNASIO CONTEMPORANEO MOTESSORI,1,2
+Ciencias naturales,MOS,6,Avanzado,GIMNASIO FORMADORES DE EXCELENCIA EMPRENDIMIENTO Y LIDERAZGO FEEL,1,3
+Ciencias naturales,MOS,6,Avanzado,INSTITUCIÓN EDUCATIVA NOGALES COUNTRY SCHOOL,1,4
+Ciencias naturales,MOS,6,Avanzado,LICEO HACIENDA CASA BLANCA,1,5
+Ciencias naturales,MOS,6,Avanzado,LICEO LORENS,1,6
+Ciencias naturales,MOS,6,Avanzado,LICEO PESTALOZZIANO,1,7
+Ciencias naturales,MOS,7,Progreso limitado,COLEGIO MONTERROSALES CICLOS,1,1
+Ciencias naturales,MOS,7,Progreso limitado,LICEO SANTA TERESITA DE MADRID,1,2
+Ciencias naturales,MOS,7,Progreso limitado,SAGRADOS CORAZONES DE MOSQUERA,1,3
+Ciencias naturales,MOS,7,Emergente,COLEGIO DISTRITAL SAN JOSE DE CASTILLA,1,1
+Ciencias naturales,MOS,7,Emergente,COLEGIO SANTA ANA DE FONTIBON SAS,1,2
+Ciencias naturales,MOS,7,Emergente,ESCUELA RURAL DEPARTAMENTAL PALOQUEMAO,1,3
+Ciencias naturales,MOS,7,Emergente,GIMNASIO REAL DE LA SABANA,1,4
+Ciencias naturales,MOS,7,Emergente,INNOVA SCHOOL,1,5
+Ciencias naturales,MOS,7,Emergente,INSTITUTO DIVERSIFICADO ALBERT EINSTEIN,1,6
+Ciencias naturales,MOS,7,Emergente,INSTITUTO DIVERSIFICADO ALBERT EINSTEIN- SAET LTDA,1,7
+Ciencias naturales,MOS,7,Emergente,LICEO CAMPESTRE NUEVO PACTO,1,8
+Ciencias naturales,MOS,7,Emergente,LICEO CAMPESTRE SIGLO XXI,1,9
+Ciencias naturales,MOS,7,Emergente,LICEO HACIENDA CASA BLANCA,1,10
+Ciencias naturales,MOS,7,En aceleración,COLEGIO CAFAM,1,1
+Ciencias naturales,MOS,7,En aceleración,COLEGIO CAFETAL BILINGUE,1,2
+Ciencias naturales,MOS,7,En aceleración,COLEGIO MAYOR DE INGLATERRA,1,3
+Ciencias naturales,MOS,7,En aceleración,COLEGIO MIXTO DE INTEGRACIÓN MODERNA,1,4
+Ciencias naturales,MOS,7,En aceleración,COLEGIO SICOPEDAGÓGICO DE FONTIBÓN,1,5
+Ciencias naturales,MOS,7,En aceleración,COLEGIO TERESITA DE LISEUX,1,6
+Ciencias naturales,MOS,7,En aceleración,COLEGIO VIÑA DEL MAR,1,7
+Ciencias naturales,MOS,7,En aceleración,GIMNASIO CAMPESTRE LOS ARRAYANES,1,8
+Ciencias naturales,MOS,7,En aceleración,INSTITUCIÓN EDUCATIVA NOGALES COUNTRY SCHOOL,1,9
+Ciencias naturales,MOS,7,En aceleración,INSTITUTO DIVERSIFICADO ALBERT EINSTEIN,1,10
+Ciencias naturales,MOS,7,Avanzado,INNOVA SCHOOLS HOME,1,1
+Ciencias naturales,MOS,7,Avanzado,INSTITUTO DIVERSIFICADO ALBERT EINSTEIN,1,2
+Ciencias naturales,MOS,7,Avanzado,LICEO HACIENDA CASABLANCA,1,3
+Ciencias naturales,MOS,8,Progreso limitado,COLEGIO GIOVANNI ANTONIO FARINA,1,1
+Ciencias naturales,MOS,8,Progreso limitado,GIMNASIO CRISTIANO DE CUNDINAMARCA,1,2
+Ciencias naturales,MOS,8,Emergente,COLEGIO DE FORMACION INTEGRAL SEMBRADORES DE PAZ,1,1
+Ciencias naturales,MOS,8,Emergente,COLEGIO NUESTRA SEÑORA DEL ROSARIO FUNZA,1,2
+Ciencias naturales,MOS,8,Emergente,COLEGIO SAN JOSE,1,3
+Ciencias naturales,MOS,8,Emergente,GIMNASIO INDOAMERICANO,1,4
+Ciencias naturales,MOS,8,Emergente,GIMNASIO LOS ROBLES,1,5
+Ciencias naturales,MOS,8,Emergente,INNOVA,1,6
+Ciencias naturales,MOS,8,Emergente,INSTITUCIÓN EDUCATIVA LA MERCED,1,7
+Ciencias naturales,MOS,8,Emergente,INSTITUTO COMERCIAL LORETO SEDE CASTILLA,1,8
+Ciencias naturales,MOS,8,Emergente,INSTITUTO PEDAGÓGICO NUESTRA SEÑORA DEL PILAR,1,9
+Ciencias naturales,MOS,8,En aceleración,COLEGIO CAMPESTRE SAN NICOLAS DE TOLENTINO,1,1
+Ciencias naturales,MOS,8,En aceleración,COLEGIO INSTITUTO TÉCNICO INTERNACIONAL INSTITUCIÓN EDUCATIVA DISTRITAL,1,2
+Ciencias naturales,MOS,8,En aceleración,COLEGIO SAGRADOS CORAZONES DE MONQUERA,1,3
+Ciencias naturales,MOS,8,En aceleración,COLEGIO SALESIANO SAN JOSÉ MOSQUERA,1,4
+Ciencias naturales,MOS,8,En aceleración,COLEGIO SUPERIOR AMERICANO,1,5
+Ciencias naturales,MOS,8,En aceleración,COLEGIO TALLER PSICOPEDAGÓGICO DE LOS ANDES,1,6
+Ciencias naturales,MOS,8,En aceleración,COLEGIO VATICANO,1,7
+Ciencias naturales,MOS,8,En aceleración,FREINETSKOLAN MIMER,1,8
+Ciencias naturales,MOS,8,En aceleración,GIMNASIO CAMPESTRE VALSENALES,1,9
+Ciencias naturales,MOS,8,En aceleración,GIMNASIO CATOLICO SAN NICOLAS DE BARI,1,10
+Ciencias naturales,MOS,8,Avanzado,COLEGIO BILINGUE SAN JUAN DE DIOS,1,1
+Ciencias naturales,MOS,8,Avanzado,GIMNASIO BILINGUE CAMPESTRE MARIE CURIE,1,2
+Ciencias naturales,MOS,8,Avanzado,GIMNASIO CULTURAL EL ARTE DEL FUTURO,1,3
+Ciencias naturales,MOS,8,Avanzado,GIMNASIO GREEN HILLS,1,4
+Ciencias naturales,MOS,8,Avanzado,GIMNASIO LOS PINOS,1,5
+Ciencias naturales,MOS,8,Avanzado,I.E.D ROGELIO SALMONA,1,6
+Ciencias naturales,MOS,8,Avanzado,LICEO CAMPESTRE FACATATIVÁ,1,7
+Ciencias naturales,MOS,8,Avanzado,LICEO HACIENDA CASABLANCA,1,8
+Ciencias naturales,MOS,9,Progreso limitado,GIMNASIO MODERNO SAN FRANCISCO EL TINTAL,1,1
+Ciencias naturales,MOS,9,Emergente,COLEGIO BILINGUE MAXIMINO POITIERS,1,1
+Ciencias naturales,MOS,9,Emergente,COLEGIO SAN PEDRO,1,2
+Ciencias naturales,MOS,9,Emergente,COLEGIO SANTA ANGELA MERICI,1,3
+Ciencias naturales,MOS,9,Emergente,INSTITUCIÓN EDUCATIVA DEPARTAMENTAL FIDEL LEON TRIANA,1,4
+Ciencias naturales,MOS,9,Emergente,JAIRO MOSQUERA MORENO SECUNDARIA Y MEDIA,1,5
+Ciencias naturales,MOS,9,Emergente,LICEO HACIENDA CASABLANCA MINUTOS DE DIOS,1,6
+Ciencias naturales,MOS,9,Emergente,SAGRADOS CORAZONES,1,7
+Ciencias naturales,MOS,9,En aceleración,COLEGIO DE FORMACIÓN INTEGRAL MUNDO NUEVO,1,1
+Ciencias naturales,MOS,9,En aceleración,COLEGIO MILITAR CORONEL JUAN JOSE RONDON,1,2
+Ciencias naturales,MOS,9,En aceleración,COLEGIO NUESTRA SEÑORA DEL ROSARIO,1,3
+Ciencias naturales,MOS,9,En aceleración,EL GIMNASIO CAMPESTRE DEL RODADERO S.A.S,1,4
+Ciencias naturales,MOS,9,En aceleración,GIMNASIO REAL DE LA SABANA,1,5
+Ciencias naturales,MOS,9,En aceleración,INNOVA SCHOOL,1,6
+Ciencias naturales,MOS,9,En aceleración,INSTITUTO INFANTIL Y JUVENIL INJUV,1,7
+Ciencias naturales,MOS,9,En aceleración,INSTITUTO RENATO DESCARTES,1,8
+Ciencias naturales,MOS,9,En aceleración,LA FRATERNIDAD,1,9
+Ciencias naturales,MOS,9,En aceleración,LICEO LATINO AMERICANO,1,10
+Ciencias naturales,MOS,9,Avanzado,COLEGIO LA PRESENTACIÓN,1,1
+Ciencias naturales,MOS,10,Progreso limitado,INNOVA HOME,1,1
+Ciencias naturales,MOS,10,Progreso limitado,INNOVA SCHOOLS,1,2
+Ciencias naturales,MOS,10,Progreso limitado,INSTITUTO SALESIANO SAN JOSE,1,3
+Ciencias naturales,MOS,10,Emergente,COLEGIO FRANCISCO JOSÉ DE CALDAS,1,1
+Ciencias naturales,MOS,10,Emergente,INSTITUTO COOPERATIVO AGROINDUSTRIAL HERNAN ECHAVARRIA OLOZAGA,1,2
+Ciencias naturales,MOS,10,En aceleración,LICEO CAMPESTRE THOMAS DE IRIARTE,2,1
+Ciencias naturales,MOS,10,En aceleración,CEHO,1,2
+Ciencias naturales,MOS,10,En aceleración,GIMNASIO LOS ROBLES,1,3
+Ciencias naturales,MOS,10,En aceleración,LICEO SIMÓN BOLÍVAR,1,4
+Ciencias naturales,MOS,10,En aceleración,NUEVO COLEGIO SAN JUAN BAUTISTA,1,5
+Ciencias naturales,MOS,10,Avanzado,COLEGIO MINUTO DE DIOS CIUDAD VERDE,1,1
+Ciencias naturales,MOS,10,Avanzado,INNOVA SCHOOLS MOSQUERA,1,2
+Ciencias naturales,TUN,5,Progreso limitado,COLEGIO GALILEO GALILEI,1,1
+Ciencias naturales,TUN,5,Progreso limitado,GIMNASIO NEW CASTLE,1,2
+Ciencias naturales,TUN,5,Emergente,CENTRO EDUCATIVO HOWARD GARDNER,1,1
+Ciencias naturales,TUN,5,Emergente,CENTRO EDUCATIVO SEMILLITAS DE AMOR,1,2
+Ciencias naturales,TUN,5,Emergente,COLEGIO CRISTIANO FILADELFIA TUNJA,1,3
+Ciencias naturales,TUN,5,Emergente,COLEGIO DE BOYACÁ,1,4
+Ciencias naturales,TUN,5,Emergente,COLEGIO DE LA PRESENTACIÓN,1,5
+Ciencias naturales,TUN,5,Emergente,COLEGIO MONTERROSALES CICLOS,1,6
+Ciencias naturales,TUN,5,Emergente,COLEGIO SAN VIATOR TUNJA,1,7
+Ciencias naturales,TUN,5,Emergente,COLEGIO TODDLERS ANTES JARDIN INFANTIL TODDLERS,1,8
+Ciencias naturales,TUN,5,Emergente,LICE SANTA INES,1,9
+Ciencias naturales,TUN,5,En aceleración,GIMNASIO CAMPESTRE DEL NORTE,4,1
+Ciencias naturales,TUN,5,En aceleración,COLEGIO NUEVA GRANADA,2,2
+Ciencias naturales,TUN,5,En aceleración,COUNTRY BILINGUAL SCHOOL,2,3
+Ciencias naturales,TUN,5,En aceleración,GIMNASIO GALILEO GALILEI,2,4
+Ciencias naturales,TUN,5,En aceleración,GIMNASIO VILLA FONTANA,2,5
+Ciencias naturales,TUN,5,En aceleración,CENTRO EDUCATIVO HOWARD GARDNER,1,6
+Ciencias naturales,TUN,5,En aceleración,COLEGIO ANDINO,1,7
+Ciencias naturales,TUN,5,En aceleración,COLEGIO ANDINO DE TUNJA,1,8
+Ciencias naturales,TUN,5,En aceleración,COLEGIO BILINGÜE SAN VIATOR TUNJA,1,9
+Ciencias naturales,TUN,5,En aceleración,COLEGIO CRISTIANO MANANTIAL,1,10
+Ciencias naturales,TUN,5,Avanzado,COLEGIO ANDINO DE TUNJA,1,1
+Ciencias naturales,TUN,5,Avanzado,COLEGIO SAN VIATOR,1,2
+Ciencias naturales,TUN,5,Avanzado,POLEGIO PARROQUIAL SAN MIGUEL,1,3
+Ciencias naturales,TUN,6,Progreso limitado,COLEGIO NUEVA GRANADA,1,1
+Ciencias naturales,TUN,6,Progreso limitado,LICEO SANTA INES,1,2
+Ciencias naturales,TUN,6,Emergente,COLEGIO ABRAHAM LINCOLN,2,1
+Ciencias naturales,TUN,6,Emergente,GIMNASIO CAMPESTRE DEL NORTE,1,2
+Ciencias naturales,TUN,6,Emergente,GIMNASIO CAMPESTRE SEMILLERO DEL SABER,1,3
+Ciencias naturales,TUN,6,Emergente,GIMNASIO GALILEO GALILEI,1,4
+Ciencias naturales,TUN,6,Emergente,GIMNASIO MODERNO LOS PINOS SAS,1,5
+Ciencias naturales,TUN,6,Emergente,GIMNASIO SANTANDER,1,6
+Ciencias naturales,TUN,6,Emergente,GIMNASIO VILLA FONTANA,1,7
+Ciencias naturales,TUN,6,En aceleración,CENTRO DE EDUCACIÓN ACTIVA JOHN DEWEY,1,1
+Ciencias naturales,TUN,6,En aceleración,CENTRO PEDAGÓGICO MANDALA,1,2
+Ciencias naturales,TUN,6,En aceleración,COLEGIO AMERICANO DE BOGOTA,1,3
+Ciencias naturales,TUN,6,En aceleración,COLEGIO GABRIEL GARCIA MARQUEZ,1,4
+Ciencias naturales,TUN,6,En aceleración,COLEGIO MONTERROSALES CICLOS,1,5
+Ciencias naturales,TUN,6,En aceleración,COLEGIO REINA DE LA PAZ,1,6
+Ciencias naturales,TUN,6,En aceleración,FUNDACION PEDAGOGICA RAYUELA,1,7
+Ciencias naturales,TUN,6,En aceleración,GIMNASIO CAMPESTRE NORTE,1,8
+Ciencias naturales,TUN,6,En aceleración,GIMNASIO CAMPESTRE SANTO DOMINGO,1,9
+Ciencias naturales,TUN,6,En aceleración,GIMNASIO COMFACASANARE,1,10
+Ciencias naturales,TUN,6,Avanzado,AMERICAN SCHOOL SAINT FRANCIS,1,1
+Ciencias naturales,TUN,6,Avanzado,COLEGIO MONTERROSALES HOMESCHOOL,1,2
+Ciencias naturales,TUN,6,Avanzado,COLEGIO NUEVA GRANADA,1,3
+Ciencias naturales,TUN,6,Avanzado,COLEGIO SAN VIATOR,1,4
+Ciencias naturales,TUN,6,Avanzado,FUNDACIÓN PEDAGÓGICA RAYUELA,1,5
+Ciencias naturales,TUN,6,Avanzado,GABRIEL GARCIA MARQUEZ,1,6
+Ciencias naturales,TUN,6,Avanzado,GIMNASIO CAMBRIDGE TUNJA,1,7
+Ciencias naturales,TUN,6,Avanzado,GIMNASIO INFANTIL CHIQUILANDIA,1,8
+Ciencias naturales,TUN,7,Emergente,CENTRO EDUCATIVO COLEGIO SENSERITOS,1,1
+Ciencias naturales,TUN,7,Emergente,COLEGIO ANDINO DE TUNJA,1,2
+Ciencias naturales,TUN,7,Emergente,COLEGIO GIMASIO SANTANDER TUNJA,1,3
+Ciencias naturales,TUN,7,Emergente,GIMNASIO VILLA FONTANA,1,4
+Ciencias naturales,TUN,7,Emergente,I.E.T. PEDRO JOSÉ SARMIENTO,1,5
+Ciencias naturales,TUN,7,Emergente,LICEO SANTA INÉS,1,6
+Ciencias naturales,TUN,7,En aceleración,GIMNASIO CAMPESTRE DEL NORTE,2,1
+Ciencias naturales,TUN,7,En aceleración,GIMNASIO VILLA FONTANA,2,2
+Ciencias naturales,TUN,7,En aceleración,CENTRO PEDAGÓGICO MANDALA,1,3
+Ciencias naturales,TUN,7,En aceleración,COLEGIO ANDINO DE TUNJA,1,4
+Ciencias naturales,TUN,7,En aceleración,COLEGIO DE BOYACA,1,5
+Ciencias naturales,TUN,7,En aceleración,COLEGIO JESUS EUCARISTIA,1,6
+Ciencias naturales,TUN,7,En aceleración,COLEGIO PARROQUIAL LA ASUNCION,1,7
+Ciencias naturales,TUN,7,En aceleración,COLEGIO SAN JOSÉ DE LA SALLE,1,8
+Ciencias naturales,TUN,7,En aceleración,COLEGIO SAN VIATOR TUNJA,1,9
+Ciencias naturales,TUN,7,En aceleración,DON BOSCO V,1,10
+Ciencias naturales,TUN,7,Avanzado,CENTRO PEDAGÓGICO MANDALA,1,1
+Ciencias naturales,TUN,7,Avanzado,COLEGIO ABRAHAM LINCOLN,1,2
+Ciencias naturales,TUN,7,Avanzado,COLEGIO ANDINO,1,3
+Ciencias naturales,TUN,7,Avanzado,COLEGIO COOPERATIVO REYES PATRIA,1,4
+Ciencias naturales,TUN,7,Avanzado,COLEGIO PARROQUIAL SAN MIGUEL,1,5
+Ciencias naturales,TUN,7,Avanzado,FUNDACIÓN PEDAGÓGICA RAYUELA,1,6
+Ciencias naturales,TUN,7,Avanzado,GIMNACIO VILLA FONTANA,1,7
+Ciencias naturales,TUN,7,Avanzado,GIMNASIO CAMPESTRE DEL NORTE,1,8
+Ciencias naturales,TUN,7,Avanzado,GIMNASIO VILLA FONTANA,1,9
+Ciencias naturales,TUN,7,Avanzado,IMMANUEL CHRISTIAN BILINGUAL SCHOOL,1,10
+Ciencias naturales,TUN,8,Progreso limitado,COLEGIO SAN VIATOR TUNJA,2,1
+Ciencias naturales,TUN,8,Progreso limitado,LICEO SANTA INES,1,2
+Ciencias naturales,TUN,8,Emergente,CENTRO PEDAGÓGICO MANDALA,1,1
+Ciencias naturales,TUN,8,Emergente,CLERIGOS SAN VIATOR TUNJA,1,2
+Ciencias naturales,TUN,8,Emergente,COGIO DE LA PRESENTACIÓN TUNJA,1,3
+Ciencias naturales,TUN,8,Emergente,COLEGIO CARDENAL SANCHA,1,4
+Ciencias naturales,TUN,8,Emergente,COLEGIO SALESIANO MALDONADO TUNJA,1,5
+Ciencias naturales,TUN,8,Emergente,COLEGIO SAN VIATOR,1,6
+Ciencias naturales,TUN,8,Emergente,COUNTRY BILINGUAL SCHOOL,1,7
+Ciencias naturales,TUN,8,Emergente,INSTITUCIÓN EDUCATIVA COUNTRY BILINGUAL SCHOOL,1,8
+Ciencias naturales,TUN,8,Emergente,SAINT NICOLAS SCHOOL,1,9
+Ciencias naturales,TUN,8,En aceleración,COLEGIO NUEVA INGLATERRA CAMPESTRE,2,1
+Ciencias naturales,TUN,8,En aceleración,ACE EMPOWER ACADEMY SAN JOSÉ CALIDORNIA EEUU,1,2
+Ciencias naturales,TUN,8,En aceleración,COLEGIO ABRAHAM LINCOLN,1,3
+Ciencias naturales,TUN,8,En aceleración,COLEGIO CAMPESTRE HISPANO INGLES,1,4
+Ciencias naturales,TUN,8,En aceleración,COLEGIO DE LA PRESENTACIÓN,1,5
+Ciencias naturales,TUN,8,En aceleración,COPUNTRY BILINGUAL SCHOOL,1,6
+Ciencias naturales,TUN,8,En aceleración,GIMNASIO CAMPESTRE DEL NORTE,1,7
+Ciencias naturales,TUN,8,En aceleración,GIMNASIO GALILEO GALILEI,1,8
+Ciencias naturales,TUN,8,En aceleración,GIMNASIO VILLA FONTANA,1,9
+Ciencias naturales,TUN,8,En aceleración,LICEO SANTA INES,1,10
+Ciencias naturales,TUN,8,Avanzado,GIMNASIO VILLA FONTANA,2,1
+Ciencias naturales,TUN,8,Avanzado,LICEO SANTA INES,2,2
+Ciencias naturales,TUN,8,Avanzado,AMERICAN SCHOOL SAINT FRANCES,1,3
+Ciencias naturales,TUN,8,Avanzado,COLEGIO ANDINO DE TUNJA,1,4
+Ciencias naturales,TUN,8,Avanzado,COLEGIO COMFABOY TUNJA,1,5
+Ciencias naturales,TUN,8,Avanzado,COLEGIO DE BOYACÁ,1,6
+Ciencias naturales,TUN,8,Avanzado,COLEGIO UNICAB VIRTUAL,1,7
+Ciencias naturales,TUN,8,Avanzado,COLEGIO VILLA FONTANA,1,8
+Ciencias naturales,TUN,8,Avanzado,GIMNASIO VIZCAYA,1,9
+Ciencias naturales,TUN,8,Avanzado,INSTITUCIÓN EDUCATIVA GIMNASIO AGUSTÍNIANO DE TUNJA,1,10
+Ciencias naturales,TUN,9,Emergente,GIMNASIO CAMPESTRE DEL NORTE,2,1
+Ciencias naturales,TUN,9,Emergente,COLEGIO ANDINO DE TUNJA,1,2
+Ciencias naturales,TUN,9,Emergente,COLEGIO LEV VYGOTSKY,1,3
+Ciencias naturales,TUN,9,Emergente,COLEGIO SALESIANO MALDONADO TUNJA,1,4
+Ciencias naturales,TUN,9,Emergente,COLEGIO SAN VIATOR TUNJA,1,5
+Ciencias naturales,TUN,9,Emergente,COLEGIO SERGIO CAMARGO,1,6
+Ciencias naturales,TUN,9,Emergente,FUNDACIÓN PEDAGÓGICA RAYUELA,1,7
+Ciencias naturales,TUN,9,Emergente,GIMANSIO CAMPESTRE DEL NORTE,1,8
+Ciencias naturales,TUN,9,Emergente,INSTITUCIÓN TÉCNICA EDUCATIVA JAIRO ALBARRACÍN BARRERA,1,9
+Ciencias naturales,TUN,9,Emergente,NUEVA GRANADA,1,10
+Ciencias naturales,TUN,9,En aceleración,GIMNASIO CAMPESTRE DEL NORTE,3,1
+Ciencias naturales,TUN,9,En aceleración,CENTRO PEDAGÓGICO MANDALA,2,2
+Ciencias naturales,TUN,9,En aceleración,AMERICAN SCHOOL SAINT FRANCES,1,3
+Ciencias naturales,TUN,9,En aceleración,COLEGIO ANDINO DE TUNJA,1,4
+Ciencias naturales,TUN,9,En aceleración,COLEGIO BILINGÜE SAN VIATOR TUNJA,1,5
+Ciencias naturales,TUN,9,En aceleración,COLEGIO DE LA PRESENTACIÓN,1,6
+Ciencias naturales,TUN,9,En aceleración,COLEGIO LEV VIGOTSKY,1,7
+Ciencias naturales,TUN,9,En aceleración,COLEGIO LOS ANGELES,1,8
+Ciencias naturales,TUN,9,En aceleración,COLEGIO MILITAR JUAN JOSE RENDON,1,9
+Ciencias naturales,TUN,9,En aceleración,FUNDACIÓN PEDAGÓGICA RAYUELA,1,10
+Ciencias naturales,TUN,9,Avanzado,LA PRESENTACIÓN TUNJA,1,1
+Ciencias naturales,TUN,9,Avanzado,SAN VIATOR TUNJA,1,2
+Ciencias naturales,TUN,10,Progreso limitado,COLEGIO SAN VIATOR TUNJA,1,1
+Ciencias naturales,TUN,10,Emergente,CIBERCOLEGIO UCN,1,1
+Ciencias naturales,TUN,10,Emergente,COLEGIO DE BOYACÁ,1,2
+Ciencias naturales,TUN,10,Emergente,COLEGIO DE LA PRESENTACIÓN TUNJA,1,3
+Ciencias naturales,TUN,10,Emergente,COLEGIO MONTESSORI,1,4
+Ciencias naturales,TUN,10,Emergente,COUNTRY BILINGUAL SCHOOL,1,5
+Ciencias naturales,TUN,10,Emergente,GIMNASIO CAMPESTRE DEL NORTE,1,6
+Ciencias naturales,TUN,10,Emergente,INSTITUCIÓN DE EDUCACIÓN FORMAL COMFABOY,1,7
+Ciencias naturales,TUN,10,En aceleración,COLEGIO ANDINO DE TUNJA,2,1
+Ciencias naturales,TUN,10,En aceleración,UNICAB,2,2
+Ciencias naturales,TUN,10,En aceleración,AMERICAN SCHOOL,1,3
+Ciencias naturales,TUN,10,En aceleración,COLEGIO BILINGUE SAN VIATOR TUNJA,1,4
+Ciencias naturales,TUN,10,En aceleración,COLEGIO COOPERATIVO REYES PATRIA,1,5
+Ciencias naturales,TUN,10,En aceleración,COLEGIO DE BOYACA,1,6
+Ciencias naturales,TUN,10,En aceleración,COLEGIO DE LA PRESENTACION TUNJA,1,7
+Ciencias naturales,TUN,10,En aceleración,COLEGIO LA PRESENTACIÓN,1,8
+Ciencias naturales,TUN,10,En aceleración,COLEGIO LOS ANGELES,1,9
+Ciencias naturales,TUN,10,En aceleración,COLEGIO LOS ANGELES TUNJA,1,10
+Ciencias naturales,TUN,10,Avanzado,GIMNASIO CAMPESTRE DEL NORTE,3,1
+Ciencias naturales,TUN,10,Avanzado,AMERICAN SCHOOL SAINT FRANCES,2,2
+Ciencias naturales,TUN,10,Avanzado,ABRAHAM LINCOLN SCHOOL,1,3
+Ciencias naturales,TUN,10,Avanzado,COLEGIO ANDINO DE TUNJA,1,4
+Ciencias naturales,TUN,10,Avanzado,COLEGIO DE LA PRESENTACION,1,5
+Ciencias naturales,TUN,10,Avanzado,COLEGIO LOS ANGELES TUNJA,1,6
+Ciencias naturales,TUN,10,Avanzado,COLEGIO SAN VIATOR,1,7
+Ciencias naturales,TUN,10,Avanzado,GIMNASIO VILLA FONTANA,1,8
+Ciencias naturales,TUN,10,Avanzado,GIMNASIO VIZCAYA,1,9
+Ciencias naturales,TUN,10,Avanzado,I.E.T. PEDRO JOSÉ SARMIENTO,1,10
+Ciencias naturales,USAQ,5,Progreso limitado,GIMNASIO CAMPESTRE ESCALEMOS,1,1
+Ciencias naturales,USAQ,5,Emergente,COLEGIO DE NUESTRA SEÑORA DEL BUEN CONSEJO,1,1
+Ciencias naturales,USAQ,5,Emergente,COLEGIO DOS HEMISFERIOS,1,2
+Ciencias naturales,USAQ,5,Emergente,COLEGIO MARIA AUXILIADORA NORTE,1,3
+Ciencias naturales,USAQ,5,Emergente,COLEGIO MARIA INMACULADA,1,4
+Ciencias naturales,USAQ,5,Emergente,COLEGIO NUESTRA SEÑORA DE NAZARETH,1,5
+Ciencias naturales,USAQ,5,Emergente,FUNDACION COLEGIO EMILIO VALENZUELA,1,6
+Ciencias naturales,USAQ,5,Emergente,GIMNASIO LOS ANDES,1,7
+Ciencias naturales,USAQ,5,Emergente,GIMNASIO LOS ARRAYANES BILINGÜE,1,8
+Ciencias naturales,USAQ,5,Emergente,GIMNASIO SANTA CRISTINA DE TOSCANA,1,9
+Ciencias naturales,USAQ,5,Emergente,INSTITUCIÓN EDUCATIVA DISTRITAL PRADO VERANIEGO,1,10
+Ciencias naturales,USAQ,5,En aceleración,COLEGIO MARIA AUXILIADORA NORTE,4,1
+Ciencias naturales,USAQ,5,En aceleración,COLEGIO AGUSTÍN NIETO CABALLERO,1,2
+Ciencias naturales,USAQ,5,En aceleración,COLEGIO BILINGÜE MAXIMINO POITIERS,1,3
+Ciencias naturales,USAQ,5,En aceleración,COLEGIO CALASANZ,1,4
+Ciencias naturales,USAQ,5,En aceleración,COLEGIO CAMPESTRE SAN JOSE ANTIGUO SIERVAS DE SAN JOSE,1,5
+Ciencias naturales,USAQ,5,En aceleración,COLEGIO CLAUSTRO MODERNO,1,6
+Ciencias naturales,USAQ,5,En aceleración,COLEGIO DE LAS RR ESCLAVAS SAGRADO CORAZÓN DE JESUS,1,7
+Ciencias naturales,USAQ,5,En aceleración,COLEGIO GEORGE WASHINGTON,1,8
+Ciencias naturales,USAQ,5,En aceleración,COLEGIO HAPE HABILIDADES DEL PENSAMIENTO,1,9
+Ciencias naturales,USAQ,5,En aceleración,COLEGIO JOSE EUSTASIO RIVERA,1,10
+Ciencias naturales,USAQ,5,Avanzado,COLEGIO AGUSTÍN NIETO CABALLERO,1,1
+Ciencias naturales,USAQ,5,Avanzado,INSTITUCIÓN EDUCATIVA PUENTE AMARILLO FRANCISCO TORRES LEON,1,2
+Ciencias naturales,USAQ,6,Progreso limitado,GIMNASIO ANTONIO ARBOLEDA,1,1
+Ciencias naturales,USAQ,6,Progreso limitado,INSTITUTO DE INTEGRACIÓN CULTURAL IDIC,1,2
+Ciencias naturales,USAQ,6,Emergente,COLEGIO MARIA AUXILIADORA NORTE,2,1
+Ciencias naturales,USAQ,6,Emergente,CENTRO EDUCATIVO INFANCIA DE JESUS,1,2
+Ciencias naturales,USAQ,6,Emergente,COLEGIO DEL SANTO ANGEL,1,3
+Ciencias naturales,USAQ,6,Emergente,COLEGIO EL MINUTO DE DIOS,1,4
+Ciencias naturales,USAQ,6,Emergente,COLEGIO SAN VIATOR,1,5
+Ciencias naturales,USAQ,6,Emergente,COLEGIO WINDSOR,1,6
+Ciencias naturales,USAQ,6,Emergente,GIMNASIO REINO DE CASTILLA,1,7
+Ciencias naturales,USAQ,6,Emergente,INNOVA USAQUÉN 170,1,8
+Ciencias naturales,USAQ,6,Emergente,LICEO DE COLOMBIA DE BILINGUE,1,9
+Ciencias naturales,USAQ,6,Emergente,TOBERIN,1,10
+Ciencias naturales,USAQ,6,En aceleración,COLEGIO BILINGUE SAN JUAN DE AVILA,1,1
+Ciencias naturales,USAQ,6,En aceleración,COLEGIO DE LA SAGRADA FAMILIA,1,2
+Ciencias naturales,USAQ,6,En aceleración,COLEGIO GEORGE WASHINGTON SCHOOL,1,3
+Ciencias naturales,USAQ,6,En aceleración,COLEGIO MONTEHELENA BILINGÜE SEDE PRINCIPAL,1,4
+Ciencias naturales,USAQ,6,En aceleración,COLEGIO PSICOPEDAGÓGICO CARL ROGERS,1,5
+Ciencias naturales,USAQ,6,En aceleración,COLEGIO SANTIAGO ALBERIONE,1,6
+Ciencias naturales,USAQ,6,En aceleración,COLEGIO TERESIANO,1,7
+Ciencias naturales,USAQ,6,En aceleración,ESCUELA PEDAGOGICA EXPERIMENTAL,1,8
+Ciencias naturales,USAQ,6,En aceleración,LICEO SORIA,1,9
+Ciencias naturales,USAQ,6,Avanzado,COLEGIO MARIA AUXILIADORA NORTE,1,1
+Ciencias naturales,USAQ,6,Avanzado,COLEGIO MARIA INMACULADA,1,2
+Ciencias naturales,USAQ,6,Avanzado,COLEGIO MONTEHELENA BILINGÜE SEDE PRINCIPAL,1,3
+Ciencias naturales,USAQ,6,Avanzado,GIMNASIO JOSE JOAQUIN CASAS,1,4
+Ciencias naturales,USAQ,6,Avanzado,GIMNASIO SAN ANGELO,1,5
+Ciencias naturales,USAQ,6,Avanzado,LICEO ALTA BLANCA,1,6
+Ciencias naturales,USAQ,7,Progreso limitado,COLEGIO GEORGE WASHINGTON,1,1
+Ciencias naturales,USAQ,7,Progreso limitado,COLEGIO GEORGE WASHINGTON SCHOOL,1,2
+Ciencias naturales,USAQ,7,Progreso limitado,INSTITUCIÓN ESCUELA ESCUELA NORMAL SUPERIOR LA PRESENATCION,1,3
+Ciencias naturales,USAQ,7,Emergente,COLEGIO AGUSTÍNIANO NORTE,1,1
+Ciencias naturales,USAQ,7,Emergente,COLEGIO CORAZÓNISTA HERMANOS DEL SAGRADO CORA,1,2
+Ciencias naturales,USAQ,7,Emergente,COLEGIO DE NUESTRA SEÑORA DEL BUEN CONSEJO,1,3
+Ciencias naturales,USAQ,7,Emergente,COLEGIO GEORGE WASHINGTON,1,4
+Ciencias naturales,USAQ,7,Emergente,COLEGIO MARIA INMACULADA,1,5
+Ciencias naturales,USAQ,7,Emergente,COLEGIO MONTEHELENA BILINGÜE SEDE PRINCIPAL,1,6
+Ciencias naturales,USAQ,7,Emergente,COLEGIO NUESTRA SEÑORA DE LAS MERCEDES,1,7
+Ciencias naturales,USAQ,7,Emergente,COLEGIO PIERRE DE FERMAT,1,8
+Ciencias naturales,USAQ,7,Emergente,COLEGIO RENFORT,1,9
+Ciencias naturales,USAQ,7,Emergente,ESCUELA NORMAL SUPERIOR DE ACACÍAS,1,10
+Ciencias naturales,USAQ,7,En aceleración,GIMNASIO LOS ARRAYANES BILINGUE,4,1
+Ciencias naturales,USAQ,7,En aceleración,COLEGIO BILINGÜE LA ENSEÑANZA,1,2
+Ciencias naturales,USAQ,7,En aceleración,COLEGIO FRANCISCANO DEL VIRREY SOLIS,1,3
+Ciencias naturales,USAQ,7,En aceleración,COLEGIO GEORGE WASHINGTON,1,4
+Ciencias naturales,USAQ,7,En aceleración,COLEGIO LAUSANA,1,5
+Ciencias naturales,USAQ,7,En aceleración,COLEGIO MONTERROSALES BILINGUE,1,6
+Ciencias naturales,USAQ,7,En aceleración,COLEGIO NUEVO CAMPESTRE,1,7
+Ciencias naturales,USAQ,7,En aceleración,FUNDACION COLEGIO EMILIO VALENZUELA,1,8
+Ciencias naturales,USAQ,7,En aceleración,FUNDACION EDUCACIONAL ANA RESTREPO DEL CORRAL,1,9
+Ciencias naturales,USAQ,7,En aceleración,FUNDACION EDUCATIVA COLEGIO WESLEYANO DEL NORTE,1,10
+Ciencias naturales,USAQ,7,Avanzado,LICEO LA SABANA,2,1
+Ciencias naturales,USAQ,7,Avanzado,COLEGIO LA INMACULADA,1,2
+Ciencias naturales,USAQ,7,Avanzado,COLEGIO MARIA INMACULADA,1,3
+Ciencias naturales,USAQ,7,Avanzado,GIMNASIO EL HONTANAR,1,4
+Ciencias naturales,USAQ,7,Avanzado,GIMNASIO KAIPORE,1,5
+Ciencias naturales,USAQ,7,Avanzado,GIMNASIO LOS ANDES,1,6
+Ciencias naturales,USAQ,7,Avanzado,GIMNASIO MONSEÑOR MANUEL MARIA CAMARGO,1,7
+Ciencias naturales,USAQ,7,Avanzado,INSTITUTO SAN BERNARDO DE LA SALLE,1,8
+Ciencias naturales,USAQ,7,Avanzado,LICEO ALTA BLANCA,1,9
+Ciencias naturales,USAQ,8,Progreso limitado,COLEGIO BILINGÜE MAXIMINO POITIERS,1,1
+Ciencias naturales,USAQ,8,Progreso limitado,COLEGIO LAUSANA,1,2
+Ciencias naturales,USAQ,8,Progreso limitado,COLEGIO MARIA AUXILIADORA NORTE,1,3
+Ciencias naturales,USAQ,8,Progreso limitado,COLEGIO MARIA INMACULADA,1,4
+Ciencias naturales,USAQ,8,Progreso limitado,COLEGIO WALDORF EL MAESTRO,1,5
+Ciencias naturales,USAQ,8,Progreso limitado,LICEO CAMPESTRE,1,6
+Ciencias naturales,USAQ,8,Progreso limitado,LICEO LUNITA DE CHIA,1,7
+Ciencias naturales,USAQ,8,Emergente,COLEGIO MONTERROSALES CICLOS,2,1
+Ciencias naturales,USAQ,8,Emergente,COLEGIO BILINGÜE MAXIMINO POITIERS,1,2
+Ciencias naturales,USAQ,8,Emergente,COLEGIO CAMPESTRE SAN JOSE ANTIGUO SIERVAS DE SAN JOSE,1,3
+Ciencias naturales,USAQ,8,Emergente,COLEGIO COFREM,1,4
+Ciencias naturales,USAQ,8,Emergente,COLEGIO CRISTO REY BOGOTA,1,5
+Ciencias naturales,USAQ,8,Emergente,COLEGIO EUCARISTICO,1,6
+Ciencias naturales,USAQ,8,Emergente,COLEGIO GIOVANNI PASCOLI,1,7
+Ciencias naturales,USAQ,8,Emergente,COLEGIO MARIA AUXILIADORA NORTE,1,8
+Ciencias naturales,USAQ,8,Emergente,COLEGIO MARIA INMACULADA,1,9
+Ciencias naturales,USAQ,8,Emergente,COLEGIO MONTERROSALES BILINGUE,1,10
+Ciencias naturales,USAQ,8,En aceleración,COLEGIO GEORGE WASHINGTON SCHOOL,2,1
+Ciencias naturales,USAQ,8,En aceleración,COLEGIO MARIA AUXILIADORA NORTE,2,2
+Ciencias naturales,USAQ,8,En aceleración,B LEARNING LECAM (VIRTUAL),1,3
+Ciencias naturales,USAQ,8,En aceleración,COLEGIO CASABLANCA,1,4
+Ciencias naturales,USAQ,8,En aceleración,COLEGIO JOSE MANUEL MARROQUIN,1,5
+Ciencias naturales,USAQ,8,En aceleración,COLEGIO MONTERROSALES CICLOS,1,6
+Ciencias naturales,USAQ,8,En aceleración,COLEGIO STELLA MATUTINA,1,7
+Ciencias naturales,USAQ,8,En aceleración,COLEGIO VIRTUAL SIGLO XXI,1,8
+Ciencias naturales,USAQ,8,En aceleración,ESCUELA PEDAGÓGICA EXPERIMENTAL EPE,1,9
+Ciencias naturales,USAQ,8,En aceleración,GIMNASIO CAMPESTRE LOS ARRAYANES,1,10
+Ciencias naturales,USAQ,8,Avanzado,COLEGIO MARIA INMACULADA,2,1
+Ciencias naturales,USAQ,8,Avanzado,COLEGIO DE NUESTRA SEÑORA DEL ROSARIO,1,2
+Ciencias naturales,USAQ,8,Avanzado,COLEGIO DEL ROSARIO DE SANTO DOMINGO,1,3
+Ciencias naturales,USAQ,8,Avanzado,GIMNASIO SAN ANGELO,1,4
+Ciencias naturales,USAQ,8,Avanzado,INNOVA USAQUÉN 170,1,5
+Ciencias naturales,USAQ,8,Avanzado,USAQUÉN,1,6
+Ciencias naturales,ZIPA,5,Progreso limitado,GIMNASIO CAMPESTRE ICAV,2,1
+Ciencias naturales,ZIPA,5,Progreso limitado,COLEGIO DOUGLAS BROWN DE ZIPAQUIRÁ,1,2
+Ciencias naturales,ZIPA,5,Progreso limitado,GIMNASIO CAMPESTRE SANTA SOFIA,1,3
+Ciencias naturales,ZIPA,5,Emergente,COLEGIO BILINGUE CAMPESTRE COLOMBO BRITANICO,3,1
+Ciencias naturales,ZIPA,5,Emergente,COLEGIO CAMPESTRE ARTES Y LETRAS,2,2
+Ciencias naturales,ZIPA,5,Emergente,ANTOINE DE SAINT - EXUPERY,1,3
+Ciencias naturales,ZIPA,5,Emergente,ASPAEN CARTAGENA DE INDIAS,1,4
+Ciencias naturales,ZIPA,5,Emergente,BOSQUES DE SHERWOOD,1,5
+Ciencias naturales,ZIPA,5,Emergente,COLEGIO COLOMBO BRITANICO DE ZIPAQUIRA,1,6
+Ciencias naturales,ZIPA,5,Emergente,COLEGIO LA BUENA SEMILLA,1,7
+Ciencias naturales,ZIPA,5,Emergente,COLEGIO MONTEMAYOR SCHOOL,1,8
+Ciencias naturales,ZIPA,5,Emergente,COLEGIO SAN ALBERTO MAGNO,1,9
+Ciencias naturales,ZIPA,5,Emergente,GIMNASIO CAMPESTRE STEVE JOBS,1,10
+Ciencias naturales,ZIPA,5,En aceleración,COLEGIO BILINGUE CAMPESTRE COLOMBO BRITANICO,4,1
+Ciencias naturales,ZIPA,5,En aceleración,COLEGIO CAMPESTRE ARTES Y LETRAS,2,2
+Ciencias naturales,ZIPA,5,En aceleración,GIMNASIO INTEGRAL GENIOS DEL ZIPA,2,3
+Ciencias naturales,ZIPA,5,En aceleración,ATELIED,1,4
+Ciencias naturales,ZIPA,5,En aceleración,BILINGUE CAMPESTRE COLOMBO BRITANICO DE ZIPAQUIRA,1,5
+Ciencias naturales,ZIPA,5,En aceleración,COLEGIO ANTOINE DE SAINT EXUPERY  SEDE PRINCIPAL,1,6
+Ciencias naturales,ZIPA,5,En aceleración,COLEGIO ANTONIE DE SAINTEEXUPERY,1,7
+Ciencias naturales,ZIPA,5,En aceleración,COLEGIO BILINGÜE CAMPESTRE COLOMBO BRITÁNICO,1,8
+Ciencias naturales,ZIPA,5,En aceleración,COLEGIO BILINGÜE COLOMBO BRITÁNICO,1,9
+Ciencias naturales,ZIPA,5,En aceleración,COLEGIO BRITANICO ZIPAQUIRA,1,10
+Ciencias naturales,ZIPA,5,Avanzado,CAMPBELL SCHOOL,1,1
+Ciencias naturales,ZIPA,5,Avanzado,COLEGIO CAMPESTRE COLOMBO BRITANICO ZIPAQUIRA,1,2
+Ciencias naturales,ZIPA,5,Avanzado,COLEGIO NUESTRA SEÑORA DE LUXEMBURGO,1,3
+Ciencias naturales,ZIPA,5,Avanzado,LICEO SAMANIEGO,1,4
+Ciencias naturales,ZIPA,6,Progreso limitado,ARNULFO BRICEÑO CONTRERAS,1,1
+Ciencias naturales,ZIPA,6,Progreso limitado,CAMPBELL SCHOOL,1,2
+Ciencias naturales,ZIPA,6,Progreso limitado,CENTRO EDUCATIVO MI BELLA INFANCIA,1,3
+Ciencias naturales,ZIPA,6,Progreso limitado,COLEGIO DOUGLAS BROWN,1,4
+Ciencias naturales,ZIPA,6,Progreso limitado,GIMNACIO CAMPESTRE ICAV,1,5
+Ciencias naturales,ZIPA,6,Progreso limitado,GIMNASIO CAMPESTRE SANTA SOFIA,1,6
+Ciencias naturales,ZIPA,6,Progreso limitado,GIMNASIO SAN MATEO,1,7
+Ciencias naturales,ZIPA,6,Emergente,CAMPBELL SCHOOL,3,1
+Ciencias naturales,ZIPA,6,Emergente,COLEGIO LA PRESENTACIÓN ZIPAQUIRÁ,2,2
+Ciencias naturales,ZIPA,6,Emergente,COLEGIO ADVENTISTA,1,3
+Ciencias naturales,ZIPA,6,Emergente,COLEGIO ANTOINE DE SAINT EXUPERY  SEDE PRINCIPAL,1,4
+Ciencias naturales,ZIPA,6,Emergente,COLEGIO ANTOINE DE SAINT EXUPÉRY,1,5
+Ciencias naturales,ZIPA,6,Emergente,COLEGIO BILINGUE CAMPESTRE COLOMBO BRITÁNICO,1,6
+Ciencias naturales,ZIPA,6,Emergente,COLEGIO BILINGUE CEDAM,1,7
+Ciencias naturales,ZIPA,6,Emergente,COLEGIO BILINGUE COLOMBO BRITANICO,1,8
+Ciencias naturales,ZIPA,6,Emergente,COLEGIO BILINGÜE COLOMBO BRITANICO,1,9
+Ciencias naturales,ZIPA,6,Emergente,COLEGIO CAMPESTRE ARTES Y LETRAS,1,10
+Ciencias naturales,ZIPA,6,En aceleración,COLEGIO CAMPESTRE ARTES Y LETRAS,2,1
+Ciencias naturales,ZIPA,6,En aceleración,COLEGIO ANTOINE DE SAINT EXUPER,1,2
+Ciencias naturales,ZIPA,6,En aceleración,COLEGIO BILINGUE CAMPESTRE COLOMBO BRITANICO,1,3
+Ciencias naturales,ZIPA,6,En aceleración,COLEGIO BILINGÜE CAMPESTRE COLOMBO BRITANICO,1,4
+Ciencias naturales,ZIPA,6,En aceleración,COLEGIO CAMPESTRE COLOMBO BRITANICO,1,5
+Ciencias naturales,ZIPA,6,En aceleración,COLEGIO CAMPESTRE GENIOS DEL ZIPA,1,6
+Ciencias naturales,ZIPA,6,En aceleración,COLEGIO COLOMBO BRITANICO,1,7
+Ciencias naturales,ZIPA,6,En aceleración,COLEGIO COLOMBO BRITANICO ZIPAQUIRA,1,8
+Ciencias naturales,ZIPA,6,En aceleración,COLEGIO DE LA PRESENTACIÓN DE ZIPAQUIRA,1,9
+Ciencias naturales,ZIPA,6,En aceleración,COLEGIO FUNDACIÓN COLOMBIA,1,10
+Ciencias naturales,ZIPA,6,Avanzado,COLEGIO BILINGUE COLOMBO BRITANICO,1,1
+Ciencias naturales,ZIPA,6,Avanzado,COLEGIO NUESTRA SEÑORA DE LUXEMBURGO,1,2
+Ciencias naturales,ZIPA,6,Avanzado,COLEGIO PADRE MANYANET DE CHÍA,1,3
+Ciencias naturales,ZIPA,6,Avanzado,GIMNASIO CAMPESTRE FRIEDRICH FROEBEL,1,4
+Ciencias naturales,ZIPA,6,Avanzado,GIMNASIO SABANA NORTE,1,5
+Ciencias naturales,ZIPA,7,Emergente,COLEGIO NUESTRA SEÑORA DE LUXEMBURGO,2,1
+Ciencias naturales,ZIPA,7,Emergente,COLEGIO BILINGÜE CAMPESTRE COLOMBO BRITANICO,1,2
+Ciencias naturales,ZIPA,7,Emergente,COLEGIO CAMPESTRE ICAV,1,3
+Ciencias naturales,ZIPA,7,Emergente,COLEGIO DE LA PRESENTACIÓN DE ZIPAQUIRA,1,4
+Ciencias naturales,ZIPA,7,Emergente,COLEGIO DE LA REAL LEGION BRITANICA,1,5
+Ciencias naturales,ZIPA,7,Emergente,COLEGIO FUNDACIÓN SOCIAL ALBERTO MERANI,1,6
+Ciencias naturales,ZIPA,7,Emergente,COLEGIO SAN JUAN DIEGO,1,7
+Ciencias naturales,ZIPA,7,Emergente,GIMNASIO CAMPESTRE ICAV,1,8
+Ciencias naturales,ZIPA,7,Emergente,GIMNASIO CAMPESTRE SANTA SOFIA,1,9
+Ciencias naturales,ZIPA,7,Emergente,GIMNASIO INTEGRAL GENIOS DEL ZIPA,1,10
+Ciencias naturales,ZIPA,7,En aceleración,GIMNASIO CAMPESTRE ICAV,2,1
+Ciencias naturales,ZIPA,7,En aceleración,CENTRO EDUCATIVO KERUB,1,2
+Ciencias naturales,ZIPA,7,En aceleración,COLEGIO BILINGUE CAMPESTRE COLOMBO BRITÁNICO ZIPAQ,1,3
+Ciencias naturales,ZIPA,7,En aceleración,COLEGIO BILINGUE JOSE ALLAMANO,1,4
+Ciencias naturales,ZIPA,7,En aceleración,COLEGIO CAMPESTRE ARTES Y LETRAS,1,5
+Ciencias naturales,ZIPA,7,En aceleración,COLEGIO CAMPESTRE BILINGUE COLOMBO BRITANICO DE ZI,1,6
+Ciencias naturales,ZIPA,7,En aceleración,COLEGIO COLOMBO BRITANICO,1,7
+Ciencias naturales,ZIPA,7,En aceleración,COLEGIO COOPERATIVO DE COGUA,1,8
+Ciencias naturales,ZIPA,7,En aceleración,COLEGIO CORAZONISTA,1,9
+Ciencias naturales,ZIPA,7,En aceleración,COLEGIO CRISTIANO DECOLOMBIA (ANTIGUO CARLOS V),1,10
+Ciencias naturales,ZIPA,7,Avanzado,GIMNASIO NUEVA ESCOCIA,2,1
+Ciencias naturales,ZIPA,7,Avanzado,ASPAEN GIMNASIO CARTAGENA DE INDIAS,1,2
+Ciencias naturales,ZIPA,7,Avanzado,COLEGIO BILINGUE CAMPESTRE COLOMBO BRITÀNICO,1,3
+Ciencias naturales,ZIPA,7,Avanzado,COLEGIO BRITÁNICO DE ZIPAQUIRÁ,1,4
+Ciencias naturales,ZIPA,7,Avanzado,COLEGIO CAMPESTRE ARTES Y LETRAS,1,5
+Ciencias naturales,ZIPA,7,Avanzado,COLEGIO JORBALAN,1,6
+Ciencias naturales,ZIPA,7,Avanzado,COLEGIO LICEO CATEDRAL HIGH SCHOOL,1,7
+Ciencias naturales,ZIPA,7,Avanzado,COLEGIO NUESTRA SEÑORA DE LUXEMBURGO,1,8
+Ciencias naturales,ZIPA,7,Avanzado,ESCUELA EXPERIENCIAL LA SEMILLA,1,9
+Ciencias naturales,ZIPA,7,Avanzado,GENIOS DEL ZIPA,1,10
+Ciencias naturales,ZIPA,8,Progreso limitado,COLEGIO LA PRESENTACIÓN DE ZIPAQUIRÁ,1,1
+Ciencias naturales,ZIPA,8,Emergente,COLEGIO DE LA PRESENTACIÓN DE ZIPAQUIRA,1,1
+Ciencias naturales,ZIPA,8,Emergente,COLEGIO DIVINO NIÑO COGUA,1,2
+Ciencias naturales,ZIPA,8,Emergente,COLEGIO FUNDACIÓN SOCIAL ALBERTO MERANI,1,3
+Ciencias naturales,ZIPA,8,Emergente,COLEGIO LICEO CATEDRAL HIGH SCHOOL,1,4
+Ciencias naturales,ZIPA,8,Emergente,COLEGIO MONTEMAYOR SCHOOL,1,5
+Ciencias naturales,ZIPA,8,Emergente,COLEGIO MONTERROSALES CICLOS,1,6
+Ciencias naturales,ZIPA,8,Emergente,COLEGIO REFOUS,1,7
+Ciencias naturales,ZIPA,8,Emergente,GIMNASIO CAMPESTRE ICAV,1,8
+Ciencias naturales,ZIPA,8,Emergente,GIMNASIO CAMPESTRE SANTA SOFÍA,1,9
+Ciencias naturales,ZIPA,8,En aceleración,COLEGIO FRANCISCO JOSE DE CALDAS,3,1
+Ciencias naturales,ZIPA,8,En aceleración,GIMNASIO CAMPESTRE SANTA SOFIA,3,2
+Ciencias naturales,ZIPA,8,En aceleración,GENIOS DEL ZIPA,2,3
+Ciencias naturales,ZIPA,8,En aceleración,GIMNASIO INTEGRAL GENIOS DEL ZIPA,2,4
+Ciencias naturales,ZIPA,8,En aceleración,COLEGIO ANTONIO NARIÑO HH CORAZONISTAS,1,5
+Ciencias naturales,ZIPA,8,En aceleración,COLEGIO BILINGUE CAMPESTRE COLOMBO BRITANICO,1,6
+Ciencias naturales,ZIPA,8,En aceleración,COLEGIO CAFETAL BILINGUE,1,7
+Ciencias naturales,ZIPA,8,En aceleración,COLEGIO CAMPESTRE MONTECERVINO MONTECERVINO,1,8
+Ciencias naturales,ZIPA,8,En aceleración,COLEGIO DE LA PRESENTACIÓN DE ZIPAQUIRA,1,9
+Ciencias naturales,ZIPA,8,En aceleración,COLEGIO LICEO CATEDRAL HIGH SCHOOL,1,10
+Ciencias naturales,ZIPA,8,Avanzado,GIMNASIO INTEGRAL GENIOS DEL ZIPA,5,1
+Ciencias naturales,ZIPA,8,Avanzado,COLEGIO BILINGUE CAMPESTRE COLOMBO BRITANICO,2,2
+Ciencias naturales,ZIPA,8,Avanzado,GIMNASIO CAMPESTRE SANTA SOFÍA,2,3
+Ciencias naturales,ZIPA,8,Avanzado,GIMNASIO SABANA NORTE,2,4
+Ciencias naturales,ZIPA,8,Avanzado,INSTITUCION EDUCATIVA SAN ALBERTO MAGNO,2,5
+Ciencias naturales,ZIPA,8,Avanzado,COLEGIO BILINGÜE CAMPESTRE COLOMBO BRITÁNICO ZIPA,1,6
+Ciencias naturales,ZIPA,8,Avanzado,COLEGIO CRISTIANO DE COLOMBIA,1,7
+Ciencias naturales,ZIPA,8,Avanzado,COLEGIO DE LA PRESENTACIÓN DE ZIPAQUIRA,1,8
+Ciencias naturales,ZIPA,8,Avanzado,COLEGIO DIVINO NIÑO,1,9
+Ciencias naturales,ZIPA,8,Avanzado,COLEGIO EL FARO,1,10
+Ciencias naturales,ZIPA,9,Emergente,ACHARA MONTESSORI SCHOOL CHIA,1,1
+Ciencias naturales,ZIPA,9,Emergente,COLEGIO BILINGUE CAMPESTRE COLOMBO BRITANICO,1,2
+Ciencias naturales,ZIPA,9,Emergente,COLEGIO FRANCISCO JOSE DE CALDAS,1,3
+Ciencias naturales,ZIPA,9,Emergente,LICEO CAMPESTRE DE ARTES Y LETRAS,1,4
+Ciencias naturales,ZIPA,9,Emergente,LICEO CAMPESTRE DE LAS AMÉRICAS,1,5
+Ciencias naturales,ZIPA,9,Emergente,LICEO CATEDRAL HIGH SCHOOL,1,6
+Ciencias naturales,ZIPA,9,En aceleración,GIMNASIO CAMPESTRE SANTA SOFIA,4,1
+Ciencias naturales,ZIPA,9,En aceleración,GIMNASIO SABANA NORTE,2,2
+Ciencias naturales,ZIPA,9,En aceleración,COLEGIO BILINGUE CAMPESTRE COLOMBO BRITANICO,1,3
+Ciencias naturales,ZIPA,9,En aceleración,COLEGIO CAMPESTRE COLOMBO BRITANICO,1,4
+Ciencias naturales,ZIPA,9,En aceleración,COLEGIO CAMPESTRE GENIOS DEL ZIPA,1,5
+Ciencias naturales,ZIPA,9,En aceleración,COLEGIO DIVINO NIÑO,1,6
+Ciencias naturales,ZIPA,9,En aceleración,COLEGIO UNICAB VIRTUAL,1,7
+Ciencias naturales,ZIPA,9,En aceleración,"COLEGIO, CAMINO AL SABER PRECOZ",1,8
+Ciencias naturales,ZIPA,9,En aceleración,COLOMBO BRITANICO DE ZIPAQUIRA,1,9
+Ciencias naturales,ZIPA,9,En aceleración,GIMNASIO CAMBRIDGE,1,10
+Ciencias naturales,ZIPA,9,Avanzado,COLEGIO MONTEMAYOR SCHOOL,2,1
+Ciencias naturales,ZIPA,9,Avanzado,GIMNASIO SABANA NORTE,2,2
+Ciencias naturales,ZIPA,9,Avanzado,SAN ALBERTO MAGNO,2,3
+Ciencias naturales,ZIPA,9,Avanzado,COLEGIO BILINGUE COLOMBO BRITANICO ZIPAQUIRA,1,4
+Ciencias naturales,ZIPA,9,Avanzado,COLEGIO DE LA PRESENTACIÓN DE ZIPAQUIRA,1,5
+Ciencias naturales,ZIPA,9,Avanzado,COLEGIO EL MINUTO DE DIOS,1,6
+Ciencias naturales,ZIPA,9,Avanzado,COLEGIO GIMNASIO SANTA SOFIA,1,7
+Ciencias naturales,ZIPA,9,Avanzado,GICEI,1,8
+Ciencias naturales,ZIPA,9,Avanzado,GIMNASIO CAMPESTRE FRIEDRICH FROEBEL,1,9
+Ciencias naturales,ZIPA,9,Avanzado,GIMNASIO CAMPESTRE NUEVA ALEJANDRIA,1,10
+Ciencias naturales,ZIPA,10,Progreso limitado,COLEGIO PADRE MANYANETH,1,1
+Ciencias naturales,ZIPA,10,Emergente,COLEGIO BILINGUE CAMPESTRE COLOMBO BRITANICO,1,1
+Ciencias naturales,ZIPA,10,Emergente,COLEGIO COLOMBO AMERICANO,1,2
+Ciencias naturales,ZIPA,10,Emergente,GIMNASIO CAMPESTRE ICAV,1,3
+Ciencias naturales,ZIPA,10,Emergente,GIMNASIO CAMPESTRE SANTA SOFIA,1,4
+Ciencias naturales,ZIPA,10,Emergente,GIMNASIO LOS ARRAYANES BILINGUE,1,5
+Ciencias naturales,ZIPA,10,Emergente,INSTITUTO PEDAGOGICO ESACALEMOS,1,6
+Ciencias naturales,ZIPA,10,En aceleración,GIMNASIO CAMPESTRE SANTA SOFIA,3,1
+Ciencias naturales,ZIPA,10,En aceleración,COLEGIO DE LA PRESENTACIÓN DE ZIPAQUIRA,2,2
+Ciencias naturales,ZIPA,10,En aceleración,COLEGIO BILINGUE CAMPESTRE COLOBO BRITANICO,1,3
+Ciencias naturales,ZIPA,10,En aceleración,COLEGIO BILINGÜE CAMPESTRE COLOMBO BRITANICO,1,4
+Ciencias naturales,ZIPA,10,En aceleración,COLEGIO BILINGÜE COLOMBO BRITÁNICO,1,5
+Ciencias naturales,ZIPA,10,En aceleración,COLEGIO CAMPESTRE SANTA SOFIA,1,6
+Ciencias naturales,ZIPA,10,En aceleración,COLEGIO COLOMBO BRITÁNICO ZIPAQUIRA,1,7
+Ciencias naturales,ZIPA,10,En aceleración,COLEGIO COLOMBO BRITÁNICO ZIPAQUIRÁ,1,8
+Ciencias naturales,ZIPA,10,En aceleración,COLEGIO EL ROSARIO,1,9
+Ciencias naturales,ZIPA,10,En aceleración,GIMANASIO SANTA SOFIA,1,10
+Ciencias naturales,ZIPA,10,Avanzado,GIMNASIO CAMPESTRE SANTA SOFIA,2,1
+Ciencias naturales,ZIPA,10,Avanzado,INSTITUCION EDUCATIVA SAN ALBERTO MAGNO,2,2
+Ciencias naturales,ZIPA,10,Avanzado,COLEGIO BILINGÜE COLOMBO BRITÁNICO ZIPAQUIRÁ,1,3
+Ciencias naturales,ZIPA,10,Avanzado,COLEGIO DE LAS RR ESCLAVAS SAGRADO CORAZÓN DE JESUS,1,4
+Ciencias naturales,ZIPA,10,Avanzado,COLEGIO FRANCISCO JOSE DE CALDAS,1,5
+Ciencias naturales,ZIPA,10,Avanzado,COLEGIO PADRE MANYANET DE CHÍA,1,6
+Ciencias naturales,ZIPA,10,Avanzado,GIMNASIO LOS ARRAYANES,1,7
+Ciencias naturales,ZIPA,10,Avanzado,LICEO CATEDRAL HIGH SCHOOL,1,8
+Ciencias naturales,ZIPA,10,Avanzado,PAULO FREIRE,1,9
