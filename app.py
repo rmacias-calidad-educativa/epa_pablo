@@ -10,8 +10,8 @@ import plotly.express as px
 import plotly.graph_objects as go
 import streamlit as st
 
-from src.processing import aggregate_group, build_attempt_table
-from src.ui import (
+from processing import aggregate_group, build_attempt_table
+from ui import (
     LEVEL_COLORS,
     LEVEL_ORDER,
     apply_filters,
