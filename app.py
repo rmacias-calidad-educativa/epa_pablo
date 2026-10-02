@@ -234,6 +234,61 @@ def render_site_test_matrix(source: pd.DataFrame, key_prefix: str, aggregated: b
     )
     st.plotly_chart(fig, use_container_width=True)
 
+    # Histórico de la prueba seleccionada a través de los años.
+    history_source = source[source["QuizName"] == selected_test].copy()
+    if selected_grade != "Todos":
+        grade_num = int(selected_grade.replace("°", ""))
+        history_source = history_source[history_source["Grado_num"] == grade_num]
+
+    if "Año" in history_source.columns and history_source["Año"].nunique() > 1:
+        if aggregated:
+            history = (
+                history_source.groupby(["Año", "Sede"], as_index=False)
+                .agg(
+                    Debajo_igual_50=("Debajo_igual_50", "sum"),
+                    Encima_50=("Encima_50", "sum"),
+                )
+            )
+        else:
+            history = (
+                history_source.groupby(["Año", "Sede"], as_index=False)
+                .agg(
+                    Debajo_igual_50=("Grupo_50", lambda x: (x == "≤50%").sum()),
+                    Encima_50=("Grupo_50", lambda x: (x == ">50%").sum()),
+                )
+            )
+
+        history_long = history.melt(
+            id_vars=["Año", "Sede"],
+            value_vars=["Debajo_igual_50", "Encima_50"],
+            var_name="Grupo",
+            value_name="Estudiantes",
+        )
+        history_long["Grupo"] = history_long["Grupo"].map(
+            {
+                "Debajo_igual_50": "≤50%",
+                "Encima_50": ">50%",
+            }
+        )
+        history_long["Año"] = history_long["Año"].astype(str)
+
+        fig = px.bar(
+            history_long,
+            x="Año",
+            y="Estudiantes",
+            color="Grupo",
+            facet_col="Sede",
+            facet_col_wrap=3,
+            barmode="group",
+            text="Estudiantes",
+            category_orders={"Sede": sites, "Grupo": ["≤50%", ">50%"]},
+            title=f"Histórico anual por sede | {selected_test}",
+        )
+        fig.for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1]))
+        fig.update_yaxes(matches=None, showticklabels=True)
+        fig.update_layout(height=650, legend_title_text="Resultado")
+        st.plotly_chart(fig, use_container_width=True)
+
     if selected_year == 2025 and total < 30:
         st.info(
             "En 2025 hay muy pocos registros en la base actual. Interpreta esa vista como "
