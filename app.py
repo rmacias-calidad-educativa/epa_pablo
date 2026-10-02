@@ -106,7 +106,13 @@ def process_raw(raw: pd.DataFrame):
 def read_default_data():
     temporal_path = Path("data/default_temporal_summary.csv")
     if not temporal_path.exists():
-        return pd.DataFrame(), pd.DataFrame(), pd.DataFrame(), pd.DataFrame()
+        return (
+            pd.DataFrame(),
+            pd.DataFrame(),
+            pd.DataFrame(),
+            pd.DataFrame(),
+            pd.DataFrame(),
+        )
 
     temporal = pd.read_csv(temporal_path)
     temporal["Prueba"] = temporal["QuizName"].apply(normalize_area)
@@ -156,7 +162,14 @@ def read_default_data():
     if not top10_origin.empty and "Nivel" in top10_origin.columns:
         top10_origin["Nivel"] = top10_origin["Nivel"].replace(LEGACY_LEVEL_MAP)
 
-    return temporal, levels, dimensions, top10_origin
+    newcomer_path = Path("data/default_newcomers_mos_tun_2026.csv")
+    newcomers = (
+        pd.read_csv(newcomer_path)
+        if newcomer_path.exists()
+        else pd.DataFrame()
+    )
+
+    return temporal, levels, dimensions, top10_origin, newcomers
 
 
 def grade_label(value) -> str:
@@ -209,7 +222,12 @@ def build_student_level(data: pd.DataFrame) -> pd.DataFrame:
         .agg(
             Porcentaje=("Porcentaje_acierto", "mean"),
             colegio_de_origen=("colegio_de_origen", "first"),
+            AntiguedadBS=("AntiguedadBS", "first"),
         )
+    )
+    student["AntiguedadBS"] = pd.to_numeric(
+        student["AntiguedadBS"],
+        errors="coerce",
     )
     student["Nivel"] = np.select(
         [
@@ -248,6 +266,7 @@ def render_main_line(
     d: pd.DataFrame,
     aggregated: bool,
     level_summary: pd.DataFrame | None = None,
+    newcomer_summary: pd.DataFrame | None = None,
     test_name: str | None = None,
 ):
     if aggregated:
@@ -428,7 +447,117 @@ def render_main_line(
             "<extra></extra>"
         ),
     )
+
+    # Contraste de estudiantes con 1 año o menos de antigüedad en MOS y TUN.
+    newcomer_plot = pd.DataFrame()
+
+    if aggregated:
+        if (
+            newcomer_summary is not None
+            and not newcomer_summary.empty
+            and test_name is not None
+        ):
+            newcomer_plot = newcomer_summary[
+                newcomer_summary["Prueba"].astype(str) == test_name
+            ].copy()
+            newcomer_plot = newcomer_plot[
+                newcomer_plot["Sede"].isin(
+                    grouped["Sede"].astype(str).unique()
+                )
+                & newcomer_plot["Grado_num"].isin(
+                    grouped["Grado_num"].unique()
+                )
+            ]
+    else:
+        newcomer_students = student[
+            student["Sede"].isin(["MOS", "TUN"])
+        ].copy()
+        newcomer_students["Es_nuevo"] = (
+            newcomer_students["AntiguedadBS"] <= 1
+        )
+        if not newcomer_students.empty:
+            newcomer_plot = (
+                newcomer_students.groupby(
+                    ["Sede", "Grado_num"],
+                    as_index=False,
+                )
+                .apply(
+                    lambda g: pd.Series({
+                        "Nuevos_1_o_menos": int(g["Es_nuevo"].sum()),
+                        "Nuevos_Nivel1_2": int(
+                            (
+                                g["Es_nuevo"]
+                                & g["Menor_igual_50"]
+                            ).sum()
+                        ),
+                    }),
+                    include_groups=False,
+                )
+            )
+            newcomer_plot["Pct_Nuevos_en_Nivel1_2"] = np.where(
+                newcomer_plot["Nuevos_1_o_menos"] > 0,
+                newcomer_plot["Nuevos_Nivel1_2"]
+                / newcomer_plot["Nuevos_1_o_menos"] * 100,
+                np.nan,
+            )
+
+    if not newcomer_plot.empty:
+        site_colors = {
+            trace.name: trace.line.color
+            for trace in fig.data
+            if trace.name in ["MOS", "TUN"]
+        }
+
+        for site in ["MOS", "TUN"]:
+            nd = newcomer_plot[
+                newcomer_plot["Sede"].astype(str) == site
+            ].copy()
+            if nd.empty:
+                continue
+
+            nd = nd.sort_values("Grado_num")
+            fig.add_trace(
+                go.Scatter(
+                    x=nd["Grado_num"],
+                    y=nd["Nuevos_Nivel1_2"],
+                    mode="lines+markers+text",
+                    name=f"{site} · ≤1 año",
+                    line=dict(
+                        dash="dot",
+                        width=2.5,
+                        color=site_colors.get(site),
+                    ),
+                    marker=dict(
+                        size=8,
+                        symbol="circle-open",
+                        color=site_colors.get(site),
+                    ),
+                    text=nd["Nuevos_Nivel1_2"],
+                    textposition="bottom center",
+                    textfont=dict(size=11),
+                    customdata=np.column_stack([
+                        nd["Nuevos_1_o_menos"],
+                        nd["Pct_Nuevos_en_Nivel1_2"],
+                    ]),
+                    hovertemplate=(
+                        f"<b>{site} · ≤1 año de antigüedad</b><br>"
+                        "Nivel 1 + Nivel 2: %{y}<br>"
+                        "Total con ≤1 año: %{customdata[0]:.0f}<br>"
+                        "% con ≤1 año en Nivel 1 + Nivel 2: "
+                        "%{customdata[1]:.1f}%"
+                        "<extra></extra>"
+                    ),
+                    cliponaxis=False,
+                )
+            )
+
     st.plotly_chart(fig, use_container_width=True)
+
+    if not newcomer_plot.empty:
+        st.caption(
+            "Línea punteada: estudiantes de MOS y TUN con 1 año o menos "
+            "de antigüedad que se encuentran en Nivel 1 + Nivel 2."
+        )
 
 
 def level_counts_by_site_from_raw(data: pd.DataFrame) -> pd.DataFrame:
@@ -1340,6 +1469,7 @@ def render_test_page(
     dimensions: pd.DataFrame,
     levels_public: pd.DataFrame,
     top10_public: pd.DataFrame,
+    newcomer_public: pd.DataFrame,
     test_name: str,
     aggregated: bool,
 ):
@@ -1398,6 +1528,7 @@ def render_test_page(
         site_filtered,
         aggregated=aggregated,
         level_summary=levels_public,
+        newcomer_summary=newcomer_public,
         test_name=test_name,
     )
 
@@ -1470,11 +1601,18 @@ if uploaded is not None:
         attempts, dimensions = process_raw(raw)
         levels_public = pd.DataFrame()
         top10_public = pd.DataFrame()
+        newcomer_public = pd.DataFrame()
     except Exception as exc:
         st.error(f"No fue posible procesar el Excel: {exc}")
         st.stop()
 else:
-    attempts, levels_public, dimensions, top10_public = read_default_data()
+    (
+        attempts,
+        levels_public,
+        dimensions,
+        top10_public,
+        newcomer_public,
+    ) = read_default_data()
     if attempts.empty:
         st.info("Carga el Excel para visualizar los resultados.")
         st.stop()
@@ -1488,6 +1626,7 @@ for tab, test_name in zip(tabs, TESTS):
             dimensions=dimensions,
             levels_public=levels_public,
             top10_public=top10_public,
+            newcomer_public=newcomer_public,
             test_name=test_name,
             aggregated=aggregated,
         )
