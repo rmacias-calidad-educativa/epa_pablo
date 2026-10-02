@@ -1,0 +1,131 @@
+Prueba,Sede,Grado_num,Nivel,Estudiantes
+Ciencias sociales,BAQ,7,Progreso limitado,6
+Ciencias sociales,BAQ,8,Avanzado,9
+Ciencias sociales,BAQ,8,Emergente,30
+Ciencias sociales,BAQ,8,En aceleración,14
+Ciencias sociales,BAQ,8,Progreso limitado,3
+Ciencias sociales,COT,5,Avanzado,2
+Ciencias sociales,COT,5,Emergente,18
+Ciencias sociales,COT,5,En aceleración,15
+Ciencias sociales,COT,5,Progreso limitado,4
+Ciencias sociales,COT,6,Avanzado,12
+Ciencias sociales,COT,6,Emergente,4
+Ciencias sociales,COT,6,En aceleración,15
+Ciencias sociales,COT,7,Avanzado,22
+Ciencias sociales,COT,7,Emergente,4
+Ciencias sociales,COT,7,En aceleración,7
+Ciencias sociales,COT,7,Progreso limitado,2
+Ciencias sociales,COT,8,Avanzado,12
+Ciencias sociales,COT,8,Emergente,5
+Ciencias sociales,COT,8,En aceleración,12
+Ciencias sociales,COT,8,Progreso limitado,2
+Ciencias sociales,COT,9,Avanzado,13
+Ciencias sociales,COT,9,Emergente,8
+Ciencias sociales,COT,9,En aceleración,14
+Ciencias sociales,COT,9,Progreso limitado,1
+Ciencias sociales,COT,10,Avanzado,6
+Ciencias sociales,COT,10,Emergente,4
+Ciencias sociales,COT,10,En aceleración,12
+Ciencias sociales,MOS,5,Avanzado,2
+Ciencias sociales,MOS,5,Emergente,28
+Ciencias sociales,MOS,5,En aceleración,13
+Ciencias sociales,MOS,5,Progreso limitado,27
+Ciencias sociales,MOS,6,Avanzado,17
+Ciencias sociales,MOS,6,Emergente,36
+Ciencias sociales,MOS,6,En aceleración,33
+Ciencias sociales,MOS,6,Progreso limitado,23
+Ciencias sociales,MOS,7,Avanzado,18
+Ciencias sociales,MOS,7,Emergente,19
+Ciencias sociales,MOS,7,En aceleración,12
+Ciencias sociales,MOS,7,Progreso limitado,11
+Ciencias sociales,MOS,8,Avanzado,15
+Ciencias sociales,MOS,8,Emergente,28
+Ciencias sociales,MOS,8,En aceleración,24
+Ciencias sociales,MOS,8,Progreso limitado,11
+Ciencias sociales,MOS,9,Avanzado,23
+Ciencias sociales,MOS,9,Emergente,15
+Ciencias sociales,MOS,9,En aceleración,19
+Ciencias sociales,MOS,9,Progreso limitado,7
+Ciencias sociales,MOS,10,Avanzado,6
+Ciencias sociales,MOS,10,Emergente,15
+Ciencias sociales,MOS,10,En aceleración,12
+Ciencias sociales,MOS,10,Progreso limitado,9
+Ciencias sociales,MOS,11,Avanzado,17
+Ciencias sociales,MOS,11,Emergente,8
+Ciencias sociales,MOS,11,En aceleración,21
+Ciencias sociales,MOS,11,Progreso limitado,2
+Ciencias sociales,TUN,5,Avanzado,1
+Ciencias sociales,TUN,5,Emergente,22
+Ciencias sociales,TUN,5,En aceleración,10
+Ciencias sociales,TUN,5,Progreso limitado,8
+Ciencias sociales,TUN,6,Avanzado,14
+Ciencias sociales,TUN,6,Emergente,8
+Ciencias sociales,TUN,6,En aceleración,14
+Ciencias sociales,TUN,6,Progreso limitado,2
+Ciencias sociales,TUN,7,Avanzado,11
+Ciencias sociales,TUN,7,Emergente,8
+Ciencias sociales,TUN,7,En aceleración,11
+Ciencias sociales,TUN,7,Progreso limitado,3
+Ciencias sociales,TUN,8,Avanzado,14
+Ciencias sociales,TUN,8,Emergente,10
+Ciencias sociales,TUN,8,En aceleración,12
+Ciencias sociales,TUN,8,Progreso limitado,5
+Ciencias sociales,TUN,9,Avanzado,12
+Ciencias sociales,TUN,9,Emergente,7
+Ciencias sociales,TUN,9,En aceleración,16
+Ciencias sociales,TUN,9,Progreso limitado,1
+Ciencias sociales,TUN,10,Avanzado,16
+Ciencias sociales,TUN,10,Emergente,5
+Ciencias sociales,TUN,10,En aceleración,22
+Ciencias sociales,TUN,10,Progreso limitado,1
+Ciencias sociales,USAQ,5,Avanzado,1
+Ciencias sociales,USAQ,5,Emergente,18
+Ciencias sociales,USAQ,5,En aceleración,11
+Ciencias sociales,USAQ,5,Progreso limitado,9
+Ciencias sociales,USAQ,6,Avanzado,27
+Ciencias sociales,USAQ,6,Emergente,7
+Ciencias sociales,USAQ,6,En aceleración,25
+Ciencias sociales,USAQ,6,Progreso limitado,3
+Ciencias sociales,USAQ,7,Avanzado,17
+Ciencias sociales,USAQ,7,Emergente,5
+Ciencias sociales,USAQ,7,En aceleración,8
+Ciencias sociales,USAQ,8,Avanzado,10
+Ciencias sociales,USAQ,8,Emergente,16
+Ciencias sociales,USAQ,8,En aceleración,19
+Ciencias sociales,ZIPA,5,Avanzado,3
+Ciencias sociales,ZIPA,5,Emergente,33
+Ciencias sociales,ZIPA,5,En aceleración,13
+Ciencias sociales,ZIPA,5,Progreso limitado,19
+Ciencias sociales,ZIPA,6,Avanzado,22
+Ciencias sociales,ZIPA,6,Emergente,19
+Ciencias sociales,ZIPA,6,En aceleración,16
+Ciencias sociales,ZIPA,6,Progreso limitado,16
+Ciencias sociales,ZIPA,7,Avanzado,38
+Ciencias sociales,ZIPA,7,Emergente,6
+Ciencias sociales,ZIPA,7,En aceleración,20
+Ciencias sociales,ZIPA,7,Progreso limitado,1
+Ciencias sociales,ZIPA,8,Avanzado,49
+Ciencias sociales,ZIPA,8,Emergente,12
+Ciencias sociales,ZIPA,8,En aceleración,10
+Ciencias sociales,ZIPA,8,Progreso limitado,1
+Ciencias sociales,ZIPA,9,Avanzado,38
+Ciencias sociales,ZIPA,9,Emergente,4
+Ciencias sociales,ZIPA,9,En aceleración,6
+Ciencias sociales,ZIPA,10,Avanzado,18
+Ciencias sociales,ZIPA,10,Emergente,4
+Ciencias sociales,ZIPA,10,En aceleración,12
+Ciencias sociales,ZIPA,10,Progreso limitado,2
+Inglés,COT,9,Emergente,22
+Inglés,COT,9,En aceleración,3
+Inglés,COT,9,Progreso limitado,8
+Inglés,COT,10,Avanzado,7
+Inglés,COT,10,Emergente,6
+Inglés,COT,10,En aceleración,8
+Inglés,MOS,9,Emergente,52
+Inglés,MOS,9,En aceleración,2
+Inglés,MOS,9,Progreso limitado,9
+Inglés,MOS,10,Avanzado,4
+Inglés,MOS,10,Emergente,12
+Inglés,MOS,10,En aceleración,26
+Inglés,MOS,10,Progreso limitado,2
+Inglés,MOS,11,Avanzado,18
