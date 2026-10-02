@@ -100,7 +100,7 @@ def process_raw(raw: pd.DataFrame):
 def read_default_data():
     temporal_path = Path("data/default_temporal_summary.csv")
     if not temporal_path.exists():
-        return pd.DataFrame(), pd.DataFrame(), pd.DataFrame()
+        return pd.DataFrame(), pd.DataFrame(), pd.DataFrame(), pd.DataFrame()
 
     temporal = pd.read_csv(temporal_path)
     temporal["Prueba"] = temporal["QuizName"].apply(normalize_area)
@@ -134,7 +134,14 @@ def read_default_data():
             columns={"competencia": "Dimension"}
         )
 
-    return temporal, levels, dimensions
+    top10_path = Path("data/default_top10_origin_2026.csv")
+    top10_origin = (
+        pd.read_csv(top10_path)
+        if top10_path.exists()
+        else pd.DataFrame()
+    )
+
+    return temporal, levels, dimensions, top10_origin
 
 
 def grade_label(value) -> str:
@@ -917,6 +924,146 @@ def render_origin_patterns(d: pd.DataFrame):
     st.plotly_chart(fig, use_container_width=True)
 
 
+def render_top10_origin_by_level(
+    data: pd.DataFrame,
+    test_name: str,
+    aggregated: bool,
+    top10_public: pd.DataFrame | None,
+):
+    st.divider()
+    st.subheader("Top 10 colegios de origen por nivel de desempeño")
+    st.caption(
+        "Pertenencia = número de estudiantes únicos que provienen de cada colegio "
+        "de origen dentro del nivel de desempeño seleccionado."
+    )
+
+    if aggregated:
+        if top10_public is None or top10_public.empty:
+            st.info(
+                "No hay un resumen público de colegios de origen disponible."
+            )
+            return
+
+        ranking = top10_public[
+            top10_public["Prueba"].astype(str) == test_name
+        ].copy()
+        if ranking.empty:
+            st.info("No hay información de colegios de origen para esta prueba.")
+            return
+
+        st.caption(
+            "La vista precargada corresponde al total de la RED en 2026. "
+            "Al cargar el Excel completo, el ranking responde también a los filtros "
+            "de sede y grado seleccionados."
+        )
+    else:
+        if (
+            "colegio_de_origen" not in data.columns
+            or data["colegio_de_origen"].dropna().empty
+        ):
+            st.info("No hay información de colegio de origen en los filtros actuales.")
+            return
+
+        student = build_student_level(data)
+        student = student[
+            student["colegio_de_origen"].notna()
+            & (student["colegio_de_origen"].astype(str).str.strip() != "")
+        ].copy()
+
+        if student.empty:
+            st.info("No hay información de colegio de origen en los filtros actuales.")
+            return
+
+        ranking = (
+            student.groupby(
+                ["Nivel", "colegio_de_origen"],
+                as_index=False,
+            )
+            .agg(Estudiantes=("IdentiEstudiante", "nunique"))
+        )
+        ranking["Ranking"] = (
+            ranking.groupby("Nivel")["Estudiantes"]
+            .rank(method="first", ascending=False)
+            .astype(int)
+        )
+        ranking = ranking[
+            ranking["Ranking"] <= 10
+        ].copy()
+
+    rows = [
+        ("Progreso limitado", "Emergente"),
+        ("En aceleración", "Avanzado"),
+    ]
+
+    for left_level, right_level in rows:
+        c1, c2 = st.columns(2)
+        for col, level in [(c1, left_level), (c2, right_level)]:
+            with col:
+                d = ranking[
+                    ranking["Nivel"].astype(str) == level
+                ].copy()
+
+                if d.empty:
+                    st.info(f"Sin datos para {level}.")
+                    continue
+
+                d = d.sort_values(
+                    ["Estudiantes", "colegio_de_origen"],
+                    ascending=[True, False],
+                )
+
+                total_level = d["Estudiantes"].sum()
+                d["Pct_top10"] = np.where(
+                    total_level > 0,
+                    d["Estudiantes"] / total_level * 100,
+                    0,
+                )
+
+                fig = px.bar(
+                    d,
+                    x="Estudiantes",
+                    y="colegio_de_origen",
+                    orientation="h",
+                    text="Estudiantes",
+                    custom_data=["Pct_top10"],
+                    title=level,
+                    labels={
+                        "Estudiantes": "",
+                        "colegio_de_origen": "",
+                    },
+                )
+                fig.update_traces(
+                    marker_color=LEVEL_COLORS[level],
+                    textposition="outside",
+                    cliponaxis=False,
+                    hovertemplate=(
+                        "<b>%{y}</b><br>"
+                        "Estudiantes: %{x}<br>"
+                        "Participación entre el top 10: %{customdata[0]:.1f}%"
+                        "<extra></extra>"
+                    ),
+                )
+                fig.update_xaxes(
+                    showgrid=False,
+                    showticklabels=False,
+                    ticks="",
+                    title=None,
+                    rangemode="tozero",
+                )
+                fig.update_yaxes(
+                    showgrid=False,
+                    ticks="",
+                    title=None,
+                )
+                fig.update_layout(
+                    height=430,
+                    plot_bgcolor="rgba(0,0,0,0)",
+                    margin=dict(l=12, r=35, t=55, b=15),
+                    showlegend=False,
+                )
+                st.plotly_chart(fig, use_container_width=True)
+
+
 def render_dimensions(
     dimensions: pd.DataFrame,
     test_name: str,
@@ -1069,6 +1216,7 @@ def render_test_page(
     attempts: pd.DataFrame,
     dimensions: pd.DataFrame,
     levels_public: pd.DataFrame,
+    top10_public: pd.DataFrame,
     test_name: str,
     aggregated: bool,
 ):
@@ -1167,6 +1315,13 @@ def render_test_page(
         aggregated=aggregated,
     )
 
+    render_top10_origin_by_level(
+        data=site_filtered,
+        test_name=test_name,
+        aggregated=aggregated,
+        top10_public=top10_public,
+    )
+
 
 st.title("📊 Estado de llegada 2026")
 st.caption(
@@ -1191,11 +1346,12 @@ if uploaded is not None:
         raw = read_excel(uploaded.getvalue())
         attempts, dimensions = process_raw(raw)
         levels_public = pd.DataFrame()
+        top10_public = pd.DataFrame()
     except Exception as exc:
         st.error(f"No fue posible procesar el Excel: {exc}")
         st.stop()
 else:
-    attempts, levels_public, dimensions = read_default_data()
+    attempts, levels_public, dimensions, top10_public = read_default_data()
     if attempts.empty:
         st.info("Carga el Excel para visualizar los resultados.")
         st.stop()
@@ -1208,6 +1364,7 @@ for tab, test_name in zip(tabs, TESTS):
             attempts=attempts,
             dimensions=dimensions,
             levels_public=levels_public,
+            top10_public=top10_public,
             test_name=test_name,
             aggregated=aggregated,
         )
