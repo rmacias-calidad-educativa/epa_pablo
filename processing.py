@@ -112,12 +112,12 @@ def performance_level(score: object) -> str:
         return "Sin información"
     x = float(score)
     if x <= 25:
-        return "Progreso limitado"
+        return "Nivel 1"
     if x <= 50:
-        return "Emergente"
+        return "Nivel 2"
     if x <= 75:
-        return "En aceleración"
-    return "Avanzado"
+        return "Nivel 3"
+    return "Nivel 4"
 
 
 def _as_bool(series: pd.Series) -> pd.Series:
@@ -243,7 +243,7 @@ def build_attempt_table(raw: pd.DataFrame) -> pd.DataFrame:
     ).str.strip()
 
     attempts["Necesita_apoyo"] = attempts["Nivel_desempeno"].isin(
-        ["Progreso limitado", "Emergente"]
+        ["Nivel 1", "Nivel 2"]
     )
     attempts["Grupo_50"] = np.where(
         attempts["Porcentaje_acierto"] <= 50,
@@ -375,10 +375,10 @@ def aggregate_group(df: pd.DataFrame, group_cols: list[str]) -> pd.DataFrame:
             Promedio=("Porcentaje_acierto", "mean"),
             Mediana=("Porcentaje_acierto", "median"),
             Cobertura_promedio=("Cobertura_respuesta", "mean"),
-            Progreso_limitado=("Nivel_desempeno", lambda s: (s == "Progreso limitado").mean() * 100),
-            Emergente=("Nivel_desempeno", lambda s: (s == "Emergente").mean() * 100),
-            En_aceleracion=("Nivel_desempeno", lambda s: (s == "En aceleración").mean() * 100),
-            Avanzado=("Nivel_desempeno", lambda s: (s == "Avanzado").mean() * 100),
+            Progreso_limitado=("Nivel_desempeno", lambda s: (s == "Nivel 1").mean() * 100),
+            Emergente=("Nivel_desempeno", lambda s: (s == "Nivel 2").mean() * 100),
+            En_aceleracion=("Nivel_desempeno", lambda s: (s == "Nivel 3").mean() * 100),
+            Avanzado=("Nivel_desempeno", lambda s: (s == "Nivel 4").mean() * 100),
             Requiere_apoyo=("Necesita_apoyo", "mean"),
         )
     )
