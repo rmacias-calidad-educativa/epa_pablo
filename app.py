@@ -10,7 +10,11 @@ import plotly.express as px
 import plotly.graph_objects as go
 import streamlit as st
 
-from processing import build_attempt_table, normalize_area
+from processing import (
+    build_attempt_table,
+    build_dimension_table,
+    normalize_area,
+)
 
 
 YEAR = 2026
@@ -46,7 +50,7 @@ st.markdown(
     """
     <style>
     .block-container {
-        padding-top: 1.2rem;
+        padding-top: 1.1rem;
         padding-bottom: 3rem;
         max-width: 1550px;
     }
@@ -55,9 +59,12 @@ st.markdown(
         padding: 10px 12px;
         border-radius: 12px;
     }
-    .muted {
-        color: #777;
-        font-size: .9rem;
+    .threshold-box {
+        padding: 14px 18px;
+        border-radius: 12px;
+        border: 1px solid rgba(128,128,128,.18);
+        margin: 8px 0 18px 0;
+        font-size: 1.02rem;
     }
     </style>
     """,
@@ -71,27 +78,51 @@ def read_excel(file_bytes: bytes) -> pd.DataFrame:
 
 
 @st.cache_data(show_spinner=False)
-def process_raw(raw: pd.DataFrame) -> pd.DataFrame:
-    data = build_attempt_table(raw)
-    data["Prueba"] = data["QuizName"].apply(normalize_area)
-    data = data[
-        (data["Año"] == YEAR)
-        & (data["Prueba"].isin(TESTS))
+def process_raw(raw: pd.DataFrame):
+    attempts = build_attempt_table(raw)
+    attempts["Prueba"] = attempts["QuizName"].apply(normalize_area)
+    attempts = attempts[
+        (attempts["Año"] == YEAR)
+        & (attempts["Prueba"].isin(TESTS))
     ].copy()
-    return data
+
+    dimensions = build_dimension_table(raw)
+    if not dimensions.empty:
+        dimensions = dimensions[
+            (dimensions["Año"] == YEAR)
+            & (dimensions["Prueba"].isin(TESTS))
+        ].copy()
+
+    return attempts, dimensions
 
 
 @st.cache_data(show_spinner=False)
-def read_default_summary() -> pd.DataFrame:
-    path = Path("data/default_temporal_summary.csv")
-    if not path.exists():
-        return pd.DataFrame()
+def read_default_data():
+    temporal_path = Path("data/default_temporal_summary.csv")
+    if not temporal_path.exists():
+        return pd.DataFrame(), pd.DataFrame(), pd.DataFrame()
 
-    d = pd.read_csv(path)
-    d["Prueba"] = d["QuizName"].apply(normalize_area)
-    if "Año" in d.columns:
-        d = d[d["Año"] == YEAR]
-    return d[d["Prueba"].isin(TESTS)].copy()
+    temporal = pd.read_csv(temporal_path)
+    temporal["Prueba"] = temporal["QuizName"].apply(normalize_area)
+    if "Año" in temporal.columns:
+        temporal = temporal[temporal["Año"] == YEAR]
+    temporal = temporal[temporal["Prueba"].isin(TESTS)].copy()
+
+    levels_path = Path("data/default_levels_2026.csv")
+    levels = (
+        pd.read_csv(levels_path)
+        if levels_path.exists()
+        else pd.DataFrame()
+    )
+
+    dimensions_path = Path("data/default_dimensions_2026.csv")
+    dimensions = (
+        pd.read_csv(dimensions_path)
+        if dimensions_path.exists()
+        else pd.DataFrame()
+    )
+
+    return temporal, levels, dimensions
 
 
 def grade_label(value) -> str:
@@ -101,41 +132,41 @@ def grade_label(value) -> str:
         return str(value)
 
 
-def clean_line_layout(fig, grades):
-    fig.update_xaxes(
-        title=None,
-        tickmode="array",
-        tickvals=grades,
-        ticktext=[grade_label(g) for g in grades],
-        showgrid=False,
-        zeroline=False,
-        ticks="",
-    )
+def style_clean_axes(fig, grades=None, hide_y=True):
+    if grades is not None:
+        fig.update_xaxes(
+            title=None,
+            tickmode="array",
+            tickvals=grades,
+            ticktext=[grade_label(g) for g in grades],
+            showgrid=False,
+            zeroline=False,
+            ticks="",
+        )
+    else:
+        fig.update_xaxes(
+            title=None,
+            showgrid=False,
+            zeroline=False,
+            ticks="",
+        )
+
     fig.update_yaxes(
         title=None,
         showgrid=False,
         zeroline=False,
-        showticklabels=False,
+        showticklabels=not hide_y,
         ticks="",
         rangemode="tozero",
     )
     fig.update_layout(
-        height=610,
-        hovermode="x unified",
-        legend_title_text="Sede",
-        margin=dict(l=18, r=18, t=70, b=25),
         plot_bgcolor="rgba(0,0,0,0)",
-    )
-    fig.update_traces(
-        textposition="top center",
-        cliponaxis=False,
-        line=dict(width=2.5),
-        marker=dict(size=8),
+        margin=dict(l=18, r=18, t=70, b=25),
     )
     return fig
 
 
-def build_student_test_grade(data: pd.DataFrame) -> pd.DataFrame:
+def build_student_level(data: pd.DataFrame) -> pd.DataFrame:
     student = (
         data.groupby(
             ["IdentiEstudiante", "Sede", "Grado_num"],
@@ -146,7 +177,6 @@ def build_student_test_grade(data: pd.DataFrame) -> pd.DataFrame:
             colegio_de_origen=("colegio_de_origen", "first"),
         )
     )
-    student["Menor_igual_50"] = student["Porcentaje"] <= 50
     student["Nivel"] = np.select(
         [
             student["Porcentaje"] <= 25,
@@ -160,7 +190,24 @@ def build_student_test_grade(data: pd.DataFrame) -> pd.DataFrame:
         ],
         default="Avanzado",
     )
+    student["Menor_igual_50"] = student["Porcentaje"] <= 50
     return student
+
+
+def render_threshold_note():
+    st.markdown(
+        """
+        <div class="threshold-box">
+        <strong>Lectura del corte del 50%:</strong>
+        estar en <strong>≤50% de aciertos</strong> significa pertenecer a
+        <strong>Progreso limitado (0–25%)</strong> o
+        <strong>Emergente (&gt;25–50%)</strong>.
+        Los estudiantes con <strong>&gt;50%</strong> se ubican en
+        <strong>En aceleración</strong> o <strong>Avanzado</strong>.
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
 
 def render_main_line(d: pd.DataFrame, aggregated: bool):
@@ -174,7 +221,7 @@ def render_main_line(d: pd.DataFrame, aggregated: bool):
             )
         )
     else:
-        student = build_student_test_grade(d)
+        student = build_student_level(d)
         grouped = (
             student.groupby(["Sede", "Grado_num"], as_index=False)
             .agg(
@@ -202,10 +249,18 @@ def render_main_line(d: pd.DataFrame, aggregated: bool):
     total = total_low + total_high
 
     m1, m2, m3 = st.columns(3)
-    m1.metric("Estudiantes ≤50%", f"{total_low:,}".replace(",", "."))
-    m2.metric("Estudiantes >50%", f"{total_high:,}".replace(",", "."))
+    m1.metric(
+        "Progreso limitado + Emergente",
+        f"{total_low:,}".replace(",", "."),
+        help="Estudiantes con 50% o menos de aciertos.",
+    )
+    m2.metric(
+        "En aceleración + Avanzado",
+        f"{total_high:,}".replace(",", "."),
+        help="Estudiantes con más de 50% de aciertos.",
+    )
     m3.metric(
-        "% ≤50%",
+        "% en Progreso limitado + Emergente",
         f"{(total_low / total * 100):.1f}%" if total else "—",
     )
 
@@ -231,66 +286,208 @@ def render_main_line(d: pd.DataFrame, aggregated: bool):
         },
         labels={
             "Sede": "Sede",
-            "Menor_igual_50": "≤50%",
-            "Mayor_50": ">50%",
+            "Menor_igual_50": "Progreso limitado + Emergente",
+            "Mayor_50": "En aceleración + Avanzado",
             "Pct_50_o_menos": "% ≤50%",
         },
-        title="Cantidad de estudiantes con ≤50% de aciertos por grado",
+        title="Estudiantes en Progreso limitado + Emergente por grado",
     )
-    fig = clean_line_layout(fig, grades)
+    fig = style_clean_axes(fig, grades=grades, hide_y=True)
+    fig.update_layout(
+        height=600,
+        hovermode="x unified",
+        legend_title_text="Sede",
+    )
+    fig.update_traces(
+        textposition="top center",
+        cliponaxis=False,
+        line=dict(width=2.5),
+        marker=dict(size=8),
+    )
     st.plotly_chart(fig, use_container_width=True)
 
-    st.caption(
-        "Las cifras sobre cada punto son estudiantes con ≤50% de aciertos. "
-        "El detalle emergente muestra también el total y los estudiantes >50%."
-    )
 
-
-def render_level_distribution(d: pd.DataFrame):
-    student = build_student_test_grade(d)
-    if student.empty:
-        return
-
-    levels = (
-        student.groupby(["Grado_num", "Nivel"], as_index=False)
+def level_counts_from_raw(data: pd.DataFrame) -> pd.DataFrame:
+    student = build_student_level(data)
+    return (
+        student.groupby(["Sede", "Nivel"], as_index=False)
         .agg(Estudiantes=("IdentiEstudiante", "nunique"))
     )
-    totals = levels.groupby("Grado_num")["Estudiantes"].transform("sum")
-    levels["Porcentaje"] = levels["Estudiantes"] / totals * 100
-    levels["Grado"] = levels["Grado_num"].apply(grade_label)
+
+
+def render_levels_vs_network(
+    site_data: pd.DataFrame,
+    network_data: pd.DataFrame,
+    aggregated: bool,
+    level_summary: pd.DataFrame | None,
+    test_name: str,
+    selected_sites: list[str],
+    selected_grades: list[int],
+):
+    st.subheader("Distribución de los 4 niveles de desempeño por sede")
+    st.caption(
+        "Cada sede se compara con la distribución de toda la RED. "
+        "La RED siempre incluye las seis sedes para los mismos grados seleccionados."
+    )
+
+    if aggregated:
+        if level_summary is None or level_summary.empty:
+            st.info(
+                "La base pública precargada aún no contiene el desglose de los cuatro niveles. "
+                "Carga el Excel completo para habilitar esta comparación."
+            )
+            return
+
+        base = level_summary[
+            level_summary["Prueba"].astype(str) == test_name
+        ].copy()
+        if selected_grades:
+            base = base[base["Grado_num"].isin(selected_grades)]
+
+        site_counts = (
+            base[base["Sede"].isin(selected_sites)]
+            .groupby(["Sede", "Nivel"], as_index=False)["Estudiantes"]
+            .sum()
+        )
+        network_counts = (
+            base.groupby("Nivel", as_index=False)["Estudiantes"]
+            .sum()
+            .assign(Sede="RED")
+        )
+    else:
+        site_counts = level_counts_from_raw(site_data)
+        network_counts = (
+            level_counts_from_raw(network_data)
+            .groupby("Nivel", as_index=False)["Estudiantes"]
+            .sum()
+            .assign(Sede="RED")
+        )
+
+    counts = pd.concat([site_counts, network_counts], ignore_index=True)
+    if counts.empty:
+        st.info("No hay datos de niveles para los filtros seleccionados.")
+        return
+
+    entities = [s for s in SITES if s in selected_sites] + ["RED"]
+    full = pd.MultiIndex.from_product(
+        [entities, LEVEL_ORDER],
+        names=["Sede", "Nivel"],
+    ).to_frame(index=False)
+    counts = full.merge(counts, on=["Sede", "Nivel"], how="left")
+    counts["Estudiantes"] = counts["Estudiantes"].fillna(0).astype(int)
+
+    totals = counts.groupby("Sede")["Estudiantes"].transform("sum")
+    counts["Porcentaje"] = np.where(
+        totals > 0,
+        counts["Estudiantes"] / totals * 100,
+        0,
+    )
+    counts["Etiqueta"] = counts.apply(
+        lambda r: (
+            f"{r['Porcentaje']:.0f}%"
+            if r["Porcentaje"] >= 6 and r["Estudiantes"] > 0
+            else ""
+        ),
+        axis=1,
+    )
 
     fig = px.bar(
-        levels,
-        x="Grado",
-        y="Porcentaje",
+        counts,
+        x="Porcentaje",
+        y="Sede",
         color="Nivel",
-        text="Estudiantes",
+        orientation="h",
         barmode="stack",
-        category_orders={"Nivel": LEVEL_ORDER},
+        category_orders={
+            "Sede": entities,
+            "Nivel": LEVEL_ORDER,
+        },
         color_discrete_map=LEVEL_COLORS,
-        labels={"Grado": "", "Porcentaje": "", "Nivel": "Nivel"},
-        title="Distribución de niveles de desempeño por grado",
+        text="Etiqueta",
+        hover_data={
+            "Estudiantes": True,
+            "Porcentaje": ":.1f",
+            "Etiqueta": False,
+        },
+        labels={
+            "Porcentaje": "",
+            "Sede": "",
+            "Nivel": "Nivel",
+        },
+        title="Composición de niveles: cada sede frente a la RED",
     )
-    fig.update_yaxes(
+    fig.update_xaxes(
         range=[0, 100],
         showticklabels=False,
         showgrid=False,
-        title=None,
         ticks="",
-    )
-    fig.update_xaxes(
         title=None,
+    )
+    fig.update_yaxes(
         showgrid=False,
         ticks="",
+        title=None,
     )
     fig.update_layout(
-        height=480,
-        margin=dict(l=18, r=18, t=65, b=25),
+        height=max(430, 62 * len(entities) + 120),
         plot_bgcolor="rgba(0,0,0,0)",
+        margin=dict(l=18, r=18, t=70, b=20),
         legend_title_text="Nivel",
     )
     fig.update_traces(textposition="inside")
     st.plotly_chart(fig, use_container_width=True)
+
+    network_pct = (
+        counts[counts["Sede"] == "RED"]
+        .set_index("Nivel")["Porcentaje"]
+        .reindex(LEVEL_ORDER)
+    )
+    site_pct = counts[counts["Sede"] != "RED"].copy()
+    site_pct["Diferencia_vs_RED"] = site_pct.apply(
+        lambda r: r["Porcentaje"] - network_pct.loc[r["Nivel"]],
+        axis=1,
+    )
+
+    if not site_pct.empty:
+        delta = site_pct.pivot(
+            index="Sede",
+            columns="Nivel",
+            values="Diferencia_vs_RED",
+        ).reindex(
+            index=[s for s in SITES if s in selected_sites],
+            columns=LEVEL_ORDER,
+        )
+        labels = delta.applymap(
+            lambda x: "" if pd.isna(x) else f"{x:+.1f} pp"
+        )
+
+        max_abs = np.nanmax(np.abs(delta.values))
+        max_abs = max(10, min(40, max_abs if np.isfinite(max_abs) else 10))
+
+        fig = go.Figure(
+            data=go.Heatmap(
+                z=delta.values,
+                x=delta.columns,
+                y=delta.index,
+                zmid=0,
+                zmin=-max_abs,
+                zmax=max_abs,
+                colorscale="RdBu_r",
+                text=labels.values,
+                texttemplate="%{text}",
+                hovertemplate=(
+                    "Sede: %{y}<br>Nivel: %{x}<br>"
+                    "Diferencia vs RED: %{z:+.1f} pp<extra></extra>"
+                ),
+                colorbar=dict(title="pp vs RED"),
+            )
+        )
+        fig.update_layout(
+            title="Diferencia de cada sede frente a la RED",
+            height=max(360, 55 * len(delta.index) + 140),
+            margin=dict(l=18, r=18, t=65, b=25),
+        )
+        st.plotly_chart(fig, use_container_width=True)
 
 
 def render_origin_patterns(d: pd.DataFrame):
@@ -298,35 +495,18 @@ def render_origin_patterns(d: pd.DataFrame):
         "colegio_de_origen" not in d.columns
         or d["colegio_de_origen"].dropna().empty
     ):
-        st.info(
-            "Para ver patrones por colegio de origen, carga el Excel completo."
-        )
         return
 
     origin = d[
         d["colegio_de_origen"].notna()
         & (d["colegio_de_origen"].astype(str).str.strip() != "")
     ].copy()
-
     if origin.empty:
-        st.info("No hay información de colegio de origen en este filtro.")
         return
-
-    st.subheader("Patrones por colegio de origen")
-    st.caption(
-        "Aquí se busca recurrencia dentro de la misma prueba: "
-        "si estudiantes de un mismo colegio tienden a concentrarse en ≤50% "
-        "a través de varios grados."
-    )
 
     student = (
         origin.groupby(
-            [
-                "IdentiEstudiante",
-                "colegio_de_origen",
-                "Sede",
-                "Grado_num",
-            ],
+            ["IdentiEstudiante", "colegio_de_origen", "Grado_num"],
             as_index=False,
         )
         .agg(Porcentaje=("Porcentaje_acierto", "mean"))
@@ -339,90 +519,44 @@ def render_origin_patterns(d: pd.DataFrame):
         .sort_values("Estudiantes", ascending=False)
     )
 
-    c1, c2 = st.columns(2)
-    with c1:
-        min_n = st.slider(
-            "Mínimo de estudiantes por colegio de origen",
-            2,
-            20,
-            5,
-            key=f"min_origin_{st.session_state.get('_active_test', 'x')}",
-        )
-    with c2:
-        top_n = st.slider(
-            "Número de colegios a comparar",
-            3,
-            15,
-            8,
-            key=f"top_origin_{st.session_state.get('_active_test', 'x')}",
-        )
-
-    eligible = school_volume[
-        school_volume["Estudiantes"] >= min_n
-    ].head(top_n)
-
-    if eligible.empty:
-        st.info("No hay colegios de origen con el tamaño mínimo seleccionado.")
+    top = school_volume[
+        school_volume["Estudiantes"] >= 5
+    ].head(8)
+    if top.empty:
         return
 
-    schools = eligible["colegio_de_origen"].tolist()
-    sd = student[student["colegio_de_origen"].isin(schools)].copy()
-
+    sd = student[
+        student["colegio_de_origen"].isin(top["colegio_de_origen"])
+    ]
     trend = (
         sd.groupby(["colegio_de_origen", "Grado_num"], as_index=False)
         .agg(
             Estudiantes=("IdentiEstudiante", "nunique"),
-            Menor_igual_50=("Bajo_50", "sum"),
+            Pct_50=("Bajo_50", "mean"),
         )
     )
-    trend["Pct_50"] = np.where(
-        trend["Estudiantes"] > 0,
-        trend["Menor_igual_50"] / trend["Estudiantes"] * 100,
-        np.nan,
-    )
+    trend["Pct_50"] *= 100
 
     grades = sorted(
         [int(g) for g in trend["Grado_num"].dropna().unique()]
     )
     fig = px.line(
-        trend.sort_values(["colegio_de_origen", "Grado_num"]),
+        trend,
         x="Grado_num",
         y="Pct_50",
         color="colegio_de_origen",
         markers=True,
         text=trend["Pct_50"].map(lambda x: f"{x:.0f}%"),
-        hover_data={
-            "Grado_num": False,
-            "Estudiantes": True,
-            "Menor_igual_50": True,
-            "Pct_50": ":.1f",
-        },
         labels={
             "colegio_de_origen": "Colegio de origen",
             "Pct_50": "% ≤50",
         },
-        title="% de estudiantes ≤50% por grado y colegio de origen",
+        title="Patrón de estudiantes ≤50% por colegio de origen",
     )
-    fig.update_xaxes(
-        title=None,
-        tickmode="array",
-        tickvals=grades,
-        ticktext=[grade_label(g) for g in grades],
-        showgrid=False,
-        ticks="",
-    )
-    fig.update_yaxes(
-        title=None,
-        range=[0, 100],
-        showticklabels=False,
-        showgrid=False,
-        ticks="",
-        zeroline=False,
-    )
+    fig = style_clean_axes(fig, grades=grades, hide_y=True)
+    fig.update_yaxes(range=[0, 100], showticklabels=False)
     fig.update_layout(
-        height=560,
-        margin=dict(l=18, r=18, t=70, b=25),
-        plot_bgcolor="rgba(0,0,0,0)",
+        height=540,
         legend_title_text="Colegio de origen",
     )
     fig.update_traces(
@@ -433,76 +567,178 @@ def render_origin_patterns(d: pd.DataFrame):
     )
     st.plotly_chart(fig, use_container_width=True)
 
-    summary = (
-        sd.groupby("colegio_de_origen", as_index=False)
-        .agg(
-            Estudiantes=("IdentiEstudiante", "nunique"),
-            Grados_observados=("Grado_num", "nunique"),
-            Pct_50=("Bajo_50", "mean"),
-        )
-    )
-    summary["Pct_50"] *= 100
 
-    recurrent = (
-        trend.assign(Grado_concentrado=lambda x: x["Pct_50"] >= 50)
-        .groupby("colegio_de_origen", as_index=False)
-        .agg(
-            Grados_con_50pct_o_mas_en_bajo50=(
-                "Grado_concentrado",
-                "sum",
-            )
-        )
-    )
-    summary = summary.merge(recurrent, on="colegio_de_origen", how="left")
-    summary["Patron"] = np.select(
-        [
-            summary["Grados_con_50pct_o_mas_en_bajo50"] >= 2,
-            summary["Grados_con_50pct_o_mas_en_bajo50"] == 1,
-        ],
-        [
-            "Recurrente en varios grados",
-            "Concentrado en un grado",
-        ],
-        default="Sin patrón recurrente claro",
-    )
+def render_dimensions(
+    dimensions: pd.DataFrame,
+    test_name: str,
+    selected_sites: list[str],
+    selected_grades: list[int],
+    aggregated: bool,
+):
+    st.divider()
+    st.subheader("Dimensiones de evaluación")
 
-    st.dataframe(
-        summary.sort_values(
-            ["Grados_con_50pct_o_mas_en_bajo50", "Pct_50"],
-            ascending=False,
+    if test_name == "Inglés":
+        st.info(
+            "En Inglés, el campo de la fuente contiene Pre A1, A1, A2 y B1. "
+            "Esos valores son niveles de dominio, no dimensiones de evaluación, "
+            "por lo que no se presentan como dimensiones en esta sección."
+        )
+        return
+
+    if dimensions is None or dimensions.empty:
+        st.info(
+            "La base pública precargada aún no contiene el resumen de dimensiones. "
+            "Carga el Excel completo para habilitar esta lectura."
+        )
+        return
+
+    d = dimensions[
+        dimensions["Prueba"].astype(str) == test_name
+    ].copy()
+    if selected_grades:
+        d = d[d["Grado_num"].isin(selected_grades)]
+
+    if d.empty:
+        st.info("No hay información de dimensiones para los filtros seleccionados.")
+        return
+
+    available_sites = [
+        s for s in SITES
+        if s in d["Sede"].dropna().astype(str).unique()
+        and s in selected_sites
+    ]
+    reference = st.selectbox(
+        "Vista de dimensiones",
+        ["RED"] + available_sites,
+        key=f"dimension_reference_{test_name}",
+        help=(
+            "RED combina las seis sedes. Selecciona una sede para ver "
+            "el comportamiento de sus dimensiones a través de los grados."
         ),
-        use_container_width=True,
-        hide_index=True,
-        column_config={
-            "Pct_50": st.column_config.NumberColumn(
-                "% estudiantes ≤50",
-                format="%.1f%%",
-            ),
+    )
+
+    if aggregated:
+        if reference == "RED":
+            plot = (
+                d.groupby(
+                    ["Grado_num", "Dimension"],
+                    as_index=False,
+                )
+                .apply(
+                    lambda g: pd.Series({
+                        "Estudiantes": g["Estudiantes"].sum(),
+                        "Promedio_dimension": np.average(
+                            g["Promedio_dimension"],
+                            weights=g["Estudiantes"],
+                        ),
+                    }),
+                    include_groups=False,
+                )
+            )
+        else:
+            plot = d[d["Sede"] == reference].copy()
+    else:
+        if reference == "RED":
+            plot = (
+                d.groupby(
+                    ["Grado_num", "Dimension"],
+                    as_index=False,
+                )
+                .agg(
+                    Estudiantes=("IdentiEstudiante", "nunique"),
+                    Promedio_dimension=("Porcentaje_dimension", "mean"),
+                )
+            )
+        else:
+            plot = (
+                d[d["Sede"] == reference]
+                .groupby(
+                    ["Grado_num", "Dimension"],
+                    as_index=False,
+                )
+                .agg(
+                    Estudiantes=("IdentiEstudiante", "nunique"),
+                    Promedio_dimension=("Porcentaje_dimension", "mean"),
+                )
+            )
+
+    if plot.empty:
+        st.info("No hay dimensiones para esa selección.")
+        return
+
+    plot["Etiqueta"] = plot["Promedio_dimension"].map(
+        lambda x: f"{x:.0f}%"
+    )
+    grades = sorted(
+        [int(g) for g in plot["Grado_num"].dropna().unique()]
+    )
+
+    fig = px.line(
+        plot.sort_values(["Dimension", "Grado_num"]),
+        x="Grado_num",
+        y="Promedio_dimension",
+        color="Dimension",
+        markers=True,
+        text="Etiqueta",
+        hover_data={
+            "Grado_num": False,
+            "Estudiantes": True,
+            "Promedio_dimension": ":.1f",
+            "Etiqueta": False,
         },
+        labels={
+            "Dimension": "Dimensión",
+            "Promedio_dimension": "% de acierto",
+        },
+        title=f"Comportamiento de las dimensiones por grado | {reference}",
+    )
+    fig = style_clean_axes(fig, grades=grades, hide_y=True)
+    fig.update_yaxes(
+        range=[0, 100],
+        showticklabels=False,
+    )
+    fig.update_layout(
+        height=570,
+        legend_title_text="Dimensión",
+    )
+    fig.update_traces(
+        textposition="top center",
+        cliponaxis=False,
+        line=dict(width=2.2),
+        marker=dict(size=7),
+    )
+    st.plotly_chart(fig, use_container_width=True)
+
+    st.caption(
+        "El porcentaje de cada dimensión se calcula sobre los ítems esperados "
+        "para esa competencia. Las cifras sobre los puntos muestran el promedio de acierto."
     )
 
 
 def render_test_page(
-    data: pd.DataFrame,
+    attempts: pd.DataFrame,
+    dimensions: pd.DataFrame,
+    levels_public: pd.DataFrame,
     test_name: str,
     aggregated: bool,
 ):
-    st.session_state["_active_test"] = test_name
-
     st.markdown(f"## {test_name}")
-    st.caption(
-        f"Resultados de {test_name} · Año fijo: {YEAR}"
-    )
+    st.caption(f"Resultados de {test_name} · Año fijo: {YEAR}")
+    render_threshold_note()
 
-    d = data[data["Prueba"] == test_name].copy()
-    if d.empty:
+    test_all = attempts[
+        attempts["Prueba"].astype(str) == test_name
+    ].copy()
+    if test_all.empty:
         st.info(f"No hay datos de {test_name} para {YEAR}.")
         return
 
-    filter_cols = st.columns([1.2, 1.5])
-    with filter_cols[0]:
+    c1, c2 = st.columns([1.2, 1.4])
+    with c1:
         available_sites = [
-            s for s in SITES if s in d["Sede"].dropna().astype(str).unique()
+            s for s in SITES
+            if s in test_all["Sede"].dropna().astype(str).unique()
         ]
         selected_sites = st.multiselect(
             "Sedes/colegios",
@@ -510,10 +746,9 @@ def render_test_page(
             default=available_sites,
             key=f"sites_{test_name}",
         )
-
-    with filter_cols[1]:
+    with c2:
         grades = sorted(
-            [int(g) for g in d["Grado_num"].dropna().unique()]
+            [int(g) for g in test_all["Grado_num"].dropna().unique()]
         )
         selected_grades = st.multiselect(
             "Grados",
@@ -523,63 +758,64 @@ def render_test_page(
             key=f"grades_{test_name}",
         )
 
-    if selected_sites:
-        d = d[d["Sede"].astype(str).isin(selected_sites)]
+    grade_filtered_network = test_all.copy()
     if selected_grades:
-        d = d[d["Grado_num"].isin(selected_grades)]
+        grade_filtered_network = grade_filtered_network[
+            grade_filtered_network["Grado_num"].isin(selected_grades)
+        ]
 
-    if d.empty:
+    site_filtered = grade_filtered_network.copy()
+    if selected_sites:
+        site_filtered = site_filtered[
+            site_filtered["Sede"].astype(str).isin(selected_sites)
+        ]
+
+    if site_filtered.empty:
         st.warning("Los filtros seleccionados no dejan datos.")
         return
 
-    render_main_line(d, aggregated=aggregated)
+    render_main_line(site_filtered, aggregated=aggregated)
+
+    st.divider()
+    render_levels_vs_network(
+        site_data=site_filtered,
+        network_data=grade_filtered_network,
+        aggregated=aggregated,
+        level_summary=levels_public,
+        test_name=test_name,
+        selected_sites=selected_sites,
+        selected_grades=selected_grades,
+    )
 
     if not aggregated:
         with st.expander(
-            "Ver distribución por los cuatro niveles de desempeño",
+            "Explorar patrones por colegio de origen",
             expanded=False,
         ):
-            render_level_distribution(d)
+            render_origin_patterns(site_filtered)
 
-        with st.expander(
-            "Ver patrones por colegio de origen",
-            expanded=False,
-        ):
-            render_origin_patterns(d)
-    else:
-        st.info(
-            "La base precargada es agregada. "
-            "Carga el Excel completo para habilitar niveles individuales "
-            "y patrones por colegio de origen."
-        )
+    render_dimensions(
+        dimensions=dimensions,
+        test_name=test_name,
+        selected_sites=selected_sites,
+        selected_grades=selected_grades,
+        aggregated=aggregated,
+    )
 
 
 st.title("📊 Estado de llegada 2026")
 st.caption(
-    "Cinco hojas independientes. Cada una analiza una prueba específica; "
-    "no se muestran resultados generales mezclando pruebas."
+    "Cinco hojas independientes. Cada hoja corresponde a una prueba y "
+    "mantiene su propio análisis por sede, grado, niveles y dimensiones."
 )
-
-with st.expander("Criterios de lectura", expanded=False):
-    st.markdown(
-        """
-- **Año fijo:** 2026.
-- **Progreso limitado:** 0% a 25%.
-- **Emergente:** >25% a 50%.
-- **En aceleración:** >50% a 75%.
-- **Avanzado:** >75% a 100%.
-- La visual principal cuenta estudiantes con **≤50% de aciertos**.
-- Los rótulos de prueba no incluyen el grado.
-- Ciencias sociales integra Competencias ciudadanas, Pensamiento ciudadano y Sociales y ciudadanas.
-        """
-    )
 
 uploaded = st.file_uploader(
     "Cargar Excel completo (opcional)",
     type=["xlsx", "xls"],
     help=(
-        "Sin archivo, el dashboard usa la base agregada precargada. "
-        "Con el Excel completo se habilitan patrones por colegio de origen."
+        "La base precargada permite la lectura principal. "
+        "El Excel completo habilita análisis individuales, colegio de origen "
+        "y dimensiones cuando el resumen público no esté disponible."
     ),
 )
 
@@ -588,13 +824,14 @@ aggregated = uploaded is None
 if uploaded is not None:
     try:
         raw = read_excel(uploaded.getvalue())
-        data = process_raw(raw)
+        attempts, dimensions = process_raw(raw)
+        levels_public = pd.DataFrame()
     except Exception as exc:
         st.error(f"No fue posible procesar el Excel: {exc}")
         st.stop()
 else:
-    data = read_default_summary()
-    if data.empty:
+    attempts, levels_public, dimensions = read_default_data()
+    if attempts.empty:
         st.info("Carga el Excel para visualizar los resultados.")
         st.stop()
 
@@ -603,7 +840,9 @@ tabs = st.tabs(TESTS)
 for tab, test_name in zip(tabs, TESTS):
     with tab:
         render_test_page(
-            data=data,
+            attempts=attempts,
+            dimensions=dimensions,
+            levels_public=levels_public,
             test_name=test_name,
             aggregated=aggregated,
         )
