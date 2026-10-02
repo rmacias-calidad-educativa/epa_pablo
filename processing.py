@@ -157,6 +157,9 @@ def build_attempt_table(raw: pd.DataFrame) -> pd.DataFrame:
 
     if "TimeCompleted" in df.columns:
         df["TimeCompleted"] = pd.to_datetime(df["TimeCompleted"], errors="coerce")
+        df["Año"] = df["TimeCompleted"].dt.year.astype("Int64")
+    else:
+        df["Año"] = pd.Series(pd.NA, index=df.index, dtype="Int64")
 
     # Una pregunta solo aporta un acierto máximo dentro del intento.
     # Esto protege el cálculo frente a duplicados accidentales de filas.
@@ -178,6 +181,7 @@ def build_attempt_table(raw: pd.DataFrame) -> pd.DataFrame:
             edad_estudiante=("edad_estudiante", "first") if "edad_estudiante" in df.columns else ("Sede", lambda s: pd.NA),
             colegio_de_origen=("colegio_de_origen", "first") if "colegio_de_origen" in df.columns else ("Sede", lambda s: pd.NA),
             TimeCompleted=("TimeCompleted", "max") if "TimeCompleted" in df.columns else ("Sede", lambda s: pd.NaT),
+            Año=("Año", "first"),
         )
     )
 
@@ -199,6 +203,7 @@ def build_attempt_table(raw: pd.DataFrame) -> pd.DataFrame:
             edad_estudiante=("edad_estudiante", "first"),
             colegio_de_origen=("colegio_de_origen", "first"),
             TimeCompleted=("TimeCompleted", "max"),
+            Año=("Año", "first"),
             Aciertos=("EsCorrecta", "sum"),
             Items_observados=("Pregunta", "nunique"),
         )
@@ -232,6 +237,11 @@ def build_attempt_table(raw: pd.DataFrame) -> pd.DataFrame:
 
     attempts["Necesita_apoyo"] = attempts["Nivel_desempeno"].isin(
         ["Progreso limitado", "Emergente"]
+    )
+    attempts["Grupo_50"] = np.where(
+        attempts["Porcentaje_acierto"] <= 50,
+        "≤50%",
+        ">50%",
     )
 
     return attempts
