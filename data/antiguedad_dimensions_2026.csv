@@ -1,0 +1,321 @@
+Prueba,Sede,Grado_num,Dimension,Estudiantes,Promedio_dimension
+Ciencias naturales,COT,5.0,Conocimiento científico,36,65.07936507936508
+Ciencias naturales,COT,5.0,Explicación de fenómenos,36,58.333333333333336
+Ciencias naturales,COT,5.0,Indagación,36,57.14285714285714
+Ciencias naturales,COT,6.0,Conocimiento científico,32,64.0625
+Ciencias naturales,COT,6.0,Explicación de fenómenos,32,65.625
+Ciencias naturales,COT,6.0,Indagación,32,62.94642857142857
+Ciencias naturales,COT,7.0,Conocimiento científico,35,68.0952380952381
+Ciencias naturales,COT,7.0,Explicación de fenómenos,35,53.06122448979592
+Ciencias naturales,COT,7.0,Indagación,35,60.0
+Ciencias naturales,COT,8.0,Conocimiento científico,31,72.58064516129032
+Ciencias naturales,COT,8.0,Explicación de fenómenos,31,65.3225806451613
+Ciencias naturales,COT,8.0,Indagación,31,47.004608294930875
+Ciencias naturales,COT,9.0,Conocimiento científico,36,42.460317460317455
+Ciencias naturales,COT,9.0,Explicación de fenómenos,36,60.18518518518518
+Ciencias naturales,COT,9.0,Indagación,36,65.07936507936508
+Ciencias naturales,COT,10.0,Conocimiento científico,22,56.060606060606055
+Ciencias naturales,COT,10.0,Explicación de fenómenos,22,64.93506493506493
+Ciencias naturales,COT,10.0,Indagación,22,72.72727272727273
+Ciencias naturales,MOS,5.0,Conocimiento científico,14,53.06122448979592
+Ciencias naturales,MOS,5.0,Explicación de fenómenos,13,48.717948717948715
+Ciencias naturales,MOS,5.0,Indagación,14,46.93877551020408
+Ciencias naturales,MOS,6.0,Conocimiento científico,31,58.064516129032256
+Ciencias naturales,MOS,6.0,Explicación de fenómenos,31,52.82258064516129
+Ciencias naturales,MOS,6.0,Indagación,31,54.83870967741935
+Ciencias naturales,MOS,7.0,Conocimiento científico,23,60.14492753623188
+Ciencias naturales,MOS,7.0,Explicación de fenómenos,23,49.06832298136646
+Ciencias naturales,MOS,7.0,Indagación,23,49.68944099378882
+Ciencias naturales,MOS,8.0,Conocimiento científico,20,74.16666666666666
+Ciencias naturales,MOS,8.0,Explicación de fenómenos,20,64.375
+Ciencias naturales,MOS,8.0,Indagación,20,47.857142857142854
+Ciencias naturales,MOS,9.0,Conocimiento científico,10,47.14285714285714
+Ciencias naturales,MOS,9.0,Explicación de fenómenos,10,48.333333333333336
+Ciencias naturales,MOS,9.0,Indagación,10,61.42857142857142
+Ciencias naturales,MOS,10.0,Conocimiento científico,4,58.33333333333333
+Ciencias naturales,MOS,10.0,Explicación de fenómenos,4,57.14285714285714
+Ciencias naturales,MOS,10.0,Indagación,4,42.857142857142854
+Ciencias naturales,TUN,5.0,Conocimiento científico,31,67.28110599078342
+Ciencias naturales,TUN,5.0,Explicación de fenómenos,31,59.13978494623656
+Ciencias naturales,TUN,5.0,Indagación,31,60.8294930875576
+Ciencias naturales,TUN,6.0,Conocimiento científico,32,65.10416666666667
+Ciencias naturales,TUN,6.0,Explicación de fenómenos,32,57.421875
+Ciencias naturales,TUN,6.0,Indagación,32,59.82142857142857
+Ciencias naturales,TUN,7.0,Conocimiento científico,22,65.9090909090909
+Ciencias naturales,TUN,7.0,Explicación de fenómenos,22,55.844155844155836
+Ciencias naturales,TUN,7.0,Indagación,22,74.02597402597402
+Ciencias naturales,TUN,8.0,Conocimiento científico,25,73.33333333333333
+Ciencias naturales,TUN,8.0,Explicación de fenómenos,25,67.5
+Ciencias naturales,TUN,8.0,Indagación,25,53.714285714285715
+Ciencias naturales,TUN,9.0,Conocimiento científico,14,52.04081632653061
+Ciencias naturales,TUN,9.0,Explicación de fenómenos,14,63.09523809523809
+Ciencias naturales,TUN,9.0,Indagación,14,75.51020408163265
+Ciencias naturales,TUN,10.0,Conocimiento científico,13,66.66666666666667
+Ciencias naturales,TUN,10.0,Explicación de fenómenos,13,65.93406593406593
+Ciencias naturales,TUN,10.0,Indagación,13,84.61538461538461
+Ciencias naturales,ZIPA,5.0,Conocimiento científico,67,58.84861407249467
+Ciencias naturales,ZIPA,5.0,Explicación de fenómenos,67,52.985074626865675
+Ciencias naturales,ZIPA,5.0,Indagación,67,54.79744136460554
+Ciencias naturales,ZIPA,6.0,Conocimiento científico,73,52.51141552511415
+Ciencias naturales,ZIPA,6.0,Explicación de fenómenos,73,50.17123287671233
+Ciencias naturales,ZIPA,6.0,Indagación,73,46.96673189823875
+Ciencias naturales,ZIPA,7.0,Conocimiento científico,65,71.7948717948718
+Ciencias naturales,ZIPA,7.0,Explicación de fenómenos,65,65.27472527472528
+Ciencias naturales,ZIPA,7.0,Indagación,65,67.9120879120879
+Ciencias naturales,ZIPA,8.0,Conocimiento científico,73,78.76712328767124
+Ciencias naturales,ZIPA,8.0,Explicación de fenómenos,73,76.71232876712328
+Ciencias naturales,ZIPA,8.0,Indagación,73,58.51272015655577
+Ciencias naturales,ZIPA,9.0,Conocimiento científico,48,66.96428571428571
+Ciencias naturales,ZIPA,9.0,Explicación de fenómenos,48,66.31944444444444
+Ciencias naturales,ZIPA,9.0,Indagación,48,74.70238095238095
+Ciencias naturales,ZIPA,10.0,Conocimiento científico,35,59.047619047619044
+Ciencias naturales,ZIPA,10.0,Explicación de fenómenos,35,71.0204081632653
+Ciencias naturales,ZIPA,10.0,Indagación,35,72.65306122448979
+Ciencias sociales,COT,5.0,Argumentación en contextos ciudadanos,38,45.61403508771929
+Ciencias sociales,COT,5.0,Conocimientos,38,57.89473684210526
+Ciencias sociales,COT,5.0,Multiperspectivismo,38,46.05263157894736
+Ciencias sociales,COT,5.0,pensamiento sistémico,38,45.78947368421053
+Ciencias sociales,COT,6.0,Argumentación en contextos ciudadanos,31,74.19354838709677
+Ciencias sociales,COT,6.0,Conocimientos,31,82.58064516129032
+Ciencias sociales,COT,6.0,Multiperspectivismo,31,69.35483870967742
+Ciencias sociales,COT,6.0,pensamiento sistémico,31,64.51612903225806
+Ciencias sociales,COT,7.0,Argumentación en contextos ciudadanos,35,77.85714285714286
+Ciencias sociales,COT,7.0,Conocimientos,35,67.61904761904762
+Ciencias sociales,COT,7.0,Multiperspectivismo,35,68.0
+Ciencias sociales,COT,7.0,pensamiento sistémico,35,81.71428571428571
+Ciencias sociales,COT,8.0,Argumentación en contextos ciudadanos,31,73.11827956989247
+Ciencias sociales,COT,8.0,Conocimientos,31,69.89247311827957
+Ciencias sociales,COT,8.0,Multiperspectivismo,31,65.80645161290323
+Ciencias sociales,COT,8.0,pensamiento sistémico,31,65.05376344086022
+Ciencias sociales,COT,9.0,Argumentación en contextos ciudadanos,35,64.76190476190476
+Ciencias sociales,COT,9.0,Conocimientos,35,61.42857142857143
+Ciencias sociales,COT,9.0,Multiperspectivismo,35,62.857142857142854
+Ciencias sociales,COT,9.0,pensamiento sistémico,35,76.57142857142857
+Ciencias sociales,COT,10.0,Interpretación y Análisis de Perspectivas,22,65.9090909090909
+Ciencias sociales,COT,10.0,Pensamiento Reflexivo y Sistémico,22,62.121212121212125
+Ciencias sociales,COT,10.0,Pensamiento Social,22,77.27272727272727
+Ciencias sociales,MOS,5.0,Argumentación en contextos ciudadanos,10,36.666666666666664
+Ciencias sociales,MOS,5.0,Conocimientos,10,36.666666666666664
+Ciencias sociales,MOS,5.0,Multiperspectivismo,10,31.666666666666664
+Ciencias sociales,MOS,5.0,pensamiento sistémico,10,26.0
+Ciencias sociales,MOS,6.0,Argumentación en contextos ciudadanos,30,56.666666666666664
+Ciencias sociales,MOS,6.0,Conocimientos,30,62.666666666666664
+Ciencias sociales,MOS,6.0,Multiperspectivismo,30,57.77777777777778
+Ciencias sociales,MOS,6.0,pensamiento sistémico,30,48.0
+Ciencias sociales,MOS,7.0,Argumentación en contextos ciudadanos,17,55.88235294117647
+Ciencias sociales,MOS,7.0,Conocimientos,18,48.148148148148145
+Ciencias sociales,MOS,7.0,Multiperspectivismo,18,52.22222222222222
+Ciencias sociales,MOS,7.0,pensamiento sistémico,17,51.76470588235294
+Ciencias sociales,MOS,8.0,Argumentación en contextos ciudadanos,20,66.66666666666666
+Ciencias sociales,MOS,8.0,Conocimientos,20,71.66666666666666
+Ciencias sociales,MOS,8.0,Multiperspectivismo,20,48.0
+Ciencias sociales,MOS,8.0,pensamiento sistémico,20,51.666666666666664
+Ciencias sociales,MOS,9.0,Argumentación en contextos ciudadanos,8,79.16666666666666
+Ciencias sociales,MOS,9.0,Conocimientos,9,62.96296296296296
+Ciencias sociales,MOS,9.0,Multiperspectivismo,8,70.83333333333333
+Ciencias sociales,MOS,9.0,pensamiento sistémico,8,75.0
+Ciencias sociales,MOS,10.0,Interpretación y Análisis de Perspectivas,4,65.625
+Ciencias sociales,MOS,10.0,Pensamiento Reflexivo y Sistémico,4,45.83333333333333
+Ciencias sociales,MOS,10.0,Pensamiento Social,4,70.83333333333334
+Ciencias sociales,TUN,5.0,Argumentación en contextos ciudadanos,31,47.31182795698924
+Ciencias sociales,TUN,5.0,Conocimientos,31,43.01075268817204
+Ciencias sociales,TUN,5.0,Multiperspectivismo,31,44.08602150537634
+Ciencias sociales,TUN,5.0,pensamiento sistémico,31,36.12903225806452
+Ciencias sociales,TUN,6.0,Argumentación en contextos ciudadanos,32,60.15625
+Ciencias sociales,TUN,6.0,Conocimientos,32,68.125
+Ciencias sociales,TUN,6.0,Multiperspectivismo,32,63.020833333333336
+Ciencias sociales,TUN,6.0,pensamiento sistémico,32,55.625
+Ciencias sociales,TUN,7.0,Argumentación en contextos ciudadanos,22,65.9090909090909
+Ciencias sociales,TUN,7.0,Conocimientos,22,57.57575757575757
+Ciencias sociales,TUN,7.0,Multiperspectivismo,22,53.63636363636363
+Ciencias sociales,TUN,7.0,pensamiento sistémico,22,71.81818181818181
+Ciencias sociales,TUN,8.0,Argumentación en contextos ciudadanos,25,61.33333333333333
+Ciencias sociales,TUN,8.0,Conocimientos,25,67.33333333333333
+Ciencias sociales,TUN,8.0,Multiperspectivismo,25,56.0
+Ciencias sociales,TUN,8.0,pensamiento sistémico,25,53.33333333333333
+Ciencias sociales,TUN,9.0,Argumentación en contextos ciudadanos,14,73.80952380952381
+Ciencias sociales,TUN,9.0,Conocimientos,14,71.42857142857143
+Ciencias sociales,TUN,9.0,Multiperspectivismo,14,73.80952380952382
+Ciencias sociales,TUN,9.0,pensamiento sistémico,14,78.57142857142857
+Ciencias sociales,TUN,10.0,Interpretación y Análisis de Perspectivas,13,78.84615384615384
+Ciencias sociales,TUN,10.0,Pensamiento Reflexivo y Sistémico,13,62.82051282051282
+Ciencias sociales,TUN,10.0,Pensamiento Social,13,85.8974358974359
+Ciencias sociales,ZIPA,5.0,Argumentación en contextos ciudadanos,68,45.09803921568627
+Ciencias sociales,ZIPA,5.0,Conocimientos,68,49.26470588235294
+Ciencias sociales,ZIPA,5.0,Multiperspectivismo,68,38.725490196078425
+Ciencias sociales,ZIPA,5.0,pensamiento sistémico,68,34.411764705882355
+Ciencias sociales,ZIPA,6.0,Argumentación en contextos ciudadanos,72,56.59722222222222
+Ciencias sociales,ZIPA,6.0,Conocimientos,72,56.111111111111114
+Ciencias sociales,ZIPA,6.0,Multiperspectivismo,72,55.78703703703704
+Ciencias sociales,ZIPA,6.0,pensamiento sistémico,72,50.0
+Ciencias sociales,ZIPA,7.0,Argumentación en contextos ciudadanos,65,78.84615384615384
+Ciencias sociales,ZIPA,7.0,Conocimientos,65,72.05128205128204
+Ciencias sociales,ZIPA,7.0,Multiperspectivismo,65,75.07692307692308
+Ciencias sociales,ZIPA,7.0,pensamiento sistémico,65,83.6923076923077
+Ciencias sociales,ZIPA,8.0,Argumentación en contextos ciudadanos,71,77.46478873239437
+Ciencias sociales,ZIPA,8.0,Conocimientos,71,82.15962441314554
+Ciencias sociales,ZIPA,8.0,Multiperspectivismo,71,72.3943661971831
+Ciencias sociales,ZIPA,8.0,pensamiento sistémico,71,77.2300469483568
+Ciencias sociales,ZIPA,9.0,Argumentación en contextos ciudadanos,48,82.63888888888889
+Ciencias sociales,ZIPA,9.0,Conocimientos,48,81.59722222222221
+Ciencias sociales,ZIPA,9.0,Multiperspectivismo,48,85.7638888888889
+Ciencias sociales,ZIPA,9.0,pensamiento sistémico,48,90.83333333333333
+Ciencias sociales,ZIPA,10.0,Interpretación y Análisis de Perspectivas,36,70.13888888888889
+Ciencias sociales,ZIPA,10.0,Pensamiento Reflexivo y Sistémico,36,64.35185185185185
+Ciencias sociales,ZIPA,10.0,Pensamiento Social,36,75.92592592592592
+Inglés,COT,9.0,A1,32,75.0
+Inglés,COT,9.0,A2,32,62.98076923076923
+Inglés,COT,9.0,Pre A1,32,84.375
+Inglés,COT,10.0,A1,21,79.36507936507937
+Inglés,COT,10.0,A2,21,76.55677655677655
+Inglés,COT,10.0,B1,21,95.23809523809524
+Inglés,COT,10.0,Pre A1,21,75.0
+Inglés,MOS,9.0,A1,9,77.77777777777777
+Inglés,MOS,9.0,A2,9,59.82905982905983
+Inglés,MOS,9.0,Pre A1,9,82.22222222222223
+Inglés,MOS,10.0,A1,3,66.66666666666667
+Inglés,MOS,10.0,A2,3,56.41025641025641
+Inglés,MOS,10.0,B1,3,100.0
+Inglés,MOS,10.0,Pre A1,3,66.66666666666667
+Inglés,TUN,9.0,A1,14,75.0
+Inglés,TUN,9.0,A2,14,65.93406593406594
+Inglés,TUN,9.0,Pre A1,14,90.0
+Inglés,TUN,10.0,A1,13,72.64957264957265
+Inglés,TUN,10.0,A2,13,67.45562130177515
+Inglés,TUN,10.0,B1,13,84.61538461538461
+Inglés,TUN,10.0,Pre A1,13,63.46153846153846
+Inglés,ZIPA,9.0,A1,47,77.12765957446808
+Inglés,ZIPA,9.0,A2,47,69.72176759410803
+Inglés,ZIPA,9.0,Pre A1,47,87.65957446808511
+Inglés,ZIPA,10.0,A1,36,76.85185185185185
+Inglés,ZIPA,10.0,A2,36,72.00854700854701
+Inglés,ZIPA,10.0,B1,36,88.88888888888889
+Inglés,ZIPA,10.0,Pre A1,36,77.08333333333333
+Lenguaje,COT,3.0,Comprensión lectora,25,50.0
+Lenguaje,COT,4.0,Comprensión lectora,28,50.714285714285715
+Lenguaje,COT,5.0,Comprensión lectora,37,55.13513513513514
+Lenguaje,COT,6.0,Comprensión lectora,32,64.375
+Lenguaje,COT,7.0,Comprensión lectora,35,63.857142857142854
+Lenguaje,COT,8.0,Comprensión lectora,31,60.645161290322584
+Lenguaje,COT,9.0,Comprensión lectora,36,67.63888888888889
+Lenguaje,COT,10.0,Comprensión lectora,22,52.72727272727273
+Lenguaje,MOS,3.0,Comprensión lectora,21,34.523809523809526
+Lenguaje,MOS,4.0,Comprensión lectora,17,51.1764705882353
+Lenguaje,MOS,5.0,Comprensión lectora,16,40.3125
+Lenguaje,MOS,6.0,Comprensión lectora,29,55.0
+Lenguaje,MOS,7.0,Comprensión lectora,21,57.857142857142854
+Lenguaje,MOS,8.0,Comprensión lectora,20,61.75
+Lenguaje,MOS,9.0,Comprensión lectora,9,59.44444444444444
+Lenguaje,MOS,10.0,Comprensión lectora,4,32.5
+Lenguaje,TUN,3.0,Comprensión lectora,11,41.36363636363637
+Lenguaje,TUN,4.0,Comprensión lectora,12,47.5
+Lenguaje,TUN,5.0,Comprensión lectora,31,51.29032258064516
+Lenguaje,TUN,6.0,Comprensión lectora,33,59.54545454545455
+Lenguaje,TUN,7.0,Comprensión lectora,23,58.47826086956522
+Lenguaje,TUN,8.0,Comprensión lectora,24,63.958333333333336
+Lenguaje,TUN,9.0,Comprensión lectora,14,68.21428571428571
+Lenguaje,TUN,10.0,Comprensión lectora,14,47.857142857142854
+Lenguaje,ZIPA,3.0,Comprensión lectora,54,45.18518518518518
+Lenguaje,ZIPA,4.0,Comprensión lectora,53,53.0188679245283
+Lenguaje,ZIPA,5.0,Comprensión lectora,68,51.61764705882353
+Lenguaje,ZIPA,6.0,Comprensión lectora,74,55.67567567567568
+Lenguaje,ZIPA,7.0,Comprensión lectora,65,66.61538461538461
+Lenguaje,ZIPA,8.0,Comprensión lectora,73,64.65753424657534
+Lenguaje,ZIPA,9.0,Comprensión lectora,50,66.4
+Lenguaje,ZIPA,10.0,Comprensión lectora,34,54.705882352941174
+Matemáticas,COT,3.0,Comunicación,25,63.0
+Matemáticas,COT,3.0,Razonamiento,25,50.0
+Matemáticas,COT,3.0,Resolución de problemas,25,52.4
+Matemáticas,COT,4.0,Comunicación,28,54.76190476190476
+Matemáticas,COT,4.0,Razonamiento,28,57.142857142857146
+Matemáticas,COT,4.0,Resolución de problemas,28,48.214285714285715
+Matemáticas,COT,5.0,Comunicación,37,39.189189189189186
+Matemáticas,COT,5.0,Razonamiento,37,66.36636636636636
+Matemáticas,COT,5.0,Resolución de problemas,37,44.4015444015444
+Matemáticas,COT,6.0,Comunicación,32,57.291666666666664
+Matemáticas,COT,6.0,Razonamiento,32,69.79166666666667
+Matemáticas,COT,6.0,Resolución de problemas,32,57.421875
+Matemáticas,COT,7.0,Comunicación,35,67.3469387755102
+Matemáticas,COT,7.0,Razonamiento,35,56.666666666666664
+Matemáticas,COT,7.0,Resolución de problemas,35,56.326530612244895
+Matemáticas,COT,8.0,Comunicación,31,51.61290322580645
+Matemáticas,COT,8.0,Razonamiento,31,65.59139784946237
+Matemáticas,COT,8.0,Resolución de problemas,31,55.24193548387097
+Matemáticas,COT,9.0,Comunicación,36,66.2037037037037
+Matemáticas,COT,9.0,Razonamiento,36,65.74074074074073
+Matemáticas,COT,9.0,Resolución de problemas,36,76.73611111111111
+Matemáticas,COT,10.0,Argumentación,22,36.36363636363637
+Matemáticas,COT,10.0,Formulación y ejecución,22,41.47727272727273
+Matemáticas,COT,10.0,Interpretación y representación,22,45.454545454545446
+Matemáticas,MOS,3.0,Comunicación,22,59.09090909090909
+Matemáticas,MOS,3.0,Razonamiento,22,47.72727272727273
+Matemáticas,MOS,3.0,Resolución de problemas,22,52.72727272727273
+Matemáticas,MOS,4.0,Comunicación,17,55.88235294117647
+Matemáticas,MOS,4.0,Razonamiento,17,48.03921568627451
+Matemáticas,MOS,4.0,Resolución de problemas,17,39.705882352941174
+Matemáticas,MOS,5.0,Comunicación,16,34.375
+Matemáticas,MOS,5.0,Razonamiento,17,54.90196078431372
+Matemáticas,MOS,5.0,Resolución de problemas,17,36.134453781512605
+Matemáticas,MOS,6.0,Comunicación,31,61.827956989247305
+Matemáticas,MOS,6.0,Razonamiento,31,74.19354838709677
+Matemáticas,MOS,6.0,Resolución de problemas,31,52.82258064516129
+Matemáticas,MOS,7.0,Comunicación,27,62.96296296296296
+Matemáticas,MOS,7.0,Razonamiento,27,53.08641975308642
+Matemáticas,MOS,7.0,Resolución de problemas,27,51.851851851851855
+Matemáticas,MOS,8.0,Comunicación,20,50.83333333333333
+Matemáticas,MOS,8.0,Razonamiento,20,71.66666666666666
+Matemáticas,MOS,8.0,Resolución de problemas,20,53.125
+Matemáticas,MOS,9.0,Comunicación,10,60.0
+Matemáticas,MOS,9.0,Razonamiento,10,53.33333333333333
+Matemáticas,MOS,9.0,Resolución de problemas,10,63.75
+Matemáticas,MOS,10.0,Argumentación,4,65.0
+Matemáticas,MOS,10.0,Formulación y ejecución,4,31.25
+Matemáticas,MOS,10.0,Interpretación y representación,4,46.42857142857143
+Matemáticas,TUN,3.0,Comunicación,11,47.72727272727273
+Matemáticas,TUN,3.0,Razonamiento,11,46.96969696969697
+Matemáticas,TUN,3.0,Resolución de problemas,11,49.09090909090909
+Matemáticas,TUN,4.0,Comunicación,13,48.717948717948715
+Matemáticas,TUN,4.0,Razonamiento,13,56.4102564102564
+Matemáticas,TUN,4.0,Resolución de problemas,13,38.46153846153846
+Matemáticas,TUN,5.0,Comunicación,31,50.806451612903224
+Matemáticas,TUN,5.0,Razonamiento,31,66.30824372759857
+Matemáticas,TUN,5.0,Resolución de problemas,31,43.31797235023041
+Matemáticas,TUN,6.0,Comunicación,33,53.53535353535353
+Matemáticas,TUN,6.0,Razonamiento,33,75.75757575757575
+Matemáticas,TUN,6.0,Resolución de problemas,33,54.92424242424242
+Matemáticas,TUN,7.0,Comunicación,23,68.94409937888199
+Matemáticas,TUN,7.0,Razonamiento,23,55.79710144927536
+Matemáticas,TUN,7.0,Resolución de problemas,23,62.732919254658384
+Matemáticas,TUN,8.0,Comunicación,24,62.5
+Matemáticas,TUN,8.0,Razonamiento,24,70.83333333333333
+Matemáticas,TUN,8.0,Resolución de problemas,24,61.458333333333336
+Matemáticas,TUN,9.0,Comunicación,14,63.09523809523809
+Matemáticas,TUN,9.0,Razonamiento,14,73.80952380952381
+Matemáticas,TUN,9.0,Resolución de problemas,14,76.78571428571429
+Matemáticas,TUN,10.0,Argumentación,14,57.142857142857146
+Matemáticas,TUN,10.0,Formulación y ejecución,14,42.857142857142854
+Matemáticas,TUN,10.0,Interpretación y representación,14,47.95918367346939
+Matemáticas,ZIPA,3.0,Comunicación,54,59.25925925925926
+Matemáticas,ZIPA,3.0,Razonamiento,54,43.51851851851852
+Matemáticas,ZIPA,3.0,Resolución de problemas,54,52.407407407407405
+Matemáticas,ZIPA,4.0,Comunicación,52,49.35897435897436
+Matemáticas,ZIPA,4.0,Razonamiento,52,52.56410256410257
+Matemáticas,ZIPA,4.0,Resolución de problemas,52,44.71153846153846
+Matemáticas,ZIPA,5.0,Comunicación,68,43.75
+Matemáticas,ZIPA,5.0,Razonamiento,68,65.359477124183
+Matemáticas,ZIPA,5.0,Resolución de problemas,68,43.27731092436974
+Matemáticas,ZIPA,6.0,Comunicación,72,51.388888888888886
+Matemáticas,ZIPA,6.0,Razonamiento,72,65.27777777777777
+Matemáticas,ZIPA,6.0,Resolución de problemas,72,46.354166666666664
+Matemáticas,ZIPA,7.0,Comunicación,65,69.45054945054945
+Matemáticas,ZIPA,7.0,Razonamiento,65,58.2051282051282
+Matemáticas,ZIPA,7.0,Resolución de problemas,65,61.31868131868132
+Matemáticas,ZIPA,8.0,Comunicación,71,55.39906103286385
+Matemáticas,ZIPA,8.0,Razonamiento,71,71.83098591549296
+Matemáticas,ZIPA,8.0,Resolución de problemas,71,69.19014084507042
+Matemáticas,ZIPA,9.0,Comunicación,50,66.33333333333333
+Matemáticas,ZIPA,9.0,Razonamiento,50,68.0
+Matemáticas,ZIPA,9.0,Resolución de problemas,50,77.0
+Matemáticas,ZIPA,10.0,Argumentación,36,53.333333333333336
+Matemáticas,ZIPA,10.0,Formulación y ejecución,36,42.708333333333336
+Matemáticas,ZIPA,10.0,Interpretación y representación,36,50.79365079365079
