@@ -90,9 +90,201 @@ uploaded = st.file_uploader(
 )
 
 if uploaded is None:
-    st.info(
-        "Carga el Excel para activar el dashboard. El repositorio no necesita guardar "
-        "datos personales: el archivo se procesa durante la sesión."
+    default_path = Path("data/default_summary.csv")
+    if not default_path.exists():
+        st.info("Carga el Excel para activar el dashboard.")
+        st.stop()
+
+    summary_data = pd.read_csv(default_path)
+    st.success(
+        "Mostrando la base precargada anonimizada. "
+        "Puedes cargar el Excel completo arriba para habilitar el análisis individual."
+    )
+
+    st.sidebar.header("Filtros")
+    sedes = st.sidebar.multiselect(
+        "Sede",
+        sorted(summary_data["Sede"].dropna().astype(str).unique()),
+    )
+    grados = st.sidebar.multiselect(
+        "Grado",
+        sorted(summary_data["Grado"].dropna().astype(str).unique()),
+    )
+    areas = st.sidebar.multiselect(
+        "Área",
+        sorted(summary_data["Area"].dropna().astype(str).unique()),
+    )
+
+    default_filtered = summary_data.copy()
+    if sedes:
+        default_filtered = default_filtered[default_filtered["Sede"].astype(str).isin(sedes)]
+    if grados:
+        default_filtered = default_filtered[default_filtered["Grado"].astype(str).isin(grados)]
+    if areas:
+        default_filtered = default_filtered[default_filtered["Area"].astype(str).isin(areas)]
+
+    if default_filtered.empty:
+        st.warning("Los filtros seleccionados no dejan registros para analizar.")
+        st.stop()
+
+    total_intentos = default_filtered["Intentos"].sum()
+    weighted_avg = (
+        (default_filtered["Promedio"] * default_filtered["Intentos"]).sum()
+        / total_intentos
+    )
+    weighted_coverage = (
+        (default_filtered["Cobertura"] * default_filtered["Intentos"]).sum()
+        / total_intentos
+    )
+    support_pct = (
+        (
+            (default_filtered["Progreso_limitado"] + default_filtered["Emergente"])
+            * default_filtered["Intentos"]
+        ).sum()
+        / total_intentos
+    )
+    sedes_n = default_filtered["Sede"].nunique()
+    grados_n = default_filtered["Grado"].nunique()
+
+    k1, k2, k3, k4, k5 = st.columns(5)
+    k1.metric("Intentos", f"{int(total_intentos):,}".replace(",", "."))
+    k2.metric("Promedio", f"{weighted_avg:.1f}%")
+    k3.metric("En ≤50%", f"{support_pct:.1f}%")
+    k4.metric("Cobertura", f"{weighted_coverage:.1f}%")
+    k5.metric("Sedes / grados", f"{sedes_n} / {grados_n}")
+
+    t1, t2, t3 = st.tabs(["Panorama", "Sedes y grados", "Áreas"])
+
+    with t1:
+        level_totals = pd.DataFrame({
+            "Nivel": LEVEL_ORDER,
+            "Porcentaje": [
+                (default_filtered["Progreso_limitado"] * default_filtered["Intentos"]).sum() / total_intentos,
+                (default_filtered["Emergente"] * default_filtered["Intentos"]).sum() / total_intentos,
+                (default_filtered["En_aceleracion"] * default_filtered["Intentos"]).sum() / total_intentos,
+                (default_filtered["Avanzado"] * default_filtered["Intentos"]).sum() / total_intentos,
+            ],
+        })
+        fig = px.bar(
+            level_totals,
+            x="Nivel",
+            y="Porcentaje",
+            color="Nivel",
+            category_orders={"Nivel": LEVEL_ORDER},
+            color_discrete_map=LEVEL_COLORS,
+            text=level_totals["Porcentaje"].map(lambda x: f"{x:.1f}%"),
+            title="Distribución global de niveles de desempeño",
+        )
+        fig.update_layout(showlegend=False, xaxis_title=None)
+        fig.update_yaxes(range=[0, 100], title="% de intentos")
+        st.plotly_chart(fig, use_container_width=True)
+
+        heat = default_filtered.copy()
+        heat["Requiere_apoyo"] = heat["Progreso_limitado"] + heat["Emergente"]
+        heat["Grado_etiqueta"] = heat["Grado_num"].astype(int).astype(str) + "°"
+        heat = (
+            heat.groupby(["Sede", "Grado_etiqueta"], as_index=False)
+            .apply(
+                lambda g: pd.Series({
+                    "Requiere_apoyo": (
+                        (g["Requiere_apoyo"] * g["Intentos"]).sum()
+                        / g["Intentos"].sum()
+                    )
+                }),
+                include_groups=False,
+            )
+        )
+        pivot = heat.pivot(
+            index="Sede",
+            columns="Grado_etiqueta",
+            values="Requiere_apoyo",
+        )
+        cols = sorted(pivot.columns, key=lambda x: int(str(x).replace("°", "")))
+        pivot = pivot[cols]
+        fig = px.imshow(
+            pivot,
+            text_auto=".0f",
+            aspect="auto",
+            zmin=0,
+            zmax=100,
+            labels={
+                "x": "Grado",
+                "y": "Sede",
+                "color": "% en Progreso limitado + Emergente",
+            },
+            title="Mapa de concentración de retos",
+        )
+        st.plotly_chart(fig, use_container_width=True)
+
+    with t2:
+        challenge = default_filtered.copy()
+        challenge["Requiere_apoyo"] = challenge["Progreso_limitado"] + challenge["Emergente"]
+        by_site = (
+            challenge.groupby("Sede", as_index=False)
+            .apply(
+                lambda g: pd.Series({
+                    "Intentos": g["Intentos"].sum(),
+                    "Promedio": (g["Promedio"] * g["Intentos"]).sum() / g["Intentos"].sum(),
+                    "Requiere_apoyo": (g["Requiere_apoyo"] * g["Intentos"]).sum() / g["Intentos"].sum(),
+                }),
+                include_groups=False,
+            )
+            .sort_values("Requiere_apoyo", ascending=False)
+        )
+        fig = px.bar(
+            by_site,
+            x="Sede",
+            y="Requiere_apoyo",
+            text=by_site["Requiere_apoyo"].map(lambda x: f"{x:.1f}%"),
+            title="Concentración de retos por sede",
+            labels={"Requiere_apoyo": "% en ≤50"},
+        )
+        fig.update_yaxes(range=[0, 100])
+        st.plotly_chart(fig, use_container_width=True)
+
+        st.dataframe(
+            default_filtered.sort_values(
+                ["Progreso_limitado", "Emergente"],
+                ascending=False,
+            ),
+            use_container_width=True,
+            hide_index=True,
+        )
+
+    with t3:
+        by_area = (
+            default_filtered.groupby("Area", as_index=False)
+            .apply(
+                lambda g: pd.Series({
+                    "Intentos": g["Intentos"].sum(),
+                    "Promedio": (g["Promedio"] * g["Intentos"]).sum() / g["Intentos"].sum(),
+                    "Cobertura": (g["Cobertura"] * g["Intentos"]).sum() / g["Intentos"].sum(),
+                    "Requiere_apoyo": (
+                        ((g["Progreso_limitado"] + g["Emergente"]) * g["Intentos"]).sum()
+                        / g["Intentos"].sum()
+                    ),
+                }),
+                include_groups=False,
+            )
+            .sort_values("Promedio")
+        )
+        fig = px.bar(
+            by_area,
+            x="Promedio",
+            y="Area",
+            orientation="h",
+            text=by_area["Promedio"].map(lambda x: f"{x:.1f}%"),
+            title="Desempeño promedio por área",
+            labels={"Area": "Área", "Promedio": "% de acierto"},
+        )
+        fig.update_xaxes(range=[0, 100])
+        st.plotly_chart(fig, use_container_width=True)
+
+        st.dataframe(by_area, use_container_width=True, hide_index=True)
+
+    st.caption(
+        "La vista precargada usa información agregada y anonimizada. "
+        "El archivo original con identificaciones personales no se publica en este repositorio."
     )
     st.stop()
 
