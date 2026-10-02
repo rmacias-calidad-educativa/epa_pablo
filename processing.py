@@ -254,6 +254,115 @@ def build_attempt_table(raw: pd.DataFrame) -> pd.DataFrame:
     return attempts
 
 
+
+def build_dimension_table(raw: pd.DataFrame) -> pd.DataFrame:
+    """Construye resultados por dimensión/competencia a nivel de estudiante e intento.
+
+    El denominador esperado de cada dimensión se estima como el máximo número de
+    ítems observados para esa dimensión dentro de la misma prueba original.
+    Esto evita inflar el porcentaje cuando una respuesta faltante no aparece
+    como fila en la exportación.
+    """
+    missing = validate_columns(raw)
+    if missing:
+        raise ValueError(
+            "Faltan columnas requeridas: " + ", ".join(missing)
+        )
+    if "competencia" not in raw.columns:
+        return pd.DataFrame()
+
+    df = raw.copy()
+    df["QuizName_original"] = df["QuizName"]
+    df["Grado_num"] = df["Grado"].apply(grade_number)
+    df["Prueba"] = df["QuizName_original"].apply(normalize_area)
+    df["EsCorrecta"] = _as_bool(df["IsCorrect"])
+    df["Dimension"] = (
+        df["competencia"]
+        .astype("string")
+        .str.strip()
+    )
+
+    if "TimeCompleted" in df.columns:
+        df["TimeCompleted"] = pd.to_datetime(
+            df["TimeCompleted"], errors="coerce"
+        )
+        df["Año"] = df["TimeCompleted"].dt.year.astype("Int64")
+    else:
+        df["Año"] = pd.Series(pd.NA, index=df.index, dtype="Int64")
+
+    item_level = (
+        df.groupby(
+            [
+                "AttemptId",
+                "IdentiEstudiante",
+                "QuizName_original",
+                "Pregunta",
+                "Dimension",
+            ],
+            dropna=False,
+            as_index=False,
+        )
+        .agg(
+            EsCorrecta=("EsCorrecta", "max"),
+            Sede=("Sede", "first"),
+            Grado_num=("Grado_num", "first"),
+            Prueba=("Prueba", "first"),
+            Año=("Año", "first"),
+        )
+    )
+
+    dimension_attempt = (
+        item_level.groupby(
+            [
+                "AttemptId",
+                "IdentiEstudiante",
+                "QuizName_original",
+                "Dimension",
+            ],
+            dropna=False,
+            as_index=False,
+        )
+        .agg(
+            Sede=("Sede", "first"),
+            Grado_num=("Grado_num", "first"),
+            Prueba=("Prueba", "first"),
+            Año=("Año", "first"),
+            Aciertos_dimension=("EsCorrecta", "sum"),
+            Items_observados_dimension=("Pregunta", "nunique"),
+        )
+    )
+
+    expected = (
+        dimension_attempt.groupby(
+            ["QuizName_original", "Dimension"],
+            dropna=False,
+            as_index=False,
+        )["Items_observados_dimension"]
+        .max()
+        .rename(
+            columns={
+                "Items_observados_dimension": "Items_esperados_dimension"
+            }
+        )
+    )
+
+    dimension_attempt = dimension_attempt.merge(
+        expected,
+        on=["QuizName_original", "Dimension"],
+        how="left",
+    )
+    dimension_attempt["Porcentaje_dimension"] = (
+        dimension_attempt["Aciertos_dimension"]
+        / dimension_attempt["Items_esperados_dimension"]
+        * 100
+    ).clip(lower=0, upper=100)
+    dimension_attempt["Nivel_dimension"] = (
+        dimension_attempt["Porcentaje_dimension"].apply(performance_level)
+    )
+
+    return dimension_attempt
+
+
 def aggregate_group(df: pd.DataFrame, group_cols: list[str]) -> pd.DataFrame:
     if not group_cols:
         return pd.DataFrame()
