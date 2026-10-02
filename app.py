@@ -938,219 +938,115 @@ def render_top10_origin_by_level(
     st.divider()
     st.subheader("Colegios de origen por nivel de desempeño")
     st.caption(
-        "Filtra por grado y por colegio de origen dentro de la prueba actual. "
-        "La distribución usa estudiantes únicos."
+        "Filtra por sede de llegada y por grado dentro de la prueba actual. "
+        "Luego se muestran los colegios de origen con mayor número de estudiantes "
+        "en cada nivel de desempeño."
     )
 
     if aggregated:
         if top10_public is None or top10_public.empty:
             st.info(
-                "No hay un resumen público de colegios de origen disponible."
+                "La versión precargada todavía no contiene el detalle de sede "
+                "necesario para este filtro. Carga el Excel completo para filtrar "
+                "por sede y grado."
             )
             return
 
-        base = top10_public[
-            top10_public["Prueba"].astype(str) == test_name
-        ].copy()
+        st.info(
+            "Para filtrar por sede de llegada y grado se requiere el Excel completo, "
+            "porque el resumen público actual está agregado por grado y colegio de origen."
+        )
+        return
 
-        if base.empty:
-            st.info("No hay información de colegios de origen para esta prueba.")
-            return
+    if (
+        "colegio_de_origen" not in data.columns
+        or data["colegio_de_origen"].dropna().empty
+    ):
+        st.info("No hay información de colegio de origen en los filtros actuales.")
+        return
 
-        grade_options = sorted(
-            [int(g) for g in base["Grado_num"].dropna().unique()]
+    student = build_student_level(data)
+    student = student[
+        student["colegio_de_origen"].notna()
+        & (student["colegio_de_origen"].astype(str).str.strip() != "")
+    ].copy()
+
+    if student.empty:
+        st.info("No hay información de colegio de origen en los filtros actuales.")
+        return
+
+    available_sites = [
+        site for site in SITES
+        if site in student["Sede"].dropna().astype(str).unique()
+    ]
+    grade_options = sorted(
+        [int(g) for g in student["Grado_num"].dropna().unique()]
+    )
+
+    c1, c2 = st.columns([1, 1.2])
+
+    with c1:
+        selected_origin_sites = st.multiselect(
+            "Sede",
+            available_sites,
+            default=available_sites,
+            key=f"origin_sites_{test_name}",
+            help="Sede de llegada del estudiante.",
         )
 
-        c1, c2 = st.columns([1, 2])
-        with c1:
-            selected_origin_grades = st.multiselect(
-                "Grado",
-                grade_options,
-                default=grade_options,
-                format_func=lambda g: f"{g}°",
-                key=f"origin_grades_{test_name}",
-            )
+    filtered_students = student.copy()
 
-        filtered = base.copy()
-        if selected_origin_grades:
-            filtered = filtered[
-                filtered["Grado_num"].isin(selected_origin_grades)
-            ]
+    if selected_origin_sites:
+        filtered_students = filtered_students[
+            filtered_students["Sede"].astype(str).isin(selected_origin_sites)
+        ]
 
-        school_options = sorted(
-            filtered["colegio_de_origen"]
-            .dropna()
-            .astype(str)
-            .unique()
+    grade_options_filtered = sorted(
+        [int(g) for g in filtered_students["Grado_num"].dropna().unique()]
+    )
+
+    with c2:
+        selected_origin_grades = st.multiselect(
+            "Grado",
+            grade_options_filtered,
+            default=grade_options_filtered,
+            format_func=lambda g: f"{g}°",
+            key=f"origin_grades_{test_name}",
         )
 
-        with c2:
-            selected_schools = st.multiselect(
-                "Colegio de origen",
-                school_options,
-                placeholder="Todos los colegios",
-                key=f"origin_schools_{test_name}",
-            )
+    if selected_origin_grades:
+        filtered_students = filtered_students[
+            filtered_students["Grado_num"].isin(selected_origin_grades)
+        ]
 
-        if selected_schools:
-            filtered = filtered[
-                filtered["colegio_de_origen"].isin(selected_schools)
-            ]
+    if filtered_students.empty:
+        st.warning("Los filtros de sede y grado no dejan estudiantes para analizar.")
+        return
 
-        if filtered.empty:
-            st.warning("Los filtros seleccionados no dejan colegios para analizar.")
-            return
+    # Resumen de la selección.
+    total_students = filtered_students["IdentiEstudiante"].nunique()
+    total_origin_schools = filtered_students["colegio_de_origen"].nunique()
 
-        ranking = (
-            filtered.groupby(
-                ["Nivel", "colegio_de_origen"],
-                as_index=False,
-            )["Estudiantes"]
-            .sum()
+    m1, m2 = st.columns(2)
+    m1.metric(
+        "Estudiantes en la selección",
+        f"{total_students:,}".replace(",", "."),
+    )
+    m2.metric(
+        "Colegios de origen representados",
+        f"{total_origin_schools:,}".replace(",", "."),
+    )
+
+    ranking = (
+        filtered_students.groupby(
+            ["Nivel", "colegio_de_origen"],
+            as_index=False,
         )
+        .agg(Estudiantes=("IdentiEstudiante", "nunique"))
+    )
 
-        st.caption(
-            "En la versión precargada, el filtro se construye con los colegios "
-            "que aparecen entre los 10 de mayor frecuencia dentro de cada grado y nivel."
-        )
+    st.markdown("#### Top 10 colegios de origen con mayor número de estudiantes en cada nivel")
 
-    else:
-        if (
-            "colegio_de_origen" not in data.columns
-            or data["colegio_de_origen"].dropna().empty
-        ):
-            st.info("No hay información de colegio de origen en los filtros actuales.")
-            return
-
-        student = build_student_level(data)
-        student = student[
-            student["colegio_de_origen"].notna()
-            & (student["colegio_de_origen"].astype(str).str.strip() != "")
-        ].copy()
-
-        if student.empty:
-            st.info("No hay información de colegio de origen en los filtros actuales.")
-            return
-
-        grade_options = sorted(
-            [int(g) for g in student["Grado_num"].dropna().unique()]
-        )
-
-        c1, c2 = st.columns([1, 2])
-        with c1:
-            selected_origin_grades = st.multiselect(
-                "Grado",
-                grade_options,
-                default=grade_options,
-                format_func=lambda g: f"{g}°",
-                key=f"origin_grades_{test_name}",
-            )
-
-        filtered_students = student.copy()
-        if selected_origin_grades:
-            filtered_students = filtered_students[
-                filtered_students["Grado_num"].isin(selected_origin_grades)
-            ]
-
-        school_options = sorted(
-            filtered_students["colegio_de_origen"]
-            .dropna()
-            .astype(str)
-            .unique()
-        )
-
-        with c2:
-            selected_schools = st.multiselect(
-                "Colegio de origen",
-                school_options,
-                placeholder="Todos los colegios",
-                key=f"origin_schools_{test_name}",
-            )
-
-        if selected_schools:
-            filtered_students = filtered_students[
-                filtered_students["colegio_de_origen"].isin(selected_schools)
-            ]
-
-        if filtered_students.empty:
-            st.warning("Los filtros seleccionados no dejan colegios para analizar.")
-            return
-
-        ranking = (
-            filtered_students.groupby(
-                ["Nivel", "colegio_de_origen"],
-                as_index=False,
-            )
-            .agg(Estudiantes=("IdentiEstudiante", "nunique"))
-        )
-
-    # Distribución de los colegios seleccionados entre los cuatro niveles.
-    if selected_schools:
-        selected_distribution = ranking[
-            ranking["colegio_de_origen"].isin(selected_schools)
-        ].copy()
-
-        if not selected_distribution.empty:
-            totals = (
-                selected_distribution.groupby("colegio_de_origen")["Estudiantes"]
-                .transform("sum")
-            )
-            selected_distribution["Porcentaje"] = np.where(
-                totals > 0,
-                selected_distribution["Estudiantes"] / totals * 100,
-                0,
-            )
-            selected_distribution["Etiqueta"] = (
-                selected_distribution["Porcentaje"]
-                .map(lambda x: f"{x:.0f}%" if x >= 5 else "")
-            )
-
-            st.markdown("#### Distribución de los colegios seleccionados")
-            fig = px.bar(
-                selected_distribution,
-                x="Porcentaje",
-                y="colegio_de_origen",
-                color="Nivel",
-                orientation="h",
-                barmode="stack",
-                category_orders={"Nivel": LEVEL_ORDER},
-                color_discrete_map=LEVEL_COLORS,
-                text="Etiqueta",
-                hover_data={
-                    "Estudiantes": True,
-                    "Porcentaje": ":.1f",
-                    "Etiqueta": False,
-                },
-                labels={
-                    "Porcentaje": "",
-                    "colegio_de_origen": "",
-                    "Nivel": "Nivel",
-                },
-            )
-            fig.update_xaxes(
-                range=[0, 100],
-                showticklabels=False,
-                showgrid=False,
-                ticks="",
-                title=None,
-            )
-            fig.update_yaxes(
-                showgrid=False,
-                ticks="",
-                title=None,
-            )
-            fig.update_layout(
-                height=max(280, 58 * len(selected_schools) + 120),
-                plot_bgcolor="rgba(0,0,0,0)",
-                margin=dict(l=10, r=20, t=30, b=10),
-                legend_title_text="Nivel",
-            )
-            fig.update_traces(textposition="inside")
-            st.plotly_chart(fig, use_container_width=True)
-
-    st.markdown("#### Top 10 colegios con mayor número de estudiantes en cada nivel")
-
-    # Recalcular el ranking después de aplicar los filtros locales.
     ranking = ranking.sort_values(
         ["Nivel", "Estudiantes", "colegio_de_origen"],
         ascending=[True, False, True],
@@ -1169,6 +1065,7 @@ def render_top10_origin_by_level(
 
     for left_level, right_level in rows:
         c1, c2 = st.columns(2)
+
         for col, level in [(c1, left_level), (c2, right_level)]:
             with col:
                 d = ranking[
