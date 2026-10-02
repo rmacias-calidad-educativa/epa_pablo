@@ -1,0 +1,196 @@
+Prueba,Sede,Grado_num,Nivel,Estudiantes
+Ciencias naturales,MOS,5,Nivel 1,2
+Ciencias naturales,MOS,5,Nivel 2,6
+Ciencias naturales,MOS,5,Nivel 3,6
+Ciencias naturales,MOS,6,Nivel 1,2
+Ciencias naturales,MOS,6,Nivel 2,14
+Ciencias naturales,MOS,6,Nivel 3,11
+Ciencias naturales,MOS,6,Nivel 4,4
+Ciencias naturales,MOS,7,Nivel 1,2
+Ciencias naturales,MOS,7,Nivel 2,7
+Ciencias naturales,MOS,7,Nivel 3,14
+Ciencias naturales,MOS,8,Nivel 1,1
+Ciencias naturales,MOS,8,Nivel 2,5
+Ciencias naturales,MOS,8,Nivel 3,10
+Ciencias naturales,MOS,8,Nivel 4,4
+Ciencias naturales,MOS,9,Nivel 2,6
+Ciencias naturales,MOS,9,Nivel 3,4
+Ciencias naturales,MOS,10,Nivel 2,2
+Ciencias naturales,MOS,10,Nivel 3,2
+Ciencias naturales,TUN,5,Nivel 2,7
+Ciencias naturales,TUN,5,Nivel 3,21
+Ciencias naturales,TUN,5,Nivel 4,3
+Ciencias naturales,TUN,6,Nivel 1,2
+Ciencias naturales,TUN,6,Nivel 2,8
+Ciencias naturales,TUN,6,Nivel 3,18
+Ciencias naturales,TUN,6,Nivel 4,4
+Ciencias naturales,TUN,7,Nivel 2,6
+Ciencias naturales,TUN,7,Nivel 3,10
+Ciencias naturales,TUN,7,Nivel 4,6
+Ciencias naturales,TUN,8,Nivel 2,7
+Ciencias naturales,TUN,8,Nivel 3,11
+Ciencias naturales,TUN,8,Nivel 4,7
+Ciencias naturales,TUN,9,Nivel 2,1
+Ciencias naturales,TUN,9,Nivel 3,12
+Ciencias naturales,TUN,9,Nivel 4,1
+Ciencias naturales,TUN,10,Nivel 2,2
+Ciencias naturales,TUN,10,Nivel 3,6
+Ciencias naturales,TUN,10,Nivel 4,5
+Ciencias sociales,MOS,5,Nivel 1,4
+Ciencias sociales,MOS,5,Nivel 2,5
+Ciencias sociales,MOS,5,Nivel 3,1
+Ciencias sociales,MOS,6,Nivel 1,4
+Ciencias sociales,MOS,6,Nivel 2,10
+Ciencias sociales,MOS,6,Nivel 3,9
+Ciencias sociales,MOS,6,Nivel 4,7
+Ciencias sociales,MOS,7,Nivel 1,5
+Ciencias sociales,MOS,7,Nivel 2,8
+Ciencias sociales,MOS,7,Nivel 3,2
+Ciencias sociales,MOS,7,Nivel 4,4
+Ciencias sociales,MOS,8,Nivel 2,8
+Ciencias sociales,MOS,8,Nivel 3,9
+Ciencias sociales,MOS,8,Nivel 4,3
+Ciencias sociales,MOS,9,Nivel 1,1
+Ciencias sociales,MOS,9,Nivel 2,1
+Ciencias sociales,MOS,9,Nivel 3,3
+Ciencias sociales,MOS,9,Nivel 4,4
+Ciencias sociales,MOS,10,Nivel 2,2
+Ciencias sociales,MOS,10,Nivel 3,1
+Ciencias sociales,MOS,10,Nivel 4,1
+Ciencias sociales,TUN,5,Nivel 1,6
+Ciencias sociales,TUN,5,Nivel 2,16
+Ciencias sociales,TUN,5,Nivel 3,8
+Ciencias sociales,TUN,5,Nivel 4,1
+Ciencias sociales,TUN,6,Nivel 1,2
+Ciencias sociales,TUN,6,Nivel 2,8
+Ciencias sociales,TUN,6,Nivel 3,11
+Ciencias sociales,TUN,6,Nivel 4,11
+Ciencias sociales,TUN,7,Nivel 1,3
+Ciencias sociales,TUN,7,Nivel 2,4
+Ciencias sociales,TUN,7,Nivel 3,9
+Ciencias sociales,TUN,7,Nivel 4,6
+Ciencias sociales,TUN,8,Nivel 1,4
+Ciencias sociales,TUN,8,Nivel 2,7
+Ciencias sociales,TUN,8,Nivel 3,6
+Ciencias sociales,TUN,8,Nivel 4,8
+Ciencias sociales,TUN,9,Nivel 2,2
+Ciencias sociales,TUN,9,Nivel 3,5
+Ciencias sociales,TUN,9,Nivel 4,7
+Ciencias sociales,TUN,10,Nivel 3,7
+Ciencias sociales,TUN,10,Nivel 4,6
+Inglés,MOS,9,Nivel 2,8
+Inglés,MOS,9,Nivel 3,1
+Inglés,MOS,10,Nivel 2,2
+Inglés,MOS,10,Nivel 3,1
+Inglés,TUN,9,Nivel 1,3
+Inglés,TUN,9,Nivel 2,8
+Inglés,TUN,9,Nivel 3,3
+Inglés,TUN,10,Nivel 2,7
+Inglés,TUN,10,Nivel 3,2
+Inglés,TUN,10,Nivel 4,4
+Lenguaje,MOS,3,Nivel 1,8
+Lenguaje,MOS,3,Nivel 2,10
+Lenguaje,MOS,3,Nivel 3,2
+Lenguaje,MOS,3,Nivel 4,1
+Lenguaje,MOS,4,Nivel 1,1
+Lenguaje,MOS,4,Nivel 2,8
+Lenguaje,MOS,4,Nivel 3,5
+Lenguaje,MOS,4,Nivel 4,3
+Lenguaje,MOS,5,Nivel 1,5
+Lenguaje,MOS,5,Nivel 2,7
+Lenguaje,MOS,5,Nivel 3,4
+Lenguaje,MOS,6,Nivel 1,2
+Lenguaje,MOS,6,Nivel 2,14
+Lenguaje,MOS,6,Nivel 3,7
+Lenguaje,MOS,6,Nivel 4,6
+Lenguaje,MOS,7,Nivel 1,1
+Lenguaje,MOS,7,Nivel 2,5
+Lenguaje,MOS,7,Nivel 3,12
+Lenguaje,MOS,7,Nivel 4,3
+Lenguaje,MOS,8,Nivel 2,5
+Lenguaje,MOS,8,Nivel 3,13
+Lenguaje,MOS,8,Nivel 4,2
+Lenguaje,MOS,9,Nivel 2,5
+Lenguaje,MOS,9,Nivel 3,2
+Lenguaje,MOS,9,Nivel 4,2
+Lenguaje,MOS,10,Nivel 1,1
+Lenguaje,MOS,10,Nivel 2,2
+Lenguaje,MOS,10,Nivel 3,1
+Lenguaje,TUN,3,Nivel 1,4
+Lenguaje,TUN,3,Nivel 2,4
+Lenguaje,TUN,3,Nivel 3,3
+Lenguaje,TUN,4,Nivel 1,3
+Lenguaje,TUN,4,Nivel 2,4
+Lenguaje,TUN,4,Nivel 3,4
+Lenguaje,TUN,4,Nivel 4,1
+Lenguaje,TUN,5,Nivel 1,3
+Lenguaje,TUN,5,Nivel 2,15
+Lenguaje,TUN,5,Nivel 3,11
+Lenguaje,TUN,5,Nivel 4,2
+Lenguaje,TUN,6,Nivel 1,3
+Lenguaje,TUN,6,Nivel 2,10
+Lenguaje,TUN,6,Nivel 3,11
+Lenguaje,TUN,6,Nivel 4,9
+Lenguaje,TUN,7,Nivel 1,1
+Lenguaje,TUN,7,Nivel 2,10
+Lenguaje,TUN,7,Nivel 3,6
+Lenguaje,TUN,7,Nivel 4,6
+Lenguaje,TUN,8,Nivel 1,1
+Lenguaje,TUN,8,Nivel 2,6
+Lenguaje,TUN,8,Nivel 3,11
+Lenguaje,TUN,8,Nivel 4,6
+Lenguaje,TUN,9,Nivel 2,1
+Lenguaje,TUN,9,Nivel 3,9
+Lenguaje,TUN,9,Nivel 4,4
+Lenguaje,TUN,10,Nivel 1,2
+Lenguaje,TUN,10,Nivel 2,8
+Lenguaje,TUN,10,Nivel 3,3
+Lenguaje,TUN,10,Nivel 4,1
+Matemáticas,MOS,3,Nivel 1,4
+Matemáticas,MOS,3,Nivel 2,6
+Matemáticas,MOS,3,Nivel 3,9
+Matemáticas,MOS,3,Nivel 4,3
+Matemáticas,MOS,4,Nivel 1,1
+Matemáticas,MOS,4,Nivel 2,10
+Matemáticas,MOS,4,Nivel 3,6
+Matemáticas,MOS,5,Nivel 1,3
+Matemáticas,MOS,5,Nivel 2,7
+Matemáticas,MOS,5,Nivel 3,7
+Matemáticas,MOS,6,Nivel 2,11
+Matemáticas,MOS,6,Nivel 3,12
+Matemáticas,MOS,6,Nivel 4,8
+Matemáticas,MOS,7,Nivel 1,2
+Matemáticas,MOS,7,Nivel 2,9
+Matemáticas,MOS,7,Nivel 3,12
+Matemáticas,MOS,7,Nivel 4,4
+Matemáticas,MOS,8,Nivel 2,6
+Matemáticas,MOS,8,Nivel 3,14
+Matemáticas,MOS,9,Nivel 2,4
+Matemáticas,MOS,9,Nivel 3,5
+Matemáticas,MOS,9,Nivel 4,1
+Matemáticas,MOS,10,Nivel 2,3
+Matemáticas,MOS,10,Nivel 3,1
+Matemáticas,TUN,3,Nivel 1,1
+Matemáticas,TUN,3,Nivel 2,4
+Matemáticas,TUN,3,Nivel 3,6
+Matemáticas,TUN,4,Nivel 1,1
+Matemáticas,TUN,4,Nivel 2,7
+Matemáticas,TUN,4,Nivel 3,5
+Matemáticas,TUN,5,Nivel 1,3
+Matemáticas,TUN,5,Nivel 2,8
+Matemáticas,TUN,5,Nivel 3,18
+Matemáticas,TUN,5,Nivel 4,2
+Matemáticas,TUN,6,Nivel 2,11
+Matemáticas,TUN,6,Nivel 3,18
+Matemáticas,TUN,6,Nivel 4,4
+Matemáticas,TUN,7,Nivel 2,7
+Matemáticas,TUN,7,Nivel 3,12
+Matemáticas,TUN,7,Nivel 4,4
+Matemáticas,TUN,8,Nivel 2,5
+Matemáticas,TUN,8,Nivel 3,12
+Matemáticas,TUN,8,Nivel 4,7
+Matemáticas,TUN,9,Nivel 3,8
+Matemáticas,TUN,9,Nivel 4,6
+Matemáticas,TUN,10,Nivel 1,2
+Matemáticas,TUN,10,Nivel 2,8
+Matemáticas,TUN,10,Nivel 3,4
