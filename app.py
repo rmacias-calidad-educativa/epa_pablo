@@ -108,19 +108,31 @@ def read_default_data():
         temporal = temporal[temporal["Año"] == YEAR]
     temporal = temporal[temporal["Prueba"].isin(TESTS)].copy()
 
-    levels_path = Path("data/default_levels_2026.csv")
+    level_files = sorted(Path("data").glob("default_levels_2026_part*.csv"))
     levels = (
-        pd.read_csv(levels_path)
-        if levels_path.exists()
+        pd.concat(
+            [pd.read_csv(path) for path in level_files],
+            ignore_index=True,
+        )
+        if level_files
         else pd.DataFrame()
     )
 
-    dimensions_path = Path("data/default_dimensions_2026.csv")
+    dimension_files = sorted(
+        Path("data").glob("default_dimensions_2026_part*.csv")
+    )
     dimensions = (
-        pd.read_csv(dimensions_path)
-        if dimensions_path.exists()
+        pd.concat(
+            [pd.read_csv(path) for path in dimension_files],
+            ignore_index=True,
+        )
+        if dimension_files
         else pd.DataFrame()
     )
+    if not dimensions.empty and "competencia" in dimensions.columns:
+        dimensions = dimensions.rename(
+            columns={"competencia": "Dimension"}
+        )
 
     return temporal, levels, dimensions
 
