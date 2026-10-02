@@ -112,6 +112,7 @@ def read_default_data():
             pd.DataFrame(),
             pd.DataFrame(),
             pd.DataFrame(),
+            pd.DataFrame(),
         )
 
     temporal = pd.read_csv(temporal_path)
@@ -169,7 +170,27 @@ def read_default_data():
         else pd.DataFrame()
     )
 
-    return temporal, levels, dimensions, top10_origin, newcomers
+    newcomer_levels_path = Path(
+        "data/default_newcomer_levels_mos_tun_2026.csv"
+    )
+    newcomer_levels = (
+        pd.read_csv(newcomer_levels_path)
+        if newcomer_levels_path.exists()
+        else pd.DataFrame()
+    )
+    if not newcomer_levels.empty and "Nivel" in newcomer_levels.columns:
+        newcomer_levels["Nivel"] = newcomer_levels["Nivel"].replace(
+            LEGACY_LEVEL_MAP
+        )
+
+    return (
+        temporal,
+        levels,
+        dimensions,
+        top10_origin,
+        newcomers,
+        newcomer_levels,
+    )
 
 
 def grade_label(value) -> str:
@@ -573,14 +594,17 @@ def render_levels_by_site_vs_network(
     network_data: pd.DataFrame,
     aggregated: bool,
     level_summary: pd.DataFrame | None,
+    newcomer_levels_summary: pd.DataFrame | None,
     test_name: str,
     selected_sites: list[str],
     selected_grades: list[int],
 ):
     st.subheader("Vista 1 · Distribución de los 4 niveles por colegio/sede")
     st.caption(
-        "Cada fila representa una sede/colegio. La fila RED muestra el comportamiento "
-        "global de las seis sedes para la misma prueba y los mismos grados seleccionados."
+        "Cada fila representa una sede/colegio. Para MOS y TUN se agrega una fila "
+        "adicional con estudiantes de 1 año o menos de antigüedad. La fila RED muestra "
+        "el comportamiento global de las seis sedes para la misma prueba y los mismos "
+        "grados seleccionados."
     )
 
     if aggregated:
@@ -603,6 +627,30 @@ def render_levels_by_site_vs_network(
             .sum()
         )
 
+        newcomer_counts = pd.DataFrame()
+        if (
+            newcomer_levels_summary is not None
+            and not newcomer_levels_summary.empty
+        ):
+            nb = newcomer_levels_summary[
+                newcomer_levels_summary["Prueba"].astype(str) == test_name
+            ].copy()
+            if selected_grades:
+                nb = nb[nb["Grado_num"].isin(selected_grades)]
+            nb = nb[
+                nb["Sede"].isin(
+                    [s for s in selected_sites if s in ["MOS", "TUN"]]
+                )
+            ]
+            if not nb.empty:
+                newcomer_counts = (
+                    nb.groupby(["Sede", "Nivel"], as_index=False)["Estudiantes"]
+                    .sum()
+                )
+                newcomer_counts["Sede"] = (
+                    newcomer_counts["Sede"].astype(str) + " · ≤1 año"
+                )
+
         network_counts = (
             base.groupby("Nivel", as_index=False)["Estudiantes"]
             .sum()
@@ -610,6 +658,26 @@ def render_levels_by_site_vs_network(
         )
     else:
         site_counts = level_counts_by_site_from_raw(site_data)
+
+        newcomer_students = build_student_level(site_data)
+        newcomer_students = newcomer_students[
+            newcomer_students["Sede"].isin(["MOS", "TUN"])
+            & (newcomer_students["AntiguedadBS"] <= 1)
+        ].copy()
+        if newcomer_students.empty:
+            newcomer_counts = pd.DataFrame()
+        else:
+            newcomer_counts = (
+                newcomer_students.groupby(
+                    ["Sede", "Nivel"],
+                    as_index=False,
+                )
+                .agg(Estudiantes=("IdentiEstudiante", "nunique"))
+            )
+            newcomer_counts["Sede"] = (
+                newcomer_counts["Sede"].astype(str) + " · ≤1 año"
+            )
+
         network_counts = (
             level_counts_by_site_from_raw(network_data)
             .groupby("Nivel", as_index=False)["Estudiantes"]
@@ -617,12 +685,28 @@ def render_levels_by_site_vs_network(
             .assign(Sede="RED")
         )
 
-    counts = pd.concat([site_counts, network_counts], ignore_index=True)
+    parts = [site_counts]
+    if not newcomer_counts.empty:
+        parts.append(newcomer_counts)
+    parts.append(network_counts)
+    counts = pd.concat(parts, ignore_index=True)
     if counts.empty:
         st.info("No hay datos de niveles para los filtros seleccionados.")
         return
 
-    entities = [site for site in SITES if site in selected_sites] + ["RED"]
+    newcomer_entity_set = set(
+        newcomer_counts["Sede"].astype(str).unique()
+    ) if not newcomer_counts.empty else set()
+
+    entities = []
+    for site in SITES:
+        if site not in selected_sites:
+            continue
+        entities.append(site)
+        newcomer_label = f"{site} · ≤1 año"
+        if newcomer_label in newcomer_entity_set:
+            entities.append(newcomer_label)
+    entities.append("RED")
 
     full = pd.MultiIndex.from_product(
         [entities, LEVEL_ORDER],
@@ -719,7 +803,7 @@ def render_levels_by_site_vs_network(
                 values="Diferencia_vs_RED",
             )
             .reindex(
-                index=[site for site in SITES if site in selected_sites],
+                index=[entity for entity in entities if entity != "RED"],
                 columns=LEVEL_ORDER,
             )
         )
@@ -1470,6 +1554,7 @@ def render_test_page(
     levels_public: pd.DataFrame,
     top10_public: pd.DataFrame,
     newcomer_public: pd.DataFrame,
+    newcomer_levels_public: pd.DataFrame,
     test_name: str,
     aggregated: bool,
 ):
@@ -1538,6 +1623,7 @@ def render_test_page(
         network_data=grade_filtered_network,
         aggregated=aggregated,
         level_summary=levels_public,
+        newcomer_levels_summary=newcomer_levels_public,
         test_name=test_name,
         selected_sites=selected_sites,
         selected_grades=selected_grades,
@@ -1602,6 +1688,7 @@ if uploaded is not None:
         levels_public = pd.DataFrame()
         top10_public = pd.DataFrame()
         newcomer_public = pd.DataFrame()
+        newcomer_levels_public = pd.DataFrame()
     except Exception as exc:
         st.error(f"No fue posible procesar el Excel: {exc}")
         st.stop()
@@ -1612,6 +1699,7 @@ else:
         dimensions,
         top10_public,
         newcomer_public,
+        newcomer_levels_public,
     ) = read_default_data()
     if attempts.empty:
         st.info("Carga el Excel para visualizar los resultados.")
@@ -1627,6 +1715,7 @@ for tab, test_name in zip(tabs, TESTS):
             levels_public=levels_public,
             top10_public=top10_public,
             newcomer_public=newcomer_public,
+            newcomer_levels_public=newcomer_levels_public,
             test_name=test_name,
             aggregated=aggregated,
         )
