@@ -72,17 +72,22 @@ def grade_number(value: object) -> float:
 
 
 def normalize_area(quiz_name: object) -> str:
+    """Homogeneiza el nombre de la prueba sin incluir el grado."""
     q = normalize_text(quiz_name)
-    if "INGLES" in q:
-        return "Inglés"
     if "MATEM" in q:
         return "Matemáticas"
     if "LENGUAJE" in q or "LECTURA" in q:
         return "Lenguaje"
-    if "CIENCIAS" in q and "SOCIA" not in q:
-        return "Ciencias"
-    if "SOCIALES" in q or "CIUDADAN" in q or "PENSAMIENTO CIUDADANO" in q:
-        return "Sociales y Ciudadanas"
+    if (
+        "SOCIALES" in q
+        or "CIUDADAN" in q
+        or "PENSAMIENTO CIUDADANO" in q
+    ):
+        return "Ciencias sociales"
+    if "CIENCIAS" in q:
+        return "Ciencias naturales"
+    if "INGLES" in q:
+        return "Inglés"
     return str(quiz_name).strip()
 
 
@@ -145,8 +150,9 @@ def build_attempt_table(raw: pd.DataFrame) -> pd.DataFrame:
         )
 
     df = raw.copy()
+    df["QuizName_original"] = df["QuizName"]
     df["Grado_num"] = df["Grado"].apply(grade_number)
-    df["Area"] = df["QuizName"].apply(normalize_area)
+    df["Area"] = df["QuizName_original"].apply(normalize_area)
     df["EsCorrecta"] = _as_bool(df["IsCorrect"])
 
     course_col = find_course_column(df)
@@ -164,7 +170,7 @@ def build_attempt_table(raw: pd.DataFrame) -> pd.DataFrame:
     # Una pregunta solo aporta un acierto máximo dentro del intento.
     # Esto protege el cálculo frente a duplicados accidentales de filas.
     keys = [
-        "AttemptId", "IdentiEstudiante", "QuizName", "Pregunta"
+        "AttemptId", "IdentiEstudiante", "QuizName_original", "Pregunta"
     ]
     item_level = (
         df.groupby(keys, dropna=False, as_index=False)
@@ -187,7 +193,7 @@ def build_attempt_table(raw: pd.DataFrame) -> pd.DataFrame:
 
     attempts = (
         item_level.groupby(
-            ["AttemptId", "IdentiEstudiante", "QuizName"],
+            ["AttemptId", "IdentiEstudiante", "QuizName_original"],
             dropna=False,
             as_index=False,
         )
@@ -210,9 +216,10 @@ def build_attempt_table(raw: pd.DataFrame) -> pd.DataFrame:
     )
 
     attempts["Items_esperados"] = attempts.apply(
-        lambda r: expected_items(r["Area"], r["Grado_num"], r["QuizName"]),
+        lambda r: expected_items(r["Area"], r["Grado_num"], r["QuizName_original"]),
         axis=1,
     )
+    attempts["QuizName"] = attempts["Area"]
     attempts["No_respondidos"] = (
         attempts["Items_esperados"] - attempts["Items_observados"]
     ).clip(lower=0)
