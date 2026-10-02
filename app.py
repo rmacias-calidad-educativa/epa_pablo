@@ -62,6 +62,184 @@ def pct(x):
 def num(x, digits=1):
     return f"{x:.{digits}f}" if pd.notna(x) else "—"
 
+def render_site_test_matrix(source: pd.DataFrame, key_prefix: str, aggregated: bool = False):
+    """Matriz prueba × sede con conteos ≤50 y >50."""
+    st.subheader("Las 6 sedes × pruebas")
+    st.caption(
+        "Filas = pruebas, columnas = sedes. El color representa el % de estudiantes en ≤50%. "
+        "Cada celda muestra cuántos están en ≤50% y cuántos en >50%."
+    )
+
+    years = sorted(
+        [int(y) for y in source["Año"].dropna().unique()]
+    ) if "Año" in source.columns else []
+    year_options = ["Todos"] + years
+    selected_year = st.selectbox(
+        "Año",
+        year_options,
+        index=len(year_options) - 1,
+        key=f"{key_prefix}_year",
+    )
+
+    grade_source = source.copy()
+    if selected_year != "Todos" and "Año" in grade_source.columns:
+        grade_source = grade_source[grade_source["Año"] == selected_year]
+
+    grade_values = sorted(
+        [int(g) for g in grade_source["Grado_num"].dropna().unique()]
+    )
+    grade_options = ["Todos"] + [f"{g}°" for g in grade_values]
+    selected_grade = st.selectbox(
+        "Grado",
+        grade_options,
+        key=f"{key_prefix}_grade",
+    )
+
+    d = source.copy()
+    if selected_year != "Todos" and "Año" in d.columns:
+        d = d[d["Año"] == selected_year]
+    if selected_grade != "Todos":
+        grade_num = int(selected_grade.replace("°", ""))
+        d = d[d["Grado_num"] == grade_num]
+
+    if d.empty:
+        st.info("No hay registros para la combinación seleccionada.")
+        return
+
+    sites = ["BAQ", "COT", "MOS", "TUN", "USAQ", "ZIPA"]
+
+    if aggregated:
+        grouped = (
+            d.groupby(["QuizName", "Sede"], as_index=False)
+            .agg(
+                Estudiantes=("Estudiantes", "sum"),
+                Debajo_igual_50=("Debajo_igual_50", "sum"),
+                Encima_50=("Encima_50", "sum"),
+            )
+        )
+    else:
+        grouped = (
+            d.groupby(["QuizName", "Sede"], as_index=False)
+            .agg(
+                Estudiantes=("IdentiEstudiante", "nunique"),
+                Debajo_igual_50=("Grupo_50", lambda x: (x == "≤50%").sum()),
+                Encima_50=("Grupo_50", lambda x: (x == ">50%").sum()),
+            )
+        )
+
+    grouped["Total"] = grouped["Debajo_igual_50"] + grouped["Encima_50"]
+    grouped["Pct_50_o_menos"] = np.where(
+        grouped["Total"] > 0,
+        grouped["Debajo_igual_50"] / grouped["Total"] * 100,
+        np.nan,
+    )
+
+    total_under = int(grouped["Debajo_igual_50"].sum())
+    total_above = int(grouped["Encima_50"].sum())
+    total = total_under + total_above
+    pct_under = total_under / total * 100 if total else np.nan
+
+    k1, k2, k3, k4 = st.columns(4)
+    k1.metric("≤50%", f"{total_under:,}".replace(",", "."))
+    k2.metric(">50%", f"{total_above:,}".replace(",", "."))
+    k3.metric("% ≤50%", f"{pct_under:.1f}%" if total else "—")
+    k4.metric("Pruebas visibles", grouped["QuizName"].nunique())
+
+    tests = (
+        grouped.groupby("QuizName")["Total"]
+        .sum()
+        .sort_values(ascending=True)
+        .index
+        .tolist()
+    )
+
+    pct_pivot = (
+        grouped.pivot(index="QuizName", columns="Sede", values="Pct_50_o_menos")
+        .reindex(index=tests, columns=sites)
+    )
+    under_pivot = (
+        grouped.pivot(index="QuizName", columns="Sede", values="Debajo_igual_50")
+        .reindex(index=tests, columns=sites)
+    )
+    above_pivot = (
+        grouped.pivot(index="QuizName", columns="Sede", values="Encima_50")
+        .reindex(index=tests, columns=sites)
+    )
+
+    text_matrix = []
+    for test in tests:
+        row = []
+        for site in sites:
+            lo = under_pivot.loc[test, site]
+            hi = above_pivot.loc[test, site]
+            if pd.isna(lo) and pd.isna(hi):
+                row.append("—")
+            else:
+                row.append(f"{int(0 if pd.isna(lo) else lo)} ≤50 | {int(0 if pd.isna(hi) else hi)} >50")
+        text_matrix.append(row)
+
+    fig = go.Figure(
+        data=go.Heatmap(
+            z=pct_pivot.values,
+            x=sites,
+            y=tests,
+            zmin=0,
+            zmax=100,
+            colorscale="RdYlGn_r",
+            text=text_matrix,
+            texttemplate="%{text}",
+            hovertemplate=(
+                "Sede: %{x}<br>Prueba: %{y}<br>"
+                "% ≤50: %{z:.1f}%<br>%{text}<extra></extra>"
+            ),
+            colorbar=dict(title="% ≤50"),
+        )
+    )
+    fig.update_layout(
+        title="Mapa de estudiantes ≤50% y >50% por sede y prueba",
+        xaxis_title="Sede",
+        yaxis_title="",
+        height=max(520, 32 * len(tests) + 180),
+    )
+    st.plotly_chart(fig, use_container_width=True)
+
+    selected_test = st.selectbox(
+        "Explorar una prueba en detalle",
+        sorted(grouped["QuizName"].unique()),
+        key=f"{key_prefix}_test",
+    )
+    detail = grouped[grouped["QuizName"] == selected_test].copy()
+    detail = detail.set_index("Sede").reindex(sites, fill_value=0).reset_index()
+
+    fig = go.Figure()
+    fig.add_bar(
+        x=detail["Sede"],
+        y=detail["Debajo_igual_50"],
+        name="≤50%",
+        text=detail["Debajo_igual_50"],
+        textposition="auto",
+    )
+    fig.add_bar(
+        x=detail["Sede"],
+        y=detail["Encima_50"],
+        name=">50%",
+        text=detail["Encima_50"],
+        textposition="auto",
+    )
+    fig.update_layout(
+        barmode="group",
+        title=f"Cantidad de estudiantes por sede | {selected_test}",
+        xaxis_title="Sede",
+        yaxis_title="Estudiantes",
+    )
+    st.plotly_chart(fig, use_container_width=True)
+
+    if selected_year == 2025 and total < 30:
+        st.info(
+            "En 2025 hay muy pocos registros en la base actual. Interpreta esa vista como "
+            "referencia descriptiva, no como comparación estable con 2026."
+        )
+
 
 st.title("📊 Estado de llegada de los estudiantes")
 st.caption(
@@ -152,6 +330,16 @@ if uploaded is None:
     k3.metric("En ≤50%", f"{support_pct:.1f}%")
     k4.metric("Cobertura", f"{weighted_coverage:.1f}%")
     k5.metric("Sedes / grados", f"{sedes_n} / {grados_n}")
+
+    temporal_path = Path("data/default_temporal_summary.csv")
+    if temporal_path.exists():
+        temporal_data = pd.read_csv(temporal_path)
+        render_site_test_matrix(
+            temporal_data,
+            key_prefix="default_matrix",
+            aggregated=True,
+        )
+        st.divider()
 
     t1, t2, t3 = st.tabs(["Panorama", "Cruce sede × grado", "Cruce área × grado"])
 
@@ -350,6 +538,14 @@ c3.metric("Promedio", pct(avg))
 c4.metric("En ≤50%", pct(support))
 c5.metric("Cobertura", pct(coverage))
 c6.metric("Ítems no observados", f"{int(missing_items):,}".replace(",", "."))
+
+st.divider()
+render_site_test_matrix(
+    filtered,
+    key_prefix="full_matrix",
+    aggregated=False,
+)
+st.divider()
 
 tabs = st.tabs(
     [
@@ -880,10 +1076,214 @@ with tabs[3]:
             )
 
         st.divider()
+        st.subheader("6. ¿Hay patrones asociados al colegio de origen?")
+        st.caption(
+            "Esta lectura busca recurrencia. Compara, por área, el % de estudiantes ≤50% "
+            "de cada colegio contra el promedio de la red en el mismo filtro."
+        )
+
+        student_area = (
+            origin_site.groupby(
+                ["IdentiEstudiante", "colegio_de_origen", "Area"],
+                as_index=False,
+            )
+            .agg(Promedio_area=("Porcentaje_acierto", "mean"))
+        )
+        student_area["Bajo_50"] = student_area["Promedio_area"] <= 50
+
+        network_area = (
+            student_area.groupby("Area", as_index=False)
+            .agg(Pct_red_50=("Bajo_50", "mean"))
+        )
+        network_area["Pct_red_50"] *= 100
+
+        school_area = (
+            student_area[
+                student_area["colegio_de_origen"].isin(top_schools)
+            ]
+            .groupby(["colegio_de_origen", "Area"], as_index=False)
+            .agg(
+                Estudiantes=("IdentiEstudiante", "nunique"),
+                Pct_50_o_menos=("Bajo_50", "mean"),
+            )
+        )
+        school_area["Pct_50_o_menos"] *= 100
+        school_area = school_area.merge(network_area, on="Area", how="left")
+        school_area["Diferencia_vs_red"] = (
+            school_area["Pct_50_o_menos"] - school_area["Pct_red_50"]
+        )
+
+        school_area_valid = school_area[
+            school_area["Estudiantes"] >= 3
+        ].copy()
+
+        if not school_area_valid.empty:
+            delta_pivot = school_area_valid.pivot(
+                index="colegio_de_origen",
+                columns="Area",
+                values="Diferencia_vs_red",
+            )
+            raw_pivot = school_area_valid.pivot(
+                index="colegio_de_origen",
+                columns="Area",
+                values="Pct_50_o_menos",
+            )
+
+            text_pattern = []
+            for school in delta_pivot.index:
+                row = []
+                for area in delta_pivot.columns:
+                    raw_value = raw_pivot.loc[school, area]
+                    row.append(
+                        "—" if pd.isna(raw_value) else f"{raw_value:.0f}% ≤50"
+                    )
+                text_pattern.append(row)
+
+            max_abs = np.nanmax(np.abs(delta_pivot.values))
+            max_abs = max(20, min(60, max_abs if np.isfinite(max_abs) else 20))
+
+            fig = go.Figure(
+                data=go.Heatmap(
+                    z=delta_pivot.values,
+                    x=delta_pivot.columns,
+                    y=delta_pivot.index,
+                    zmid=0,
+                    zmin=-max_abs,
+                    zmax=max_abs,
+                    colorscale="RdBu_r",
+                    text=text_pattern,
+                    texttemplate="%{text}",
+                    hovertemplate=(
+                        "Colegio: %{y}<br>Área: %{x}<br>"
+                        "Diferencia vs red: %{z:+.1f} pp<br>%{text}<extra></extra>"
+                    ),
+                    colorbar=dict(title="Δ pp vs red"),
+                )
+            )
+            fig.update_layout(
+                title="Patrón por colegio y área: diferencia en %≤50 frente a la red",
+                xaxis_title="Área",
+                yaxis_title="",
+                height=max(520, 34 * len(delta_pivot.index) + 180),
+            )
+            st.plotly_chart(fig, use_container_width=True)
+
+            repeat_attempts = (
+                origin_site[
+                    origin_site["colegio_de_origen"].isin(top_schools)
+                ]
+                .assign(Bajo_50=lambda d: d["Porcentaje_acierto"] <= 50)
+                .groupby(
+                    ["IdentiEstudiante", "colegio_de_origen"],
+                    as_index=False,
+                )
+                .agg(
+                    Pruebas=("QuizName", "nunique"),
+                    Pruebas_50_o_menos=("Bajo_50", "sum"),
+                )
+            )
+            repeat_attempts["Recurrente_2mas"] = (
+                repeat_attempts["Pruebas_50_o_menos"] >= 2
+            )
+            repeat_school = (
+                repeat_attempts.groupby("colegio_de_origen", as_index=False)
+                .agg(
+                    Estudiantes=("IdentiEstudiante", "nunique"),
+                    Pct_estudiantes_2mas=("Recurrente_2mas", "mean"),
+                )
+            )
+            repeat_school["Pct_estudiantes_2mas"] *= 100
+
+            recurrent_areas = (
+                school_area_valid.assign(
+                    Area_sobre_red_10pp=lambda d: d["Diferencia_vs_red"] >= 10
+                )
+                .groupby("colegio_de_origen", as_index=False)
+                .agg(
+                    Areas_evaluadas=("Area", "nunique"),
+                    Areas_sobre_red_10pp=("Area_sobre_red_10pp", "sum"),
+                    Mayor_diferencia_pp=("Diferencia_vs_red", "max"),
+                )
+            )
+
+            pattern_summary = repeat_school.merge(
+                recurrent_areas,
+                on="colegio_de_origen",
+                how="left",
+            )
+            pattern_summary["Patron_descriptivo"] = np.select(
+                [
+                    pattern_summary["Areas_sobre_red_10pp"] >= 2,
+                    pattern_summary["Areas_sobre_red_10pp"] == 1,
+                ],
+                [
+                    "Recurrente en varias áreas",
+                    "Concentrado en un área",
+                ],
+                default="Sin patrón recurrente claro",
+            )
+
+            st.dataframe(
+                pattern_summary.sort_values(
+                    ["Areas_sobre_red_10pp", "Pct_estudiantes_2mas"],
+                    ascending=False,
+                ),
+                use_container_width=True,
+                hide_index=True,
+                column_config={
+                    "Pct_estudiantes_2mas": st.column_config.NumberColumn(
+                        "% estudiantes con 2+ pruebas ≤50",
+                        format="%.1f%%",
+                    ),
+                    "Mayor_diferencia_pp": st.column_config.NumberColumn(
+                        "Mayor diferencia vs red",
+                        format="%+.1f pp",
+                    ),
+                },
+            )
+
+            # Asociación descriptiva global colegio de origen ↔ nivel.
+            contingency = pd.crosstab(
+                student_level[
+                    student_level["colegio_de_origen"].isin(top_schools)
+                ]["colegio_de_origen"],
+                student_level[
+                    student_level["colegio_de_origen"].isin(top_schools)
+                ]["Nivel_estudiante"],
+            )
+            if contingency.shape[0] > 1 and contingency.shape[1] > 1:
+                observed = contingency.to_numpy(dtype=float)
+                n = observed.sum()
+                expected = (
+                    observed.sum(axis=1, keepdims=True)
+                    @ observed.sum(axis=0, keepdims=True)
+                    / n
+                )
+                valid = expected > 0
+                chi2 = np.sum(
+                    ((observed - expected) ** 2 / np.where(valid, expected, 1))[valid]
+                )
+                denom = min(observed.shape[0] - 1, observed.shape[1] - 1)
+                cramers_v = np.sqrt(chi2 / (n * denom)) if denom > 0 else np.nan
+                st.metric(
+                    "Asociación descriptiva colegio de origen ↔ nivel (V de Cramér)",
+                    f"{cramers_v:.3f}" if pd.notna(cramers_v) else "—",
+                )
+                st.caption(
+                    "V de Cramér va de 0 a 1. Describe cuánto se apartan las distribuciones "
+                    "de nivel entre colegios; no prueba causalidad y puede variar con muestras pequeñas."
+                )
+        else:
+            st.info(
+                "No hay suficientes estudiantes por colegio y área para evaluar patrones "
+                "con el umbral actual."
+            )
+
+        st.divider()
         st.caption(
             "El nivel del estudiante en esta vista se calcula con el promedio de sus pruebas "
-            "dentro de los filtros activos. Para análisis por prueba específica, usa también "
-            "el filtro de prueba en la barra lateral."
+            "dentro de los filtros activos. Los patrones son descriptivos y deben leerse junto "
+            "con el tamaño de muestra del colegio."
         )
 
 # ------------------------- Estudiantes -------------------------
