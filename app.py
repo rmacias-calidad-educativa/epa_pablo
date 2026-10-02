@@ -409,6 +409,210 @@ def render_main_line(
     st.plotly_chart(fig, use_container_width=True)
 
 
+def level_counts_by_site_from_raw(data: pd.DataFrame) -> pd.DataFrame:
+    student = build_student_level(data)
+    return (
+        student.groupby(["Sede", "Nivel"], as_index=False)
+        .agg(Estudiantes=("IdentiEstudiante", "nunique"))
+    )
+
+
+def render_levels_by_site_vs_network(
+    site_data: pd.DataFrame,
+    network_data: pd.DataFrame,
+    aggregated: bool,
+    level_summary: pd.DataFrame | None,
+    test_name: str,
+    selected_sites: list[str],
+    selected_grades: list[int],
+):
+    st.subheader("Vista 1 · Distribución de los 4 niveles por colegio/sede")
+    st.caption(
+        "Cada fila representa una sede/colegio. La fila RED muestra el comportamiento "
+        "global de las seis sedes para la misma prueba y los mismos grados seleccionados."
+    )
+
+    if aggregated:
+        if level_summary is None or level_summary.empty:
+            st.info(
+                "La base pública precargada aún no contiene el desglose de los cuatro niveles."
+            )
+            return
+
+        base = level_summary[
+            level_summary["Prueba"].astype(str) == test_name
+        ].copy()
+
+        if selected_grades:
+            base = base[base["Grado_num"].isin(selected_grades)]
+
+        site_counts = (
+            base[base["Sede"].isin(selected_sites)]
+            .groupby(["Sede", "Nivel"], as_index=False)["Estudiantes"]
+            .sum()
+        )
+
+        network_counts = (
+            base.groupby("Nivel", as_index=False)["Estudiantes"]
+            .sum()
+            .assign(Sede="RED")
+        )
+    else:
+        site_counts = level_counts_by_site_from_raw(site_data)
+        network_counts = (
+            level_counts_by_site_from_raw(network_data)
+            .groupby("Nivel", as_index=False)["Estudiantes"]
+            .sum()
+            .assign(Sede="RED")
+        )
+
+    counts = pd.concat([site_counts, network_counts], ignore_index=True)
+    if counts.empty:
+        st.info("No hay datos de niveles para los filtros seleccionados.")
+        return
+
+    entities = [site for site in SITES if site in selected_sites] + ["RED"]
+
+    full = pd.MultiIndex.from_product(
+        [entities, LEVEL_ORDER],
+        names=["Sede", "Nivel"],
+    ).to_frame(index=False)
+
+    counts = full.merge(
+        counts,
+        on=["Sede", "Nivel"],
+        how="left",
+    )
+    counts["Estudiantes"] = counts["Estudiantes"].fillna(0).astype(int)
+
+    totals = counts.groupby("Sede")["Estudiantes"].transform("sum")
+    counts["Porcentaje"] = np.where(
+        totals > 0,
+        counts["Estudiantes"] / totals * 100,
+        0,
+    )
+    counts["Etiqueta"] = counts.apply(
+        lambda r: (
+            f"{r['Porcentaje']:.0f}%"
+            if r["Porcentaje"] >= 6 and r["Estudiantes"] > 0
+            else ""
+        ),
+        axis=1,
+    )
+
+    fig = px.bar(
+        counts,
+        x="Porcentaje",
+        y="Sede",
+        color="Nivel",
+        orientation="h",
+        barmode="stack",
+        category_orders={
+            "Sede": entities,
+            "Nivel": LEVEL_ORDER,
+        },
+        color_discrete_map=LEVEL_COLORS,
+        text="Etiqueta",
+        hover_data={
+            "Estudiantes": True,
+            "Porcentaje": ":.1f",
+            "Etiqueta": False,
+        },
+        labels={
+            "Porcentaje": "",
+            "Sede": "",
+            "Nivel": "Nivel",
+        },
+        title="Composición de niveles: cada colegio/sede frente a la RED",
+    )
+    fig.update_xaxes(
+        range=[0, 100],
+        showticklabels=False,
+        showgrid=False,
+        ticks="",
+        title=None,
+    )
+    fig.update_yaxes(
+        showgrid=False,
+        ticks="",
+        title=None,
+        categoryorder="array",
+        categoryarray=list(reversed(entities)),
+    )
+    fig.update_layout(
+        height=max(430, 62 * len(entities) + 120),
+        plot_bgcolor="rgba(0,0,0,0)",
+        margin=dict(l=18, r=18, t=70, b=20),
+        legend_title_text="Nivel",
+    )
+    fig.update_traces(textposition="inside")
+    st.plotly_chart(fig, use_container_width=True)
+
+    network_pct = (
+        counts[counts["Sede"] == "RED"]
+        .set_index("Nivel")["Porcentaje"]
+        .reindex(LEVEL_ORDER)
+    )
+
+    site_pct = counts[counts["Sede"] != "RED"].copy()
+    site_pct["Diferencia_vs_RED"] = site_pct.apply(
+        lambda r: r["Porcentaje"] - network_pct.loc[r["Nivel"]],
+        axis=1,
+    )
+
+    if not site_pct.empty:
+        delta = (
+            site_pct.pivot(
+                index="Sede",
+                columns="Nivel",
+                values="Diferencia_vs_RED",
+            )
+            .reindex(
+                index=[site for site in SITES if site in selected_sites],
+                columns=LEVEL_ORDER,
+            )
+        )
+
+        labels = delta.map(
+            lambda x: "" if pd.isna(x) else f"{x:+.1f} pp"
+        )
+
+        max_abs = np.nanmax(np.abs(delta.values))
+        max_abs = max(
+            10,
+            min(40, max_abs if np.isfinite(max_abs) else 10),
+        )
+
+        fig = go.Figure(
+            data=go.Heatmap(
+                z=delta.values,
+                x=delta.columns,
+                y=delta.index,
+                zmid=0,
+                zmin=-max_abs,
+                zmax=max_abs,
+                colorscale=[
+                    [0.0, "#C93C3C"],
+                    [0.5, "#F7F7F7"],
+                    [1.0, "#2E8B57"],
+                ],
+                text=labels.values,
+                texttemplate="%{text}",
+                hovertemplate=(
+                    "Sede: %{y}<br>Nivel: %{x}<br>"
+                    "Diferencia vs RED: %{z:+.1f} pp<extra></extra>"
+                ),
+                colorbar=dict(title="pp vs RED"),
+            )
+        )
+        fig.update_layout(
+            title="Contraste por colegio/sede frente a la RED · rojo = por debajo · verde = por encima",
+            height=max(360, 55 * len(delta.index) + 140),
+            margin=dict(l=18, r=18, t=65, b=25),
+        )
+        st.plotly_chart(fig, use_container_width=True)
+
+
 def level_counts_by_grade_from_raw(data: pd.DataFrame) -> pd.DataFrame:
     student = build_student_level(data)
     return (
@@ -426,7 +630,7 @@ def render_levels_vs_network(
     selected_sites: list[str],
     selected_grades: list[int],
 ):
-    st.subheader("Distribución de los 4 niveles de desempeño por grado")
+    st.subheader("Vista 2 · Distribución de los 4 niveles por grado")
     st.caption(
         "Cada fila representa un grado. La fila RED muestra el comportamiento "
         "global de las seis sedes para la misma prueba y los mismos grados seleccionados."
@@ -924,6 +1128,17 @@ def render_test_page(
         aggregated=aggregated,
         level_summary=levels_public,
         test_name=test_name,
+    )
+
+    st.divider()
+    render_levels_by_site_vs_network(
+        site_data=site_filtered,
+        network_data=grade_filtered_network,
+        aggregated=aggregated,
+        level_summary=levels_public,
+        test_name=test_name,
+        selected_sites=selected_sites,
+        selected_grades=selected_grades,
     )
 
     st.divider()
