@@ -65,8 +65,8 @@ def num(x, digits=1):
 
 st.title("📊 Estado de llegada de los estudiantes")
 st.caption(
-    "Dashboard diagnóstico para identificar niveles de desempeño, cobertura de respuesta "
-    "y concentraciones de reto por prueba, sede, grado, curso (cuando exista) y procedencia."
+    "Dashboard diagnóstico para responder tres preguntas: cómo llegan los estudiantes, "
+    "dónde se concentran los retos y de qué colegios provienen quienes requieren mayor apoyo."
 )
 
 with st.expander("Reglas de cálculo", expanded=False):
@@ -355,8 +355,8 @@ tabs = st.tabs(
     [
         "Panorama",
         "Pruebas",
-        "Sedes y grados",
-        "Colegios de origen",
+        "Dónde están los retos",
+        "Origen × nivel",
         "Estudiantes",
         "Calidad de respuesta",
     ]
@@ -550,10 +550,11 @@ with tabs[2]:
 
 # ------------------------- Colegios de origen -------------------------
 with tabs[3]:
-    st.subheader("¿De qué colegios vienen y cómo están llegando?")
+    st.subheader("De qué colegios vienen y en qué nivel llegan")
     st.caption(
-        "Esta vista cruza procedencia con volumen, sede de llegada, grado y desempeño. "
-        "Usa el mínimo de estudiantes para evitar conclusiones con muestras demasiado pequeñas."
+        "Lee esta sección de arriba hacia abajo: selecciona una sede, identifica los colegios "
+        "que más estudiantes aportan y observa cómo se distribuyen esos estudiantes entre "
+        "Progreso limitado, Emergente, En aceleración y Avanzado."
     )
 
     origin = filtered[
@@ -564,130 +565,327 @@ with tabs[3]:
     if origin.empty:
         st.info("No hay información de colegio de origen en el filtro actual.")
     else:
-        student_origin = origin[
+        sedes_origin = sorted(origin["Sede"].dropna().astype(str).unique())
+        selected_site_origin = st.selectbox(
+            "Sede de llegada",
+            ["Todas"] + sedes_origin,
+            key="origin_site_selector",
+        )
+
+        origin_site = origin.copy()
+        if selected_site_origin != "Todas":
+            origin_site = origin_site[
+                origin_site["Sede"].astype(str) == selected_site_origin
+            ]
+
+        # Una fila por estudiante para volumen y procedencia.
+        student_origin = origin_site[
             ["IdentiEstudiante", "colegio_de_origen", "Sede", "Grado"]
         ].drop_duplicates()
 
-        m1, m2, m3 = st.columns(3)
-        m1.metric("Colegios de origen", student_origin["colegio_de_origen"].nunique())
-        m2.metric("Estudiantes con procedencia", student_origin["IdentiEstudiante"].nunique())
-        m3.metric(
+        # Nivel global del estudiante dentro del filtro actual.
+        student_level = (
+            origin_site.groupby(
+                ["IdentiEstudiante", "colegio_de_origen", "Sede", "Grado"],
+                as_index=False,
+            )
+            .agg(
+                Promedio_estudiante=("Porcentaje_acierto", "mean"),
+                Pruebas=("QuizName", "nunique"),
+            )
+        )
+        student_level["Nivel_estudiante"] = student_level["Promedio_estudiante"].apply(
+            lambda x: (
+                "Progreso limitado" if x <= 25
+                else "Emergente" if x <= 50
+                else "En aceleración" if x <= 75
+                else "Avanzado"
+            )
+        )
+
+        total_students_origin = student_origin["IdentiEstudiante"].nunique()
+        total_schools_origin = student_origin["colegio_de_origen"].nunique()
+
+        m1, m2, m3, m4 = st.columns(4)
+        m1.metric("Sede", selected_site_origin)
+        m2.metric("Estudiantes", f"{total_students_origin:,}".replace(",", "."))
+        m3.metric("Colegios de origen", f"{total_schools_origin:,}".replace(",", "."))
+        m4.metric(
             "Cobertura de procedencia",
-            f"{student_origin['IdentiEstudiante'].nunique() / filtered['IdentiEstudiante'].nunique() * 100:.1f}%"
+            f"{total_students_origin / origin_site['IdentiEstudiante'].nunique() * 100:.1f}%"
+            if origin_site["IdentiEstudiante"].nunique() else "—",
         )
 
-        min_students = st.slider(
-            "Mínimo de estudiantes por colegio para comparar desempeño",
-            min_value=2,
-            max_value=20,
-            value=5,
-        )
+        c1, c2 = st.columns([1, 1])
+        with c1:
+            min_students = st.slider(
+                "Mínimo de estudiantes por colegio",
+                min_value=2,
+                max_value=20,
+                value=5,
+                key="origin_min_students",
+            )
+        with c2:
+            top_n = st.slider(
+                "Número máximo de colegios a mostrar",
+                min_value=5,
+                max_value=30,
+                value=15,
+                key="origin_top_n",
+            )
 
-        volume = (
+        school_volume = (
             student_origin.groupby("colegio_de_origen", as_index=False)
             .agg(Estudiantes=("IdentiEstudiante", "nunique"))
-            .sort_values("Estudiantes", ascending=False)
         )
+        eligible_schools = school_volume[
+            school_volume["Estudiantes"] >= min_students
+        ].sort_values("Estudiantes", ascending=False)
 
-        top_volume = volume.head(25).sort_values("Estudiantes")
-        fig = px.bar(
-            top_volume,
-            x="Estudiantes",
-            y="colegio_de_origen",
-            orientation="h",
-            text="Estudiantes",
-            title="Principales colegios de origen por número de estudiantes",
-            labels={"colegio_de_origen": "Colegio de origen"},
-        )
-        st.plotly_chart(fig, use_container_width=True)
+        top_schools = eligible_schools.head(top_n)["colegio_de_origen"].tolist()
 
-        school_summary = aggregate_group(origin, ["colegio_de_origen"])
-        school_summary = school_summary[
-            school_summary["Estudiantes"] >= min_students
-        ].copy()
-        school_summary["Pct_50_o_menos"] = (
-            school_summary["Progreso_limitado"] + school_summary["Emergente"]
-        )
+        if not top_schools:
+            st.warning(
+                "No hay colegios con el mínimo de estudiantes seleccionado. "
+                "Reduce el umbral para ampliar la comparación."
+            )
+        else:
+            level_counts = (
+                student_level[
+                    student_level["colegio_de_origen"].isin(top_schools)
+                ]
+                .groupby(["colegio_de_origen", "Nivel_estudiante"], as_index=False)
+                .agg(Estudiantes=("IdentiEstudiante", "nunique"))
+            )
 
-        if not school_summary.empty:
-            plot_school = school_summary.sort_values(
-                ["Pct_50_o_menos", "Estudiantes"],
-                ascending=[False, False],
-            ).head(30)
+            totals_school = (
+                level_counts.groupby("colegio_de_origen")["Estudiantes"]
+                .transform("sum")
+            )
+            level_counts["Porcentaje"] = (
+                level_counts["Estudiantes"] / totals_school * 100
+            )
 
-            fig = px.scatter(
-                plot_school,
-                x="Promedio",
+            school_order = (
+                student_level[
+                    student_level["colegio_de_origen"].isin(top_schools)
+                ]
+                .groupby("colegio_de_origen", as_index=False)
+                .agg(
+                    Estudiantes=("IdentiEstudiante", "nunique"),
+                    Promedio=("Promedio_estudiante", "mean"),
+                )
+                .sort_values(["Estudiantes", "Promedio"], ascending=[True, True])
+            )["colegio_de_origen"].tolist()
+
+            st.subheader("1. Composición por nivel de desempeño")
+            st.caption(
+                "Cada barra representa el 100% de los estudiantes que llegan desde ese colegio "
+                "a la sede seleccionada. Esto permite comparar composición, no solo promedios."
+            )
+
+            fig = px.bar(
+                level_counts,
+                x="Porcentaje",
                 y="colegio_de_origen",
-                size="Estudiantes",
-                color="Pct_50_o_menos",
-                color_continuous_scale="RdYlGn_r",
-                range_color=[0, 100],
-                hover_data=["Estudiantes", "Cobertura_promedio"],
-                title="Desempeño según colegio de origen",
+                color="Nivel_estudiante",
+                orientation="h",
+                barmode="stack",
+                category_orders={
+                    "Nivel_estudiante": LEVEL_ORDER,
+                    "colegio_de_origen": school_order,
+                },
+                color_discrete_map=LEVEL_COLORS,
+                text=level_counts["Porcentaje"].map(
+                    lambda x: f"{x:.0f}%" if x >= 7 else ""
+                ),
+                hover_data={"Estudiantes": True, "Porcentaje": ":.1f"},
+                title=(
+                    "Distribución de estudiantes por nivel y colegio de origen"
+                    + (
+                        f" | Sede {selected_site_origin}"
+                        if selected_site_origin != "Todas"
+                        else ""
+                    )
+                ),
                 labels={
-                    "Promedio": "% de acierto",
                     "colegio_de_origen": "Colegio de origen",
-                    "Pct_50_o_menos": "% ≤50",
+                    "Porcentaje": "% de estudiantes",
+                    "Nivel_estudiante": "Nivel",
                 },
             )
             fig.update_xaxes(range=[0, 100])
+            fig.update_layout(
+                legend_title_text="Nivel de desempeño",
+                height=max(520, 34 * len(school_order) + 180),
+            )
             st.plotly_chart(fig, use_container_width=True)
 
-            st.subheader("Tabla: procedencia y desempeño")
+            st.subheader("2. Volumen y desempeño por colegio")
+            school_perf = (
+                student_level[
+                    student_level["colegio_de_origen"].isin(top_schools)
+                ]
+                .groupby("colegio_de_origen", as_index=False)
+                .agg(
+                    Estudiantes=("IdentiEstudiante", "nunique"),
+                    Promedio=("Promedio_estudiante", "mean"),
+                )
+            )
+
+            support_school = (
+                student_level[
+                    student_level["colegio_de_origen"].isin(top_schools)
+                ]
+                .assign(
+                    Requiere_apoyo=lambda d: d["Nivel_estudiante"].isin(
+                        ["Progreso limitado", "Emergente"]
+                    )
+                )
+                .groupby("colegio_de_origen", as_index=False)
+                .agg(Pct_50_o_menos=("Requiere_apoyo", "mean"))
+            )
+            support_school["Pct_50_o_menos"] *= 100
+            school_perf = school_perf.merge(
+                support_school,
+                on="colegio_de_origen",
+                how="left",
+            )
+
+            left, right = st.columns([1.05, 1])
+
+            with left:
+                vol_plot = school_perf.sort_values("Estudiantes")
+                fig = px.bar(
+                    vol_plot,
+                    x="Estudiantes",
+                    y="colegio_de_origen",
+                    orientation="h",
+                    text="Estudiantes",
+                    title="Número de estudiantes por colegio de origen",
+                    labels={"colegio_de_origen": "Colegio de origen"},
+                )
+                fig.update_layout(
+                    height=max(500, 32 * len(vol_plot) + 150)
+                )
+                st.plotly_chart(fig, use_container_width=True)
+
+            with right:
+                risk_plot = school_perf.sort_values("Pct_50_o_menos")
+                fig = px.bar(
+                    risk_plot,
+                    x="Pct_50_o_menos",
+                    y="colegio_de_origen",
+                    orientation="h",
+                    text=risk_plot["Pct_50_o_menos"].map(lambda x: f"{x:.0f}%"),
+                    title="% de estudiantes en Progreso limitado + Emergente",
+                    labels={
+                        "colegio_de_origen": "Colegio de origen",
+                        "Pct_50_o_menos": "% ≤50",
+                    },
+                )
+                fig.update_xaxes(range=[0, 100])
+                fig.update_layout(
+                    height=max(500, 32 * len(risk_plot) + 150)
+                )
+                st.plotly_chart(fig, use_container_width=True)
+
+            st.subheader("3. Colegio de origen × grado de llegada")
+            school_grade = (
+                student_origin[
+                    student_origin["colegio_de_origen"].isin(top_schools)
+                ]
+                .groupby(["colegio_de_origen", "Grado"], as_index=False)
+                .agg(Estudiantes=("IdentiEstudiante", "nunique"))
+            )
+            grade_pivot = school_grade.pivot(
+                index="colegio_de_origen",
+                columns="Grado",
+                values="Estudiantes",
+            ).fillna(0)
+
+            fig = px.imshow(
+                grade_pivot,
+                text_auto=".0f",
+                aspect="auto",
+                labels={
+                    "x": "Grado de llegada",
+                    "y": "Colegio de origen",
+                    "color": "Estudiantes",
+                },
+                title="Cantidad de estudiantes según colegio de origen y grado",
+            )
+            fig.update_layout(
+                height=max(500, 32 * len(grade_pivot.index) + 160)
+            )
+            st.plotly_chart(fig, use_container_width=True)
+
+            st.subheader("4. Vista jerárquica: sede → colegio → nivel")
+            hierarchy = (
+                student_level[
+                    student_level["colegio_de_origen"].isin(top_schools)
+                ]
+                .groupby(
+                    ["Sede", "colegio_de_origen", "Nivel_estudiante"],
+                    as_index=False,
+                )
+                .agg(Estudiantes=("IdentiEstudiante", "nunique"))
+            )
+
+            fig = px.treemap(
+                hierarchy,
+                path=["Sede", "colegio_de_origen", "Nivel_estudiante"],
+                values="Estudiantes",
+                color="Nivel_estudiante",
+                color_discrete_map=LEVEL_COLORS,
+                title="Estructura de procedencia y nivel de desempeño",
+            )
+            fig.update_layout(height=650)
+            st.plotly_chart(fig, use_container_width=True)
+
+            st.subheader("5. Tabla de lectura ejecutiva")
+            table_school = school_perf.sort_values(
+                ["Pct_50_o_menos", "Estudiantes"],
+                ascending=[False, False],
+            ).copy()
+            table_school["Lectura"] = np.select(
+                [
+                    table_school["Pct_50_o_menos"] >= 60,
+                    table_school["Pct_50_o_menos"] >= 40,
+                ],
+                [
+                    "Alta concentración en ≤50%",
+                    "Concentración intermedia en ≤50%",
+                ],
+                default="Menor concentración en ≤50%",
+            )
+
             st.dataframe(
-                school_summary.sort_values(
-                    ["Estudiantes", "Pct_50_o_menos"],
-                    ascending=[False, False],
-                ),
+                table_school,
                 use_container_width=True,
                 hide_index=True,
                 column_config={
                     "Promedio": st.column_config.NumberColumn(format="%.1f%%"),
-                    "Cobertura_promedio": st.column_config.NumberColumn(format="%.1f%%"),
-                    "Progreso_limitado": st.column_config.NumberColumn(format="%.1f%%"),
-                    "Emergente": st.column_config.NumberColumn(format="%.1f%%"),
-                    "En_aceleracion": st.column_config.NumberColumn(format="%.1f%%"),
-                    "Avanzado": st.column_config.NumberColumn(format="%.1f%%"),
-                    "Pct_50_o_menos": st.column_config.NumberColumn("% ≤50", format="%.1f%%"),
+                    "Pct_50_o_menos": st.column_config.NumberColumn(
+                        "% ≤50",
+                        format="%.1f%%",
+                    ),
                 },
             )
 
-        st.subheader("Colegio de origen × sede de llegada")
-        top_schools = volume.head(20)["colegio_de_origen"]
-        school_site = (
-            student_origin[student_origin["colegio_de_origen"].isin(top_schools)]
-            .groupby(["colegio_de_origen", "Sede"], as_index=False)
-            .agg(Estudiantes=("IdentiEstudiante", "nunique"))
-        )
-        site_pivot = school_site.pivot(
-            index="colegio_de_origen",
-            columns="Sede",
-            values="Estudiantes",
-        ).fillna(0)
-        fig = px.imshow(
-            site_pivot,
-            text_auto=".0f",
-            aspect="auto",
-            labels={"x": "Sede de llegada", "y": "Colegio de origen", "color": "Estudiantes"},
-            title="¿A qué sede llegan los estudiantes de los principales colegios de origen?",
-        )
-        st.plotly_chart(fig, use_container_width=True)
+            dataframe_download(
+                table_school,
+                "Descargar resumen por colegio de origen",
+                "resumen_colegios_origen.csv",
+            )
 
-        st.subheader("Colegio de origen × grado de llegada")
-        school_grade = (
-            student_origin[student_origin["colegio_de_origen"].isin(top_schools)]
-            .groupby(["colegio_de_origen", "Grado"], as_index=False)
-            .agg(Estudiantes=("IdentiEstudiante", "nunique"))
+        st.divider()
+        st.caption(
+            "El nivel del estudiante en esta vista se calcula con el promedio de sus pruebas "
+            "dentro de los filtros activos. Para análisis por prueba específica, usa también "
+            "el filtro de prueba en la barra lateral."
         )
-        st.dataframe(
-            school_grade.sort_values(
-                ["colegio_de_origen", "Estudiantes"],
-                ascending=[True, False],
-            ),
-            use_container_width=True,
-            hide_index=True,
-        )
+
 # ------------------------- Estudiantes -------------------------
 with tabs[4]:
     student_summary = (
