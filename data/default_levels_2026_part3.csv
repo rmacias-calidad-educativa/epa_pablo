@@ -1,0 +1,131 @@
+Prueba,Sede,Grado_num,Nivel,Estudiantes
+Inglés,MOS,11,Emergente,6
+Inglés,MOS,11,En aceleración,20
+Inglés,MOS,11,Progreso limitado,3
+Inglés,TUN,9,Emergente,21
+Inglés,TUN,9,En aceleración,2
+Inglés,TUN,9,Progreso limitado,13
+Inglés,TUN,10,Avanzado,9
+Inglés,TUN,10,Emergente,14
+Inglés,TUN,10,En aceleración,22
+Inglés,ZIPA,9,Emergente,30
+Inglés,ZIPA,9,En aceleración,9
+Inglés,ZIPA,9,Progreso limitado,8
+Inglés,ZIPA,10,Avanzado,7
+Inglés,ZIPA,10,Emergente,9
+Inglés,ZIPA,10,En aceleración,18
+Inglés,ZIPA,10,Progreso limitado,2
+Lenguaje,BAQ,3,Avanzado,2
+Lenguaje,BAQ,3,Emergente,26
+Lenguaje,BAQ,3,En aceleración,18
+Lenguaje,BAQ,3,Progreso limitado,12
+Lenguaje,BAQ,4,Avanzado,4
+Lenguaje,BAQ,4,Emergente,28
+Lenguaje,BAQ,4,En aceleración,23
+Lenguaje,BAQ,4,Progreso limitado,12
+Lenguaje,BAQ,5,Avanzado,1
+Lenguaje,BAQ,5,Emergente,2
+Lenguaje,BAQ,6,Avanzado,6
+Lenguaje,BAQ,6,Emergente,6
+Lenguaje,BAQ,6,En aceleración,14
+Lenguaje,BAQ,6,Progreso limitado,4
+Lenguaje,BAQ,7,Avanzado,10
+Lenguaje,BAQ,7,Emergente,10
+Lenguaje,BAQ,7,En aceleración,23
+Lenguaje,BAQ,7,Progreso limitado,5
+Lenguaje,BAQ,8,Avanzado,5
+Lenguaje,BAQ,8,Emergente,19
+Lenguaje,BAQ,8,En aceleración,34
+Lenguaje,BAQ,8,Progreso limitado,1
+Lenguaje,COT,3,Avanzado,2
+Lenguaje,COT,3,Emergente,13
+Lenguaje,COT,3,En aceleración,7
+Lenguaje,COT,3,Progreso limitado,4
+Lenguaje,COT,4,Avanzado,3
+Lenguaje,COT,4,Emergente,12
+Lenguaje,COT,4,En aceleración,10
+Lenguaje,COT,4,Progreso limitado,3
+Lenguaje,COT,5,Avanzado,4
+Lenguaje,COT,5,Emergente,13
+Lenguaje,COT,5,En aceleración,19
+Lenguaje,COT,5,Progreso limitado,2
+Lenguaje,COT,6,Avanzado,9
+Lenguaje,COT,6,Emergente,4
+Lenguaje,COT,6,En aceleración,17
+Lenguaje,COT,6,Progreso limitado,2
+Lenguaje,COT,7,Avanzado,4
+Lenguaje,COT,7,Emergente,6
+Lenguaje,COT,7,En aceleración,24
+Lenguaje,COT,7,Progreso limitado,1
+Lenguaje,COT,8,Avanzado,3
+Lenguaje,COT,8,Emergente,10
+Lenguaje,COT,8,En aceleración,17
+Lenguaje,COT,8,Progreso limitado,1
+Lenguaje,COT,9,Avanzado,14
+Lenguaje,COT,9,Emergente,6
+Lenguaje,COT,9,En aceleración,16
+Lenguaje,COT,9,Progreso limitado,1
+Lenguaje,COT,10,Avanzado,1
+Lenguaje,COT,10,Emergente,10
+Lenguaje,COT,10,En aceleración,9
+Lenguaje,COT,10,Progreso limitado,2
+Lenguaje,MOS,3,Avanzado,11
+Lenguaje,MOS,3,Emergente,45
+Lenguaje,MOS,3,En aceleración,11
+Lenguaje,MOS,3,Progreso limitado,25
+Lenguaje,MOS,4,Avanzado,21
+Lenguaje,MOS,4,Emergente,38
+Lenguaje,MOS,4,En aceleración,22
+Lenguaje,MOS,4,Progreso limitado,10
+Lenguaje,MOS,5,Avanzado,2
+Lenguaje,MOS,5,Emergente,40
+Lenguaje,MOS,5,En aceleración,24
+Lenguaje,MOS,5,Progreso limitado,24
+Lenguaje,MOS,6,Avanzado,19
+Lenguaje,MOS,6,Emergente,44
+Lenguaje,MOS,6,En aceleración,32
+Lenguaje,MOS,6,Progreso limitado,14
+Lenguaje,MOS,7,Avanzado,6
+Lenguaje,MOS,7,Emergente,16
+Lenguaje,MOS,7,En aceleración,41
+Lenguaje,MOS,7,Progreso limitado,7
+Lenguaje,MOS,8,Avanzado,14
+Lenguaje,MOS,8,Emergente,22
+Lenguaje,MOS,8,En aceleración,40
+Lenguaje,MOS,8,Progreso limitado,3
+Lenguaje,MOS,9,Avanzado,17
+Lenguaje,MOS,9,Emergente,20
+Lenguaje,MOS,9,En aceleración,25
+Lenguaje,MOS,9,Progreso limitado,2
+Lenguaje,MOS,10,Avanzado,4
+Lenguaje,MOS,10,Emergente,29
+Lenguaje,MOS,10,En aceleración,10
+Lenguaje,MOS,10,Progreso limitado,6
+Lenguaje,MOS,11,Avanzado,14
+Lenguaje,MOS,11,Emergente,12
+Lenguaje,MOS,11,En aceleración,20
+Lenguaje,MOS,11,Progreso limitado,4
+Lenguaje,TUN,3,Avanzado,1
+Lenguaje,TUN,3,Emergente,12
+Lenguaje,TUN,3,En aceleración,6
+Lenguaje,TUN,3,Progreso limitado,9
+Lenguaje,TUN,4,Avanzado,3
+Lenguaje,TUN,4,Emergente,5
+Lenguaje,TUN,4,En aceleración,5
+Lenguaje,TUN,4,Progreso limitado,4
+Lenguaje,TUN,5,Avanzado,3
+Lenguaje,TUN,5,Emergente,20
+Lenguaje,TUN,5,En aceleración,14
+Lenguaje,TUN,5,Progreso limitado,4
+Lenguaje,TUN,6,Avanzado,12
+Lenguaje,TUN,6,Emergente,10
+Lenguaje,TUN,6,En aceleración,15
+Lenguaje,TUN,6,Progreso limitado,3
+Lenguaje,TUN,7,Avanzado,7
+Lenguaje,TUN,7,Emergente,12
+Lenguaje,TUN,7,En aceleración,14
+Lenguaje,TUN,7,Progreso limitado,1
+Lenguaje,TUN,8,Avanzado,9
+Lenguaje,TUN,8,Emergente,8
+Lenguaje,TUN,8,En aceleración,22
+Lenguaje,TUN,8,Progreso limitado,1
