@@ -1,0 +1,111 @@
+Prueba,Sede,Grado_num,competencia,Estudiantes,Promedio_dimension
+Ciencias sociales,COT,5,Multiperspectivismo,39,45.299145299145295
+Ciencias sociales,COT,5,pensamiento sistémico,39,44.61538461538461
+Ciencias sociales,COT,6,Argumentación en contextos ciudadanos,31,74.19354838709677
+Ciencias sociales,COT,6,Conocimientos,31,82.58064516129032
+Ciencias sociales,COT,6,Multiperspectivismo,31,69.35483870967742
+Ciencias sociales,COT,6,pensamiento sistémico,31,64.51612903225806
+Ciencias sociales,COT,7,Argumentación en contextos ciudadanos,35,77.85714285714286
+Ciencias sociales,COT,7,Conocimientos,35,67.61904761904762
+Ciencias sociales,COT,7,Multiperspectivismo,35,68.0
+Ciencias sociales,COT,7,pensamiento sistémico,35,81.71428571428571
+Ciencias sociales,COT,8,Argumentación en contextos ciudadanos,31,73.11827956989247
+Ciencias sociales,COT,8,Conocimientos,31,69.89247311827957
+Ciencias sociales,COT,8,Multiperspectivismo,31,65.80645161290323
+Ciencias sociales,COT,8,pensamiento sistémico,31,65.05376344086022
+Ciencias sociales,COT,9,Argumentación en contextos ciudadanos,36,64.81481481481481
+Ciencias sociales,COT,9,Conocimientos,36,62.03703703703704
+Ciencias sociales,COT,9,Multiperspectivismo,36,62.5
+Ciencias sociales,COT,9,pensamiento sistémico,36,77.22222222222223
+Ciencias sociales,COT,10,Interpretación y Análisis de Perspectivas,22,65.9090909090909
+Ciencias sociales,COT,10,Pensamiento Reflexivo y Sistémico,22,62.121212121212125
+Ciencias sociales,COT,10,Pensamiento Social,22,77.27272727272727
+Ciencias sociales,MOS,5,Argumentación en contextos ciudadanos,65,37.43589743589743
+Ciencias sociales,MOS,5,Conocimientos,69,39.85507246376812
+Ciencias sociales,MOS,5,Multiperspectivismo,68,35.78431372549019
+Ciencias sociales,MOS,5,pensamiento sistémico,69,31.594202898550726
+Ciencias sociales,MOS,6,Argumentación en contextos ciudadanos,109,55.04587155963303
+Ciencias sociales,MOS,6,Conocimientos,109,56.51376146788991
+Ciencias sociales,MOS,6,Multiperspectivismo,109,48.318042813455655
+Ciencias sociales,MOS,6,pensamiento sistémico,109,45.5045871559633
+Ciencias sociales,MOS,7,Argumentación en contextos ciudadanos,56,62.94642857142857
+Ciencias sociales,MOS,7,Conocimientos,59,56.779661016949156
+Ciencias sociales,MOS,7,Multiperspectivismo,58,57.58620689655172
+Ciencias sociales,MOS,7,pensamiento sistémico,58,60.689655172413794
+Ciencias sociales,MOS,8,Argumentación en contextos ciudadanos,78,52.136752136752136
+Ciencias sociales,MOS,8,Conocimientos,78,62.17948717948718
+Ciencias sociales,MOS,8,Multiperspectivismo,78,49.743589743589745
+Ciencias sociales,MOS,8,pensamiento sistémico,78,51.06837606837606
+Ciencias sociales,MOS,9,Argumentación en contextos ciudadanos,63,60.84656084656084
+Ciencias sociales,MOS,9,Conocimientos,64,62.239583333333336
+Ciencias sociales,MOS,9,Multiperspectivismo,63,62.169312169312164
+Ciencias sociales,MOS,9,pensamiento sistémico,63,67.61904761904762
+Ciencias sociales,MOS,10,Interpretación y Análisis de Perspectivas,42,48.51190476190476
+Ciencias sociales,MOS,10,Pensamiento Reflexivo y Sistémico,42,44.047619047619044
+Ciencias sociales,MOS,10,Pensamiento Social,42,55.95238095238095
+Ciencias sociales,MOS,11,Interpretación y Análisis de Perspectivas,48,64.84375
+Ciencias sociales,MOS,11,Pensamiento Reflexivo y Sistémico,48,66.36904761904762
+Ciencias sociales,MOS,11,Pensamiento Social,48,70.13888888888889
+Ciencias sociales,TUN,5,Argumentación en contextos ciudadanos,41,46.34146341463414
+Ciencias sociales,TUN,5,Conocimientos,41,44.71544715447154
+Ciencias sociales,TUN,5,Multiperspectivismo,41,41.46341463414634
+Ciencias sociales,TUN,5,pensamiento sistémico,41,35.609756097560975
+Ciencias sociales,TUN,6,Argumentación en contextos ciudadanos,38,63.81578947368421
+Ciencias sociales,TUN,6,Conocimientos,38,70.0
+Ciencias sociales,TUN,6,Multiperspectivismo,38,65.78947368421052
+Ciencias sociales,TUN,6,pensamiento sistémico,38,57.89473684210526
+Ciencias sociales,TUN,7,Argumentación en contextos ciudadanos,33,68.18181818181819
+Ciencias sociales,TUN,7,Conocimientos,33,60.60606060606061
+Ciencias sociales,TUN,7,Multiperspectivismo,33,59.39393939393939
+Ciencias sociales,TUN,7,pensamiento sistémico,33,73.33333333333333
+Ciencias sociales,TUN,8,Argumentación en contextos ciudadanos,41,65.04065040650406
+Ciencias sociales,TUN,8,Conocimientos,41,73.17073170731707
+Ciencias sociales,TUN,8,Multiperspectivismo,41,58.048780487804876
+Ciencias sociales,TUN,8,pensamiento sistémico,41,55.69105691056911
+Ciencias sociales,TUN,9,Argumentación en contextos ciudadanos,36,66.66666666666667
+Ciencias sociales,TUN,9,Conocimientos,36,63.42592592592593
+Ciencias sociales,TUN,9,Multiperspectivismo,36,67.12962962962962
+Ciencias sociales,TUN,9,pensamiento sistémico,36,73.33333333333333
+Ciencias sociales,TUN,10,Interpretación y Análisis de Perspectivas,44,71.30681818181819
+Ciencias sociales,TUN,10,Pensamiento Reflexivo y Sistémico,44,62.5
+Ciencias sociales,TUN,10,Pensamiento Social,44,79.54545454545455
+Ciencias sociales,USAQ,5,Argumentación en contextos ciudadanos,39,39.31623931623931
+Ciencias sociales,USAQ,5,Conocimientos,39,43.16239316239316
+Ciencias sociales,USAQ,5,Multiperspectivismo,39,47.86324786324786
+Ciencias sociales,USAQ,5,pensamiento sistémico,39,38.97435897435897
+Ciencias sociales,USAQ,6,Argumentación en contextos ciudadanos,62,70.56451612903226
+Ciencias sociales,USAQ,6,Conocimientos,62,75.48387096774194
+Ciencias sociales,USAQ,6,Multiperspectivismo,62,69.6236559139785
+Ciencias sociales,USAQ,6,pensamiento sistémico,62,66.12903225806451
+Ciencias sociales,USAQ,7,Argumentación en contextos ciudadanos,30,79.16666666666667
+Ciencias sociales,USAQ,7,Conocimientos,30,77.77777777777779
+Ciencias sociales,USAQ,7,Multiperspectivismo,30,74.0
+Ciencias sociales,USAQ,7,pensamiento sistémico,30,80.66666666666667
+Ciencias sociales,USAQ,8,Argumentación en contextos ciudadanos,45,70.37037037037037
+Ciencias sociales,USAQ,8,Conocimientos,45,69.25925925925925
+Ciencias sociales,USAQ,8,Multiperspectivismo,45,57.77777777777778
+Ciencias sociales,USAQ,8,pensamiento sistémico,45,55.55555555555556
+Ciencias sociales,ZIPA,5,Argumentación en contextos ciudadanos,68,45.09803921568627
+Ciencias sociales,ZIPA,5,Conocimientos,68,49.26470588235294
+Ciencias sociales,ZIPA,5,Multiperspectivismo,68,38.725490196078425
+Ciencias sociales,ZIPA,5,pensamiento sistémico,68,34.411764705882355
+Ciencias sociales,ZIPA,6,Argumentación en contextos ciudadanos,73,56.50684931506849
+Ciencias sociales,ZIPA,6,Conocimientos,73,56.16438356164384
+Ciencias sociales,ZIPA,6,Multiperspectivismo,73,55.93607305936073
+Ciencias sociales,ZIPA,6,pensamiento sistémico,73,50.136986301369866
+Ciencias sociales,ZIPA,7,Argumentación en contextos ciudadanos,65,78.84615384615384
+Ciencias sociales,ZIPA,7,Conocimientos,65,72.05128205128204
+Ciencias sociales,ZIPA,7,Multiperspectivismo,65,75.07692307692308
+Ciencias sociales,ZIPA,7,pensamiento sistémico,65,83.6923076923077
+Ciencias sociales,ZIPA,8,Argumentación en contextos ciudadanos,72,77.77777777777777
+Ciencias sociales,ZIPA,8,Conocimientos,72,82.17592592592592
+Ciencias sociales,ZIPA,8,Multiperspectivismo,72,72.77777777777777
+Ciencias sociales,ZIPA,8,pensamiento sistémico,72,77.31481481481482
+Ciencias sociales,ZIPA,9,Argumentación en contextos ciudadanos,48,82.63888888888889
+Ciencias sociales,ZIPA,9,Conocimientos,48,81.59722222222221
+Ciencias sociales,ZIPA,9,Multiperspectivismo,48,85.7638888888889
+Ciencias sociales,ZIPA,9,pensamiento sistémico,48,90.83333333333333
+Ciencias sociales,ZIPA,10,Interpretación y Análisis de Perspectivas,36,70.13888888888889
+Ciencias sociales,ZIPA,10,Pensamiento Reflexivo y Sistémico,36,64.35185185185185
+Ciencias sociales,ZIPA,10,Pensamiento Social,36,75.92592592592592
+Inglés,COT,9,A1,33,78.78787878787878
