@@ -222,7 +222,12 @@ def render_threshold_note():
     )
 
 
-def render_main_line(d: pd.DataFrame, aggregated: bool):
+def render_main_line(
+    d: pd.DataFrame,
+    aggregated: bool,
+    level_summary: pd.DataFrame | None = None,
+    test_name: str | None = None,
+):
     if aggregated:
         grouped = (
             d.groupby(["Sede", "Grado_num"], as_index=False)
@@ -232,6 +237,28 @@ def render_main_line(d: pd.DataFrame, aggregated: bool):
                 Mayor_50=("Encima_50", "sum"),
             )
         )
+
+        if (
+            level_summary is not None
+            and not level_summary.empty
+            and test_name is not None
+        ):
+            level_base = level_summary[
+                level_summary["Prueba"].astype(str) == test_name
+            ].copy()
+            level_base = level_base[
+                level_base["Sede"].isin(d["Sede"].astype(str).unique())
+                & level_base["Grado_num"].isin(d["Grado_num"].unique())
+            ]
+            level_counts = (
+                level_base.groupby(
+                    ["Sede", "Grado_num", "Nivel"],
+                    as_index=False,
+                )["Estudiantes"]
+                .sum()
+            )
+        else:
+            level_counts = pd.DataFrame()
     else:
         student = build_student_level(d)
         grouped = (
@@ -244,6 +271,13 @@ def render_main_line(d: pd.DataFrame, aggregated: bool):
         grouped["Mayor_50"] = (
             grouped["Estudiantes"] - grouped["Menor_igual_50"]
         )
+        level_counts = (
+            student.groupby(
+                ["Sede", "Grado_num", "Nivel"],
+                as_index=False,
+            )
+            .agg(Estudiantes=("IdentiEstudiante", "nunique"))
+        )
 
     if grouped.empty:
         st.info("No hay datos para los filtros seleccionados.")
@@ -254,6 +288,60 @@ def render_main_line(d: pd.DataFrame, aggregated: bool):
         grouped["Menor_igual_50"] / grouped["Estudiantes"] * 100,
         np.nan,
     )
+
+    if not level_counts.empty:
+        level_pivot = (
+            level_counts.pivot_table(
+                index=["Sede", "Grado_num"],
+                columns="Nivel",
+                values="Estudiantes",
+                aggfunc="sum",
+                fill_value=0,
+            )
+            .reset_index()
+        )
+        for level in LEVEL_ORDER:
+            if level not in level_pivot.columns:
+                level_pivot[level] = 0
+
+        level_pivot["Total_niveles"] = (
+            level_pivot[LEVEL_ORDER].sum(axis=1)
+        )
+        level_pivot["Pct_Progreso_limitado"] = np.where(
+            level_pivot["Total_niveles"] > 0,
+            level_pivot["Progreso limitado"]
+            / level_pivot["Total_niveles"] * 100,
+            0,
+        )
+        level_pivot["Pct_Emergente"] = np.where(
+            level_pivot["Total_niveles"] > 0,
+            level_pivot["Emergente"]
+            / level_pivot["Total_niveles"] * 100,
+            0,
+        )
+        level_pivot["Pct_PL_E"] = (
+            level_pivot["Pct_Progreso_limitado"]
+            + level_pivot["Pct_Emergente"]
+        )
+
+        grouped = grouped.merge(
+            level_pivot[
+                [
+                    "Sede",
+                    "Grado_num",
+                    "Pct_Progreso_limitado",
+                    "Pct_Emergente",
+                    "Pct_PL_E",
+                ]
+            ],
+            on=["Sede", "Grado_num"],
+            how="left",
+        )
+    else:
+        grouped["Pct_Progreso_limitado"] = np.nan
+        grouped["Pct_Emergente"] = np.nan
+        grouped["Pct_PL_E"] = grouped["Pct_50_o_menos"]
+
     grouped["Grado"] = grouped["Grado_num"].apply(grade_label)
 
     total_low = int(grouped["Menor_igual_50"].sum())
@@ -288,19 +376,14 @@ def render_main_line(d: pd.DataFrame, aggregated: bool):
         markers=True,
         text="Menor_igual_50",
         category_orders={"Sede": SITES},
-        hover_data={
-            "Grado_num": False,
-            "Grado": True,
-            "Estudiantes": True,
-            "Menor_igual_50": True,
-            "Mayor_50": True,
-            "Pct_50_o_menos": ":.1f",
-        },
+        custom_data=[
+            "Pct_Progreso_limitado",
+            "Pct_Emergente",
+            "Pct_PL_E",
+        ],
         labels={
             "Sede": "Sede",
             "Menor_igual_50": "Progreso limitado + Emergente",
-            "Mayor_50": "En aceleración + Avanzado",
-            "Pct_50_o_menos": "% ≤50%",
         },
         title="Estudiantes en Progreso limitado + Emergente por grado",
     )
@@ -315,6 +398,13 @@ def render_main_line(d: pd.DataFrame, aggregated: bool):
         cliponaxis=False,
         line=dict(width=2.5),
         marker=dict(size=8),
+        hovertemplate=(
+            "<b>%{fullData.name}</b><br>"
+            "Progreso limitado: %{customdata[0]:.1f}%<br>"
+            "Emergente: %{customdata[1]:.1f}%<br>"
+            "Progreso limitado + Emergente: %{customdata[2]:.1f}%"
+            "<extra></extra>"
+        ),
     )
     st.plotly_chart(fig, use_container_width=True)
 
@@ -786,7 +876,12 @@ def render_test_page(
         st.warning("Los filtros seleccionados no dejan datos.")
         return
 
-    render_main_line(site_filtered, aggregated=aggregated)
+    render_main_line(
+        site_filtered,
+        aggregated=aggregated,
+        level_summary=levels_public,
+        test_name=test_name,
+    )
 
     st.divider()
     render_levels_vs_network(
