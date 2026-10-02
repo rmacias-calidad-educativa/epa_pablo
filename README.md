@@ -125,3 +125,27 @@ dashboard_estado_llegada/
     ├── processing.py
     └── ui.py
 ```
+
+
+## Lecturas principales del dashboard
+
+La versión actual prioriza dos preguntas de negocio educativo:
+
+1. **¿Cuántos estudiantes están en ≤50% y cuántos en >50% en cada sede y prueba?**
+   - Matriz con las seis sedes siempre visibles.
+   - Filtros por año y grado.
+   - Conteos dentro de cada celda.
+   - Histórico anual por prueba y sede.
+
+2. **¿Existen patrones relacionados con el colegio de origen?**
+   - Distribución por los cuatro niveles de desempeño.
+   - Comparación colegio de origen × área.
+   - Diferencia del %≤50 frente al promedio de la red.
+   - Porcentaje de estudiantes con dos o más pruebas en ≤50%.
+   - Identificación descriptiva de patrones recurrentes en varias áreas.
+
+Los patrones son **descriptivos, no causales**, y deben interpretarse junto con el número de estudiantes representados.
+
+### Nota sobre años disponibles
+
+La fuente actual contiene registros de 2025 y 2026, pero 2025 tiene una cantidad muy reducida de observaciones frente a 2026. La aplicación muestra una advertencia cuando se consulta ese periodo.
