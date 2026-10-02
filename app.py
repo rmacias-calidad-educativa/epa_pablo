@@ -469,7 +469,7 @@ def render_levels_vs_network(
             index=[s for s in SITES if s in selected_sites],
             columns=LEVEL_ORDER,
         )
-        labels = delta.applymap(
+        labels = delta.map(
             lambda x: "" if pd.isna(x) else f"{x:+.1f} pp"
         )
 
