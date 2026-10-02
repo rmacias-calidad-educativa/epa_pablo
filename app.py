@@ -27,16 +27,22 @@ TESTS = [
 ]
 SITES = ["BAQ", "COT", "MOS", "TUN", "USAQ", "ZIPA"]
 LEVEL_ORDER = [
-    "Progreso limitado",
-    "Emergente",
-    "En aceleración",
-    "Avanzado",
+    "Nivel 1",
+    "Nivel 2",
+    "Nivel 3",
+    "Nivel 4",
 ]
 LEVEL_COLORS = {
-    "Progreso limitado": "#C93C3C",
-    "Emergente": "#E58B2A",
-    "En aceleración": "#D8B531",
-    "Avanzado": "#2E8B57",
+    "Nivel 1": "#C93C3C",
+    "Nivel 2": "#E58B2A",
+    "Nivel 3": "#D8B531",
+    "Nivel 4": "#2E8B57",
+}
+LEGACY_LEVEL_MAP = {
+    "Progreso limitado": "Nivel 1",
+    "Emergente": "Nivel 2",
+    "En aceleración": "Nivel 3",
+    "Avanzado": "Nivel 4",
 }
 
 
@@ -117,6 +123,8 @@ def read_default_data():
         if level_files
         else pd.DataFrame()
     )
+    if not levels.empty and "Nivel" in levels.columns:
+        levels["Nivel"] = levels["Nivel"].replace(LEGACY_LEVEL_MAP)
 
     dimension_files = sorted(
         Path("data").glob("default_dimensions_2026_part*.csv")
@@ -145,6 +153,8 @@ def read_default_data():
         if top10_grade_files
         else pd.DataFrame()
     )
+    if not top10_origin.empty and "Nivel" in top10_origin.columns:
+        top10_origin["Nivel"] = top10_origin["Nivel"].replace(LEGACY_LEVEL_MAP)
 
     return temporal, levels, dimensions, top10_origin
 
@@ -208,11 +218,11 @@ def build_student_level(data: pd.DataFrame) -> pd.DataFrame:
             student["Porcentaje"] <= 75,
         ],
         [
-            "Progreso limitado",
-            "Emergente",
-            "En aceleración",
+            "Nivel 1",
+            "Nivel 2",
+            "Nivel 3",
         ],
-        default="Avanzado",
+        default="Nivel 4",
     )
     student["Menor_igual_50"] = student["Porcentaje"] <= 50
     return student
@@ -224,10 +234,10 @@ def render_threshold_note():
         <div class="threshold-box">
         <strong>Lectura del corte del 50%:</strong>
         estar en <strong>≤50% de aciertos</strong> significa pertenecer a
-        <strong>Progreso limitado (0–25%)</strong> o
-        <strong>Emergente (&gt;25–50%)</strong>.
+        <strong>Nivel 1 (0–25%)</strong> o
+        <strong>Nivel 2 (&gt;25–50%)</strong>.
         Los estudiantes con <strong>&gt;50%</strong> se ubican en
-        <strong>En aceleración</strong> o <strong>Avanzado</strong>.
+        <strong>Nivel 3</strong> o <strong>Nivel 4</strong>.
         </div>
         """,
         unsafe_allow_html=True,
@@ -321,13 +331,13 @@ def render_main_line(
         )
         level_pivot["Pct_Progreso_limitado"] = np.where(
             level_pivot["Total_niveles"] > 0,
-            level_pivot["Progreso limitado"]
+            level_pivot["Nivel 1"]
             / level_pivot["Total_niveles"] * 100,
             0,
         )
         level_pivot["Pct_Emergente"] = np.where(
             level_pivot["Total_niveles"] > 0,
-            level_pivot["Emergente"]
+            level_pivot["Nivel 2"]
             / level_pivot["Total_niveles"] * 100,
             0,
         )
@@ -362,17 +372,17 @@ def render_main_line(
 
     m1, m2, m3 = st.columns(3)
     m1.metric(
-        "Progreso limitado + Emergente",
+        "Nivel 1 + Nivel 2",
         f"{total_low:,}".replace(",", "."),
         help="Estudiantes con 50% o menos de aciertos.",
     )
     m2.metric(
-        "En aceleración + Avanzado",
+        "Nivel 3 + Nivel 4",
         f"{total_high:,}".replace(",", "."),
         help="Estudiantes con más de 50% de aciertos.",
     )
     m3.metric(
-        "% en Progreso limitado + Emergente",
+        "% en Nivel 1 + Nivel 2",
         f"{(total_low / total * 100):.1f}%" if total else "—",
     )
 
@@ -395,9 +405,9 @@ def render_main_line(
         ],
         labels={
             "Sede": "Sede",
-            "Menor_igual_50": "Progreso limitado + Emergente",
+            "Menor_igual_50": "Nivel 1 + Nivel 2",
         },
-        title="Estudiantes en Progreso limitado + Emergente por grado",
+        title="Estudiantes en Nivel 1 + Nivel 2 por grado",
     )
     fig = style_clean_axes(fig, grades=grades, hide_y=True)
     fig.update_layout(
@@ -412,9 +422,9 @@ def render_main_line(
         marker=dict(size=8),
         hovertemplate=(
             "<b>%{fullData.name}</b><br>"
-            "Progreso limitado: %{customdata[0]:.1f}%<br>"
-            "Emergente: %{customdata[1]:.1f}%<br>"
-            "Progreso limitado + Emergente: %{customdata[2]:.1f}%"
+            "Nivel 1: %{customdata[0]:.1f}%<br>"
+            "Nivel 2: %{customdata[1]:.1f}%<br>"
+            "Nivel 1 + Nivel 2: %{customdata[2]:.1f}%"
             "<extra></extra>"
         ),
     )
@@ -1112,8 +1122,8 @@ def render_top10_origin_by_level(
     ranking = ranking[ranking["Ranking"] <= 10].copy()
 
     rows = [
-        ("Progreso limitado", "Emergente"),
-        ("En aceleración", "Avanzado"),
+        ("Nivel 1", "Nivel 2"),
+        ("Nivel 3", "Nivel 4"),
     ]
 
     for left_level, right_level in rows:
