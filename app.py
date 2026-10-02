@@ -405,6 +405,9 @@ def render_main_line(
         grouped["Pct_PL_E"] = grouped["Pct_50_o_menos"]
 
     grouped["Grado"] = grouped["Grado_num"].apply(grade_label)
+    grouped["Etiqueta_Pct_50"] = grouped["Pct_50_o_menos"].map(
+        lambda x: "" if pd.isna(x) else f"{x:.0f}%"
+    )
 
     total_low = int(grouped["Menor_igual_50"].sum())
     total_high = int(grouped["Mayor_50"].sum())
@@ -433,10 +436,10 @@ def render_main_line(
     fig = px.line(
         grouped.sort_values(["Sede", "Grado_num"]),
         x="Grado_num",
-        y="Menor_igual_50",
+        y="Pct_50_o_menos",
         color="Sede",
         markers=True,
-        text="Menor_igual_50",
+        text="Etiqueta_Pct_50",
         category_orders={"Sede": SITES},
         custom_data=[
             "Pct_Progreso_limitado",
@@ -445,11 +448,17 @@ def render_main_line(
         ],
         labels={
             "Sede": "Sede",
-            "Menor_igual_50": "Nivel 1 + Nivel 2",
+            "Pct_50_o_menos": "% en Nivel 1 + Nivel 2",
         },
-        title="Estudiantes en Nivel 1 + Nivel 2 por grado",
+        title="% de estudiantes en Nivel 1 + Nivel 2 por grado",
     )
-    fig = style_clean_axes(fig, grades=grades, hide_y=True)
+    fig = style_clean_axes(fig, grades=grades, hide_y=False)
+    fig.update_yaxes(
+        range=[0, 100],
+        showticklabels=True,
+        ticksuffix="%",
+        title="% en Nivel 1 + Nivel 2",
+    )
     fig.update_layout(
         height=600,
         hovermode="x unified",
@@ -540,7 +549,7 @@ def render_main_line(
             fig.add_trace(
                 go.Scatter(
                     x=nd["Grado_num"],
-                    y=nd["Nuevos_Nivel1_2"],
+                    y=nd["Pct_Nuevos_en_Nivel1_2"],
                     mode="lines+markers+text",
                     name=f"{site} · ≤1 año",
                     line=dict(
@@ -553,19 +562,22 @@ def render_main_line(
                         symbol="circle-open",
                         color=site_colors.get(site),
                     ),
-                    text=nd["Nuevos_Nivel1_2"],
+                    text=nd["Pct_Nuevos_en_Nivel1_2"].map(
+                        lambda x: "" if pd.isna(x) else f"{x:.0f}%"
+                    ),
                     textposition="bottom center",
                     textfont=dict(size=11),
                     customdata=np.column_stack([
                         nd["Nuevos_1_o_menos"],
                         nd["Pct_Nuevos_en_Nivel1_2"],
+                        nd["Nuevos_Nivel1_2"],
                     ]),
                     hovertemplate=(
                         f"<b>{site} · ≤1 año de antigüedad</b><br>"
-                        "Nivel 1 + Nivel 2: %{y}<br>"
+                        "% en Nivel 1 + Nivel 2: %{y:.1f}%<br>"
                         "Total con ≤1 año: %{customdata[0]:.0f}<br>"
-                        "% con ≤1 año en Nivel 1 + Nivel 2: "
-                        "%{customdata[1]:.1f}%"
+                        "Estudiantes con ≤1 año en Nivel 1 + Nivel 2: "
+                        "%{customdata[2]:.0f}"
                         "<extra></extra>"
                     ),
                     cliponaxis=False,
@@ -576,8 +588,8 @@ def render_main_line(
 
     if not newcomer_plot.empty:
         st.caption(
-            "Línea punteada: estudiantes de MOS y TUN con 1 año o menos "
-            "de antigüedad que se encuentran en Nivel 1 + Nivel 2."
+            "Línea punteada: porcentaje de estudiantes de MOS y TUN con "
+            "1 año o menos de antigüedad que se encuentran en Nivel 1 + Nivel 2."
         )
 
 
