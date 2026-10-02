@@ -308,6 +308,11 @@ def build_dimension_table(raw: pd.DataFrame) -> pd.DataFrame:
             Grado_num=("Grado_num", "first"),
             Prueba=("Prueba", "first"),
             Año=("Año", "first"),
+            AntiguedadBS=(
+                ("AntiguedadBS", "first")
+                if "AntiguedadBS" in df.columns
+                else ("Sede", lambda s: pd.NA)
+            ),
         )
     )
 
@@ -327,6 +332,7 @@ def build_dimension_table(raw: pd.DataFrame) -> pd.DataFrame:
             Grado_num=("Grado_num", "first"),
             Prueba=("Prueba", "first"),
             Año=("Año", "first"),
+            AntiguedadBS=("AntiguedadBS", "first"),
             Aciertos_dimension=("EsCorrecta", "sum"),
             Items_observados_dimension=("Pregunta", "nunique"),
         )
