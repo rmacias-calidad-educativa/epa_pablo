@@ -42,6 +42,13 @@ LEVEL_COLORS = {
     "Nivel 3": "#D8B531",
     "Nivel 4": "#2E8B57",
 }
+LATAM_ORDER = ["Inicio", "Básico", "Satisfactorio", "Avanzado"]
+LATAM_SCORE = {
+    "Inicio": 1,
+    "Básico": 2,
+    "Satisfactorio": 3,
+    "Avanzado": 4,
+}
 LEGACY_LEVEL_MAP = {
     "Progreso limitado": "Nivel 1",
     "Emergente": "Nivel 2",
@@ -85,6 +92,39 @@ st.markdown(
 @st.cache_data(show_spinner=False)
 def read_excel(file_bytes: bytes) -> pd.DataFrame:
     return pd.read_excel(io.BytesIO(file_bytes))
+
+
+@st.cache_data(show_spinner=False)
+def read_latam_efa_data():
+    detail_path = Path("data/latam_efa_aggregate_2026.csv")
+    summary_path = Path("data/latam_efa_match_summary_2026.csv")
+
+    detail = (
+        pd.read_csv(detail_path)
+        if detail_path.exists()
+        else pd.DataFrame()
+    )
+    summary = (
+        pd.read_csv(summary_path)
+        if summary_path.exists()
+        else pd.DataFrame()
+    )
+
+    if not detail.empty:
+        detail = detail[
+            detail["Sede"].astype(str).isin(SITES)
+        ].copy()
+        detail["Grado_num"] = pd.to_numeric(
+            detail["Grado_num"], errors="coerce"
+        ).astype("Int64")
+        detail["Pct_EFA"] = pd.to_numeric(
+            detail["Pct_EFA"], errors="coerce"
+        )
+        detail["Estudiantes"] = pd.to_numeric(
+            detail["Estudiantes"], errors="coerce"
+        ).fillna(0).astype(int)
+
+    return detail, summary
 
 
 @st.cache_data(show_spinner=False)
@@ -1695,10 +1735,349 @@ def render_test_page(
     )
 
 
+def _spearman_from_aggregate(data: pd.DataFrame) -> float:
+    if data is None or data.empty:
+        return np.nan
+
+    codes = data["Categoria_LATAM"].map(LATAM_SCORE)
+    weights = pd.to_numeric(
+        data["Estudiantes"], errors="coerce"
+    ).fillna(0).astype(int)
+    scores = pd.to_numeric(
+        data["Pct_EFA"], errors="coerce"
+    )
+
+    valid = codes.notna() & scores.notna() & (weights > 0)
+    if not valid.any():
+        return np.nan
+
+    x = np.repeat(codes[valid].to_numpy(), weights[valid].to_numpy())
+    y = np.repeat(scores[valid].to_numpy(), weights[valid].to_numpy())
+
+    if len(x) < 3 or len(np.unique(x)) < 2 or len(np.unique(y)) < 2:
+        return np.nan
+
+    return pd.Series(x).corr(pd.Series(y), method="spearman")
+
+
+def _weighted_group_average(group: pd.DataFrame) -> float:
+    weights = pd.to_numeric(
+        group["Estudiantes"], errors="coerce"
+    ).fillna(0)
+    values = pd.to_numeric(
+        group["Pct_EFA"], errors="coerce"
+    )
+    valid = values.notna() & (weights > 0)
+    if not valid.any():
+        return np.nan
+    return float(np.average(values[valid], weights=weights[valid]))
+
+
+def render_latam_efa_area(
+    data: pd.DataFrame,
+    summary: pd.DataFrame,
+    area: str,
+):
+    st.markdown(f"## {area}")
+    st.caption(
+        "Relación entre la categoría de logro LATAM y los resultados de "
+        "Evaluar para Avanzar (EFA)."
+    )
+
+    d = data[data["Area"].astype(str) == area].copy()
+    if d.empty:
+        st.info(f"No hay cruces LATAM–EFA disponibles para {area}.")
+        return
+
+    srow = summary[
+        summary["Area"].astype(str) == area
+    ].copy() if summary is not None and not summary.empty else pd.DataFrame()
+
+    available_sites = [
+        site for site in SITES
+        if site in d["Sede"].dropna().astype(str).unique()
+    ]
+    grades = sorted(
+        [int(g) for g in d["Grado_num"].dropna().unique()]
+    )
+
+    c1, c2 = st.columns([1.1, 1.4])
+    with c1:
+        selected_sites = st.multiselect(
+            "Sedes/colegios",
+            available_sites,
+            default=available_sites,
+            key=f"latam_sites_{area}",
+        )
+    with c2:
+        selected_grades = st.multiselect(
+            "Grados",
+            grades,
+            default=grades,
+            format_func=lambda g: f"{g}°",
+            key=f"latam_grades_{area}",
+        )
+
+    filtered = d.copy()
+    if selected_sites:
+        filtered = filtered[
+            filtered["Sede"].astype(str).isin(selected_sites)
+        ]
+    if selected_grades:
+        filtered = filtered[
+            filtered["Grado_num"].isin(selected_grades)
+        ]
+
+    if filtered.empty:
+        st.warning("Los filtros seleccionados no dejan estudiantes emparejados.")
+        return
+
+    matched_filtered = int(filtered["Estudiantes"].sum())
+    rho = _spearman_from_aggregate(filtered)
+
+    if not srow.empty:
+        latam_total = int(srow.iloc[0]["Registros_LATAM"])
+        matched_total = int(srow.iloc[0]["Emparejados_EFA_misma_area"])
+        coverage = float(srow.iloc[0]["Cobertura_sobre_LATAM_pct"])
+    else:
+        latam_total = 0
+        matched_total = int(d["Estudiantes"].sum())
+        coverage = np.nan
+
+    m1, m2, m3, m4 = st.columns(4)
+    m1.metric("Registros LATAM", f"{latam_total:,}".replace(",", "."))
+    m2.metric(
+        "Emparejados EFA",
+        f"{matched_total:,}".replace(",", "."),
+        help="Cruce por correo mediante la base puente y coincidencia de área.",
+    )
+    m3.metric(
+        "Cobertura",
+        f"{coverage:.1f}%" if np.isfinite(coverage) else "—",
+    )
+    m4.metric(
+        "ρ Spearman",
+        f"{rho:.2f}" if np.isfinite(rho) else "—",
+        help=(
+            "Correlación ordinal entre Inicio < Básico < Satisfactorio < "
+            "Avanzado y el porcentaje de aciertos en EFA. Se recalcula con "
+            "los filtros activos."
+        ),
+    )
+
+    st.caption(
+        f"Estudiantes representados en los filtros actuales: "
+        f"{matched_filtered:,}. El emparejamiento se realizó por "
+        "CORREO → ExternalEmail → OrgDefinedId → IdentiEstudiante. "
+        "No se publican correos ni documentos en esta vista."
+    )
+
+    group_cols = ["Grado_num", "Categoria_LATAM"]
+
+    level_counts = (
+        filtered.groupby(
+            group_cols + ["Nivel_EFA"],
+            as_index=False,
+        )["Estudiantes"]
+        .sum()
+    )
+
+    table = (
+        level_counts.pivot_table(
+            index=group_cols,
+            columns="Nivel_EFA",
+            values="Estudiantes",
+            aggfunc="sum",
+            fill_value=0,
+        )
+        .reset_index()
+    )
+
+    for level in LEVEL_ORDER:
+        if level not in table.columns:
+            table[level] = 0
+
+    totals = table[LEVEL_ORDER].sum(axis=1)
+    for level in LEVEL_ORDER:
+        table[level] = np.where(
+            totals > 0,
+            table[level] / totals * 100,
+            0,
+        )
+
+    avg = (
+        filtered.groupby(group_cols, as_index=False)
+        .apply(
+            lambda g: pd.Series({
+                "n": int(g["Estudiantes"].sum()),
+                "Promedio_EFA": _weighted_group_average(g),
+            }),
+            include_groups=False,
+        )
+    )
+
+    table = table.merge(avg, on=group_cols, how="left")
+    table["Categoria_LATAM"] = pd.Categorical(
+        table["Categoria_LATAM"],
+        categories=LATAM_ORDER,
+        ordered=True,
+    )
+    table = table.sort_values(
+        ["Grado_num", "Categoria_LATAM"]
+    )
+    table["Grado"] = table["Grado_num"].map(
+        lambda g: f"{int(g)}°"
+    )
+    table["Categoría LATAM"] = table["Categoria_LATAM"].astype(str)
+    table["Promedio EFA"] = table["Promedio_EFA"].map(
+        lambda x: f"{x:.1f}%" if pd.notna(x) else "—"
+    )
+    for level in LEVEL_ORDER:
+        table[level] = table[level].map(lambda x: f"{x:.1f}%")
+
+    display_cols = [
+        "Grado",
+        "Categoría LATAM",
+        "n",
+        "Promedio EFA",
+        *LEVEL_ORDER,
+    ]
+
+    st.markdown(
+        "### Distribución de EFA dentro de cada categoría LATAM y grado"
+    )
+    st.dataframe(
+        table[display_cols],
+        use_container_width=True,
+        hide_index=True,
+    )
+    st.caption(
+        "Los porcentajes de Nivel 1 a Nivel 4 suman 100% dentro de cada "
+        "combinación de grado y categoría LATAM."
+    )
+
+    chart_counts = (
+        filtered.groupby(
+            ["Categoria_LATAM", "Nivel_EFA"],
+            as_index=False,
+        )["Estudiantes"]
+        .sum()
+    )
+    chart_counts["Total_categoria"] = (
+        chart_counts.groupby("Categoria_LATAM")["Estudiantes"]
+        .transform("sum")
+    )
+    chart_counts["Porcentaje"] = np.where(
+        chart_counts["Total_categoria"] > 0,
+        chart_counts["Estudiantes"]
+        / chart_counts["Total_categoria"] * 100,
+        0,
+    )
+    chart_counts["Categoria_LATAM"] = pd.Categorical(
+        chart_counts["Categoria_LATAM"],
+        categories=LATAM_ORDER,
+        ordered=True,
+    )
+    chart_counts = chart_counts.sort_values(
+        ["Categoria_LATAM", "Nivel_EFA"]
+    )
+
+    fig = px.bar(
+        chart_counts,
+        x="Categoria_LATAM",
+        y="Porcentaje",
+        color="Nivel_EFA",
+        barmode="stack",
+        category_orders={
+            "Categoria_LATAM": LATAM_ORDER,
+            "Nivel_EFA": LEVEL_ORDER,
+        },
+        color_discrete_map=LEVEL_COLORS,
+        text=chart_counts["Porcentaje"].map(
+            lambda x: f"{x:.0f}%" if x >= 5 else ""
+        ),
+        custom_data=["Estudiantes"],
+        labels={
+            "Categoria_LATAM": "Categoría LATAM",
+            "Porcentaje": "% de estudiantes",
+            "Nivel_EFA": "Nivel EFA",
+        },
+        title=(
+            "Distribución de niveles EFA dentro de las categorías LATAM"
+        ),
+    )
+    fig.update_yaxes(range=[0, 100], ticksuffix="%")
+    fig.update_traces(
+        textposition="inside",
+        hovertemplate=(
+            "Categoría LATAM: %{x}<br>"
+            "Nivel EFA: %{fullData.name}<br>"
+            "Estudiantes: %{customdata[0]}<br>"
+            "Porcentaje: %{y:.1f}%<extra></extra>"
+        ),
+    )
+    fig.update_layout(
+        height=520,
+        plot_bgcolor="rgba(0,0,0,0)",
+        legend_title_text="Nivel EFA",
+    )
+    st.plotly_chart(fig, use_container_width=True)
+
+    avg_grade = (
+        filtered.groupby(
+            ["Grado_num", "Categoria_LATAM"],
+            as_index=False,
+        )
+        .apply(
+            lambda g: pd.Series({
+                "Promedio_EFA": _weighted_group_average(g),
+                "n": int(g["Estudiantes"].sum()),
+            }),
+            include_groups=False,
+        )
+    )
+    avg_grade["Categoria_LATAM"] = pd.Categorical(
+        avg_grade["Categoria_LATAM"],
+        categories=LATAM_ORDER,
+        ordered=True,
+    )
+    avg_grade["Grado"] = avg_grade["Grado_num"].map(
+        lambda g: f"{int(g)}°"
+    )
+
+    fig2 = px.line(
+        avg_grade.sort_values(
+            ["Grado_num", "Categoria_LATAM"]
+        ),
+        x="Categoria_LATAM",
+        y="Promedio_EFA",
+        color="Grado",
+        markers=True,
+        category_orders={"Categoria_LATAM": LATAM_ORDER},
+        hover_data={"n": True, "Promedio_EFA": ":.1f"},
+        labels={
+            "Categoria_LATAM": "Categoría LATAM",
+            "Promedio_EFA": "Promedio EFA",
+        },
+        title="Promedio EFA por categoría LATAM y grado",
+    )
+    fig2.update_yaxes(
+        range=[0, 100],
+        ticksuffix="%",
+        title="% de aciertos EFA",
+    )
+    fig2.update_layout(
+        height=520,
+        plot_bgcolor="rgba(0,0,0,0)",
+        legend_title_text="Grado",
+    )
+    st.plotly_chart(fig2, use_container_width=True)
+
+
 st.title("📊 Estado de llegada 2026")
 st.caption(
     "Base precargada actualizada al 19 de octubre de 2026 · "
-    "Dos ventanas complementarias: análisis general y análisis por antigüedad."
+    "Análisis general, antigüedad y relación LATAM vs Evaluar para Avanzar."
 )
 
 uploaded = st.file_uploader(
@@ -1745,8 +2124,14 @@ else:
         st.info("Carga el Excel para visualizar los resultados.")
         st.stop()
 
-view_general, view_age = st.tabs(
-    ["Análisis general", "Análisis por antigüedad ≤1 año"]
+latam_efa_data, latam_efa_summary = read_latam_efa_data()
+
+view_general, view_age, view_latam = st.tabs(
+    [
+        "Análisis general",
+        "Análisis por antigüedad ≤1 año",
+        "LATAM vs Evaluar para Avanzar",
+    ]
 )
 
 with view_general:
@@ -1793,3 +2178,33 @@ with view_age:
                         "COT, MOS, TUN y ZIPA · 1 año o menos de antigüedad"
                     ),
                 )
+
+
+with view_latam:
+    st.info(
+        "Esta ventana cruza únicamente Matemáticas y Lenguaje. "
+        "LATAM se empareja por correo mediante la base de usuarios y luego "
+        "con Evaluar para Avanzar por identificador de estudiante. "
+        "NIZA está excluida, igual que en el resto del dashboard."
+    )
+
+    if latam_efa_data.empty:
+        st.warning(
+            "No está disponible el resumen de emparejamiento LATAM–EFA."
+        )
+    else:
+        latam_math, latam_language = st.tabs(
+            ["Matemáticas", "Lenguaje"]
+        )
+        with latam_math:
+            render_latam_efa_area(
+                latam_efa_data,
+                latam_efa_summary,
+                "Matemáticas",
+            )
+        with latam_language:
+            render_latam_efa_area(
+                latam_efa_data,
+                latam_efa_summary,
+                "Lenguaje",
+            )
