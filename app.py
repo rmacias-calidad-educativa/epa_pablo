@@ -28,7 +28,7 @@ TESTS = [
     "Lenguaje",
     "Inglés",
 ]
-SITES = ["BAQ", "COT", "MOS", "NIZA", "TUN", "USAQ", "ZIPA"]
+SITES = ["BAQ", "COT", "MOS", "TUN", "USAQ", "ZIPA"]
 ANTIGUEDAD_SITES = ["COT", "MOS", "TUN", "ZIPA"]
 LEVEL_ORDER = [
     "Nivel 1",
@@ -94,6 +94,7 @@ def process_raw(raw: pd.DataFrame):
     attempts = attempts[
         (attempts["Año"] == YEAR)
         & (attempts["Prueba"].isin(TESTS))
+        & (attempts["Sede"].astype(str).isin(SITES))
     ].copy()
 
     dimensions = build_dimension_table(raw)
@@ -101,6 +102,7 @@ def process_raw(raw: pd.DataFrame):
         dimensions = dimensions[
             (dimensions["Año"] == YEAR)
             & (dimensions["Prueba"].isin(TESTS))
+            & (dimensions["Sede"].astype(str).isin(SITES))
         ].copy()
 
     age_attempts = attempts[
@@ -238,6 +240,23 @@ def read_default_data():
             age_temporal["Prueba"].isin(TESTS)
         ].copy()
 
+        # NIZA se excluye completamente del análisis general.
+        temporal = temporal[
+            temporal["Sede"].astype(str).isin(SITES)
+        ].copy()
+        if not levels.empty and "Sede" in levels.columns:
+            levels = levels[
+                levels["Sede"].astype(str).isin(SITES)
+            ].copy()
+        if not dimensions.empty and "Sede" in dimensions.columns:
+            dimensions = dimensions[
+                dimensions["Sede"].astype(str).isin(SITES)
+            ].copy()
+        if not top10_origin.empty and "Sede" in top10_origin.columns:
+            top10_origin = top10_origin[
+                top10_origin["Sede"].astype(str).isin(SITES)
+            ].copy()
+
         return (
             temporal,
             levels,
@@ -342,6 +361,23 @@ def read_default_data():
         age_top10["Nivel"] = age_top10["Nivel"].replace(
             LEGACY_LEVEL_MAP
         )
+
+    # NIZA se excluye completamente del análisis general.
+    temporal = temporal[
+        temporal["Sede"].astype(str).isin(SITES)
+    ].copy()
+    if not levels.empty and "Sede" in levels.columns:
+        levels = levels[
+            levels["Sede"].astype(str).isin(SITES)
+        ].copy()
+    if not dimensions.empty and "Sede" in dimensions.columns:
+        dimensions = dimensions[
+            dimensions["Sede"].astype(str).isin(SITES)
+        ].copy()
+    if not top10_origin.empty and "Sede" in top10_origin.columns:
+        top10_origin = top10_origin[
+            top10_origin["Sede"].astype(str).isin(SITES)
+        ].copy()
 
     return (
         temporal,
