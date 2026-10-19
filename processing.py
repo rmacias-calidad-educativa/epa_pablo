@@ -33,6 +33,9 @@ OPTIONAL_COURSE_COLUMNS = [
     "Salon",
     "Salón",
     "salon",
+    "AULA",
+    "Aula",
+    "aula",
 ]
 
 
@@ -53,7 +56,7 @@ def find_course_column(df: pd.DataFrame) -> Optional[str]:
         if col in df.columns:
             return col
     normalized = {normalize_text(c): c for c in df.columns}
-    for candidate in ["CURSO", "GRUPO", "SALON", "COURSE"]:
+    for candidate in ["CURSO", "GRUPO", "SALON", "COURSE", "AULA"]:
         if candidate in normalized:
             return normalized[candidate]
     return None
@@ -268,7 +271,12 @@ def build_dimension_table(raw: pd.DataFrame) -> pd.DataFrame:
         raise ValueError(
             "Faltan columnas requeridas: " + ", ".join(missing)
         )
-    if "competencia" not in raw.columns:
+    dimension_col = None
+    if "Descriptor" in raw.columns:
+        dimension_col = "Descriptor"
+    elif "competencia" in raw.columns:
+        dimension_col = "competencia"
+    if dimension_col is None:
         return pd.DataFrame()
 
     df = raw.copy()
@@ -277,9 +285,14 @@ def build_dimension_table(raw: pd.DataFrame) -> pd.DataFrame:
     df["Prueba"] = df["QuizName_original"].apply(normalize_area)
     df["EsCorrecta"] = _as_bool(df["IsCorrect"])
     df["Dimension"] = (
-        df["competencia"]
+        df[dimension_col]
         .astype("string")
         .str.strip()
+        .replace({
+            "pensamiento sistémico": "Pensamiento sistémico",
+            "Conocimiento pragmático y Sociolingüístico":
+                "Conocimiento pragmático y sociolingüístico",
+        })
     )
 
     if "TimeCompleted" in df.columns:
