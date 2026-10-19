@@ -1788,8 +1788,8 @@ def render_latam_efa_area(
 ):
     st.markdown(f"## {area}")
     st.caption(
-        "Relación entre la categoría de logro LATAM y los resultados de "
-        "Evaluar para Avanzar (EFA)."
+        "Promedio de Evaluar para Avanzar (EFA) de los estudiantes "
+        "ubicados en cada categoría de logro LATAM."
     )
 
     d = data[data["Area"].astype(str) == area].copy()
@@ -1867,9 +1867,8 @@ def render_latam_efa_area(
         "ρ Spearman",
         f"{rho:.2f}" if np.isfinite(rho) else "—",
         help=(
-            "Correlación ordinal entre Inicio < Básico < Satisfactorio < "
-            "Avanzado y el porcentaje de aciertos en EFA. Se recalcula con "
-            "los filtros activos."
+            "Asociación ordinal entre la categoría LATAM y el porcentaje "
+            "de aciertos en EFA. Se recalcula con los filtros activos."
         ),
     )
 
@@ -1880,41 +1879,12 @@ def render_latam_efa_area(
         "No se publican correos ni documentos en esta vista."
     )
 
-    group_cols = ["Grado_num", "Categoria_LATAM"]
-
-    level_counts = (
+    # Lectura principal: promedio EFA dentro de cada categoría LATAM.
+    category_avg = (
         filtered.groupby(
-            group_cols + ["Nivel_EFA"],
+            ["Categoria_LATAM"],
             as_index=False,
-        )["Estudiantes"]
-        .sum()
-    )
-
-    table = (
-        level_counts.pivot_table(
-            index=group_cols,
-            columns="Nivel_EFA",
-            values="Estudiantes",
-            aggfunc="sum",
-            fill_value=0,
         )
-        .reset_index()
-    )
-
-    for level in LEVEL_ORDER:
-        if level not in table.columns:
-            table[level] = 0
-
-    totals = table[LEVEL_ORDER].sum(axis=1)
-    for level in LEVEL_ORDER:
-        table[level] = np.where(
-            totals > 0,
-            table[level] / totals * 100,
-            0,
-        )
-
-    avg = (
-        filtered.groupby(group_cols, as_index=False)
         .apply(
             lambda g: pd.Series({
                 "n": int(g["Estudiantes"].sum()),
@@ -1923,163 +1893,216 @@ def render_latam_efa_area(
             include_groups=False,
         )
     )
-
-    table = table.merge(avg, on=group_cols, how="left")
-    table["Categoria_LATAM"] = pd.Categorical(
-        table["Categoria_LATAM"],
+    category_avg["Categoria_LATAM"] = pd.Categorical(
+        category_avg["Categoria_LATAM"],
         categories=LATAM_ORDER,
         ordered=True,
     )
-    table = table.sort_values(
-        ["Grado_num", "Categoria_LATAM"]
+    category_avg = category_avg.sort_values("Categoria_LATAM")
+    category_avg["Categoría LATAM"] = (
+        category_avg["Categoria_LATAM"].astype(str)
     )
-    table["Grado"] = table["Grado_num"].map(
-        lambda g: f"{int(g)}°"
-    )
-    table["Categoría LATAM"] = table["Categoria_LATAM"].astype(str)
-    table["Promedio EFA"] = table["Promedio_EFA"].map(
+    category_avg["Promedio EFA"] = category_avg["Promedio_EFA"].map(
         lambda x: f"{x:.1f}%" if pd.notna(x) else "—"
     )
-    for level in LEVEL_ORDER:
-        table[level] = table[level].map(lambda x: f"{x:.1f}%")
 
-    display_cols = [
-        "Grado",
-        "Categoría LATAM",
-        "n",
-        "Promedio EFA",
-        *LEVEL_ORDER,
-    ]
-
-    st.markdown(
-        "### Distribución de EFA dentro de cada categoría LATAM y grado"
-    )
+    st.markdown("### Promedio EFA dentro de cada categoría LATAM")
     st.dataframe(
-        table[display_cols],
+        category_avg[
+            ["Categoría LATAM", "n", "Promedio EFA"]
+        ],
         use_container_width=True,
         hide_index=True,
     )
-    st.caption(
-        "Los porcentajes de Nivel 1 a Nivel 4 suman 100% dentro de cada "
-        "combinación de grado y categoría LATAM."
-    )
 
-    chart_counts = (
-        filtered.groupby(
-            ["Categoria_LATAM", "Nivel_EFA"],
-            as_index=False,
-        )["Estudiantes"]
-        .sum()
-    )
-    chart_counts["Total_categoria"] = (
-        chart_counts.groupby("Categoria_LATAM")["Estudiantes"]
-        .transform("sum")
-    )
-    chart_counts["Porcentaje"] = np.where(
-        chart_counts["Total_categoria"] > 0,
-        chart_counts["Estudiantes"]
-        / chart_counts["Total_categoria"] * 100,
-        0,
-    )
-    chart_counts["Categoria_LATAM"] = pd.Categorical(
-        chart_counts["Categoria_LATAM"],
-        categories=LATAM_ORDER,
-        ordered=True,
-    )
-    chart_counts = chart_counts.sort_values(
-        ["Categoria_LATAM", "Nivel_EFA"]
-    )
-
-    fig = px.bar(
-        chart_counts,
+    fig_avg = px.bar(
+        category_avg,
         x="Categoria_LATAM",
-        y="Porcentaje",
-        color="Nivel_EFA",
-        barmode="stack",
-        category_orders={
-            "Categoria_LATAM": LATAM_ORDER,
-            "Nivel_EFA": LEVEL_ORDER,
-        },
-        color_discrete_map=LEVEL_COLORS,
-        text=chart_counts["Porcentaje"].map(
-            lambda x: f"{x:.0f}%" if x >= 5 else ""
+        y="Promedio_EFA",
+        text=category_avg["Promedio_EFA"].map(
+            lambda x: f"{x:.1f}%"
         ),
-        custom_data=["Estudiantes"],
+        category_orders={"Categoria_LATAM": LATAM_ORDER},
+        custom_data=["n"],
         labels={
             "Categoria_LATAM": "Categoría LATAM",
-            "Porcentaje": "% de estudiantes",
-            "Nivel_EFA": "Nivel EFA",
+            "Promedio_EFA": "Promedio EFA",
         },
         title=(
-            "Distribución de niveles EFA dentro de las categorías LATAM"
+            "Promedio de Evaluar para Avanzar según categoría LATAM"
         ),
     )
-    fig.update_yaxes(range=[0, 100], ticksuffix="%")
-    fig.update_traces(
-        textposition="inside",
+    fig_avg.update_yaxes(
+        range=[0, 100],
+        ticksuffix="%",
+        title="% promedio de aciertos EFA",
+    )
+    fig_avg.update_traces(
+        textposition="outside",
+        cliponaxis=False,
         hovertemplate=(
-            "Categoría LATAM: %{x}<br>"
-            "Nivel EFA: %{fullData.name}<br>"
-            "Estudiantes: %{customdata[0]}<br>"
-            "Porcentaje: %{y:.1f}%<extra></extra>"
+            "<b>%{x}</b><br>"
+            "Promedio EFA: %{y:.1f}%<br>"
+            "Estudiantes: %{customdata[0]}<extra></extra>"
         ),
     )
-    fig.update_layout(
-        height=520,
+    fig_avg.update_layout(
+        height=500,
         plot_bgcolor="rgba(0,0,0,0)",
-        legend_title_text="Nivel EFA",
     )
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig_avg, use_container_width=True)
 
-    avg_grade = (
+    # Segunda lectura: el mismo promedio, separado por grado.
+    grade_avg = (
         filtered.groupby(
             ["Grado_num", "Categoria_LATAM"],
             as_index=False,
         )
         .apply(
             lambda g: pd.Series({
-                "Promedio_EFA": _weighted_group_average(g),
                 "n": int(g["Estudiantes"].sum()),
+                "Promedio_EFA": _weighted_group_average(g),
             }),
             include_groups=False,
         )
     )
-    avg_grade["Categoria_LATAM"] = pd.Categorical(
-        avg_grade["Categoria_LATAM"],
+    grade_avg["Categoria_LATAM"] = pd.Categorical(
+        grade_avg["Categoria_LATAM"],
         categories=LATAM_ORDER,
         ordered=True,
     )
-    avg_grade["Grado"] = avg_grade["Grado_num"].map(
+    grade_avg = grade_avg.sort_values(
+        ["Grado_num", "Categoria_LATAM"]
+    )
+    grade_avg["Grado"] = grade_avg["Grado_num"].map(
         lambda g: f"{int(g)}°"
     )
+    grade_avg["Categoría LATAM"] = (
+        grade_avg["Categoria_LATAM"].astype(str)
+    )
+    grade_avg["Promedio EFA"] = grade_avg["Promedio_EFA"].map(
+        lambda x: f"{x:.1f}%" if pd.notna(x) else "—"
+    )
 
-    fig2 = px.line(
-        avg_grade.sort_values(
-            ["Grado_num", "Categoria_LATAM"]
-        ),
+    st.markdown("### Promedio EFA por grado y categoría LATAM")
+    st.dataframe(
+        grade_avg[
+            ["Grado", "Categoría LATAM", "n", "Promedio EFA"]
+        ],
+        use_container_width=True,
+        hide_index=True,
+    )
+
+    fig_grade = px.line(
+        grade_avg,
         x="Categoria_LATAM",
         y="Promedio_EFA",
         color="Grado",
         markers=True,
+        text=grade_avg["Promedio_EFA"].map(
+            lambda x: f"{x:.0f}%"
+        ),
         category_orders={"Categoria_LATAM": LATAM_ORDER},
-        hover_data={"n": True, "Promedio_EFA": ":.1f"},
+        custom_data=["n"],
         labels={
             "Categoria_LATAM": "Categoría LATAM",
             "Promedio_EFA": "Promedio EFA",
         },
         title="Promedio EFA por categoría LATAM y grado",
     )
-    fig2.update_yaxes(
+    fig_grade.update_yaxes(
         range=[0, 100],
         ticksuffix="%",
-        title="% de aciertos EFA",
+        title="% promedio de aciertos EFA",
     )
-    fig2.update_layout(
-        height=520,
+    fig_grade.update_traces(
+        textposition="top center",
+        cliponaxis=False,
+        hovertemplate=(
+            "<b>%{fullData.name}</b><br>"
+            "Categoría LATAM: %{x}<br>"
+            "Promedio EFA: %{y:.1f}%<br>"
+            "Estudiantes: %{customdata[0]}<extra></extra>"
+        ),
+    )
+    fig_grade.update_layout(
+        height=540,
         plot_bgcolor="rgba(0,0,0,0)",
         legend_title_text="Grado",
     )
-    st.plotly_chart(fig2, use_container_width=True)
+    st.plotly_chart(fig_grade, use_container_width=True)
+
+    # La distribución por niveles queda disponible como análisis secundario.
+    with st.expander(
+        "Ver distribución de niveles EFA dentro de cada categoría LATAM",
+        expanded=False,
+    ):
+        level_counts = (
+            filtered.groupby(
+                ["Categoria_LATAM", "Nivel_EFA"],
+                as_index=False,
+            )["Estudiantes"]
+            .sum()
+        )
+        level_counts["Total_categoria"] = (
+            level_counts.groupby("Categoria_LATAM")["Estudiantes"]
+            .transform("sum")
+        )
+        level_counts["Porcentaje"] = np.where(
+            level_counts["Total_categoria"] > 0,
+            level_counts["Estudiantes"]
+            / level_counts["Total_categoria"] * 100,
+            0,
+        )
+        level_counts["Categoria_LATAM"] = pd.Categorical(
+            level_counts["Categoria_LATAM"],
+            categories=LATAM_ORDER,
+            ordered=True,
+        )
+        level_counts = level_counts.sort_values(
+            ["Categoria_LATAM", "Nivel_EFA"]
+        )
+
+        fig_levels = px.bar(
+            level_counts,
+            x="Categoria_LATAM",
+            y="Porcentaje",
+            color="Nivel_EFA",
+            barmode="stack",
+            category_orders={
+                "Categoria_LATAM": LATAM_ORDER,
+                "Nivel_EFA": LEVEL_ORDER,
+            },
+            color_discrete_map=LEVEL_COLORS,
+            text=level_counts["Porcentaje"].map(
+                lambda x: f"{x:.0f}%" if x >= 5 else ""
+            ),
+            custom_data=["Estudiantes"],
+            labels={
+                "Categoria_LATAM": "Categoría LATAM",
+                "Porcentaje": "% de estudiantes",
+                "Nivel_EFA": "Nivel EFA",
+            },
+            title=(
+                "Distribución de niveles EFA dentro de las categorías LATAM"
+            ),
+        )
+        fig_levels.update_yaxes(range=[0, 100], ticksuffix="%")
+        fig_levels.update_traces(
+            textposition="inside",
+            hovertemplate=(
+                "Categoría LATAM: %{x}<br>"
+                "Nivel EFA: %{fullData.name}<br>"
+                "Estudiantes: %{customdata[0]}<br>"
+                "Porcentaje: %{y:.1f}%<extra></extra>"
+            ),
+        )
+        fig_levels.update_layout(
+            height=500,
+            plot_bgcolor="rgba(0,0,0,0)",
+            legend_title_text="Nivel EFA",
+        )
+        st.plotly_chart(fig_levels, use_container_width=True)
 
 
 st.title("📊 Estado de llegada 2026")
