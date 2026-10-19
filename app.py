@@ -1,7 +1,10 @@
 
 from __future__ import annotations
 
+import base64
+import gzip
 import io
+import json
 from pathlib import Path
 
 import numpy as np
@@ -148,6 +151,104 @@ def process_raw(raw: pd.DataFrame):
 
 @st.cache_data(show_spinner=False)
 def read_default_data():
+    bundle_paths = [
+        Path(f"data/dashboard_bundle_20261019_part{i:02d}.b64")
+        for i in range(14)
+    ]
+    if all(path.exists() for path in bundle_paths):
+        payload = "".join(
+            path.read_text(encoding="utf-8").strip()
+            for path in bundle_paths
+        )
+        bundle = json.loads(
+            gzip.decompress(
+                base64.b64decode(payload)
+            ).decode("utf-8")
+        )
+
+        temporal = pd.read_csv(
+            io.StringIO(bundle["general_temporal"])
+        )
+        levels = pd.read_csv(
+            io.StringIO(bundle["general_levels"])
+        )
+        dimensions = pd.read_csv(
+            io.StringIO(bundle["general_dimensions"])
+        )
+        top10_origin = pd.read_csv(
+            io.StringIO(bundle["general_top10"])
+        )
+        age_temporal = pd.read_csv(
+            io.StringIO(bundle["age_temporal"])
+        )
+        age_levels = pd.read_csv(
+            io.StringIO(bundle["age_levels"])
+        )
+        age_dimensions = pd.read_csv(
+            io.StringIO(bundle["age_dimensions"])
+        )
+        age_top10 = pd.read_csv(
+            io.StringIO(bundle["age_top10"])
+        )
+
+        if "Prueba" not in temporal.columns:
+            temporal["Prueba"] = temporal["QuizName"].apply(
+                normalize_area
+            )
+
+        for df in [
+            levels,
+            top10_origin,
+            age_levels,
+            age_top10,
+        ]:
+            if not df.empty and "Nivel" in df.columns:
+                df["Nivel"] = df["Nivel"].replace(
+                    LEGACY_LEVEL_MAP
+                )
+
+        if (
+            not dimensions.empty
+            and "competencia" in dimensions.columns
+        ):
+            dimensions = dimensions.rename(
+                columns={"competencia": "Dimension"}
+            )
+        if (
+            not age_dimensions.empty
+            and "competencia" in age_dimensions.columns
+        ):
+            age_dimensions = age_dimensions.rename(
+                columns={"competencia": "Dimension"}
+            )
+
+        if "Año" in temporal.columns:
+            temporal = temporal[
+                temporal["Año"] == YEAR
+            ].copy()
+        if "Año" in age_temporal.columns:
+            age_temporal = age_temporal[
+                age_temporal["Año"] == YEAR
+            ].copy()
+
+        temporal = temporal[
+            temporal["Prueba"].isin(TESTS)
+        ].copy()
+        age_temporal = age_temporal[
+            age_temporal["Prueba"].isin(TESTS)
+        ].copy()
+
+        return (
+            temporal,
+            levels,
+            dimensions,
+            top10_origin,
+            age_temporal,
+            age_levels,
+            age_dimensions,
+            age_top10,
+        )
+
     temporal_path = Path("data/default_temporal_summary.csv")
     if not temporal_path.exists():
         return tuple(pd.DataFrame() for _ in range(8))
