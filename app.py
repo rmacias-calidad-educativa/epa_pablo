@@ -25,7 +25,7 @@ TESTS = [
     "Lenguaje",
     "Inglés",
 ]
-SITES = ["BAQ", "COT", "MOS", "TUN", "USAQ", "ZIPA"]
+SITES = ["BAQ", "COT", "MOS", "NIZA", "TUN", "USAQ", "ZIPA"]
 ANTIGUEDAD_SITES = ["COT", "MOS", "TUN", "ZIPA"]
 LEVEL_ORDER = [
     "Nivel 1",
@@ -1309,14 +1309,6 @@ def render_dimensions(
 ):
     st.divider()
     st.subheader("Dimensiones de evaluación")
-
-    if test_name == "Inglés":
-        st.info(
-            "En Inglés, el campo de la fuente contiene Pre A1, A1, A2 y B1. "
-            "Esos valores son niveles de dominio, no dimensiones de evaluación, "
-            "por lo que no se presentan como dimensiones en esta sección."
-        )
-        return
 
     if dimensions is None or dimensions.empty:
         st.info(
