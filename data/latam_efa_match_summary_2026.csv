@@ -1,0 +1,3 @@
+Area,Registros_LATAM,Registros_no_ambiguos,Con_correo_en_puente,Emparejados_EFA_misma_area,Cobertura_sobre_LATAM_pct,Ambiguos_excluidos,Spearman_rho,p_value
+Matemáticas,891,891,544,308,34.5679012345679,0,0.3556098655611762,1.3028439718705737e-10
+Lenguaje,927,925,579,355,38.295577130528585,2,0.41464655178714693,3.4916670980784267e-16
