@@ -1757,7 +1757,15 @@ def _spearman_from_aggregate(data: pd.DataFrame) -> float:
     if len(x) < 3 or len(np.unique(x)) < 2 or len(np.unique(y)) < 2:
         return np.nan
 
-    return pd.Series(x).corr(pd.Series(y), method="spearman")
+    # Spearman = correlación de Pearson entre los rangos.
+    # Se calcula explícitamente para no depender de scipy en Streamlit Cloud.
+    x_rank = pd.Series(x, dtype="float64").rank(method="average")
+    y_rank = pd.Series(y, dtype="float64").rank(method="average")
+
+    if x_rank.std(ddof=0) == 0 or y_rank.std(ddof=0) == 0:
+        return np.nan
+
+    return float(np.corrcoef(x_rank.to_numpy(), y_rank.to_numpy())[0, 1])
 
 
 def _weighted_group_average(group: pd.DataFrame) -> float:
