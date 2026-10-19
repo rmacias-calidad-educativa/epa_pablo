@@ -1661,6 +1661,7 @@ def render_test_page(
 
 st.title("📊 Estado de llegada 2026")
 st.caption(
+    "Base precargada actualizada al 19 de octubre de 2026 · "
     "Dos ventanas complementarias: análisis general y análisis por antigüedad."
 )
 
