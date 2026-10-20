@@ -303,6 +303,40 @@ def read_improve_efa_data():
 
 
 @st.cache_data(show_spinner=False)
+def read_student_story_profiles():
+    path = Path("data/student_story_profiles_aggregate_2026.csv")
+    data = (
+        pd.read_csv(path)
+        if path.exists()
+        else pd.DataFrame()
+    )
+
+    if not data.empty:
+        data["grado_num"] = pd.to_numeric(
+            data["grado_num"], errors="coerce"
+        ).astype("Int64")
+        data.dropna(subset=["grado_num"], inplace=True)
+        data["grado_num"] = data["grado_num"].astype(int)
+        data["Candidatos_completos"] = pd.to_numeric(
+            data["Candidatos_completos"], errors="coerce"
+        ).fillna(0).astype(int)
+
+        for col in data.columns:
+            if (
+                col.startswith("EFA_")
+                or col.startswith("Improve_")
+            ) and col not in [
+                "Prueba_filtro",
+                "Nivel_EFA_filtro",
+            ]:
+                data[col] = pd.to_numeric(
+                    data[col], errors="coerce"
+                )
+
+    return data
+
+
+@st.cache_data(show_spinner=False)
 def process_raw(raw: pd.DataFrame):
     attempts = build_attempt_table(raw)
     attempts["Prueba"] = attempts["QuizName"].apply(normalize_area)
@@ -4401,10 +4435,409 @@ def render_improve_efa_relation(
         )
 
 
+def _story_level_from_pct(value) -> str:
+    if pd.isna(value):
+        return "Sin dato"
+    value = float(value)
+    if value <= 25:
+        return "Nivel 1"
+    if value <= 50:
+        return "Nivel 2"
+    if value <= 75:
+        return "Nivel 3"
+    return "Nivel 4"
+
+
+def render_student_story(profiles: pd.DataFrame):
+    st.markdown("## Historia de un perfil representativo")
+    st.caption(
+        "Selecciona grado, nivel EFA y prueba EFA para reconstruir una "
+        "trayectoria completa con las evaluaciones adicionales disponibles."
+    )
+
+    if profiles.empty:
+        st.warning(
+            "No está disponible la base de perfiles representativos."
+        )
+        return
+
+    st.info(
+        "Por protección de datos, esta vista no publica el expediente de un "
+        "estudiante identificable. El perfil se construye con las medianas de "
+        "estudiantes que comparten la selección y cuentan con recorrido "
+        "completo. Solo se habilitan grupos con al menos 5 estudiantes."
+    )
+
+    grades = sorted(
+        profiles["grado_num"].dropna().astype(int).unique().tolist()
+    )
+
+    c1, c2, c3 = st.columns(3)
+    with c1:
+        selected_grade = st.selectbox(
+            "Grado",
+            grades,
+            format_func=lambda g: f"{g}°",
+            key="story_grade",
+        )
+
+    grade_data = profiles[
+        profiles["grado_num"] == selected_grade
+    ].copy()
+
+    available_levels = [
+        level
+        for level in LEVEL_ORDER
+        if level in set(
+            grade_data["Nivel_EFA_filtro"].astype(str)
+        )
+    ]
+
+    with c2:
+        selected_level = st.selectbox(
+            "Nivel en Evaluar para Avanzar",
+            available_levels,
+            key="story_level",
+        )
+
+    level_data = grade_data[
+        grade_data["Nivel_EFA_filtro"].astype(str)
+        == selected_level
+    ].copy()
+
+    available_tests = [
+        test
+        for test in IMPROVE_EFA_TESTS
+        if test in set(
+            level_data["Prueba_filtro"].astype(str)
+        )
+    ]
+
+    with c3:
+        selected_test = st.selectbox(
+            "Prueba de Evaluar para Avanzar",
+            available_tests,
+            key="story_test",
+        )
+
+    d = level_data[
+        level_data["Prueba_filtro"].astype(str)
+        == selected_test
+    ].copy()
+
+    if d.empty:
+        st.warning(
+            "No hay un grupo con recorrido completo para esta combinación."
+        )
+        return
+
+    row = d.iloc[0]
+    group_n = int(row["Candidatos_completos"])
+    anchor_score = float(row["EFA_seleccionada_mediana"])
+
+    final_ev = 2 if selected_grade == 10 else 3
+    final_label = f"Evaluación {final_ev}"
+
+    global_initial = float(
+        row["Improve_EV1_Puntaje global_mediana"]
+    )
+    global_final = float(
+        row[f"Improve_EV{final_ev}_Puntaje global_mediana"]
+    )
+    global_change = global_final - global_initial
+
+    k1, k2, k3, k4 = st.columns(4)
+    k1.metric(
+        "Grupo con recorrido completo",
+        f"{group_n}",
+        help=(
+            "Número de estudiantes usados para construir este perfil "
+            "representativo."
+        ),
+    )
+    k2.metric(
+        f"EFA · {selected_test}",
+        f"{anchor_score:.1f}%",
+        delta=selected_level,
+        delta_color="off",
+    )
+    k3.metric(
+        "Improve global · inicio",
+        f"{global_initial:.1f}",
+    )
+    k4.metric(
+        f"Improve global · {final_label.lower()}",
+        f"{global_final:.1f}",
+        delta=f"{global_change:+.1f}",
+    )
+
+    st.markdown("### 1. El perfil en Evaluar para Avanzar")
+
+    efa_rows = []
+    for test in IMPROVE_EFA_TESTS:
+        value = row.get(f"EFA_{test}_mediana", np.nan)
+        if pd.isna(value):
+            continue
+        efa_rows.append({
+            "Prueba": test,
+            "Puntaje EFA": float(value),
+            "Nivel": _story_level_from_pct(value),
+            "Selección": (
+                "Prueba seleccionada"
+                if test == selected_test
+                else "Otras pruebas"
+            ),
+        })
+
+    efa_profile = pd.DataFrame(efa_rows)
+
+    if not efa_profile.empty:
+        fig_efa = px.bar(
+            efa_profile,
+            x="Prueba",
+            y="Puntaje EFA",
+            color="Selección",
+            text=efa_profile["Puntaje EFA"].map(
+                lambda x: f"{x:.1f}%"
+            ),
+            custom_data=["Nivel"],
+            title=(
+                f"Perfil EFA representativo · {selected_grade}° · "
+                f"{selected_level} en {selected_test}"
+            ),
+        )
+        for y in [25, 50, 75]:
+            fig_efa.add_hline(
+                y=y,
+                line_dash="dot",
+                opacity=0.35,
+            )
+        fig_efa.update_yaxes(
+            range=[0, 100],
+            title="Puntaje EFA (%)",
+        )
+        fig_efa.update_traces(
+            textposition="outside",
+            cliponaxis=False,
+            hovertemplate=(
+                "Prueba: %{x}<br>"
+                "Puntaje EFA: %{y:.1f}%<br>"
+                "Nivel: %{customdata[0]}"
+                "<extra></extra>"
+            ),
+        )
+        fig_efa.update_layout(
+            height=480,
+            plot_bgcolor="rgba(0,0,0,0)",
+            legend_title_text="",
+        )
+        st.plotly_chart(
+            fig_efa,
+            use_container_width=True,
+            key="story_efa_profile",
+        )
+
+    st.markdown("### 2. La trayectoria global en Improve")
+
+    moments = [1, 2] if selected_grade == 10 else [1, 2, 3]
+    global_rows = []
+    for moment in moments:
+        value = row.get(
+            f"Improve_EV{moment}_Puntaje global_mediana",
+            np.nan,
+        )
+        if pd.isna(value):
+            continue
+        global_rows.append({
+            "Momento": f"Evaluación {moment}",
+            "Orden": moment,
+            "Puntaje global": float(value),
+        })
+
+    global_traj = pd.DataFrame(global_rows)
+    if not global_traj.empty:
+        fig_global = px.line(
+            global_traj.sort_values("Orden"),
+            x="Momento",
+            y="Puntaje global",
+            markers=True,
+            text=global_traj["Puntaje global"].map(
+                lambda x: f"{x:.1f}"
+            ),
+            category_orders={
+                "Momento": [
+                    f"Evaluación {m}" for m in moments
+                ]
+            },
+            title="Cómo cambia el puntaje global de Improve",
+        )
+        fig_global.update_traces(
+            textposition="top center",
+            cliponaxis=False,
+        )
+        fig_global.update_yaxes(
+            rangemode="tozero",
+            title="Puntaje global Improve",
+        )
+        fig_global.update_layout(
+            height=430,
+            plot_bgcolor="rgba(0,0,0,0)",
+        )
+        st.plotly_chart(
+            fig_global,
+            use_container_width=True,
+            key="story_improve_global",
+        )
+
+    st.markdown("### 3. Qué ocurre en cada prueba de Improve")
+
+    improve_map = {
+        "Matemáticas": "Puntaje Matemáticas",
+        "Lenguaje": "Puntaje Lectura crítica",
+        "Ciencias naturales": "Puntaje Ciencias naturales",
+        "Ciencias sociales": "Puntaje Sociales y ciudadanas",
+        "Inglés": "Puntaje Inglés",
+    }
+
+    subject_rows = []
+    for test, raw_name in improve_map.items():
+        for moment in moments:
+            value = row.get(
+                f"Improve_EV{moment}_{raw_name}_mediana",
+                np.nan,
+            )
+            if pd.isna(value):
+                continue
+            subject_rows.append({
+                "Prueba": test,
+                "Momento": f"Evaluación {moment}",
+                "Orden": moment,
+                "Promedio Improve": float(value),
+            })
+
+    subject_traj = pd.DataFrame(subject_rows)
+
+    if not subject_traj.empty:
+        fig_subject = px.line(
+            subject_traj.sort_values(["Prueba", "Orden"]),
+            x="Momento",
+            y="Promedio Improve",
+            color="Prueba",
+            markers=True,
+            category_orders={
+                "Momento": [
+                    f"Evaluación {m}" for m in moments
+                ],
+                "Prueba": IMPROVE_EFA_TESTS,
+            },
+            title="Recorrido por las cinco pruebas de Improve",
+        )
+        fig_subject.update_yaxes(
+            range=[0, 100],
+            title="Puntaje Improve",
+        )
+        fig_subject.update_xaxes(title=None)
+        fig_subject.update_layout(
+            height=540,
+            plot_bgcolor="rgba(0,0,0,0)",
+            legend_title_text="Prueba",
+        )
+        st.plotly_chart(
+            fig_subject,
+            use_container_width=True,
+            key="story_improve_subjects",
+        )
+
+        table_rows = []
+        for test, raw_name in improve_map.items():
+            efa_value = row.get(
+                f"EFA_{test}_mediana",
+                np.nan,
+            )
+            initial = row.get(
+                f"Improve_EV1_{raw_name}_mediana",
+                np.nan,
+            )
+            final = row.get(
+                f"Improve_EV{final_ev}_{raw_name}_mediana",
+                np.nan,
+            )
+            if pd.isna(initial) or pd.isna(final):
+                continue
+            table_rows.append({
+                "Prueba": test,
+                "EFA": float(efa_value)
+                if not pd.isna(efa_value)
+                else np.nan,
+                "Nivel EFA": _story_level_from_pct(efa_value),
+                "Improve inicial": float(initial),
+                "Improve final": float(final),
+                "Cambio": float(final) - float(initial),
+            })
+
+        story_table = pd.DataFrame(table_rows)
+
+        if not story_table.empty:
+            display = story_table.copy()
+            display["EFA"] = display["EFA"].map(
+                lambda x: f"{x:.1f}%"
+            )
+            display["Improve inicial"] = display[
+                "Improve inicial"
+            ].map(lambda x: f"{x:.1f}")
+            display["Improve final"] = display[
+                "Improve final"
+            ].map(lambda x: f"{x:.1f}")
+            display["Cambio"] = display["Cambio"].map(
+                lambda x: f"{x:+.1f}"
+            )
+
+            st.dataframe(
+                display,
+                use_container_width=True,
+                hide_index=True,
+            )
+
+            best = story_table.sort_values(
+                "Cambio",
+                ascending=False,
+            ).iloc[0]
+            worst = story_table.sort_values(
+                "Cambio",
+                ascending=True,
+            ).iloc[0]
+
+            st.markdown("### 4. La historia en una frase")
+            direction = (
+                "aumenta"
+                if global_change > 0
+                else "disminuye"
+                if global_change < 0
+                else "se mantiene"
+            )
+            st.success(
+                f"Este perfil representativo parte de **{selected_level} en "
+                f"{selected_test}** ({anchor_score:.1f}% en EFA). "
+                f"En Improve, su puntaje global {direction} de "
+                f"**{global_initial:.1f}** a **{global_final:.1f}** "
+                f"({global_change:+.1f} puntos). La mayor mejora por prueba "
+                f"se observa en **{best['Prueba']}** "
+                f"({best['Cambio']:+.1f}), mientras que el cambio más bajo "
+                f"se presenta en **{worst['Prueba']}** "
+                f"({worst['Cambio']:+.1f})."
+            )
+
+    st.caption(
+        "El perfil representa el comportamiento mediano de un grupo con "
+        "recorrido completo; no corresponde al expediente de una persona "
+        "identificable."
+    )
+
+
 st.title("📊 Estado de llegada 2026")
 st.caption(
     "Base precargada actualizada al 19 de octubre de 2026 · "
-    "Análisis general, antigüedad, LATAM, actividad matemática, evolución y relación EFA–Improve."
+    "Análisis general, antigüedad, LATAM, actividad matemática, evolución, relación EFA–Improve e historia longitudinal."
 )
 
 uploaded = st.file_uploader(
@@ -4466,6 +4899,7 @@ math_activity_stats, math_activity_bins, math_activity_summary = (
     improve_efa_quality,
     improve_efa_growth,
 ) = read_improve_efa_data()
+student_story_profiles = read_student_story_profiles()
 
 (
     view_general,
@@ -4474,6 +4908,7 @@ math_activity_stats, math_activity_bins, math_activity_summary = (
     view_math_activity,
     view_evolution,
     view_improve_efa,
+    view_story,
 ) = st.tabs(
     [
         "Análisis general",
@@ -4482,6 +4917,7 @@ math_activity_stats, math_activity_bins, math_activity_summary = (
         "Actividad matemática vs EFA",
         "Evolución 10°–11°",
         "EFA vs Improve",
+        "Historia longitudinal",
     ]
 )
 
@@ -4585,4 +5021,11 @@ with view_improve_efa:
         improve_efa_levels,
         improve_efa_quality,
         improve_efa_growth,
+    )
+
+
+
+with view_story:
+    render_student_story(
+        student_story_profiles,
     )
