@@ -4277,7 +4277,7 @@ def render_improve_efa_relation(
                     ).iloc[0]
                     best_rows.append({
                         "Prueba": test,
-                        "Nivel con mayor crecimiento": str(
+                        "Nivel con mejor cambio": str(
                             best["Nivel_EFA"]
                         ),
                         "Cambio promedio": best["Cambio_Improve"],
@@ -4299,7 +4299,7 @@ def render_improve_efa_relation(
                         "Final"
                     ].map(lambda x: f"{x:.1f}")
                     st.markdown(
-                        "#### Nivel EFA con mayor crecimiento por prueba"
+                        "#### Nivel EFA con mejor cambio por prueba"
                     )
                     st.dataframe(
                         best_display,
