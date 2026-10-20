@@ -3104,8 +3104,8 @@ def render_evolution_10_11(
 ):
     st.markdown("## Evolución de resultados · 10° y 11°")
     st.caption(
-        "Dos lecturas separadas: crecimiento de los mismos estudiantes y "
-        "resultado observado al cierre de cada aplicación."
+        "Evolución de puntajes entre aplicaciones, con comparación "
+        "pareada de los mismos estudiantes."
     )
 
     if summary.empty or observed.empty:
@@ -3113,17 +3113,17 @@ def render_evolution_10_11(
         return
 
     st.info(
-        "Crecimiento = comparación pareada de los mismos estudiantes. "
-        "Cierre = promedio observado de todos los estudiantes que presentaron "
-        "esa aplicación. No se mezclan ambas lecturas."
+        "El crecimiento se calcula comparando a los mismos estudiantes "
+        "entre aplicaciones. Cota se muestra cuando tiene información, "
+        "aunque no tenga una segunda aplicación para calcular cambio."
     )
 
     tab10, tab11 = st.tabs(
-        ["10° · Crecimiento y cierre", "11° · Mosquera"]
+        ["10° · Crecimiento", "11° · Mosquera"]
     )
 
     with tab10:
-        st.markdown("### 1. Crecimiento · mismos estudiantes")
+        st.markdown("### Crecimiento global · mismos estudiantes")
         st.caption(
             "Compara Evaluación 1 vs Evaluación 2 únicamente en estudiantes "
             "que presentaron ambas aplicaciones."
@@ -3298,6 +3298,223 @@ def render_evolution_10_11(
                 "Cota aparece explícitamente, pero no tiene Evaluación 2; "
                 "por eso no puede calcularse crecimiento pareado."
             )
+
+        st.divider()
+        st.markdown("### Comportamiento por cada prueba")
+        st.caption(
+            "Cada prueba compara Evaluación 1 vs Evaluación 2 por sede. "
+            "El cambio se calcula únicamente con estudiantes que presentaron "
+            "ambas aplicaciones."
+        )
+
+        subject_metrics_10 = [
+            ("Matemáticas", "Puntaje Matemáticas"),
+            ("Lectura crítica", "Puntaje Lectura crítica"),
+            ("Ciencias naturales", "Puntaje Ciencias naturales"),
+            ("Sociales y ciudadanas", "Puntaje Sociales y ciudadanas"),
+            ("Inglés", "Puntaje Inglés"),
+        ]
+
+        subject_tabs_10 = st.tabs(
+            [label for label, _ in subject_metrics_10]
+        )
+
+        for subject_tab, (subject_label, subject_metric) in zip(
+            subject_tabs_10,
+            subject_metrics_10,
+        ):
+            with subject_tab:
+                paired_subject = _paired_site_table(
+                    summary,
+                    10,
+                    subject_metric,
+                )
+
+                subject_overall = _evolution_combine(
+                    summary[
+                        (summary["Grado_num"] == 10)
+                        & (
+                            summary["Metrica"].astype(str)
+                            == subject_metric
+                        )
+                    ]
+                )
+
+                s1, s2, s3, s4 = st.columns(4)
+                s1.metric(
+                    "Estudiantes pareados",
+                    f"{subject_overall['n']:,}".replace(",", "."),
+                )
+                s2.metric(
+                    "Evaluación 1 · pareados",
+                    f"{subject_overall['initial']:.1f}",
+                )
+                s3.metric(
+                    "Evaluación 2 · pareados",
+                    f"{subject_overall['final']:.1f}",
+                )
+                s4.metric(
+                    "Cambio promedio",
+                    f"{subject_overall['change']:+.1f}",
+                )
+
+                if paired_subject.empty:
+                    st.info(
+                        "No hay estudiantes pareados para esta prueba."
+                    )
+                    continue
+
+                subject_long = pd.concat(
+                    [
+                        paired_subject[
+                            ["Sede", "Primera aplicación"]
+                        ]
+                        .rename(
+                            columns={
+                                "Primera aplicación": "Promedio"
+                            }
+                        )
+                        .assign(Evaluación="Evaluación 1"),
+                        paired_subject[
+                            ["Sede", "Última aplicación"]
+                        ]
+                        .rename(
+                            columns={
+                                "Última aplicación": "Promedio"
+                            }
+                        )
+                        .assign(Evaluación="Evaluación 2"),
+                    ],
+                    ignore_index=True,
+                )
+
+                cota_subject_ev1 = _observed_value(
+                    observed,
+                    10,
+                    "Cota",
+                    "Evaluación 1",
+                    subject_metric,
+                )
+                if (
+                    cota_subject_ev1["n"] > 0
+                    and np.isfinite(cota_subject_ev1["mean"])
+                ):
+                    subject_long = pd.concat(
+                        [
+                            subject_long,
+                            pd.DataFrame([{
+                                "Sede": "Cota",
+                                "Promedio": cota_subject_ev1["mean"],
+                                "Evaluación": "Evaluación 1",
+                            }]),
+                        ],
+                        ignore_index=True,
+                    )
+
+                fig_subject_10 = px.bar(
+                    subject_long,
+                    x="Sede",
+                    y="Promedio",
+                    color="Evaluación",
+                    barmode="group",
+                    text=subject_long["Promedio"].map(
+                        lambda x: f"{x:.1f}"
+                    ),
+                    category_orders={
+                        "Sede": [
+                            "Cota",
+                            "Mosquera",
+                            "Tunja",
+                            "Zipaquirá",
+                        ]
+                    },
+                    title=(
+                        f"{subject_label} · Evaluación 1 vs "
+                        "Evaluación 2"
+                    ),
+                )
+                fig_subject_10.update_yaxes(
+                    range=[0, 100],
+                    title="Puntaje promedio",
+                )
+                fig_subject_10.update_traces(
+                    textposition="outside",
+                    cliponaxis=False,
+                )
+                fig_subject_10.update_layout(
+                    height=490,
+                    plot_bgcolor="rgba(0,0,0,0)",
+                    legend_title_text="Aplicación",
+                )
+                st.plotly_chart(
+                    fig_subject_10,
+                    use_container_width=True,
+                    key=(
+                        "evolution10_subject_"
+                        + subject_metric.replace(" ", "_")
+                    ),
+                )
+
+                subject_display = paired_subject.copy()
+                for col in [
+                    "Primera aplicación",
+                    "Última aplicación",
+                ]:
+                    subject_display[col] = subject_display[col].map(
+                        lambda x: f"{x:.1f}"
+                    )
+                subject_display["Cambio pareado"] = subject_display[
+                    "Cambio pareado"
+                ].map(lambda x: f"{x:+.1f}")
+                subject_display["% mejora"] = subject_display[
+                    "% mejora"
+                ].map(lambda x: f"{x:.1f}%")
+
+                cota_subject_status = pd.DataFrame([{
+                    "Sede": "Cota",
+                    "n pareados": "—",
+                    "Primera aplicación": (
+                        f"{cota_subject_ev1['mean']:.1f}"
+                        if cota_subject_ev1["n"] > 0
+                        and np.isfinite(cota_subject_ev1["mean"])
+                        else "Sin dato"
+                    ),
+                    "Última aplicación": "Sin aplicación 2",
+                    "Cambio pareado": "—",
+                    "% mejora": "—",
+                }])
+
+                subject_display = pd.concat(
+                    [subject_display, cota_subject_status],
+                    ignore_index=True,
+                )
+
+                st.dataframe(
+                    subject_display[
+                        [
+                            "Sede",
+                            "n pareados",
+                            "Primera aplicación",
+                            "Última aplicación",
+                            "Cambio pareado",
+                            "% mejora",
+                        ]
+                    ],
+                    use_container_width=True,
+                    hide_index=True,
+                )
+
+                ranked_subject = paired_subject.sort_values(
+                    "Cambio pareado",
+                    ascending=False,
+                )
+                if not ranked_subject.empty:
+                    best_subject = ranked_subject.iloc[0]
+                    st.caption(
+                        f"Mayor avance en {subject_label}: "
+                        f"**{best_subject['Sede']}** "
+                        f"({best_subject['Cambio pareado']:+.1f} puntos)."
+                    )
 
     with tab11:
         st.markdown("### Mosquera · crecimiento global")
