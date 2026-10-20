@@ -337,6 +337,40 @@ def read_student_story_profiles():
 
 
 @st.cache_data(show_spinner=False)
+def read_student_story_3_9():
+    path = Path("data/student_story_3_9_aggregate_2026.csv")
+    data = (
+        pd.read_csv(path)
+        if path.exists()
+        else pd.DataFrame()
+    )
+
+    if not data.empty:
+        data["grado_num"] = pd.to_numeric(
+            data["grado_num"], errors="coerce"
+        ).astype("Int64")
+        data.dropna(subset=["grado_num"], inplace=True)
+        data["grado_num"] = data["grado_num"].astype(int)
+        data["Grupo_EFA_n"] = pd.to_numeric(
+            data["Grupo_EFA_n"], errors="coerce"
+        ).fillna(0).astype(int)
+        data["n"] = pd.to_numeric(
+            data["n"], errors="coerce"
+        ).fillna(0).astype(int)
+        data["Valor"] = pd.to_numeric(
+            data["Valor"], errors="coerce"
+        )
+        data["Escala_max"] = pd.to_numeric(
+            data["Escala_max"], errors="coerce"
+        )
+        data["Extra"] = pd.to_numeric(
+            data["Extra"], errors="coerce"
+        )
+
+    return data
+
+
+@st.cache_data(show_spinner=False)
 def process_raw(raw: pd.DataFrame):
     attempts = build_attempt_table(raw)
     attempts["Prueba"] = attempts["QuizName"].apply(normalize_area)
@@ -4448,28 +4482,40 @@ def _story_level_from_pct(value) -> str:
     return "Nivel 4"
 
 
-def render_student_story(profiles: pd.DataFrame):
+def render_student_story(
+    profiles: pd.DataFrame,
+    profiles_3_9: pd.DataFrame,
+):
     st.markdown("## Historia de un perfil representativo")
     st.caption(
-        "Selecciona grado, nivel EFA y prueba EFA para reconstruir una "
-        "trayectoria completa con las evaluaciones adicionales disponibles."
+        "Selecciona grado, nivel EFA y prueba EFA para reconstruir el "
+        "recorrido disponible en las demás evaluaciones."
     )
 
-    if profiles.empty:
+    if profiles.empty and profiles_3_9.empty:
         st.warning(
             "No está disponible la base de perfiles representativos."
         )
         return
 
     st.info(
-        "Por protección de datos, esta vista no publica el expediente de un "
-        "estudiante identificable. El perfil se construye con las medianas de "
-        "estudiantes que comparten la selección y cuentan con recorrido "
-        "completo. Solo se habilitan grupos con al menos 5 estudiantes."
+        "La vista trabaja con perfiles agregados de grupos de al menos "
+        "5 estudiantes. De 3° a 9° se muestran EFA, Innovamat y LATAM "
+        "cuando existe emparejamiento suficiente, sin Improve. "
+        "En 10° y 11° se conserva además la trayectoria de Improve."
     )
 
     grades = sorted(
-        profiles["grado_num"].dropna().astype(int).unique().tolist()
+        set(
+            profiles["grado_num"].dropna().astype(int).tolist()
+            if not profiles.empty
+            else []
+        )
+        | set(
+            profiles_3_9["grado_num"].dropna().astype(int).tolist()
+            if not profiles_3_9.empty
+            else []
+        )
     )
 
     c1, c2, c3 = st.columns(3)
@@ -4481,6 +4527,327 @@ def render_student_story(profiles: pd.DataFrame):
             key="story_grade",
         )
 
+    if selected_grade <= 9:
+        grade_data = profiles_3_9[
+            profiles_3_9["grado_num"] == selected_grade
+        ].copy()
+
+        available_levels = [
+            level
+            for level in LEVEL_ORDER
+            if level in set(
+                grade_data["Nivel_EFA_filtro"].astype(str)
+            )
+        ]
+
+        with c2:
+            selected_level = st.selectbox(
+                "Nivel en Evaluar para Avanzar",
+                available_levels,
+                key="story_level",
+            )
+
+        level_data = grade_data[
+            grade_data["Nivel_EFA_filtro"].astype(str)
+            == selected_level
+        ].copy()
+
+        available_tests = [
+            test
+            for test in IMPROVE_EFA_TESTS
+            if test in set(
+                level_data["Prueba_filtro"].astype(str)
+            )
+        ]
+
+        with c3:
+            selected_test = st.selectbox(
+                "Prueba de Evaluar para Avanzar",
+                available_tests,
+                key="story_test",
+            )
+
+        d = level_data[
+            level_data["Prueba_filtro"].astype(str)
+            == selected_test
+        ].copy()
+
+        if d.empty:
+            st.warning(
+                "No hay un grupo representativo para esta combinación."
+            )
+            return
+
+        group_n = int(d["Grupo_EFA_n"].max())
+        efa_selected = d[
+            (d["Fuente"].astype(str) == "Evaluar para Avanzar")
+            & (d["Resultado"].astype(str) == selected_test)
+        ].copy()
+        anchor_score = (
+            float(efa_selected.iloc[0]["Valor"])
+            if not efa_selected.empty
+            else np.nan
+        )
+
+        k1, k2, k3 = st.columns(3)
+        k1.metric(
+            "Estudiantes en el grupo",
+            f"{group_n}",
+        )
+        k2.metric(
+            f"EFA · {selected_test}",
+            (
+                f"{anchor_score:.1f}%"
+                if np.isfinite(anchor_score)
+                else "—"
+            ),
+            delta=selected_level,
+            delta_color="off",
+        )
+        sources = [
+            src
+            for src in ["Evaluar para Avanzar", "Innovamat", "LATAM"]
+            if src in set(d["Fuente"].astype(str))
+        ]
+        k3.metric(
+            "Fuentes disponibles",
+            f"{len(sources)}",
+            help=", ".join(sources),
+        )
+
+        st.markdown("### 1. Perfil en Evaluar para Avanzar")
+        efa = d[
+            d["Fuente"].astype(str) == "Evaluar para Avanzar"
+        ].copy()
+        if not efa.empty:
+            efa["Selección"] = np.where(
+                efa["Resultado"].astype(str) == selected_test,
+                "Prueba seleccionada",
+                "Otras pruebas",
+            )
+            efa["Nivel"] = efa["Valor"].map(_story_level_from_pct)
+
+            fig_efa = px.bar(
+                efa,
+                x="Resultado",
+                y="Valor",
+                color="Selección",
+                text=efa["Valor"].map(lambda x: f"{x:.1f}%"),
+                custom_data=["n", "Nivel"],
+                category_orders={
+                    "Resultado": IMPROVE_EFA_TESTS,
+                },
+                title=(
+                    f"Perfil EFA representativo · {selected_grade}° · "
+                    f"{selected_level} en {selected_test}"
+                ),
+            )
+            for y in [25, 50, 75]:
+                fig_efa.add_hline(
+                    y=y,
+                    line_dash="dot",
+                    opacity=0.35,
+                )
+            fig_efa.update_yaxes(
+                range=[0, 100],
+                title="Puntaje EFA (%)",
+            )
+            fig_efa.update_traces(
+                textposition="outside",
+                cliponaxis=False,
+                hovertemplate=(
+                    "Prueba: %{x}<br>"
+                    "Puntaje EFA: %{y:.1f}%<br>"
+                    "n: %{customdata[0]}<br>"
+                    "Nivel: %{customdata[1]}"
+                    "<extra></extra>"
+                ),
+            )
+            fig_efa.update_layout(
+                height=470,
+                plot_bgcolor="rgba(0,0,0,0)",
+                legend_title_text="",
+            )
+            st.plotly_chart(
+                fig_efa,
+                use_container_width=True,
+                key="story_efa_profile_3_9",
+            )
+
+        st.markdown("### 2. Resultados adicionales disponibles")
+
+        innovamat = d[
+            d["Fuente"].astype(str) == "Innovamat"
+        ].copy()
+        if not innovamat.empty:
+            st.markdown("#### Innovamat · perfil matemático")
+            innovamat_order = [
+                "Promedio general",
+                "Numeración",
+                "Relaciones y cambio",
+                "Espacio y forma",
+                "Medida",
+                "Estadística y probabilidad",
+            ]
+            innovamat["Resultado"] = pd.Categorical(
+                innovamat["Resultado"],
+                categories=innovamat_order,
+                ordered=True,
+            )
+            innovamat = innovamat.sort_values("Resultado")
+
+            fig_inv = px.bar(
+                innovamat,
+                x="Resultado",
+                y="Valor",
+                text=innovamat["Valor"].map(
+                    lambda x: f"{x:.1f}"
+                ),
+                custom_data=["n"],
+                category_orders={
+                    "Resultado": innovamat_order,
+                },
+                title=(
+                    "Desempeño representativo en la actividad "
+                    "matemática adicional"
+                ),
+            )
+            fig_inv.update_yaxes(
+                range=[0, 100],
+                title="Puntaje equivalente (0–100)",
+            )
+            fig_inv.update_traces(
+                textposition="outside",
+                cliponaxis=False,
+                hovertemplate=(
+                    "Dimensión: %{x}<br>"
+                    "Resultado: %{y:.1f}/100<br>"
+                    "n: %{customdata[0]}"
+                    "<extra></extra>"
+                ),
+            )
+            fig_inv.update_layout(
+                height=480,
+                plot_bgcolor="rgba(0,0,0,0)",
+            )
+            st.plotly_chart(
+                fig_inv,
+                use_container_width=True,
+                key="story_innovamat_3_9",
+            )
+
+        latam = d[
+            d["Fuente"].astype(str) == "LATAM"
+        ].copy()
+        if not latam.empty:
+            st.markdown("#### LATAM · nivel de logro")
+            latam_order = [
+                "Matemáticas",
+                "Lenguaje",
+            ]
+            latam["Resultado"] = pd.Categorical(
+                latam["Resultado"],
+                categories=latam_order,
+                ordered=True,
+            )
+            latam = latam.sort_values("Resultado")
+
+            fig_latam = px.bar(
+                latam,
+                x="Resultado",
+                y="Valor",
+                text=latam["Etiqueta"],
+                custom_data=["n", "Extra"],
+                category_orders={
+                    "Resultado": latam_order,
+                },
+                title="Nivel de logro LATAM predominante",
+            )
+            fig_latam.update_yaxes(
+                range=[0, 4.5],
+                title="Nivel LATAM (1–4)",
+                tickmode="array",
+                tickvals=[1, 2, 3, 4],
+                ticktext=[
+                    "Inicio",
+                    "Básico",
+                    "Satisfactorio",
+                    "Avanzado",
+                ],
+            )
+            fig_latam.update_traces(
+                textposition="outside",
+                cliponaxis=False,
+                hovertemplate=(
+                    "Área: %{x}<br>"
+                    "Nivel predominante: %{text}<br>"
+                    "n: %{customdata[0]}<br>"
+                    "Proporción en ese nivel: %{customdata[1]:.1f}%"
+                    "<extra></extra>"
+                ),
+            )
+            fig_latam.update_layout(
+                height=420,
+                plot_bgcolor="rgba(0,0,0,0)",
+            )
+            st.plotly_chart(
+                fig_latam,
+                use_container_width=True,
+                key="story_latam_3_9",
+            )
+
+        if innovamat.empty and latam.empty:
+            st.caption(
+                "Para esta combinación no hay otra fuente con al menos "
+                "5 estudiantes emparejados además de EFA."
+            )
+
+        st.markdown("### 3. La historia en una frase")
+        extra_bits = []
+        if not innovamat.empty:
+            inv_general = innovamat[
+                innovamat["Resultado"].astype(str)
+                == "Promedio general"
+            ]
+            if not inv_general.empty:
+                extra_bits.append(
+                    "en Innovamat el promedio general representativo es "
+                    f"**{float(inv_general.iloc[0]['Valor']):.1f}/100**"
+                )
+        if not latam.empty:
+            latam_txt = ", ".join(
+                f"{str(r['Resultado'])}: **{r['Etiqueta']}**"
+                for _, r in latam.iterrows()
+            )
+            extra_bits.append(
+                f"en LATAM predominan {latam_txt}"
+            )
+
+        story_extra = (
+            "; ".join(extra_bits)
+            if extra_bits
+            else "no hay otra evaluación con muestra suficiente"
+        )
+        st.success(
+            f"En {selected_grade}°, este perfil representa a estudiantes "
+            f"ubicados en **{selected_level} de {selected_test}** en EFA"
+            + (
+                f", con una mediana de **{anchor_score:.1f}%**. "
+                if np.isfinite(anchor_score)
+                else ". "
+            )
+            + story_extra
+            + "."
+        )
+
+        st.caption(
+            "De 3° a 9° no se incorpora Improve. Cada resultado adicional "
+            "solo aparece si hay al menos 5 estudiantes emparejados dentro "
+            "del grupo seleccionado."
+        )
+        return
+
+    # 10° y 11° mantienen la historia longitudinal con Improve.
     grade_data = profiles[
         profiles["grado_num"] == selected_grade
     ].copy()
@@ -4900,6 +5267,7 @@ math_activity_stats, math_activity_bins, math_activity_summary = (
     improve_efa_growth,
 ) = read_improve_efa_data()
 student_story_profiles = read_student_story_profiles()
+student_story_3_9 = read_student_story_3_9()
 
 (
     view_general,
@@ -5028,4 +5396,5 @@ with view_improve_efa:
 with view_story:
     render_student_story(
         student_story_profiles,
+        student_story_3_9,
     )
