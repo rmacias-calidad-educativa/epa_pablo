@@ -3792,8 +3792,8 @@ def render_improve_efa_relation(
 ):
     st.markdown("## Evaluar para Avanzar vs Improve")
     st.caption(
-        "Relación entre los resultados de EFA y la primera aplicación "
-        "de Improve en 10° y 11°."
+        "Relación entre EFA y la primera aplicación de Improve. "
+        "Toda la información se presenta de forma simultánea, sin filtros."
     )
 
     if summary.empty or bins.empty:
@@ -3804,196 +3804,260 @@ def render_improve_efa_relation(
 
     st.info(
         "El emparejamiento es estricto: documento exacto + mismo grado + "
-        "misma sede, y se excluyen los registros marcados para revisión. "
+        "misma sede, excluyendo los registros marcados para revisión. "
         "No se utilizan coincidencias difusas por nombre. Improve corresponde "
         "exclusivamente a la primera aplicación."
     )
 
-    grade10, grade11 = st.tabs(["10°", "11°"])
+    test_order = IMPROVE_EFA_TESTS
+    site_order = [
+        "RED",
+        "Cota",
+        "Mosquera",
+        "Tunja",
+        "Zipaquirá",
+        "BAQ",
+        "USAQ",
+    ]
 
-    for grade_tab, grade in [(grade10, 10), (grade11, 11)]:
-        with grade_tab:
-            grade_summary = summary[
-                summary["grado_num"] == grade
-            ].copy()
+    for grade in [10, 11]:
+        grade_summary = summary[
+            summary["grado_num"] == grade
+        ].copy()
+        grade_bins = bins[
+            bins["grado_num"] == grade
+        ].copy()
 
-            if grade_summary.empty:
-                st.info(f"No hay datos disponibles para {grade}°.")
-                continue
+        if grade_summary.empty:
+            continue
 
-            sites = [
-                "RED",
-                *[
-                    x for x in sorted(
-                        grade_summary["Sede"].dropna().astype(str).unique()
-                    )
-                    if x != "RED"
-                ],
+        st.divider()
+        st.markdown(f"## {grade}°")
+
+        q_grade = (
+            quality[
+                (quality["grado_num"] == grade)
+                & (quality["Sede"].astype(str) == "RED")
             ]
+            if quality is not None and not quality.empty
+            else pd.DataFrame()
+        )
 
-            c1, c2 = st.columns([1.15, 1.35])
-            with c1:
-                selected_site = st.selectbox(
-                    "Sede",
-                    sites,
-                    index=0,
-                    key=f"improve_efa_site_{grade}",
-                )
-            with c2:
-                selected_test = st.selectbox(
-                    "Prueba",
-                    IMPROVE_EFA_TESTS,
-                    index=1,
-                    key=f"improve_efa_test_{grade}",
-                )
+        if not q_grade.empty:
+            qrow = q_grade.iloc[0]
+            q1, q2, q3, q4 = st.columns(4)
+            q1.metric(
+                "Estudiantes Improve EV1",
+                f"{int(qrow['Improve_EV1_estudiantes'])}",
+            )
+            q2.metric(
+                "Emparejados estrictos",
+                f"{int(qrow['Emparejados_identidad'])}",
+            )
+            q3.metric(
+                "Cobertura",
+                f"{float(qrow['Cobertura_identidad_pct']):.1f}%",
+            )
+            q4.metric(
+                "No emparejados",
+                f"{int(qrow['No_emparejados'])}",
+            )
 
-            d = grade_summary[
-                (grade_summary["Sede"].astype(str) == selected_site)
-                & (
-                    grade_summary["Prueba"].astype(str)
-                    == selected_test
-                )
+        st.markdown("### Cobertura del emparejamiento por sede")
+        if quality is not None and not quality.empty:
+            q_sites = quality[
+                quality["grado_num"] == grade
             ].copy()
-
-            if d.empty:
-                st.warning(
-                    "No hay pares válidos para esta combinación."
-                )
-                continue
-
-            row = d.iloc[0]
-            matched_identity = int(row["Emparejados_identidad"])
-            eligible = int(row["Improve_EV1_estudiantes"])
-            valid_pairs = int(row["Pares_validos"])
-            coverage = float(row["Cobertura_identidad_pct"])
-            pearson = float(row["Pearson_r"])
-            spearman = float(row["Spearman_rho"])
-
-            m1, m2, m3, m4, m5 = st.columns(5)
-            m1.metric(
-                "Emparejados por identidad",
-                f"{matched_identity}/{eligible}",
-                help=(
-                    "Documento exacto, grado y sede consistentes; "
-                    "casos en revisión excluidos."
-                ),
+            q_sites = q_sites[
+                q_sites["Sede"].astype(str).isin(site_order)
+            ]
+            q_sites["Sede"] = pd.Categorical(
+                q_sites["Sede"],
+                categories=site_order,
+                ordered=True,
             )
-            m2.metric(
-                "Cobertura de identidad",
-                f"{coverage:.1f}%",
-            )
-            m3.metric(
-                "Pares válidos en la prueba",
-                f"{valid_pairs}",
-                help=(
-                    "Puede ser menor al emparejamiento de identidad si falta "
-                    "la prueba correspondiente en EFA."
-                ),
-            )
-            m4.metric(
-                "r Pearson",
-                f"{pearson:.2f}" if np.isfinite(pearson) else "—",
-                help="Asociación lineal entre los dos puntajes.",
-            )
-            m5.metric(
-                "ρ Spearman",
-                f"{spearman:.2f}" if np.isfinite(spearman) else "—",
-                help="Asociación monotónica basada en rangos.",
-            )
+            q_sites = q_sites.sort_values("Sede")
 
-            st.caption(
-                f"Lectura de Pearson: **{_relation_strength(pearson)}**. "
-                "Una correlación describe asociación, no causalidad."
-            )
-
-            d_bins = bins[
-                (bins["grado_num"] == grade)
-                & (bins["Sede"].astype(str) == selected_site)
-                & (bins["Prueba"].astype(str) == selected_test)
-            ].copy()
-
-            if not d_bins.empty:
-                d_bins = d_bins.sort_values("Orden")
-                marker_sizes = (
-                    12
-                    + 26
-                    * d_bins["n"]
-                    / max(1, d_bins["n"].max())
-                )
-
-                fig_rel = go.Figure()
-                fig_rel.add_trace(
-                    go.Scatter(
-                        x=d_bins["Promedio_EFA"],
-                        y=d_bins["Promedio_Improve"],
-                        mode="lines+markers+text",
-                        text=d_bins["Rango_EFA"],
-                        textposition="top center",
-                        marker=dict(size=marker_sizes),
-                        customdata=np.column_stack([
-                            d_bins["n"],
-                            d_bins["Rango_EFA"],
-                        ]),
-                        hovertemplate=(
-                            "Rango EFA: %{customdata[1]}<br>"
-                            "n: %{customdata[0]}<br>"
-                            "Promedio EFA: %{x:.1f}<br>"
-                            "Promedio Improve: %{y:.1f}"
-                            "<extra></extra>"
-                        ),
-                        name="Relación agregada",
-                    )
-                )
-                fig_rel.update_xaxes(
-                    range=[0, 100],
-                    title="Promedio EFA (%)",
-                )
-                if selected_test == "Global":
-                    fig_rel.update_yaxes(
-                        range=[0, 500],
-                        title="Puntaje global Improve",
-                    )
-                else:
-                    fig_rel.update_yaxes(
-                        range=[0, 100],
-                        title="Puntaje Improve",
-                    )
-                fig_rel.update_layout(
-                    title=(
-                        f"{selected_test} · relación entre EFA e Improve "
-                        f"({selected_site}, {grade}°)"
+            if not q_sites.empty:
+                fig_coverage = px.bar(
+                    q_sites,
+                    x="Sede",
+                    y="Cobertura_identidad_pct",
+                    text=q_sites["Cobertura_identidad_pct"].map(
+                        lambda x: f"{x:.1f}%"
                     ),
-                    height=500,
+                    custom_data=[
+                        "Emparejados_identidad",
+                        "Improve_EV1_estudiantes",
+                    ],
+                    title=(
+                        f"Cobertura de emparejamiento estricto · {grade}°"
+                    ),
+                )
+                fig_coverage.update_yaxes(
+                    range=[0, 100],
+                    title="% emparejado",
+                )
+                fig_coverage.update_traces(
+                    textposition="outside",
+                    cliponaxis=False,
+                    hovertemplate=(
+                        "<b>%{x}</b><br>"
+                        "Cobertura: %{y:.1f}%<br>"
+                        "Emparejados: %{customdata[0]:.0f}<br>"
+                        "Improve EV1: %{customdata[1]:.0f}"
+                        "<extra></extra>"
+                    ),
+                )
+                fig_coverage.update_layout(
+                    height=430,
                     plot_bgcolor="rgba(0,0,0,0)",
                 )
                 st.plotly_chart(
-                    fig_rel,
+                    fig_coverage,
                     use_container_width=True,
-                    key=(
-                        f"improve_efa_relation_{grade}_"
-                        f"{selected_site}_{selected_test}"
-                    ),
-                )
-                st.caption(
-                    "Cada punto resume estudiantes dentro de un rango de EFA; "
-                    "el tamaño del punto representa cuántos estudiantes hay "
-                    "en ese rango. No se publican puntajes individuales."
+                    key=f"improve_efa_coverage_{grade}",
                 )
 
-            st.divider()
-            st.markdown("### Relación por cada prueba")
+        st.markdown("### Relación EFA–Improve por prueba y sede")
+        st.caption(
+            "Valores positivos indican que estudiantes con mayores resultados "
+            "en EFA tienden también a obtener mayores resultados en Improve."
+        )
 
-            overview = grade_summary[
-                grade_summary["Sede"].astype(str) == selected_site
-            ].copy()
-            overview["Prueba"] = pd.Categorical(
-                overview["Prueba"],
-                categories=IMPROVE_EFA_TESTS,
-                ordered=True,
+        heat = grade_summary.copy()
+        heat = heat[
+            heat["Sede"].astype(str).isin(site_order)
+            & heat["Prueba"].astype(str).isin(test_order)
+        ]
+        heat["Sede"] = pd.Categorical(
+            heat["Sede"],
+            categories=site_order,
+            ordered=True,
+        )
+        heat["Prueba"] = pd.Categorical(
+            heat["Prueba"],
+            categories=test_order,
+            ordered=True,
+        )
+
+        pearson_matrix = (
+            heat.pivot_table(
+                index="Sede",
+                columns="Prueba",
+                values="Pearson_r",
+                aggfunc="first",
+                observed=False,
             )
-            overview = overview.sort_values("Prueba")
+            .reindex(index=site_order, columns=test_order)
+            .dropna(how="all")
+        )
+        spearman_matrix = (
+            heat.pivot_table(
+                index="Sede",
+                columns="Prueba",
+                values="Spearman_rho",
+                aggfunc="first",
+                observed=False,
+            )
+            .reindex(index=site_order, columns=test_order)
+            .dropna(how="all")
+        )
 
-            corr_long = overview.melt(
+        h1, h2 = st.columns(2)
+
+        with h1:
+            if not pearson_matrix.empty:
+                fig_p = go.Figure(
+                    data=go.Heatmap(
+                        z=pearson_matrix.values,
+                        x=pearson_matrix.columns.astype(str),
+                        y=pearson_matrix.index.astype(str),
+                        zmin=-1,
+                        zmax=1,
+                        zmid=0,
+                        text=np.where(
+                            pd.isna(pearson_matrix.values),
+                            "",
+                            np.vectorize(lambda x: f"{x:.2f}")(
+                                np.nan_to_num(pearson_matrix.values)
+                            ),
+                        ),
+                        texttemplate="%{text}",
+                        hovertemplate=(
+                            "Sede: %{y}<br>"
+                            "Prueba: %{x}<br>"
+                            "Pearson: %{z:.2f}"
+                            "<extra></extra>"
+                        ),
+                        colorbar=dict(title="r"),
+                    )
+                )
+                fig_p.update_layout(
+                    title="Pearson por sede y prueba",
+                    height=470,
+                    margin=dict(l=20, r=20, t=60, b=20),
+                )
+                st.plotly_chart(
+                    fig_p,
+                    use_container_width=True,
+                    key=f"improve_efa_pearson_heat_{grade}",
+                )
+
+        with h2:
+            if not spearman_matrix.empty:
+                fig_s = go.Figure(
+                    data=go.Heatmap(
+                        z=spearman_matrix.values,
+                        x=spearman_matrix.columns.astype(str),
+                        y=spearman_matrix.index.astype(str),
+                        zmin=-1,
+                        zmax=1,
+                        zmid=0,
+                        text=np.where(
+                            pd.isna(spearman_matrix.values),
+                            "",
+                            np.vectorize(lambda x: f"{x:.2f}")(
+                                np.nan_to_num(spearman_matrix.values)
+                            ),
+                        ),
+                        texttemplate="%{text}",
+                        hovertemplate=(
+                            "Sede: %{y}<br>"
+                            "Prueba: %{x}<br>"
+                            "Spearman: %{z:.2f}"
+                            "<extra></extra>"
+                        ),
+                        colorbar=dict(title="ρ"),
+                    )
+                )
+                fig_s.update_layout(
+                    title="Spearman por sede y prueba",
+                    height=470,
+                    margin=dict(l=20, r=20, t=60, b=20),
+                )
+                st.plotly_chart(
+                    fig_s,
+                    use_container_width=True,
+                    key=f"improve_efa_spearman_heat_{grade}",
+                )
+
+        st.markdown("### Panorama de la RED por prueba")
+        red = grade_summary[
+            grade_summary["Sede"].astype(str) == "RED"
+        ].copy()
+        red = red[
+            red["Prueba"].astype(str).isin(test_order)
+        ]
+        red["Prueba"] = pd.Categorical(
+            red["Prueba"],
+            categories=test_order,
+            ordered=True,
+        )
+        red = red.sort_values("Prueba")
+
+        if not red.empty:
+            corr_long = red.melt(
                 id_vars=["Prueba"],
                 value_vars=["Pearson_r", "Spearman_rho"],
                 var_name="Coeficiente",
@@ -4015,10 +4079,7 @@ def render_improve_efa_relation(
                 text=corr_long["Correlación"].map(
                     lambda x: f"{x:.2f}"
                 ),
-                title=(
-                    f"Correlación EFA vs Improve por prueba · "
-                    f"{selected_site}, {grade}°"
-                ),
+                title=f"Correlación EFA vs Improve · RED, {grade}°",
             )
             fig_corr.update_yaxes(
                 range=[-1, 1],
@@ -4037,10 +4098,10 @@ def render_improve_efa_relation(
             st.plotly_chart(
                 fig_corr,
                 use_container_width=True,
-                key=f"improve_efa_correlations_{grade}_{selected_site}",
+                key=f"improve_efa_red_corr_{grade}",
             )
 
-            display = overview[
+            red_display = red[
                 [
                     "Prueba",
                     "Pares_validos",
@@ -4050,13 +4111,13 @@ def render_improve_efa_relation(
                     "Spearman_rho",
                 ]
             ].copy()
-            display["Pares válidos"] = display[
-                "Pares_validos"
-            ].astype(int)
-            display["Promedio EFA"] = display[
+            red_display["Pares válidos"] = (
+                red_display["Pares_validos"].astype(int)
+            )
+            red_display["Promedio EFA"] = red_display[
                 "Promedio_EFA"
             ].map(lambda x: f"{x:.1f}%")
-            display["Promedio Improve"] = display.apply(
+            red_display["Promedio Improve"] = red_display.apply(
                 lambda r: (
                     f"{r['Promedio_Improve']:.1f}"
                     if r["Prueba"] == "Global"
@@ -4064,15 +4125,15 @@ def render_improve_efa_relation(
                 ),
                 axis=1,
             )
-            display["Pearson"] = display[
+            red_display["Pearson"] = red_display[
                 "Pearson_r"
             ].map(lambda x: f"{x:.2f}")
-            display["Spearman"] = display[
+            red_display["Spearman"] = red_display[
                 "Spearman_rho"
             ].map(lambda x: f"{x:.2f}")
 
             st.dataframe(
-                display[
+                red_display[
                     [
                         "Prueba",
                         "Pares válidos",
@@ -4086,23 +4147,148 @@ def render_improve_efa_relation(
                 hide_index=True,
             )
 
-            if quality is not None and not quality.empty:
-                q = quality[
-                    (quality["grado_num"] == grade)
-                    & (
-                        quality["Sede"].astype(str)
-                        == selected_site
-                    )
+        st.markdown("### Patrón de relación por prueba")
+        st.caption(
+            "Cada línea muestra cómo cambia el promedio de Improve a medida "
+            "que aumenta el rango de desempeño en EFA. Se muestran todas las "
+            "sedes disponibles de forma simultánea."
+        )
+
+        if not grade_bins.empty:
+            relation_bins = grade_bins[
+                grade_bins["Sede"].astype(str).isin(site_order)
+                & grade_bins["Prueba"].astype(str).isin(test_order)
+            ].copy()
+            relation_bins["Prueba"] = pd.Categorical(
+                relation_bins["Prueba"],
+                categories=test_order,
+                ordered=True,
+            )
+            relation_bins["Sede"] = pd.Categorical(
+                relation_bins["Sede"],
+                categories=site_order,
+                ordered=True,
+            )
+            relation_bins = relation_bins.sort_values(
+                ["Prueba", "Sede", "Orden"]
+            )
+
+            fig_all = px.line(
+                relation_bins,
+                x="Promedio_EFA",
+                y="Promedio_Improve",
+                color="Sede",
+                facet_col="Prueba",
+                facet_col_wrap=3,
+                markers=True,
+                custom_data=["n", "Rango_EFA"],
+                category_orders={
+                    "Prueba": test_order,
+                    "Sede": site_order,
+                },
+                title=(
+                    f"EFA → Improve por rangos, pruebas y sedes · {grade}°"
+                ),
+            )
+            fig_all.update_xaxes(
+                range=[0, 100],
+                title="EFA (%)",
+            )
+            fig_all.update_traces(
+                hovertemplate=(
+                    "Sede: %{fullData.name}<br>"
+                    "Rango EFA: %{customdata[1]}<br>"
+                    "n: %{customdata[0]}<br>"
+                    "EFA: %{x:.1f}<br>"
+                    "Improve: %{y:.1f}"
+                    "<extra></extra>"
+                ),
+            )
+            fig_all.for_each_annotation(
+                lambda a: a.update(
+                    text=a.text.replace("Prueba=", "")
+                )
+            )
+            fig_all.update_layout(
+                height=880,
+                plot_bgcolor="rgba(0,0,0,0)",
+                legend_title_text="Sede",
+            )
+            st.plotly_chart(
+                fig_all,
+                use_container_width=True,
+                key=f"improve_efa_all_relation_{grade}",
+            )
+
+        st.markdown("### Tabla completa · sede × prueba")
+        full = grade_summary[
+            grade_summary["Sede"].astype(str).isin(site_order)
+            & grade_summary["Prueba"].astype(str).isin(test_order)
+        ].copy()
+        full["Sede"] = pd.Categorical(
+            full["Sede"],
+            categories=site_order,
+            ordered=True,
+        )
+        full["Prueba"] = pd.Categorical(
+            full["Prueba"],
+            categories=test_order,
+            ordered=True,
+        )
+        full = full.sort_values(["Sede", "Prueba"])
+
+        full_display = full[
+            [
+                "Sede",
+                "Prueba",
+                "Pares_validos",
+                "Cobertura_identidad_pct",
+                "Promedio_EFA",
+                "Promedio_Improve",
+                "Pearson_r",
+                "Spearman_rho",
+            ]
+        ].copy()
+        full_display["Pares"] = full_display[
+            "Pares_validos"
+        ].astype(int)
+        full_display["Cobertura"] = full_display[
+            "Cobertura_identidad_pct"
+        ].map(lambda x: f"{x:.1f}%")
+        full_display["EFA"] = full_display[
+            "Promedio_EFA"
+        ].map(lambda x: f"{x:.1f}%")
+        full_display["Improve"] = full_display.apply(
+            lambda r: (
+                f"{r['Promedio_Improve']:.1f}"
+                if r["Prueba"] == "Global"
+                else f"{r['Promedio_Improve']:.1f}/100"
+            ),
+            axis=1,
+        )
+        full_display["Pearson"] = full_display[
+            "Pearson_r"
+        ].map(lambda x: f"{x:.2f}")
+        full_display["Spearman"] = full_display[
+            "Spearman_rho"
+        ].map(lambda x: f"{x:.2f}")
+
+        st.dataframe(
+            full_display[
+                [
+                    "Sede",
+                    "Prueba",
+                    "Pares",
+                    "Cobertura",
+                    "EFA",
+                    "Improve",
+                    "Pearson",
+                    "Spearman",
                 ]
-                if not q.empty:
-                    qrow = q.iloc[0]
-                    st.caption(
-                        "Calidad del cruce: "
-                        f"{int(qrow['Emparejados_identidad'])} de "
-                        f"{int(qrow['Improve_EV1_estudiantes'])} estudiantes "
-                        f"de Improve EV1 fueron emparejados de forma estricta "
-                        f"({float(qrow['Cobertura_identidad_pct']):.1f}%)."
-                    )
+            ],
+            use_container_width=True,
+            hide_index=True,
+        )
 
 
 st.title("📊 Estado de llegada 2026")
