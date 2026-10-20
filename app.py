@@ -66,6 +66,14 @@ MATH_COMPETENCIES = [
     "Medida",
     "Estadística y probabilidad",
 ]
+EVOLUTION_METRICS = [
+    "Puntaje global",
+    "Puntaje Matemáticas",
+    "Puntaje Lectura crítica",
+    "Puntaje Ciencias naturales",
+    "Puntaje Sociales y ciudadanas",
+    "Puntaje Inglés",
+]
 LEGACY_LEVEL_MAP = {
     "Progreso limitado": "Nivel 1",
     "Emergente": "Nivel 2",
@@ -179,6 +187,41 @@ def read_math_activity_data():
             )
 
     return stats, bins, summary
+
+
+@st.cache_data(show_spinner=False)
+def read_evolution_10_11_data():
+    summary_path = Path("data/evolucion_10_11_summary_2026.csv")
+    trajectory_path = Path("data/evolucion_11_trayectoria_2026.csv")
+    availability_path = Path(
+        "data/evolucion_10_11_disponibilidad_2026.csv"
+    )
+
+    summary = (
+        pd.read_csv(summary_path)
+        if summary_path.exists()
+        else pd.DataFrame()
+    )
+    trajectory = (
+        pd.read_csv(trajectory_path)
+        if trajectory_path.exists()
+        else pd.DataFrame()
+    )
+    availability = (
+        pd.read_csv(availability_path)
+        if availability_path.exists()
+        else pd.DataFrame()
+    )
+
+    for df in [summary, trajectory, availability]:
+        if not df.empty and "Grado_num" in df.columns:
+            df["Grado_num"] = pd.to_numeric(
+                df["Grado_num"], errors="coerce"
+            ).astype("Int64")
+            df.dropna(subset=["Grado_num"], inplace=True)
+            df["Grado_num"] = df["Grado_num"].astype(int)
+
+    return summary, trajectory, availability
 
 
 @st.cache_data(show_spinner=False)
@@ -2894,10 +2937,508 @@ def render_math_activity_vs_efa(
     )
 
 
+def _evolution_filter(
+    data: pd.DataFrame,
+    metric: str | None = None,
+    selected_grades: list[int] | None = None,
+    selected_sites: list[str] | None = None,
+) -> pd.DataFrame:
+    d = data.copy()
+    if metric is not None and "Metrica" in d.columns:
+        d = d[d["Metrica"].astype(str) == metric]
+    if selected_grades:
+        d = d[d["Grado_num"].isin(selected_grades)]
+    if selected_sites and "Sede" in d.columns:
+        d = d[d["Sede"].astype(str).isin(selected_sites)]
+    return d.copy()
+
+
+def _evolution_combine(data: pd.DataFrame) -> dict:
+    if data is None or data.empty:
+        return {
+            "n": 0,
+            "initial": np.nan,
+            "final": np.nan,
+            "change": np.nan,
+            "improved": np.nan,
+            "same": np.nan,
+            "decreased": np.nan,
+        }
+
+    n = pd.to_numeric(data["N"], errors="coerce").fillna(0).sum()
+    if n <= 0:
+        return {
+            "n": 0,
+            "initial": np.nan,
+            "final": np.nan,
+            "change": np.nan,
+            "improved": np.nan,
+            "same": np.nan,
+            "decreased": np.nan,
+        }
+
+    sum_initial = pd.to_numeric(
+        data["Sum_Inicial"], errors="coerce"
+    ).fillna(0).sum()
+    sum_final = pd.to_numeric(
+        data["Sum_Final"], errors="coerce"
+    ).fillna(0).sum()
+    sum_change = pd.to_numeric(
+        data["Sum_Cambio"], errors="coerce"
+    ).fillna(0).sum()
+    n_improved = pd.to_numeric(
+        data["N_Mejora"], errors="coerce"
+    ).fillna(0).sum()
+    n_same = pd.to_numeric(
+        data["N_Igual"], errors="coerce"
+    ).fillna(0).sum()
+    n_down = pd.to_numeric(
+        data["N_Baja"], errors="coerce"
+    ).fillna(0).sum()
+
+    return {
+        "n": int(n),
+        "initial": sum_initial / n,
+        "final": sum_final / n,
+        "change": sum_change / n,
+        "improved": n_improved / n * 100,
+        "same": n_same / n * 100,
+        "decreased": n_down / n * 100,
+    }
+
+
+def _evolution_grouped(
+    data: pd.DataFrame,
+    group_cols: list[str],
+) -> pd.DataFrame:
+    rows = []
+    if data.empty:
+        return pd.DataFrame()
+
+    for keys, group in data.groupby(group_cols, dropna=False):
+        if not isinstance(keys, tuple):
+            keys = (keys,)
+        info = _evolution_combine(group)
+        row = {col: key for col, key in zip(group_cols, keys)}
+        row.update({
+            "N": info["n"],
+            "Promedio inicial": info["initial"],
+            "Promedio final": info["final"],
+            "Cambio promedio": info["change"],
+            "% mejora": info["improved"],
+            "% igual": info["same"],
+            "% baja": info["decreased"],
+        })
+        rows.append(row)
+
+    return pd.DataFrame(rows)
+
+
+def render_evolution_10_11(
+    summary: pd.DataFrame,
+    trajectory: pd.DataFrame,
+    availability: pd.DataFrame,
+):
+    st.markdown("## Evolución de resultados · 10° y 11°")
+    st.caption(
+        "Comparación pareada entre la primera y la última evaluación "
+        "disponible de cada estudiante."
+    )
+
+    if summary.empty:
+        st.warning("No está disponible el resumen de evolución.")
+        return
+
+    st.info(
+        "La comparación utiliza únicamente estudiantes con primera y última "
+        "evaluación. En 10° se compara Inicial vs Final; en 11° se compara "
+        "Inicial vs Final. La evaluación intermedia de 11° se muestra como "
+        "trayectoria complementaria. Cota no tiene aplicación final de 10°, "
+        "por lo que no entra en la comparación longitudinal."
+    )
+
+    available_grades = sorted(
+        [int(g) for g in summary["Grado_num"].dropna().unique()]
+    )
+    available_sites = sorted(
+        summary["Sede"].dropna().astype(str).unique().tolist()
+    )
+
+    f1, f2, f3 = st.columns([1.1, 1.2, 1.7])
+    with f1:
+        selected_metric = st.selectbox(
+            "Resultado",
+            EVOLUTION_METRICS,
+            index=0,
+            key="evolution_metric",
+        )
+    with f2:
+        selected_grades = st.multiselect(
+            "Grados",
+            available_grades,
+            default=available_grades,
+            format_func=lambda g: f"{g}°",
+            key="evolution_grades",
+        )
+    with f3:
+        selected_sites = st.multiselect(
+            "Sedes",
+            available_sites,
+            default=available_sites,
+            key="evolution_sites",
+        )
+
+    if not selected_grades or not selected_sites:
+        st.warning("Selecciona al menos un grado y una sede.")
+        return
+
+    d = _evolution_filter(
+        summary,
+        metric=selected_metric,
+        selected_grades=selected_grades,
+        selected_sites=selected_sites,
+    )
+    if d.empty:
+        st.warning("No hay estudiantes pareados para los filtros seleccionados.")
+        return
+
+    overall = _evolution_combine(d)
+
+    k1, k2, k3, k4, k5 = st.columns(5)
+    k1.metric(
+        "Estudiantes pareados",
+        f"{overall['n']:,}".replace(",", "."),
+    )
+    k2.metric(
+        "Promedio inicial",
+        f"{overall['initial']:.1f}",
+    )
+    k3.metric(
+        "Promedio final",
+        f"{overall['final']:.1f}",
+    )
+    k4.metric(
+        "Cambio promedio",
+        f"{overall['change']:+.1f}",
+        help="Promedio final menos promedio inicial.",
+    )
+    k5.metric(
+        "% que mejora",
+        f"{overall['improved']:.1f}%",
+    )
+
+    if len(selected_grades) > 1:
+        st.caption(
+            "El resumen superior combina los grados seleccionados. Para comparar "
+            "sedes de forma justa, revisa el desglose por grado: 11° solo tiene "
+            "trayectoria completa en Mosquera."
+        )
+
+    by_grade = _evolution_grouped(d, ["Grado_num"])
+    if not by_grade.empty:
+        by_grade["Grado"] = by_grade["Grado_num"].map(
+            lambda g: f"{int(g)}°"
+        )
+        grade_long = pd.concat(
+            [
+                by_grade[["Grado", "Promedio inicial"]]
+                .rename(columns={"Promedio inicial": "Promedio"})
+                .assign(Momento="Inicial"),
+                by_grade[["Grado", "Promedio final"]]
+                .rename(columns={"Promedio final": "Promedio"})
+                .assign(Momento="Final"),
+            ],
+            ignore_index=True,
+        )
+        fig_grade = px.bar(
+            grade_long,
+            x="Grado",
+            y="Promedio",
+            color="Momento",
+            barmode="group",
+            text=grade_long["Promedio"].map(lambda x: f"{x:.1f}"),
+            title="Promedio inicial vs final por grado",
+        )
+        fig_grade.update_traces(
+            textposition="outside",
+            cliponaxis=False,
+        )
+        fig_grade.update_layout(
+            height=450,
+            plot_bgcolor="rgba(0,0,0,0)",
+            legend_title_text="Momento",
+        )
+        st.plotly_chart(
+            fig_grade,
+            use_container_width=True,
+            key="evolution_initial_final_by_grade",
+        )
+
+    st.divider()
+    st.markdown("### ¿En qué sede se presenta mayor avance?")
+
+    by_site_grade = _evolution_grouped(
+        d,
+        ["Grado_num", "Sede"],
+    )
+    if not by_site_grade.empty:
+        by_site_grade["Grado"] = by_site_grade["Grado_num"].map(
+            lambda g: f"{int(g)}°"
+        )
+
+        fig_change = px.bar(
+            by_site_grade.sort_values(
+                ["Grado_num", "Cambio promedio"],
+                ascending=[True, False],
+            ),
+            x="Sede",
+            y="Cambio promedio",
+            color="Grado",
+            barmode="group",
+            text=by_site_grade["Cambio promedio"].map(
+                lambda x: f"{x:+.1f}"
+            ),
+            custom_data=[
+                "N",
+                "Promedio inicial",
+                "Promedio final",
+                "% mejora",
+            ],
+            labels={"Cambio promedio": "Cambio promedio"},
+            title="Avance promedio por sede y grado",
+        )
+        fig_change.add_hline(y=0, line_dash="dot")
+        fig_change.update_traces(
+            textposition="outside",
+            cliponaxis=False,
+            hovertemplate=(
+                "<b>%{x}</b><br>"
+                "Cambio promedio: %{y:+.1f}<br>"
+                "n: %{customdata[0]}<br>"
+                "Inicial: %{customdata[1]:.1f}<br>"
+                "Final: %{customdata[2]:.1f}<br>"
+                "Mejoran: %{customdata[3]:.1f}%"
+                "<extra></extra>"
+            ),
+        )
+        fig_change.update_layout(
+            height=500,
+            plot_bgcolor="rgba(0,0,0,0)",
+            legend_title_text="Grado",
+        )
+        st.plotly_chart(
+            fig_change,
+            use_container_width=True,
+            key="evolution_change_by_site_grade",
+        )
+
+        ranking = by_site_grade.copy()
+        ranking["Promedio inicial"] = ranking[
+            "Promedio inicial"
+        ].map(lambda x: f"{x:.1f}")
+        ranking["Promedio final"] = ranking[
+            "Promedio final"
+        ].map(lambda x: f"{x:.1f}")
+        ranking["Cambio promedio"] = ranking[
+            "Cambio promedio"
+        ].map(lambda x: f"{x:+.1f}")
+        ranking["% mejora"] = ranking[
+            "% mejora"
+        ].map(lambda x: f"{x:.1f}%")
+        ranking["% baja"] = ranking[
+            "% baja"
+        ].map(lambda x: f"{x:.1f}%")
+        st.dataframe(
+            ranking[
+                [
+                    "Grado",
+                    "Sede",
+                    "N",
+                    "Promedio inicial",
+                    "Promedio final",
+                    "Cambio promedio",
+                    "% mejora",
+                    "% baja",
+                ]
+            ],
+            use_container_width=True,
+            hide_index=True,
+        )
+
+        for grade in sorted(by_site_grade["Grado_num"].unique()):
+            rg = by_site_grade[
+                by_site_grade["Grado_num"] == grade
+            ].sort_values("Cambio promedio", ascending=False)
+            if len(rg) > 1:
+                best = rg.iloc[0]
+                st.success(
+                    f"En {int(grade)}°, la sede con mayor avance promedio "
+                    f"en {selected_metric} es **{best['Sede']}**, con "
+                    f"{best['Cambio promedio']:+.1f} puntos."
+                )
+            elif len(rg) == 1:
+                only = rg.iloc[0]
+                st.caption(
+                    f"En {int(grade)}° solo hay una sede con comparación "
+                    f"completa: {only['Sede']} "
+                    f"({only['Cambio promedio']:+.1f} puntos)."
+                )
+
+    st.divider()
+    st.markdown("### Evolución por área de evaluación")
+    area_rows = []
+    for metric in EVOLUTION_METRICS:
+        dm = _evolution_filter(
+            summary,
+            metric=metric,
+            selected_grades=selected_grades,
+            selected_sites=selected_sites,
+        )
+        info = _evolution_combine(dm)
+        if info["n"] == 0:
+            continue
+        area_rows.append({
+            "Resultado": metric.replace("Puntaje ", ""),
+            "n": info["n"],
+            "Promedio inicial": info["initial"],
+            "Promedio final": info["final"],
+            "Cambio promedio": info["change"],
+            "% mejora": info["improved"],
+        })
+
+    area_table = pd.DataFrame(area_rows)
+    if not area_table.empty:
+        area_display = area_table.copy()
+        for col in [
+            "Promedio inicial",
+            "Promedio final",
+        ]:
+            area_display[col] = area_display[col].map(
+                lambda x: f"{x:.1f}"
+            )
+        area_display["Cambio promedio"] = area_display[
+            "Cambio promedio"
+        ].map(lambda x: f"{x:+.1f}")
+        area_display["% mejora"] = area_display[
+            "% mejora"
+        ].map(lambda x: f"{x:.1f}%")
+        st.dataframe(
+            area_display,
+            use_container_width=True,
+            hide_index=True,
+        )
+
+        fig_area = px.bar(
+            area_table,
+            x="Resultado",
+            y="Cambio promedio",
+            text=area_table["Cambio promedio"].map(
+                lambda x: f"{x:+.1f}"
+            ),
+            title="Cambio promedio entre primera y última evaluación",
+        )
+        fig_area.add_hline(y=0, line_dash="dot")
+        fig_area.update_traces(
+            textposition="outside",
+            cliponaxis=False,
+        )
+        fig_area.update_layout(
+            height=470,
+            plot_bgcolor="rgba(0,0,0,0)",
+        )
+        st.plotly_chart(
+            fig_area,
+            use_container_width=True,
+            key="evolution_change_by_subject",
+        )
+
+    if 11 in selected_grades and not trajectory.empty:
+        st.divider()
+        st.markdown("### Trayectoria de 11° · Inicial → Intermedia → Final")
+        t = _evolution_filter(
+            trajectory,
+            metric=selected_metric,
+            selected_grades=[11],
+            selected_sites=selected_sites,
+        )
+        if not t.empty:
+            traj = (
+                t.groupby(
+                    ["Sede", "Momento", "Orden"],
+                    as_index=False,
+                )
+                .agg(
+                    N=("N", "sum"),
+                    Sum_Puntaje=("Sum_Puntaje", "sum"),
+                )
+            )
+            traj["Promedio"] = np.where(
+                traj["N"] > 0,
+                traj["Sum_Puntaje"] / traj["N"],
+                np.nan,
+            )
+            traj = traj.sort_values(["Sede", "Orden"])
+
+            fig_traj = px.line(
+                traj,
+                x="Momento",
+                y="Promedio",
+                color="Sede",
+                markers=True,
+                text=traj["Promedio"].map(
+                    lambda x: f"{x:.1f}"
+                ),
+                category_orders={
+                    "Momento": ["Inicial", "Intermedia", "Final"]
+                },
+                custom_data=["N"],
+                title=(
+                    f"Trayectoria de 11° · "
+                    f"{selected_metric.replace('Puntaje ', '')}"
+                ),
+            )
+            fig_traj.update_traces(
+                textposition="top center",
+                cliponaxis=False,
+                hovertemplate=(
+                    "<b>%{fullData.name}</b><br>"
+                    "Momento: %{x}<br>"
+                    "Promedio: %{y:.1f}<br>"
+                    "n: %{customdata[0]}"
+                    "<extra></extra>"
+                ),
+            )
+            fig_traj.update_layout(
+                height=480,
+                plot_bgcolor="rgba(0,0,0,0)",
+                legend_title_text="Sede",
+            )
+            st.plotly_chart(
+                fig_traj,
+                use_container_width=True,
+                key="evolution_grade11_trajectory",
+            )
+
+    if availability is not None and not availability.empty:
+        with st.expander(
+            "Ver disponibilidad de aplicaciones por sede y grado",
+            expanded=False,
+        ):
+            av = availability.copy()
+            av["Grado"] = av["Grado_num"].map(
+                lambda g: f"{int(g)}°"
+            )
+            st.dataframe(
+                av[["Grado", "Sede", "Momento", "Registros"]],
+                use_container_width=True,
+                hide_index=True,
+            )
+
+
 st.title("📊 Estado de llegada 2026")
 st.caption(
     "Base precargada actualizada al 19 de octubre de 2026 · "
-    "Análisis general, antigüedad, LATAM y actividad matemática vs EFA."
+    "Análisis general, antigüedad, LATAM, actividad matemática y evolución 10°–11°."
 )
 
 uploaded = st.file_uploader(
@@ -2948,13 +3489,17 @@ latam_efa_data, latam_efa_summary = read_latam_efa_data()
 math_activity_stats, math_activity_bins, math_activity_summary = (
     read_math_activity_data()
 )
+evolution_summary, evolution_trajectory, evolution_availability = (
+    read_evolution_10_11_data()
+)
 
-view_general, view_age, view_latam, view_math_activity = st.tabs(
+view_general, view_age, view_latam, view_math_activity, view_evolution = st.tabs(
     [
         "Análisis general",
         "Análisis por antigüedad ≤1 año",
         "LATAM vs Evaluar para Avanzar",
         "Actividad matemática vs EFA",
+        "Evolución 10°–11°",
     ]
 )
 
@@ -3039,4 +3584,13 @@ with view_math_activity:
         math_activity_stats,
         math_activity_bins,
         math_activity_summary,
+    )
+
+
+
+with view_evolution:
+    render_evolution_10_11(
+        evolution_summary,
+        evolution_trajectory,
+        evolution_availability,
     )
