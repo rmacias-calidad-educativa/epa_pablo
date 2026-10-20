@@ -243,6 +243,7 @@ def read_evolution_10_11_data():
 def read_improve_efa_data():
     levels_path = Path("data/improve_efa_levels_2026.csv")
     quality_path = Path("data/improve_efa_match_quality_2026.csv")
+    growth_path = Path("data/improve_growth_by_efa_level_2026.csv")
 
     levels = (
         pd.read_csv(levels_path)
@@ -254,8 +255,13 @@ def read_improve_efa_data():
         if quality_path.exists()
         else pd.DataFrame()
     )
+    growth = (
+        pd.read_csv(growth_path)
+        if growth_path.exists()
+        else pd.DataFrame()
+    )
 
-    for df in [levels, quality]:
+    for df in [levels, quality, growth]:
         if not df.empty and "grado_num" in df.columns:
             df["grado_num"] = pd.to_numeric(
                 df["grado_num"], errors="coerce"
@@ -277,7 +283,23 @@ def read_improve_efa_data():
             levels["Promedio_Improve"], errors="coerce"
         )
 
-    return levels, quality
+    if not growth.empty:
+        for col in [
+            "Orden",
+            "n",
+            "Promedio_EFA",
+            "Improve_inicial",
+            "Improve_final",
+            "Cambio_Improve",
+            "Pct_mejora",
+            "Pct_baja",
+        ]:
+            growth[col] = pd.to_numeric(
+                growth[col], errors="coerce"
+            )
+        growth["n"] = growth["n"].fillna(0).astype(int)
+
+    return levels, quality, growth
 
 
 @st.cache_data(show_spinner=False)
@@ -3795,6 +3817,7 @@ def _relation_strength(value: float) -> str:
 def render_improve_efa_relation(
     levels: pd.DataFrame,
     quality: pd.DataFrame,
+    growth: pd.DataFrame,
 ):
     st.markdown("## Evaluar para Avanzar vs Improve")
     st.caption(
@@ -4071,6 +4094,263 @@ def render_improve_efa_relation(
                 key=f"improve_efa_levels_sites_{grade}",
             )
 
+        if growth is not None and not growth.empty:
+            st.markdown(
+                "### Crecimiento en Improve según nivel de Evaluar para Avanzar"
+            )
+            final_label = (
+                "Evaluación 2"
+                if grade == 10
+                else "Evaluación 3"
+            )
+            st.caption(
+                f"Se comparan los mismos estudiantes entre Evaluación 1 y "
+                f"{final_label} de Improve. Los grupos se forman según el "
+                "nivel obtenido en EFA para cada prueba."
+            )
+
+            growth_grade = growth[
+                (growth["grado_num"] == grade)
+                & (growth["Sede"].astype(str) == "RED")
+                & growth["Prueba"].astype(str).isin(test_order)
+            ].copy()
+
+            if not growth_grade.empty:
+                growth_grade["Nivel_EFA"] = pd.Categorical(
+                    growth_grade["Nivel_EFA"],
+                    categories=level_order,
+                    ordered=True,
+                )
+                growth_grade["Prueba"] = pd.Categorical(
+                    growth_grade["Prueba"],
+                    categories=test_order,
+                    ordered=True,
+                )
+                growth_grade = growth_grade.sort_values(
+                    ["Prueba", "Orden"]
+                )
+
+                fig_growth = px.bar(
+                    growth_grade,
+                    x="Prueba",
+                    y="Cambio_Improve",
+                    color="Nivel_EFA",
+                    barmode="group",
+                    text=growth_grade["Cambio_Improve"].map(
+                        lambda x: f"{x:+.1f}"
+                    ),
+                    custom_data=["n", "Improve_inicial", "Improve_final"],
+                    category_orders={
+                        "Prueba": test_order,
+                        "Nivel_EFA": level_order,
+                    },
+                    title=(
+                        f"Cambio promedio en Improve según nivel EFA · "
+                        f"{grade}°"
+                    ),
+                )
+                fig_growth.add_hline(y=0, line_dash="dot")
+                fig_growth.update_traces(
+                    textposition="outside",
+                    cliponaxis=False,
+                    hovertemplate=(
+                        "Prueba: %{x}<br>"
+                        "Nivel EFA: %{fullData.name}<br>"
+                        "Cambio: %{y:+.1f}<br>"
+                        "n: %{customdata[0]}<br>"
+                        "Inicial: %{customdata[1]:.1f}<br>"
+                        "Final: %{customdata[2]:.1f}"
+                        "<extra></extra>"
+                    ),
+                )
+                fig_growth.update_layout(
+                    height=540,
+                    plot_bgcolor="rgba(0,0,0,0)",
+                    legend_title_text="Nivel EFA",
+                )
+                st.plotly_chart(
+                    fig_growth,
+                    use_container_width=True,
+                    key=f"improve_growth_by_efa_level_{grade}",
+                )
+
+                st.markdown("#### De cuánto a cuánto cambió cada nivel")
+
+                long_growth = pd.concat(
+                    [
+                        growth_grade[
+                            [
+                                "Prueba",
+                                "Nivel_EFA",
+                                "n",
+                                "Improve_inicial",
+                            ]
+                        ]
+                        .rename(
+                            columns={
+                                "Improve_inicial": "Promedio Improve"
+                            }
+                        )
+                        .assign(Momento="Evaluación 1"),
+                        growth_grade[
+                            [
+                                "Prueba",
+                                "Nivel_EFA",
+                                "n",
+                                "Improve_final",
+                            ]
+                        ]
+                        .rename(
+                            columns={
+                                "Improve_final": "Promedio Improve"
+                            }
+                        )
+                        .assign(Momento=final_label),
+                    ],
+                    ignore_index=True,
+                )
+
+                fig_initial_final = px.line(
+                    long_growth,
+                    x="Momento",
+                    y="Promedio Improve",
+                    color="Nivel_EFA",
+                    facet_col="Prueba",
+                    facet_col_wrap=3,
+                    markers=True,
+                    text=long_growth["Promedio Improve"].map(
+                        lambda x: f"{x:.1f}"
+                    ),
+                    custom_data=["n"],
+                    category_orders={
+                        "Prueba": test_order,
+                        "Nivel_EFA": level_order,
+                        "Momento": ["Evaluación 1", final_label],
+                    },
+                    title=(
+                        f"Puntaje Improve inicial vs final por nivel EFA · "
+                        f"{grade}°"
+                    ),
+                )
+                fig_initial_final.update_yaxes(
+                    range=[0, 100],
+                    title="Promedio Improve",
+                )
+                fig_initial_final.update_xaxes(title=None)
+                fig_initial_final.update_traces(
+                    textposition="top center",
+                    cliponaxis=False,
+                    hovertemplate=(
+                        "Nivel EFA: %{fullData.name}<br>"
+                        "Momento: %{x}<br>"
+                        "Promedio Improve: %{y:.1f}<br>"
+                        "n: %{customdata[0]}"
+                        "<extra></extra>"
+                    ),
+                )
+                fig_initial_final.for_each_annotation(
+                    lambda a: a.update(
+                        text=a.text.replace("Prueba=", "")
+                    )
+                )
+                fig_initial_final.update_layout(
+                    height=840,
+                    plot_bgcolor="rgba(0,0,0,0)",
+                    legend_title_text="Nivel EFA",
+                )
+                st.plotly_chart(
+                    fig_initial_final,
+                    use_container_width=True,
+                    key=f"improve_initial_final_by_efa_level_{grade}",
+                )
+
+                best_rows = []
+                for test in test_order:
+                    dt = growth_grade[
+                        growth_grade["Prueba"].astype(str) == test
+                    ].copy()
+                    if dt.empty:
+                        continue
+                    best = dt.sort_values(
+                        "Cambio_Improve",
+                        ascending=False,
+                    ).iloc[0]
+                    best_rows.append({
+                        "Prueba": test,
+                        "Nivel con mayor crecimiento": str(
+                            best["Nivel_EFA"]
+                        ),
+                        "Cambio promedio": best["Cambio_Improve"],
+                        "Inicial": best["Improve_inicial"],
+                        "Final": best["Improve_final"],
+                        "n": int(best["n"]),
+                    })
+
+                if best_rows:
+                    best_table = pd.DataFrame(best_rows)
+                    best_display = best_table.copy()
+                    best_display["Cambio promedio"] = best_display[
+                        "Cambio promedio"
+                    ].map(lambda x: f"{x:+.1f}")
+                    best_display["Inicial"] = best_display[
+                        "Inicial"
+                    ].map(lambda x: f"{x:.1f}")
+                    best_display["Final"] = best_display[
+                        "Final"
+                    ].map(lambda x: f"{x:.1f}")
+                    st.markdown(
+                        "#### Nivel EFA con mayor crecimiento por prueba"
+                    )
+                    st.dataframe(
+                        best_display,
+                        use_container_width=True,
+                        hide_index=True,
+                    )
+
+                growth_display = growth_grade[
+                    [
+                        "Prueba",
+                        "Nivel_EFA",
+                        "n",
+                        "Improve_inicial",
+                        "Improve_final",
+                        "Cambio_Improve",
+                        "Pct_mejora",
+                    ]
+                ].copy()
+                growth_display = growth_display.rename(
+                    columns={
+                        "Nivel_EFA": "Nivel EFA",
+                        "n": "Estudiantes",
+                        "Improve_inicial": "Inicial",
+                        "Improve_final": "Final",
+                        "Cambio_Improve": "Cambio",
+                        "Pct_mejora": "% que mejora",
+                    }
+                )
+                for col in ["Inicial", "Final"]:
+                    growth_display[col] = growth_display[col].map(
+                        lambda x: f"{x:.1f}"
+                    )
+                growth_display["Cambio"] = growth_display[
+                    "Cambio"
+                ].map(lambda x: f"{x:+.1f}")
+                growth_display["% que mejora"] = growth_display[
+                    "% que mejora"
+                ].map(lambda x: f"{x:.1f}%")
+
+                st.dataframe(
+                    growth_display,
+                    use_container_width=True,
+                    hide_index=True,
+                )
+
+                st.caption(
+                    "Los cambios con grupos muy pequeños deben interpretarse "
+                    "con cautela. Se muestra el tamaño de cada grupo (n) junto "
+                    "con el resultado."
+                )
+
         st.markdown("### Tabla completa · prueba × nivel × sede")
         table = grade_levels[
             grade_levels["Prueba"].astype(str).isin(test_order)
@@ -4184,6 +4464,7 @@ math_activity_stats, math_activity_bins, math_activity_summary = (
 (
     improve_efa_levels,
     improve_efa_quality,
+    improve_efa_growth,
 ) = read_improve_efa_data()
 
 (
@@ -4303,4 +4584,5 @@ with view_improve_efa:
     render_improve_efa_relation(
         improve_efa_levels,
         improve_efa_quality,
+        improve_efa_growth,
     )
