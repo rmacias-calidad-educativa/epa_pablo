@@ -3184,6 +3184,28 @@ def render_evolution_10_11(
                 ignore_index=True,
             )
 
+            # Cota solo cuenta con Evaluación 1. Se muestra para dar
+            # visibilidad a la sede, pero no entra al cálculo de crecimiento.
+            cota_ev1 = _observed_value(
+                observed,
+                10,
+                "Cota",
+                "Evaluación 1",
+                "Puntaje global",
+            )
+            if cota_ev1["n"] > 0 and np.isfinite(cota_ev1["mean"]):
+                long10 = pd.concat(
+                    [
+                        long10,
+                        pd.DataFrame([{
+                            "Sede": "Cota",
+                            "Promedio": cota_ev1["mean"],
+                            "Evaluación": "Evaluación 1",
+                        }]),
+                    ],
+                    ignore_index=True,
+                )
+
             fig10_growth = px.bar(
                 long10,
                 x="Sede",
@@ -3195,8 +3217,11 @@ def render_evolution_10_11(
                 ),
                 title=(
                     "Puntaje global · Evaluación 1 vs Evaluación 2 "
-                    "(mismos estudiantes)"
+                    "(Cota solo cuenta con Evaluación 1)"
                 ),
+                category_orders={
+                    "Sede": ["Cota", "Mosquera", "Tunja", "Zipaquirá"]
+                },
             )
             fig10_growth.update_traces(
                 textposition="outside",
@@ -3231,7 +3256,12 @@ def render_evolution_10_11(
             cota_status = pd.DataFrame([{
                 "Sede": "Cota",
                 "n pareados": "—",
-                "Primera aplicación": "267.2",
+                "Primera aplicación": (
+                    f"{cota_ev1['mean']:.1f}"
+                    if cota_ev1["n"] > 0
+                    and np.isfinite(cota_ev1["mean"])
+                    else "Sin dato"
+                ),
                 "Última aplicación": "Sin aplicación 2",
                 "Cambio pareado": "—",
                 "% mejora": "—",
