@@ -2253,6 +2253,35 @@ def _math_metric_bins(
     return out
 
 
+def _math_metric_by_grade(
+    stats: pd.DataFrame,
+    metric: str,
+    selected_sites: list[str],
+    selected_grades: list[int],
+) -> pd.DataFrame:
+    rows = []
+    for grade in sorted(selected_grades):
+        info = _math_metric_summary(
+            stats,
+            metric,
+            selected_sites,
+            [grade],
+        )
+        if info["n_total"] == 0:
+            continue
+        rows.append({
+            "Grado_num": int(grade),
+            "Grado": f"{int(grade)}°",
+            "n total": info["n_total"],
+            "n con dato": info["n"],
+            "NA": info["n_na"],
+            "Promedio_variable": info["mean_x"],
+            "Promedio_EFA": info["mean_efa"],
+            "r_Pearson": info["r"],
+        })
+    return pd.DataFrame(rows)
+
+
 def _metric_value_label(metric: str, value: float) -> str:
     if pd.isna(value):
         return "—"
@@ -2354,6 +2383,139 @@ def _render_math_metric_relation(
         plot_bgcolor="rgba(0,0,0,0)",
     )
     st.plotly_chart(fig, use_container_width=True)
+
+    st.markdown("#### Comportamiento por grado")
+    by_grade = _math_metric_by_grade(
+        stats,
+        metric,
+        selected_sites,
+        selected_grades,
+    )
+
+    if by_grade.empty:
+        st.info("No hay datos por grado para esta selección.")
+        return
+
+    grade_display = by_grade.copy()
+    grade_display["Promedio de la variable"] = grade_display[
+        "Promedio_variable"
+    ].map(lambda x: _metric_value_label(metric, x))
+    grade_display["Promedio EFA"] = grade_display[
+        "Promedio_EFA"
+    ].map(
+        lambda x: f"{x:.1f}%" if pd.notna(x) else "—"
+    )
+    grade_display["r Pearson"] = grade_display[
+        "r_Pearson"
+    ].map(
+        lambda x: f"{x:.2f}" if pd.notna(x) else "—"
+    )
+
+    st.dataframe(
+        grade_display[
+            [
+                "Grado",
+                "n total",
+                "n con dato",
+                "NA",
+                "Promedio de la variable",
+                "Promedio EFA",
+                "r Pearson",
+            ]
+        ],
+        use_container_width=True,
+        hide_index=True,
+    )
+
+    g1, g2 = st.columns(2)
+
+    with g1:
+        fig_var = px.line(
+            by_grade,
+            x="Grado_num",
+            y="Promedio_variable",
+            markers=True,
+            text=by_grade["Promedio_variable"].map(
+                lambda x: (
+                    f"{x:.2f}"
+                    if pd.notna(x)
+                    else ""
+                )
+            ),
+            custom_data=["n con dato", "NA"],
+            labels={
+                "Grado_num": "Grado",
+                "Promedio_variable": metric,
+            },
+            title=f"{metric} por grado",
+        )
+        fig_var = style_clean_axes(
+            fig_var,
+            grades=by_grade["Grado_num"].tolist(),
+            hide_y=False,
+        )
+        if metric not in [
+            "Actividades realizadas",
+            "Tiempo total (horas)",
+        ]:
+            fig_var.update_yaxes(
+                range=[0, 10],
+                title="Promedio (0–10)",
+            )
+        else:
+            fig_var.update_yaxes(title=metric)
+        fig_var.update_traces(
+            textposition="top center",
+            cliponaxis=False,
+            hovertemplate=(
+                "Grado: %{x}°<br>"
+                "Promedio: %{y:.2f}<br>"
+                "n con dato: %{customdata[0]:.0f}<br>"
+                "NA: %{customdata[1]:.0f}"
+                "<extra></extra>"
+            ),
+        )
+        fig_var.update_layout(height=420)
+        st.plotly_chart(fig_var, use_container_width=True)
+
+    with g2:
+        fig_efa = px.line(
+            by_grade,
+            x="Grado_num",
+            y="Promedio_EFA",
+            markers=True,
+            text=by_grade["Promedio_EFA"].map(
+                lambda x: f"{x:.1f}%" if pd.notna(x) else ""
+            ),
+            custom_data=["n con dato"],
+            labels={
+                "Grado_num": "Grado",
+                "Promedio_EFA": "Promedio EFA",
+            },
+            title="Promedio EFA de los mismos estudiantes por grado",
+        )
+        fig_efa = style_clean_axes(
+            fig_efa,
+            grades=by_grade["Grado_num"].tolist(),
+            hide_y=False,
+        )
+        fig_efa.update_yaxes(
+            range=[0, 100],
+            ticksuffix="%",
+            title="% promedio de aciertos EFA",
+        )
+        fig_efa.update_traces(
+            textposition="top center",
+            cliponaxis=False,
+            hovertemplate=(
+                "Grado: %{x}°<br>"
+                "Promedio EFA: %{y:.1f}%<br>"
+                "n con dato: %{customdata[0]:.0f}"
+                "<extra></extra>"
+            ),
+        )
+        fig_efa.update_layout(height=420)
+        st.plotly_chart(fig_efa, use_container_width=True)
 
 
 def render_math_activity_vs_efa(
@@ -2550,6 +2712,160 @@ def render_math_activity_vs_efa(
         "El porcentaje con dato permite ver la cobertura real de cada "
         "competencia. Los estudiantes con celda vacía no se convierten a 0."
     )
+
+    st.markdown("#### Competencias por grado")
+    comp_grade_rows = []
+    for grade in sorted(selected_grades):
+        for metric in MATH_COMPETENCIES:
+            info = _math_metric_summary(
+                stats,
+                metric,
+                selected_sites,
+                [grade],
+            )
+            if info["n_total"] == 0:
+                continue
+            comp_grade_rows.append({
+                "Grado_num": int(grade),
+                "Grado": f"{int(grade)}°",
+                "Competencia": metric,
+                "n total": info["n_total"],
+                "n con dato": info["n"],
+                "NA": info["n_na"],
+                "% con dato": (
+                    info["n"] / info["n_total"] * 100
+                    if info["n_total"] > 0
+                    else np.nan
+                ),
+                "Promedio_competencia": info["mean_x"],
+                "Promedio_EFA": info["mean_efa"],
+                "r_Pearson": info["r"],
+            })
+
+    comp_grade = pd.DataFrame(comp_grade_rows)
+
+    if not comp_grade.empty:
+        comp_grade_display = comp_grade.copy()
+        comp_grade_display["% con dato"] = comp_grade_display[
+            "% con dato"
+        ].map(
+            lambda x: f"{x:.1f}%" if pd.notna(x) else "—"
+        )
+        comp_grade_display["Promedio competencia (0–10)"] = (
+            comp_grade_display["Promedio_competencia"].map(
+                lambda x: f"{x:.2f}" if pd.notna(x) else "—"
+            )
+        )
+        comp_grade_display["Promedio EFA"] = comp_grade_display[
+            "Promedio_EFA"
+        ].map(
+            lambda x: f"{x:.1f}%" if pd.notna(x) else "—"
+        )
+        comp_grade_display["r Pearson"] = comp_grade_display[
+            "r_Pearson"
+        ].map(
+            lambda x: f"{x:.2f}" if pd.notna(x) else "—"
+        )
+
+        st.dataframe(
+            comp_grade_display[
+                [
+                    "Grado",
+                    "Competencia",
+                    "n con dato",
+                    "NA",
+                    "% con dato",
+                    "Promedio competencia (0–10)",
+                    "Promedio EFA",
+                    "r Pearson",
+                ]
+            ],
+            use_container_width=True,
+            hide_index=True,
+        )
+
+        comp_matrix = (
+            comp_grade.pivot(
+                index="Competencia",
+                columns="Grado_num",
+                values="Promedio_competencia",
+            )
+            .reindex(index=MATH_COMPETENCIES)
+        )
+        efa_matrix = (
+            comp_grade.pivot(
+                index="Competencia",
+                columns="Grado_num",
+                values="Promedio_EFA",
+            )
+            .reindex(index=MATH_COMPETENCIES)
+        )
+
+        h1, h2 = st.columns(2)
+
+        with h1:
+            fig_comp = go.Figure(
+                data=go.Heatmap(
+                    z=comp_matrix.values,
+                    x=[f"{int(g)}°" for g in comp_matrix.columns],
+                    y=comp_matrix.index,
+                    zmin=0,
+                    zmax=10,
+                    text=np.where(
+                        pd.isna(comp_matrix.values),
+                        "",
+                        np.vectorize(lambda x: f"{x:.1f}")(
+                            np.nan_to_num(comp_matrix.values)
+                        ),
+                    ),
+                    texttemplate="%{text}",
+                    hovertemplate=(
+                        "Competencia: %{y}<br>"
+                        "Grado: %{x}<br>"
+                        "Promedio: %{z:.2f}/10"
+                        "<extra></extra>"
+                    ),
+                    colorbar=dict(title="0–10"),
+                )
+            )
+            fig_comp.update_layout(
+                title="Promedio de competencia por grado",
+                height=430,
+                margin=dict(l=15, r=15, t=60, b=20),
+            )
+            st.plotly_chart(fig_comp, use_container_width=True)
+
+        with h2:
+            fig_comp_efa = go.Figure(
+                data=go.Heatmap(
+                    z=efa_matrix.values,
+                    x=[f"{int(g)}°" for g in efa_matrix.columns],
+                    y=efa_matrix.index,
+                    zmin=0,
+                    zmax=100,
+                    text=np.where(
+                        pd.isna(efa_matrix.values),
+                        "",
+                        np.vectorize(lambda x: f"{x:.0f}%")(
+                            np.nan_to_num(efa_matrix.values)
+                        ),
+                    ),
+                    texttemplate="%{text}",
+                    hovertemplate=(
+                        "Competencia: %{y}<br>"
+                        "Grado: %{x}<br>"
+                        "Promedio EFA: %{z:.1f}%"
+                        "<extra></extra>"
+                    ),
+                    colorbar=dict(title="% EFA"),
+                )
+            )
+            fig_comp_efa.update_layout(
+                title="Promedio EFA de estudiantes con dato por grado",
+                height=430,
+                margin=dict(l=15, r=15, t=60, b=20),
+            )
+            st.plotly_chart(fig_comp_efa, use_container_width=True)
 
     selected_comp = st.selectbox(
         "Explorar una competencia",
