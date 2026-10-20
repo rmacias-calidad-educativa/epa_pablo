@@ -196,6 +196,9 @@ def read_evolution_10_11_data():
     availability_path = Path(
         "data/evolucion_10_11_disponibilidad_2026.csv"
     )
+    observed_path = Path(
+        "data/evolucion_10_11_observado_2026.csv"
+    )
 
     summary = (
         pd.read_csv(summary_path)
@@ -212,8 +215,13 @@ def read_evolution_10_11_data():
         if availability_path.exists()
         else pd.DataFrame()
     )
+    observed = (
+        pd.read_csv(observed_path)
+        if observed_path.exists()
+        else pd.DataFrame()
+    )
 
-    for df in [summary, trajectory, availability]:
+    for df in [summary, trajectory, availability, observed]:
         if not df.empty and "Grado_num" in df.columns:
             df["Grado_num"] = pd.to_numeric(
                 df["Grado_num"], errors="coerce"
@@ -221,7 +229,7 @@ def read_evolution_10_11_data():
             df.dropna(subset=["Grado_num"], inplace=True)
             df["Grado_num"] = df["Grado_num"].astype(int)
 
-    return summary, trajectory, availability
+    return summary, trajectory, availability, observed
 
 
 @st.cache_data(show_spinner=False)
@@ -3034,406 +3042,606 @@ def _evolution_grouped(
     return pd.DataFrame(rows)
 
 
+def _observed_value(
+    observed: pd.DataFrame,
+    grade: int,
+    site: str,
+    moment: str,
+    metric: str,
+) -> dict:
+    d = observed[
+        (observed["Grado_num"] == grade)
+        & (observed["Sede"].astype(str) == site)
+        & (observed["Momento"].astype(str) == moment)
+        & (observed["Metrica"].astype(str) == metric)
+    ].copy()
+    if d.empty:
+        return {"n": 0, "mean": np.nan}
+    row = d.iloc[0]
+    return {
+        "n": int(pd.to_numeric(row["N"], errors="coerce")),
+        "mean": float(pd.to_numeric(row["Promedio"], errors="coerce")),
+    }
+
+
+def _paired_site_table(
+    summary: pd.DataFrame,
+    grade: int,
+    metric: str,
+) -> pd.DataFrame:
+    d = summary[
+        (summary["Grado_num"] == grade)
+        & (summary["Metrica"].astype(str) == metric)
+    ].copy()
+    if d.empty:
+        return pd.DataFrame()
+
+    rows = []
+    for _, r in d.iterrows():
+        n = float(r["N"])
+        if n <= 0:
+            continue
+        initial = float(r["Sum_Inicial"]) / n
+        final = float(r["Sum_Final"]) / n
+        change = float(r["Sum_Cambio"]) / n
+        improved = float(r["N_Mejora"]) / n * 100
+        rows.append({
+            "Sede": r["Sede"],
+            "n pareados": int(n),
+            "Primera aplicación": initial,
+            "Última aplicación": final,
+            "Cambio pareado": change,
+            "% mejora": improved,
+        })
+    return pd.DataFrame(rows)
+
+
 def render_evolution_10_11(
     summary: pd.DataFrame,
     trajectory: pd.DataFrame,
     availability: pd.DataFrame,
+    observed: pd.DataFrame,
 ):
     st.markdown("## Evolución de resultados · 10° y 11°")
     st.caption(
-        "Comparación pareada entre la primera y la última evaluación "
-        "disponible de cada estudiante."
+        "Dos lecturas separadas: crecimiento de los mismos estudiantes y "
+        "resultado observado al cierre de cada aplicación."
     )
 
-    if summary.empty:
-        st.warning("No está disponible el resumen de evolución.")
+    if summary.empty or observed.empty:
+        st.warning("No está disponible la información de evolución.")
         return
 
     st.info(
-        "La comparación utiliza únicamente estudiantes con primera y última "
-        "evaluación. En 10° se compara Inicial vs Final; en 11° se compara "
-        "Inicial vs Final. La evaluación intermedia de 11° se muestra como "
-        "trayectoria complementaria. Cota no tiene aplicación final de 10°, "
-        "por lo que no entra en la comparación longitudinal."
+        "Crecimiento = comparación pareada de los mismos estudiantes. "
+        "Cierre = promedio observado de todos los estudiantes que presentaron "
+        "esa aplicación. No se mezclan ambas lecturas."
     )
 
-    available_grades = sorted(
-        [int(g) for g in summary["Grado_num"].dropna().unique()]
-    )
-    available_sites = sorted(
-        summary["Sede"].dropna().astype(str).unique().tolist()
+    tab10, tab11 = st.tabs(
+        ["10° · Crecimiento y cierre", "11° · Mosquera"]
     )
 
-    f1, f2, f3 = st.columns([1.1, 1.2, 1.7])
-    with f1:
-        selected_metric = st.selectbox(
-            "Resultado",
-            EVOLUTION_METRICS,
-            index=0,
-            key="evolution_metric",
-        )
-    with f2:
-        selected_grades = st.multiselect(
-            "Grados",
-            available_grades,
-            default=available_grades,
-            format_func=lambda g: f"{g}°",
-            key="evolution_grades",
-        )
-    with f3:
-        selected_sites = st.multiselect(
-            "Sedes",
-            available_sites,
-            default=available_sites,
-            key="evolution_sites",
-        )
-
-    if not selected_grades or not selected_sites:
-        st.warning("Selecciona al menos un grado y una sede.")
-        return
-
-    d = _evolution_filter(
-        summary,
-        metric=selected_metric,
-        selected_grades=selected_grades,
-        selected_sites=selected_sites,
-    )
-    if d.empty:
-        st.warning("No hay estudiantes pareados para los filtros seleccionados.")
-        return
-
-    overall = _evolution_combine(d)
-
-    k1, k2, k3, k4, k5 = st.columns(5)
-    k1.metric(
-        "Estudiantes pareados",
-        f"{overall['n']:,}".replace(",", "."),
-    )
-    k2.metric(
-        "Promedio inicial",
-        f"{overall['initial']:.1f}",
-    )
-    k3.metric(
-        "Promedio final",
-        f"{overall['final']:.1f}",
-    )
-    k4.metric(
-        "Cambio promedio",
-        f"{overall['change']:+.1f}",
-        help="Promedio final menos promedio inicial.",
-    )
-    k5.metric(
-        "% que mejora",
-        f"{overall['improved']:.1f}%",
-    )
-
-    if len(selected_grades) > 1:
+    with tab10:
+        st.markdown("### 1. Crecimiento · mismos estudiantes")
         st.caption(
-            "El resumen superior combina los grados seleccionados. Para comparar "
-            "sedes de forma justa, revisa el desglose por grado: 11° solo tiene "
-            "trayectoria completa en Mosquera."
+            "Compara Evaluación 1 vs Evaluación 2 únicamente en estudiantes "
+            "que presentaron ambas aplicaciones."
         )
 
-    by_grade = _evolution_grouped(d, ["Grado_num"])
-    if not by_grade.empty:
-        by_grade["Grado"] = by_grade["Grado_num"].map(
-            lambda g: f"{int(g)}°"
-        )
-        grade_long = pd.concat(
-            [
-                by_grade[["Grado", "Promedio inicial"]]
-                .rename(columns={"Promedio inicial": "Promedio"})
-                .assign(Momento="Inicial"),
-                by_grade[["Grado", "Promedio final"]]
-                .rename(columns={"Promedio final": "Promedio"})
-                .assign(Momento="Final"),
-            ],
-            ignore_index=True,
-        )
-        fig_grade = px.bar(
-            grade_long,
-            x="Grado",
-            y="Promedio",
-            color="Momento",
-            barmode="group",
-            text=grade_long["Promedio"].map(lambda x: f"{x:.1f}"),
-            title="Promedio inicial vs final por grado",
-        )
-        fig_grade.update_traces(
-            textposition="outside",
-            cliponaxis=False,
-        )
-        fig_grade.update_layout(
-            height=450,
-            plot_bgcolor="rgba(0,0,0,0)",
-            legend_title_text="Momento",
-        )
-        st.plotly_chart(
-            fig_grade,
-            use_container_width=True,
-            key="evolution_initial_final_by_grade",
-        )
-
-    st.divider()
-    st.markdown("### ¿En qué sede se presenta mayor avance?")
-
-    by_site_grade = _evolution_grouped(
-        d,
-        ["Grado_num", "Sede"],
-    )
-    if not by_site_grade.empty:
-        by_site_grade["Grado"] = by_site_grade["Grado_num"].map(
-            lambda g: f"{int(g)}°"
-        )
-
-        fig_change = px.bar(
-            by_site_grade.sort_values(
-                ["Grado_num", "Cambio promedio"],
-                ascending=[True, False],
-            ),
-            x="Sede",
-            y="Cambio promedio",
-            color="Grado",
-            barmode="group",
-            text=by_site_grade["Cambio promedio"].map(
-                lambda x: f"{x:+.1f}"
-            ),
-            custom_data=[
-                "N",
-                "Promedio inicial",
-                "Promedio final",
-                "% mejora",
-            ],
-            labels={"Cambio promedio": "Cambio promedio"},
-            title="Avance promedio por sede y grado",
-        )
-        fig_change.add_hline(y=0, line_dash="dot")
-        fig_change.update_traces(
-            textposition="outside",
-            cliponaxis=False,
-            hovertemplate=(
-                "<b>%{x}</b><br>"
-                "Cambio promedio: %{y:+.1f}<br>"
-                "n: %{customdata[0]}<br>"
-                "Inicial: %{customdata[1]:.1f}<br>"
-                "Final: %{customdata[2]:.1f}<br>"
-                "Mejoran: %{customdata[3]:.1f}%"
-                "<extra></extra>"
-            ),
-        )
-        fig_change.update_layout(
-            height=500,
-            plot_bgcolor="rgba(0,0,0,0)",
-            legend_title_text="Grado",
-        )
-        st.plotly_chart(
-            fig_change,
-            use_container_width=True,
-            key="evolution_change_by_site_grade",
-        )
-
-        ranking = by_site_grade.copy()
-        ranking["Promedio inicial"] = ranking[
-            "Promedio inicial"
-        ].map(lambda x: f"{x:.1f}")
-        ranking["Promedio final"] = ranking[
-            "Promedio final"
-        ].map(lambda x: f"{x:.1f}")
-        ranking["Cambio promedio"] = ranking[
-            "Cambio promedio"
-        ].map(lambda x: f"{x:+.1f}")
-        ranking["% mejora"] = ranking[
-            "% mejora"
-        ].map(lambda x: f"{x:.1f}%")
-        ranking["% baja"] = ranking[
-            "% baja"
-        ].map(lambda x: f"{x:.1f}%")
-        st.dataframe(
-            ranking[
-                [
-                    "Grado",
-                    "Sede",
-                    "N",
-                    "Promedio inicial",
-                    "Promedio final",
-                    "Cambio promedio",
-                    "% mejora",
-                    "% baja",
-                ]
-            ],
-            use_container_width=True,
-            hide_index=True,
-        )
-
-        for grade in sorted(by_site_grade["Grado_num"].unique()):
-            rg = by_site_grade[
-                by_site_grade["Grado_num"] == grade
-            ].sort_values("Cambio promedio", ascending=False)
-            if len(rg) > 1:
-                best = rg.iloc[0]
-                st.success(
-                    f"En {int(grade)}°, la sede con mayor avance promedio "
-                    f"en {selected_metric} es **{best['Sede']}**, con "
-                    f"{best['Cambio promedio']:+.1f} puntos."
-                )
-            elif len(rg) == 1:
-                only = rg.iloc[0]
-                st.caption(
-                    f"En {int(grade)}° solo hay una sede con comparación "
-                    f"completa: {only['Sede']} "
-                    f"({only['Cambio promedio']:+.1f} puntos)."
-                )
-
-    st.divider()
-    st.markdown("### Evolución por área de evaluación")
-    area_rows = []
-    for metric in EVOLUTION_METRICS:
-        dm = _evolution_filter(
+        paired10 = _paired_site_table(
             summary,
-            metric=metric,
-            selected_grades=selected_grades,
-            selected_sites=selected_sites,
+            10,
+            "Puntaje global",
         )
-        info = _evolution_combine(dm)
-        if info["n"] == 0:
-            continue
-        area_rows.append({
-            "Resultado": metric.replace("Puntaje ", ""),
-            "n": info["n"],
-            "Promedio inicial": info["initial"],
-            "Promedio final": info["final"],
-            "Cambio promedio": info["change"],
-            "% mejora": info["improved"],
-        })
 
-    area_table = pd.DataFrame(area_rows)
-    if not area_table.empty:
-        area_display = area_table.copy()
-        for col in [
-            "Promedio inicial",
-            "Promedio final",
-        ]:
-            area_display[col] = area_display[col].map(
-                lambda x: f"{x:.1f}"
+        if not paired10.empty:
+            overall10 = _evolution_combine(
+                summary[
+                    (summary["Grado_num"] == 10)
+                    & (
+                        summary["Metrica"].astype(str)
+                        == "Puntaje global"
+                    )
+                ]
             )
-        area_display["Cambio promedio"] = area_display[
-            "Cambio promedio"
-        ].map(lambda x: f"{x:+.1f}")
-        area_display["% mejora"] = area_display[
-            "% mejora"
-        ].map(lambda x: f"{x:.1f}%")
-        st.dataframe(
-            area_display,
-            use_container_width=True,
-            hide_index=True,
-        )
 
-        fig_area = px.bar(
-            area_table,
-            x="Resultado",
-            y="Cambio promedio",
-            text=area_table["Cambio promedio"].map(
-                lambda x: f"{x:+.1f}"
-            ),
-            title="Cambio promedio entre primera y última evaluación",
-        )
-        fig_area.add_hline(y=0, line_dash="dot")
-        fig_area.update_traces(
-            textposition="outside",
-            cliponaxis=False,
-        )
-        fig_area.update_layout(
-            height=470,
-            plot_bgcolor="rgba(0,0,0,0)",
-        )
-        st.plotly_chart(
-            fig_area,
-            use_container_width=True,
-            key="evolution_change_by_subject",
-        )
-
-    if 11 in selected_grades and not trajectory.empty:
-        st.divider()
-        st.markdown("### Trayectoria de 11° · Inicial → Intermedia → Final")
-        t = _evolution_filter(
-            trajectory,
-            metric=selected_metric,
-            selected_grades=[11],
-            selected_sites=selected_sites,
-        )
-        if not t.empty:
-            traj = (
-                t.groupby(
-                    ["Sede", "Momento", "Orden"],
-                    as_index=False,
-                )
-                .agg(
-                    N=("N", "sum"),
-                    Sum_Puntaje=("Sum_Puntaje", "sum"),
-                )
+            k1, k2, k3, k4 = st.columns(4)
+            k1.metric(
+                "Estudiantes pareados",
+                f"{overall10['n']:,}".replace(",", "."),
             )
-            traj["Promedio"] = np.where(
-                traj["N"] > 0,
-                traj["Sum_Puntaje"] / traj["N"],
-                np.nan,
+            k2.metric(
+                "Primera aplicación · pareados",
+                f"{overall10['initial']:.1f}",
             )
-            traj = traj.sort_values(["Sede", "Orden"])
+            k3.metric(
+                "Segunda aplicación · pareados",
+                f"{overall10['final']:.1f}",
+            )
+            k4.metric(
+                "Crecimiento promedio",
+                f"{overall10['change']:+.1f}",
+            )
 
-            fig_traj = px.line(
-                traj,
-                x="Momento",
+            long10 = pd.concat(
+                [
+                    paired10[
+                        ["Sede", "Primera aplicación"]
+                    ]
+                    .rename(
+                        columns={"Primera aplicación": "Promedio"}
+                    )
+                    .assign(Evaluación="Evaluación 1"),
+                    paired10[
+                        ["Sede", "Última aplicación"]
+                    ]
+                    .rename(
+                        columns={"Última aplicación": "Promedio"}
+                    )
+                    .assign(Evaluación="Evaluación 2"),
+                ],
+                ignore_index=True,
+            )
+
+            fig10_growth = px.bar(
+                long10,
+                x="Sede",
                 y="Promedio",
-                color="Sede",
-                markers=True,
-                text=traj["Promedio"].map(
+                color="Evaluación",
+                barmode="group",
+                text=long10["Promedio"].map(
                     lambda x: f"{x:.1f}"
                 ),
-                category_orders={
-                    "Momento": ["Inicial", "Intermedia", "Final"]
-                },
-                custom_data=["N"],
                 title=(
-                    f"Trayectoria de 11° · "
-                    f"{selected_metric.replace('Puntaje ', '')}"
+                    "Puntaje global · Evaluación 1 vs Evaluación 2 "
+                    "(mismos estudiantes)"
                 ),
             )
-            fig_traj.update_traces(
-                textposition="top center",
+            fig10_growth.update_traces(
+                textposition="outside",
                 cliponaxis=False,
-                hovertemplate=(
-                    "<b>%{fullData.name}</b><br>"
-                    "Momento: %{x}<br>"
-                    "Promedio: %{y:.1f}<br>"
-                    "n: %{customdata[0]}"
-                    "<extra></extra>"
-                ),
             )
-            fig_traj.update_layout(
-                height=480,
+            fig10_growth.update_layout(
+                height=500,
                 plot_bgcolor="rgba(0,0,0,0)",
-                legend_title_text="Sede",
+                legend_title_text="Aplicación",
             )
             st.plotly_chart(
-                fig_traj,
+                fig10_growth,
                 use_container_width=True,
-                key="evolution_grade11_trajectory",
+                key="evolution10_paired_global",
             )
 
-    if availability is not None and not availability.empty:
-        with st.expander(
-            "Ver disponibilidad de aplicaciones por sede y grado",
-            expanded=False,
-        ):
-            av = availability.copy()
-            av["Grado"] = av["Grado_num"].map(
-                lambda g: f"{int(g)}°"
+            growth_display = paired10.copy()
+            for col in [
+                "Primera aplicación",
+                "Última aplicación",
+            ]:
+                growth_display[col] = growth_display[col].map(
+                    lambda x: f"{x:.1f}"
+                )
+            growth_display["Cambio pareado"] = growth_display[
+                "Cambio pareado"
+            ].map(lambda x: f"{x:+.1f}")
+            growth_display["% mejora"] = growth_display[
+                "% mejora"
+            ].map(lambda x: f"{x:.1f}%")
+
+            cota_status = pd.DataFrame([{
+                "Sede": "Cota",
+                "n pareados": "—",
+                "Primera aplicación": "267.2",
+                "Última aplicación": "Sin aplicación 2",
+                "Cambio pareado": "—",
+                "% mejora": "—",
+            }])
+            growth_display = pd.concat(
+                [growth_display, cota_status],
+                ignore_index=True,
             )
+
             st.dataframe(
-                av[["Grado", "Sede", "Momento", "Registros"]],
+                growth_display[
+                    [
+                        "Sede",
+                        "n pareados",
+                        "Primera aplicación",
+                        "Última aplicación",
+                        "Cambio pareado",
+                        "% mejora",
+                    ]
+                ],
                 use_container_width=True,
                 hide_index=True,
             )
 
+            best10 = paired10.sort_values(
+                "Cambio pareado",
+                ascending=False,
+            ).iloc[0]
+            st.success(
+                f"Mayor crecimiento en 10°: **{best10['Sede']}**, "
+                f"con {best10['Cambio pareado']:+.1f} puntos en promedio."
+            )
+            st.caption(
+                "Cota aparece explícitamente, pero no tiene Evaluación 2; "
+                "por eso no puede calcularse crecimiento pareado."
+            )
+
+        st.divider()
+        st.markdown("### 2. ¿Cómo cerró la Evaluación 2?")
+        st.caption(
+            "Aquí se muestran los promedios observados de todos los estudiantes "
+            "que presentaron cada aplicación. Esta lectura describe el cierre, "
+            "no el crecimiento individual."
+        )
+
+        red_close = _observed_value(
+            observed,
+            10,
+            "RED",
+            "Evaluación 2",
+            "Puntaje global",
+        )
+        red_start = _observed_value(
+            observed,
+            10,
+            "RED",
+            "Evaluación 1",
+            "Puntaje global",
+        )
+
+        close_sites = ["Cota", "Mosquera", "Tunja", "Zipaquirá", "RED"]
+        close_rows = []
+        for site in close_sites:
+            ev1 = _observed_value(
+                observed,
+                10,
+                site,
+                "Evaluación 1",
+                "Puntaje global",
+            )
+            ev2 = _observed_value(
+                observed,
+                10,
+                site,
+                "Evaluación 2",
+                "Puntaje global",
+            )
+            close_rows.append({
+                "Sede": site,
+                "n Evaluación 1": ev1["n"] if ev1["n"] else np.nan,
+                "Promedio Evaluación 1": ev1["mean"],
+                "n Evaluación 2": ev2["n"] if ev2["n"] else np.nan,
+                "Promedio Evaluación 2": ev2["mean"],
+            })
+        close10 = pd.DataFrame(close_rows)
+
+        c1, c2, c3 = st.columns(3)
+        c1.metric(
+            "RED · Promedio Evaluación 2",
+            f"{red_close['mean']:.1f}",
+        )
+        c2.metric(
+            "Estudiantes · Evaluación 2",
+            f"{red_close['n']:,}".replace(",", "."),
+        )
+        c3.metric(
+            "RED · Diferencia descriptiva",
+            f"{red_close['mean'] - red_start['mean']:+.1f}",
+            help=(
+                "Diferencia entre promedios observados de ambas aplicaciones. "
+                "No es un cambio pareado."
+            ),
+        )
+
+        close_long = close10.melt(
+            id_vars="Sede",
+            value_vars=[
+                "Promedio Evaluación 1",
+                "Promedio Evaluación 2",
+            ],
+            var_name="Evaluación",
+            value_name="Promedio",
+        )
+        close_long["Evaluación"] = close_long["Evaluación"].replace({
+            "Promedio Evaluación 1": "Evaluación 1",
+            "Promedio Evaluación 2": "Evaluación 2",
+        })
+
+        fig10_close = px.bar(
+            close_long,
+            x="Sede",
+            y="Promedio",
+            color="Evaluación",
+            barmode="group",
+            text=close_long["Promedio"].map(
+                lambda x: "" if pd.isna(x) else f"{x:.1f}"
+            ),
+            title="Puntaje global observado por aplicación",
+        )
+        fig10_close.update_traces(
+            textposition="outside",
+            cliponaxis=False,
+        )
+        fig10_close.update_layout(
+            height=500,
+            plot_bgcolor="rgba(0,0,0,0)",
+            legend_title_text="Aplicación",
+        )
+        st.plotly_chart(
+            fig10_close,
+            use_container_width=True,
+            key="evolution10_observed_global",
+        )
+
+        close_display = close10.copy()
+        for col in [
+            "Promedio Evaluación 1",
+            "Promedio Evaluación 2",
+        ]:
+            close_display[col] = close_display[col].map(
+                lambda x: "Sin aplicación" if pd.isna(x) else f"{x:.1f}"
+            )
+        for col in ["n Evaluación 1", "n Evaluación 2"]:
+            close_display[col] = close_display[col].map(
+                lambda x: "—" if pd.isna(x) else f"{int(x)}"
+            )
+
+        st.dataframe(
+            close_display,
+            use_container_width=True,
+            hide_index=True,
+        )
+
+        st.markdown("#### Cierre de la Evaluación 2 por prueba")
+        obs10_e2 = observed[
+            (observed["Grado_num"] == 10)
+            & (observed["Momento"].astype(str) == "Evaluación 2")
+            & (
+                observed["Metrica"].astype(str)
+                != "Puntaje global"
+            )
+        ].copy()
+        if not obs10_e2.empty:
+            obs10_e2["Prueba"] = (
+                obs10_e2["Metrica"]
+                .astype(str)
+                .str.replace("Puntaje ", "", regex=False)
+            )
+            site_order = ["Mosquera", "Tunja", "Zipaquirá", "RED"]
+            obs10_e2 = obs10_e2[
+                obs10_e2["Sede"].isin(site_order)
+            ]
+            fig10_subjects = px.bar(
+                obs10_e2,
+                x="Prueba",
+                y="Promedio",
+                color="Sede",
+                barmode="group",
+                text=obs10_e2["Promedio"].map(
+                    lambda x: f"{x:.1f}"
+                ),
+                category_orders={"Sede": site_order},
+                title="Puntajes de cierre por prueba · Evaluación 2",
+            )
+            fig10_subjects.update_yaxes(
+                range=[0, 100],
+                title="Puntaje promedio",
+            )
+            fig10_subjects.update_traces(
+                textposition="outside",
+                cliponaxis=False,
+            )
+            fig10_subjects.update_layout(
+                height=540,
+                plot_bgcolor="rgba(0,0,0,0)",
+                legend_title_text="Sede",
+            )
+            st.plotly_chart(
+                fig10_subjects,
+                use_container_width=True,
+                key="evolution10_close_subjects",
+            )
+
+    with tab11:
+        st.markdown("### Mosquera · crecimiento global")
+        st.caption(
+            "11° tiene tres aplicaciones. La trayectoria se calcula sobre los "
+            "51 estudiantes que cuentan con Evaluación 1, 2 y 3."
+        )
+
+        pair11 = summary[
+            (summary["Grado_num"] == 11)
+            & (summary["Sede"].astype(str) == "Mosquera")
+        ].copy()
+        global11 = _evolution_combine(
+            pair11[
+                pair11["Metrica"].astype(str) == "Puntaje global"
+            ]
+        )
+
+        c1, c2, c3, c4, c5 = st.columns(5)
+        c1.metric("Estudiantes completos", f"{global11['n']}")
+        c2.metric("Evaluación 1", f"{global11['initial']:.1f}")
+        c3.metric("Evaluación 3", f"{global11['final']:.1f}")
+        c4.metric("Crecimiento 1 → 3", f"{global11['change']:+.1f}")
+        c5.metric("% que mejora", f"{global11['improved']:.1f}%")
+
+        traj11_global = trajectory[
+            (trajectory["Grado_num"] == 11)
+            & (trajectory["Sede"].astype(str) == "Mosquera")
+            & (
+                trajectory["Metrica"].astype(str)
+                == "Puntaje global"
+            )
+        ].copy()
+        if not traj11_global.empty:
+            traj11_global["Promedio"] = (
+                traj11_global["Sum_Puntaje"]
+                / traj11_global["N"]
+            )
+            traj11_global["Evaluación"] = (
+                traj11_global["Orden"].map({
+                    1: "Evaluación 1",
+                    2: "Evaluación 2",
+                    3: "Evaluación 3",
+                })
+            )
+            fig11_global = px.bar(
+                traj11_global.sort_values("Orden"),
+                x="Evaluación",
+                y="Promedio",
+                text=traj11_global["Promedio"].map(
+                    lambda x: f"{x:.1f}"
+                ),
+                title=(
+                    "Puntaje global · mismos 51 estudiantes "
+                    "en las tres aplicaciones"
+                ),
+            )
+            fig11_global.update_traces(
+                textposition="outside",
+                cliponaxis=False,
+            )
+            fig11_global.update_layout(
+                height=470,
+                plot_bgcolor="rgba(0,0,0,0)",
+            )
+            st.plotly_chart(
+                fig11_global,
+                use_container_width=True,
+                key="evolution11_global_three_apps",
+            )
+
+        st.divider()
+        st.markdown("### Mosquera · crecimiento por prueba")
+
+        subjects11 = pair11[
+            pair11["Metrica"].astype(str) != "Puntaje global"
+        ].copy()
+        subject_rows = []
+        for _, r in subjects11.iterrows():
+            n = float(r["N"])
+            subject_rows.append({
+                "Prueba": str(r["Metrica"]).replace("Puntaje ", ""),
+                "n": int(n),
+                "Evaluación 1": float(r["Sum_Inicial"]) / n,
+                "Evaluación 3": float(r["Sum_Final"]) / n,
+                "Crecimiento 1 → 3": float(r["Sum_Cambio"]) / n,
+                "% mejora": float(r["N_Mejora"]) / n * 100,
+            })
+        subject11 = pd.DataFrame(subject_rows)
+
+        traj11_subjects = trajectory[
+            (trajectory["Grado_num"] == 11)
+            & (trajectory["Sede"].astype(str) == "Mosquera")
+            & (
+                trajectory["Metrica"].astype(str)
+                != "Puntaje global"
+            )
+        ].copy()
+        if not traj11_subjects.empty:
+            traj11_subjects["Promedio"] = (
+                traj11_subjects["Sum_Puntaje"]
+                / traj11_subjects["N"]
+            )
+            traj11_subjects["Prueba"] = (
+                traj11_subjects["Metrica"]
+                .astype(str)
+                .str.replace("Puntaje ", "", regex=False)
+            )
+            traj11_subjects["Evaluación"] = (
+                traj11_subjects["Orden"].map({
+                    1: "Evaluación 1",
+                    2: "Evaluación 2",
+                    3: "Evaluación 3",
+                })
+            )
+
+            fig11_subjects = px.bar(
+                traj11_subjects.sort_values(
+                    ["Prueba", "Orden"]
+                ),
+                x="Prueba",
+                y="Promedio",
+                color="Evaluación",
+                barmode="group",
+                text=traj11_subjects["Promedio"].map(
+                    lambda x: f"{x:.1f}"
+                ),
+                title=(
+                    "Puntajes por prueba · Evaluación 1, 2 y 3 "
+                    "(mismos 51 estudiantes)"
+                ),
+            )
+            fig11_subjects.update_yaxes(
+                range=[0, 100],
+                title="Puntaje promedio",
+            )
+            fig11_subjects.update_traces(
+                textposition="outside",
+                cliponaxis=False,
+            )
+            fig11_subjects.update_layout(
+                height=560,
+                plot_bgcolor="rgba(0,0,0,0)",
+                legend_title_text="Aplicación",
+            )
+            st.plotly_chart(
+                fig11_subjects,
+                use_container_width=True,
+                key="evolution11_subjects_three_apps",
+            )
+
+        if not subject11.empty:
+            subject_display = subject11.copy()
+            for col in ["Evaluación 1", "Evaluación 3"]:
+                subject_display[col] = subject_display[col].map(
+                    lambda x: f"{x:.1f}"
+                )
+            subject_display["Crecimiento 1 → 3"] = subject_display[
+                "Crecimiento 1 → 3"
+            ].map(lambda x: f"{x:+.1f}")
+            subject_display["% mejora"] = subject_display[
+                "% mejora"
+            ].map(lambda x: f"{x:.1f}%")
+            st.dataframe(
+                subject_display,
+                use_container_width=True,
+                hide_index=True,
+            )
+
+            fig11_delta = px.bar(
+                subject11.sort_values(
+                    "Crecimiento 1 → 3",
+                    ascending=False,
+                ),
+                x="Prueba",
+                y="Crecimiento 1 → 3",
+                text=subject11["Crecimiento 1 → 3"].map(
+                    lambda x: f"{x:+.1f}"
+                ),
+                title=(
+                    "Crecimiento promedio por prueba · "
+                    "Evaluación 1 → Evaluación 3"
+                ),
+            )
+            fig11_delta.add_hline(y=0, line_dash="dot")
+            fig11_delta.update_traces(
+                textposition="outside",
+                cliponaxis=False,
+            )
+            fig11_delta.update_layout(
+                height=470,
+                plot_bgcolor="rgba(0,0,0,0)",
+            )
+            st.plotly_chart(
+                fig11_delta,
+                use_container_width=True,
+                key="evolution11_subject_growth",
+            )
 
 st.title("📊 Estado de llegada 2026")
 st.caption(
@@ -3489,9 +3697,12 @@ latam_efa_data, latam_efa_summary = read_latam_efa_data()
 math_activity_stats, math_activity_bins, math_activity_summary = (
     read_math_activity_data()
 )
-evolution_summary, evolution_trajectory, evolution_availability = (
-    read_evolution_10_11_data()
-)
+(
+    evolution_summary,
+    evolution_trajectory,
+    evolution_availability,
+    evolution_observed,
+) = read_evolution_10_11_data()
 
 view_general, view_age, view_latam, view_math_activity, view_evolution = st.tabs(
     [
@@ -3593,4 +3804,5 @@ with view_evolution:
         evolution_summary,
         evolution_trajectory,
         evolution_availability,
+        evolution_observed,
     )
