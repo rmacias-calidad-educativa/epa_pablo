@@ -1,0 +1,91 @@
+Grado_num,Sede,Momento,Metrica,N,Promedio,Sum_Puntaje
+10,Cota,Evaluación 1,Puntaje Ciencias naturales,24,49.64083333810171,1191.380000114441
+10,Cota,Evaluación 1,Puntaje Inglés,24,65.22749923169613,1565.459981560707
+10,Cota,Evaluación 1,Puntaje Lectura crítica,24,58.12958370273312,1395.1100088655949
+10,Cota,Evaluación 1,Puntaje Matemáticas,24,48.08333311229944,1153.9999946951866
+10,Cota,Evaluación 1,Puntaje Sociales y ciudadanas,24,54.08333300923308,1297.9999922215939
+10,Cota,Evaluación 1,Puntaje global,24,267.2083333333333,6413.0
+10,Mosquera,Evaluación 1,Puntaje Ciencias naturales,62,46.46862908116271,2881.055003032088
+10,Mosquera,Evaluación 1,Puntaje Inglés,62,61.08435430834372,3787.2299671173105
+10,Mosquera,Evaluación 1,Puntaje Lectura crítica,62,54.17080634543974,3358.589993417264
+10,Mosquera,Evaluación 1,Puntaje Matemáticas,62,43.45161290538888,2694.0000001341105
+10,Mosquera,Evaluación 1,Puntaje Sociales y ciudadanas,62,46.93548401156741,2910.0000087171793
+10,Mosquera,Evaluación 1,Puntaje global,62,243.90322580645162,15122.0
+10,Mosquera,Evaluación 2,Puntaje Ciencias naturales,57,47.36868425419456,2700.01500248909
+10,Mosquera,Evaluación 2,Puntaje Inglés,57,67.8149117712389,3865.449970960617
+10,Mosquera,Evaluación 2,Puntaje Lectura crítica,57,59.09280706393091,3368.290002644062
+10,Mosquera,Evaluación 2,Puntaje Matemáticas,57,36.98245633328168,2108.000010997056
+10,Mosquera,Evaluación 2,Puntaje Sociales y ciudadanas,57,49.824561413965725,2840.0000005960464
+10,Mosquera,Evaluación 2,Puntaje global,57,249.08771929824562,14198.0
+10,RED,Evaluación 1,Puntaje Ciencias naturales,172,47.28351744693206,8132.765000872314
+10,RED,Evaluación 1,Puntaje Inglés,172,61.828429832361465,10634.489931166172
+10,RED,Evaluación 1,Puntaje Lectura crítica,172,57.345348956106704,9863.400020450354
+10,RED,Evaluación 1,Puntaje Matemáticas,172,47.10465114520386,8101.999996975064
+10,RED,Evaluación 1,Puntaje Sociales y ciudadanas,172,51.37209303373861,8836.00000180304
+10,RED,Evaluación 1,Puntaje global,172,258.0988372093023,44393.0
+10,RED,Evaluación 2,Puntaje Ciencias naturales,140,48.226714307176216,6751.74000300467
+10,RED,Evaluación 2,Puntaje Inglés,140,68.51949972765786,9592.7299618721
+10,RED,Evaluación 2,Puntaje Lectura crítica,140,57.82221426921232,8095.109997689724
+10,RED,Evaluación 2,Puntaje Matemáticas,140,41.80000010877848,5852.000015228987
+10,RED,Evaluación 2,Puntaje Sociales y ciudadanas,140,51.00000005481498,7140.000007674098
+10,RED,Evaluación 2,Puntaje global,140,255.82857142857142,35816.0
+10,Tunja,Evaluación 1,Puntaje Ciencias naturales,48,47.8089583455585,2294.830000586808
+10,Tunja,Evaluación 1,Puntaje Inglés,48,60.83354176953435,2920.010004937649
+10,Tunja,Evaluación 1,Puntaje Lectura crítica,48,58.68812520056961,2817.0300096273413
+10,Tunja,Evaluación 1,Puntaje Matemáticas,48,50.583333459993185,2428.000006079673
+10,Tunja,Evaluación 1,Puntaje Sociales y ciudadanas,48,57.70833340163032,2770.0000032782555
+10,Tunja,Evaluación 1,Puntaje global,48,271.2291666666667,13019.0
+10,Tunja,Evaluación 2,Puntaje Ciencias naturales,47,45.37765954403166,2132.749998569488
+10,Tunja,Evaluación 2,Puntaje Inglés,47,66.07361683186065,3105.4599910974503
+10,Tunja,Evaluación 2,Puntaje Lectura crítica,47,52.62042543989547,2473.159995675087
+10,Tunja,Evaluación 2,Puntaje Matemáticas,47,43.276595720585355,2033.9999988675117
+10,Tunja,Evaluación 2,Puntaje Sociales y ciudadanas,47,48.89361702222774,2298.0000000447035
+10,Tunja,Evaluación 2,Puntaje global,47,244.82978723404256,11507.0
+10,Zipaquirá,Evaluación 1,Puntaje Ciencias naturales,38,46.4605262404994,1765.499997138977
+10,Zipaquirá,Evaluación 1,Puntaje Inglés,38,62.15236783027649,2361.7899775505066
+10,Zipaquirá,Evaluación 1,Puntaje Lectura crítica,38,60.33342127737245,2292.670008540153
+10,Zipaquirá,Evaluación 1,Puntaje Matemáticas,38,48.052631475423524,1825.999996066094
+10,Zipaquirá,Evaluación 1,Puntaje Sociales y ciudadanas,38,48.89473677857925,1857.9999975860117
+10,Zipaquirá,Evaluación 1,Puntaje global,38,258.92105263157896,9839.0
+10,Zipaquirá,Evaluación 2,Puntaje Ciencias naturales,36,53.304861165169214,1918.9750019460917
+10,Zipaquirá,Evaluación 2,Puntaje Inglés,36,72.8283333281676,2621.8199998140335
+10,Zipaquirá,Evaluación 2,Puntaje Lectura crítica,36,62.60166664918264,2253.659999370575
+10,Zipaquirá,Evaluación 2,Puntaje Matemáticas,36,47.50000014901161,1710.000005364418
+10,Zipaquirá,Evaluación 2,Puntaje Sociales y ciudadanas,36,55.61111130648188,2002.0000070333476
+10,Zipaquirá,Evaluación 2,Puntaje global,36,280.8611111111111,10111.0
+11,Mosquera,Evaluación 1,Puntaje Ciencias naturales,55,57.805818210948594,3179.320001602173
+11,Mosquera,Evaluación 1,Puntaje Inglés,55,66.47963632236828,3656.379997730255
+11,Mosquera,Evaluación 1,Puntaje Lectura crítica,55,56.89545466141269,3129.250006377698
+11,Mosquera,Evaluación 1,Puntaje Matemáticas,55,40.3636363622817,2219.9999999254937
+11,Mosquera,Evaluación 1,Puntaje Sociales y ciudadanas,55,48.50909108465368,2668.0000096559525
+11,Mosquera,Evaluación 1,Puntaje global,55,260.4727272727273,14326.0
+11,Mosquera,Evaluación 2,Puntaje Ciencias naturales,54,59.54675927620243,3215.5250009149313
+11,Mosquera,Evaluación 2,Puntaje Inglés,54,73.5694443738019,3972.7499961853027
+11,Mosquera,Evaluación 2,Puntaje Lectura crítica,54,69.96388887917554,3778.049999475479
+11,Mosquera,Evaluación 2,Puntaje Matemáticas,54,49.92592596897372,2696.000002324581
+11,Mosquera,Evaluación 2,Puntaje Sociales y ciudadanas,54,62.37037078373962,3368.0000223219395
+11,Mosquera,Evaluación 2,Puntaje global,54,307.25925925925924,16592.0
+11,Mosquera,Evaluación 3,Puntaje Ciencias naturales,51,63.45539220846167,3236.225002631545
+11,Mosquera,Evaluación 3,Puntaje Inglés,51,76.29215641348969,3890.8999770879745
+11,Mosquera,Evaluación 3,Puntaje Lectura crítica,51,64.13176486305161,3270.7200080156326
+11,Mosquera,Evaluación 3,Puntaje Matemáticas,51,56.274509780547206,2869.9999988079076
+11,Mosquera,Evaluación 3,Puntaje Sociales y ciudadanas,51,55.99999988049853,2855.999993905425
+11,Mosquera,Evaluación 3,Puntaje global,51,306.05882352941177,15609.0
+11,RED,Evaluación 1,Puntaje Ciencias naturales,55,57.805818210948594,3179.320001602173
+11,RED,Evaluación 1,Puntaje Inglés,55,66.47963632236828,3656.379997730255
+11,RED,Evaluación 1,Puntaje Lectura crítica,55,56.89545466141269,3129.250006377698
+11,RED,Evaluación 1,Puntaje Matemáticas,55,40.3636363622817,2219.9999999254937
+11,RED,Evaluación 1,Puntaje Sociales y ciudadanas,55,48.50909108465368,2668.0000096559525
+11,RED,Evaluación 1,Puntaje global,55,260.4727272727273,14326.0
+11,RED,Evaluación 2,Puntaje Ciencias naturales,54,59.54675927620243,3215.5250009149313
+11,RED,Evaluación 2,Puntaje Inglés,54,73.5694443738019,3972.7499961853027
+11,RED,Evaluación 2,Puntaje Lectura crítica,54,69.96388887917554,3778.049999475479
+11,RED,Evaluación 2,Puntaje Matemáticas,54,49.92592596897372,2696.000002324581
+11,RED,Evaluación 2,Puntaje Sociales y ciudadanas,54,62.37037078373962,3368.0000223219395
+11,RED,Evaluación 2,Puntaje global,54,307.25925925925924,16592.0
+11,RED,Evaluación 3,Puntaje Ciencias naturales,51,63.45539220846167,3236.225002631545
+11,RED,Evaluación 3,Puntaje Inglés,51,76.29215641348969,3890.8999770879745
+11,RED,Evaluación 3,Puntaje Lectura crítica,51,64.13176486305161,3270.7200080156326
+11,RED,Evaluación 3,Puntaje Matemáticas,51,56.274509780547206,2869.9999988079076
+11,RED,Evaluación 3,Puntaje Sociales y ciudadanas,51,55.99999988049853,2855.999993905425
+11,RED,Evaluación 3,Puntaje global,51,306.05882352941177,15609.0
