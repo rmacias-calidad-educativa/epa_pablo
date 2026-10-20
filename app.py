@@ -3309,9 +3309,9 @@ def render_evolution_10_11(
 
         subject_metrics_10 = [
             ("Matemáticas", "Puntaje Matemáticas"),
-            ("Lectura crítica", "Puntaje Lectura crítica"),
+            ("Lenguaje", "Puntaje Lectura crítica"),
             ("Ciencias naturales", "Puntaje Ciencias naturales"),
-            ("Sociales y ciudadanas", "Puntaje Sociales y ciudadanas"),
+            ("Ciencias sociales", "Puntaje Sociales y ciudadanas"),
             ("Inglés", "Puntaje Inglés"),
         ]
 
@@ -3592,11 +3592,21 @@ def render_evolution_10_11(
         subjects11 = pair11[
             pair11["Metrica"].astype(str) != "Puntaje global"
         ].copy()
+        evolution_subject_labels = {
+            "Puntaje Matemáticas": "Matemáticas",
+            "Puntaje Lectura crítica": "Lenguaje",
+            "Puntaje Ciencias naturales": "Ciencias naturales",
+            "Puntaje Sociales y ciudadanas": "Ciencias sociales",
+            "Puntaje Inglés": "Inglés",
+        }
         subject_rows = []
         for _, r in subjects11.iterrows():
             n = float(r["N"])
             subject_rows.append({
-                "Prueba": str(r["Metrica"]).replace("Puntaje ", ""),
+                "Prueba": evolution_subject_labels.get(
+                    str(r["Metrica"]),
+                    str(r["Metrica"]).replace("Puntaje ", ""),
+                ),
                 "n": int(n),
                 "Evaluación 1": float(r["Sum_Inicial"]) / n,
                 "Evaluación 3": float(r["Sum_Final"]) / n,
@@ -3621,7 +3631,12 @@ def render_evolution_10_11(
             traj11_subjects["Prueba"] = (
                 traj11_subjects["Metrica"]
                 .astype(str)
-                .str.replace("Puntaje ", "", regex=False)
+                .map(evolution_subject_labels)
+                .fillna(
+                    traj11_subjects["Metrica"]
+                    .astype(str)
+                    .str.replace("Puntaje ", "", regex=False)
+                )
             )
             traj11_subjects["Evaluación"] = (
                 traj11_subjects["Orden"].map({
