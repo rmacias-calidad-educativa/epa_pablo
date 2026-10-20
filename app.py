@@ -2382,7 +2382,11 @@ def _render_math_metric_relation(
         height=480,
         plot_bgcolor="rgba(0,0,0,0)",
     )
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(
+        fig,
+        use_container_width=True,
+        key=f"math_metric_bins_{metric}",
+    )
 
     st.markdown("#### Comportamiento por grado")
     by_grade = _math_metric_by_grade(
@@ -2476,7 +2480,11 @@ def _render_math_metric_relation(
             ),
         )
         fig_var.update_layout(height=420)
-        st.plotly_chart(fig_var, use_container_width=True)
+        st.plotly_chart(
+            fig_var,
+            use_container_width=True,
+            key=f"math_metric_grade_variable_{metric}",
+        )
 
     with g2:
         fig_efa = px.line(
@@ -2515,7 +2523,11 @@ def _render_math_metric_relation(
             ),
         )
         fig_efa.update_layout(height=420)
-        st.plotly_chart(fig_efa, use_container_width=True)
+        st.plotly_chart(
+            fig_efa,
+            use_container_width=True,
+            key=f"math_metric_grade_efa_{metric}",
+        )
 
 
 def render_math_activity_vs_efa(
