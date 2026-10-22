@@ -303,6 +303,90 @@ def read_improve_efa_data():
 
 
 @st.cache_data(show_spinner=False)
+def read_internal_efa_data():
+    summary_path = Path("data/internal_efa_summary_2026.csv")
+    distribution_path = Path("data/internal_efa_distribution_2026.csv")
+    coverage_path = Path("data/internal_efa_coverage_2026.csv")
+    agreement_path = Path("data/internal_efa_agreement_2026.csv")
+
+    summary = (
+        pd.read_csv(summary_path)
+        if summary_path.exists()
+        else pd.DataFrame()
+    )
+    distribution = (
+        pd.read_csv(distribution_path)
+        if distribution_path.exists()
+        else pd.DataFrame()
+    )
+    coverage = (
+        pd.read_csv(coverage_path)
+        if coverage_path.exists()
+        else pd.DataFrame()
+    )
+    agreement = (
+        pd.read_csv(agreement_path)
+        if agreement_path.exists()
+        else pd.DataFrame()
+    )
+
+    for df in [summary, distribution, coverage, agreement]:
+        if not df.empty and "Grado_num" in df.columns:
+            df["Grado_num"] = pd.to_numeric(
+                df["Grado_num"], errors="coerce"
+            ).astype("Int64")
+            df.dropna(subset=["Grado_num"], inplace=True)
+            df["Grado_num"] = df["Grado_num"].astype(int)
+
+    if not summary.empty:
+        summary["Nivel_EFA_num"] = pd.to_numeric(
+            summary["Nivel_EFA_num"], errors="coerce"
+        )
+        summary["Estudiantes"] = pd.to_numeric(
+            summary["Estudiantes"], errors="coerce"
+        ).fillna(0).astype(int)
+        summary["Promedio_interno"] = pd.to_numeric(
+            summary["Promedio_interno"], errors="coerce"
+        )
+        summary["Promedio_EFA"] = pd.to_numeric(
+            summary["Promedio_EFA"], errors="coerce"
+        )
+
+    if not distribution.empty:
+        distribution["Nivel_EFA_num"] = pd.to_numeric(
+            distribution["Nivel_EFA_num"], errors="coerce"
+        )
+        distribution["Estudiantes"] = pd.to_numeric(
+            distribution["Estudiantes"], errors="coerce"
+        ).fillna(0).astype(int)
+        distribution["Porcentaje"] = pd.to_numeric(
+            distribution["Porcentaje"], errors="coerce"
+        )
+
+    if not coverage.empty:
+        for col in ["EFA_estudiantes", "Emparejados"]:
+            coverage[col] = pd.to_numeric(
+                coverage[col], errors="coerce"
+            ).fillna(0).astype(int)
+        coverage["Cobertura_pct"] = pd.to_numeric(
+            coverage["Cobertura_pct"], errors="coerce"
+        )
+
+    if not agreement.empty:
+        for col in [
+            "Coincidencia_exacta_pct",
+            "Dentro_un_nivel_pct",
+            "Promedio_interno",
+            "Promedio_nivel_EFA",
+        ]:
+            agreement[col] = pd.to_numeric(
+                agreement[col], errors="coerce"
+            )
+
+    return summary, distribution, coverage, agreement
+
+
+@st.cache_data(show_spinner=False)
 def read_student_story_profiles():
     path = Path("data/student_story_profiles_aggregate_2026.csv")
     data = (
@@ -4469,6 +4553,340 @@ def render_improve_efa_relation(
         )
 
 
+def render_internal_vs_efa(
+    summary: pd.DataFrame,
+    distribution: pd.DataFrame,
+    coverage: pd.DataFrame,
+    agreement: pd.DataFrame,
+):
+    st.markdown("## Evaluación interna vs Evaluar para Avanzar")
+    st.caption(
+        "Comparación del desempeño interno final de cada trimestre con "
+        "los niveles obtenidos por los mismos estudiantes en EFA."
+    )
+
+    if summary.empty:
+        st.warning(
+            "No está disponible el cruce entre evaluación interna y EFA."
+        )
+        return
+
+    st.info(
+        "La unión se realiza por correo exacto normalizado. Después del cruce "
+        "se valida grado y sede. Para la evaluación interna se utiliza la "
+        "Escala DESPUÉS DE POTENCIACIÓN: Progreso limitado = 1, "
+        "Emergente = 2, En aceleración = 3 y Avanzado = 4. "
+        "En 10°–11° Ciencias naturales consolida Física y Química."
+    )
+
+    if not coverage.empty:
+        total_efa = int(coverage["EFA_estudiantes"].sum())
+        total_match = int(coverage["Emparejados"].sum())
+        weighted_coverage = (
+            total_match / total_efa * 100
+            if total_efa > 0
+            else np.nan
+        )
+        c1, c2, c3 = st.columns(3)
+        c1.metric(
+            "Registros EFA con posible cruce",
+            f"{total_efa:,}".replace(",", "."),
+        )
+        c2.metric(
+            "Emparejados",
+            f"{total_match:,}".replace(",", "."),
+        )
+        c3.metric(
+            "Cobertura global",
+            f"{weighted_coverage:.1f}%",
+        )
+
+    tests_available = [
+        test for test in TESTS
+        if test in set(summary["Prueba"].astype(str))
+    ]
+    test_tabs = st.tabs(tests_available)
+
+    internal_order = [
+        "Progreso limitado",
+        "Emergente",
+        "En aceleración",
+        "Avanzado",
+    ]
+    trim_order = [
+        "TRIMESTRE 1",
+        "TRIMESTRE 2",
+        "TRIMESTRE 3",
+    ]
+
+    for tab, test in zip(test_tabs, tests_available):
+        with tab:
+            d = summary[
+                summary["Prueba"].astype(str) == test
+            ].copy()
+
+            grades = sorted(
+                d["Grado_num"].dropna().astype(int).unique().tolist()
+            )
+
+            st.markdown(
+                "### Desempeño interno promedio según nivel EFA"
+            )
+            st.caption(
+                "Cada panel corresponde a un grado. Una trayectoria "
+                "ascendente de Nivel 1 a Nivel 4 indica que el desempeño "
+                "interno aumenta de forma consistente con EFA."
+            )
+
+            d["Nivel_EFA"] = pd.Categorical(
+                d["Nivel_EFA"],
+                categories=LEVEL_ORDER,
+                ordered=True,
+            )
+            d["Trimestre"] = pd.Categorical(
+                d["Trimestre"],
+                categories=trim_order,
+                ordered=True,
+            )
+            d = d.sort_values(
+                ["Grado_num", "Trimestre", "Nivel_EFA_num"]
+            )
+
+            fig = px.line(
+                d,
+                x="Nivel_EFA",
+                y="Promedio_interno",
+                color="Trimestre",
+                facet_col="Grado_num",
+                facet_col_wrap=3,
+                markers=True,
+                text=d["Promedio_interno"].map(
+                    lambda x: f"{x:.2f}"
+                ),
+                custom_data=["Estudiantes", "Promedio_EFA"],
+                category_orders={
+                    "Nivel_EFA": LEVEL_ORDER,
+                    "Trimestre": trim_order,
+                },
+                title=(
+                    f"{test} · desempeño interno por nivel EFA y trimestre"
+                ),
+            )
+            fig.update_yaxes(
+                range=[1, 4.15],
+                title="Desempeño interno",
+                tickmode="array",
+                tickvals=[1, 2, 3, 4],
+                ticktext=internal_order,
+            )
+            fig.update_xaxes(title=None)
+            fig.update_traces(
+                textposition="top center",
+                cliponaxis=False,
+                hovertemplate=(
+                    "Nivel EFA: %{x}<br>"
+                    "Desempeño interno: %{y:.2f}<br>"
+                    "n: %{customdata[0]}<br>"
+                    "Promedio EFA: %{customdata[1]:.1f}%"
+                    "<extra></extra>"
+                ),
+            )
+            fig.for_each_annotation(
+                lambda a: a.update(
+                    text=a.text.replace("Grado_num=", "Grado ")
+                    + "°"
+                )
+            )
+            fig.update_layout(
+                height=max(620, 310 * int(np.ceil(len(grades) / 3))),
+                plot_bgcolor="rgba(0,0,0,0)",
+                legend_title_text="Trimestre",
+            )
+            st.plotly_chart(
+                fig,
+                use_container_width=True,
+                key=f"internal_efa_mean_{test}",
+            )
+
+            st.markdown(
+                "### Cómo se distribuye la evaluación interna dentro de cada nivel EFA"
+            )
+            st.caption(
+                "Se muestra el Trimestre 3 para comparar el cierre interno "
+                "con el nivel alcanzado en EFA."
+            )
+
+            dist = distribution[
+                (distribution["Prueba"].astype(str) == test)
+                & (
+                    distribution["Trimestre"].astype(str)
+                    == "TRIMESTRE 3"
+                )
+            ].copy()
+
+            if not dist.empty:
+                dist["Nivel_EFA"] = pd.Categorical(
+                    dist["Nivel_EFA"],
+                    categories=LEVEL_ORDER,
+                    ordered=True,
+                )
+                dist["Interna_nivel"] = pd.Categorical(
+                    dist["Interna_nivel"],
+                    categories=internal_order,
+                    ordered=True,
+                )
+                fig_dist = px.bar(
+                    dist,
+                    x="Nivel_EFA",
+                    y="Porcentaje",
+                    color="Interna_nivel",
+                    facet_col="Grado_num",
+                    facet_col_wrap=3,
+                    barmode="stack",
+                    category_orders={
+                        "Nivel_EFA": LEVEL_ORDER,
+                        "Interna_nivel": internal_order,
+                    },
+                    title=(
+                        f"{test} · distribución del desempeño interno "
+                        "por nivel EFA · Trimestre 3"
+                    ),
+                )
+                fig_dist.update_yaxes(
+                    range=[0, 100],
+                    title="% estudiantes",
+                )
+                fig_dist.update_xaxes(title=None)
+                fig_dist.for_each_annotation(
+                    lambda a: a.update(
+                        text=a.text.replace("Grado_num=", "Grado ")
+                        + "°"
+                    )
+                )
+                fig_dist.update_layout(
+                    height=max(
+                        620,
+                        310 * int(np.ceil(len(grades) / 3)),
+                    ),
+                    plot_bgcolor="rgba(0,0,0,0)",
+                    legend_title_text="Desempeño interno",
+                )
+                st.plotly_chart(
+                    fig_dist,
+                    use_container_width=True,
+                    key=f"internal_efa_distribution_{test}",
+                )
+
+            st.markdown("### Cobertura del cruce por grado")
+            cov = coverage[
+                coverage["Prueba"].astype(str) == test
+            ].copy()
+
+            if not cov.empty:
+                cov = cov.sort_values("Grado_num")
+                cov["Grado"] = cov["Grado_num"].map(
+                    lambda x: f"{int(x)}°"
+                )
+                fig_cov = px.bar(
+                    cov,
+                    x="Grado",
+                    y="Cobertura_pct",
+                    text=cov["Cobertura_pct"].map(
+                        lambda x: f"{x:.1f}%"
+                    ),
+                    custom_data=[
+                        "Emparejados",
+                        "EFA_estudiantes",
+                    ],
+                    title=f"{test} · cobertura de emparejamiento por correo",
+                )
+                fig_cov.update_yaxes(
+                    range=[0, 100],
+                    title="% emparejado",
+                )
+                fig_cov.update_traces(
+                    textposition="outside",
+                    cliponaxis=False,
+                    hovertemplate=(
+                        "Grado: %{x}<br>"
+                        "Cobertura: %{y:.1f}%<br>"
+                        "Emparejados: %{customdata[0]}<br>"
+                        "EFA: %{customdata[1]}"
+                        "<extra></extra>"
+                    ),
+                )
+                fig_cov.update_layout(
+                    height=420,
+                    plot_bgcolor="rgba(0,0,0,0)",
+                )
+                st.plotly_chart(
+                    fig_cov,
+                    use_container_width=True,
+                    key=f"internal_efa_coverage_{test}",
+                )
+
+            if not agreement.empty:
+                agr = agreement[
+                    (agreement["Prueba"].astype(str) == test)
+                    & (
+                        agreement["Trimestre"].astype(str)
+                        == "TRIMESTRE 3"
+                    )
+                ].copy()
+                if not agr.empty:
+                    agr["Grado"] = agr["Grado_num"].map(
+                        lambda x: f"{int(x)}°"
+                    )
+                    agr_long = agr.melt(
+                        id_vars=["Grado"],
+                        value_vars=[
+                            "Coincidencia_exacta_pct",
+                            "Dentro_un_nivel_pct",
+                        ],
+                        var_name="Lectura",
+                        value_name="Porcentaje",
+                    )
+                    agr_long["Lectura"] = agr_long[
+                        "Lectura"
+                    ].replace({
+                        "Coincidencia_exacta_pct": "Mismo nivel",
+                        "Dentro_un_nivel_pct": "Máximo ±1 nivel",
+                    })
+                    st.markdown("### Qué tan cerca quedan ambas escalas")
+                    fig_agr = px.bar(
+                        agr_long,
+                        x="Grado",
+                        y="Porcentaje",
+                        color="Lectura",
+                        barmode="group",
+                        text=agr_long["Porcentaje"].map(
+                            lambda x: f"{x:.1f}%"
+                        ),
+                        title=(
+                            f"{test} · cercanía entre nivel interno y EFA · "
+                            "Trimestre 3"
+                        ),
+                    )
+                    fig_agr.update_yaxes(
+                        range=[0, 100],
+                        title="% estudiantes",
+                    )
+                    fig_agr.update_traces(
+                        textposition="outside",
+                        cliponaxis=False,
+                    )
+                    fig_agr.update_layout(
+                        height=450,
+                        plot_bgcolor="rgba(0,0,0,0)",
+                        legend_title_text="",
+                    )
+                    st.plotly_chart(
+                        fig_agr,
+                        use_container_width=True,
+                        key=f"internal_efa_agreement_{test}",
+                    )
+
+
 def _story_level_from_pct(value) -> str:
     if pd.isna(value):
         return "Sin dato"
@@ -5204,7 +5622,7 @@ def render_student_story(
 st.title("📊 Estado de llegada 2026")
 st.caption(
     "Base precargada actualizada al 19 de octubre de 2026 · "
-    "Análisis general, antigüedad, LATAM, actividad matemática, evolución, relación EFA–Improve e historia longitudinal."
+    "Análisis general, antigüedad, LATAM, actividad matemática, evolución, relación EFA–Improve, evaluación interna e historia longitudinal."
 )
 
 uploaded = st.file_uploader(
@@ -5266,6 +5684,12 @@ math_activity_stats, math_activity_bins, math_activity_summary = (
     improve_efa_quality,
     improve_efa_growth,
 ) = read_improve_efa_data()
+(
+    internal_efa_summary,
+    internal_efa_distribution,
+    internal_efa_coverage,
+    internal_efa_agreement,
+) = read_internal_efa_data()
 student_story_profiles = read_student_story_profiles()
 student_story_3_9 = read_student_story_3_9()
 
@@ -5276,6 +5700,7 @@ student_story_3_9 = read_student_story_3_9()
     view_math_activity,
     view_evolution,
     view_improve_efa,
+    view_internal_efa,
     view_story,
 ) = st.tabs(
     [
@@ -5285,6 +5710,7 @@ student_story_3_9 = read_student_story_3_9()
         "Actividad matemática vs EFA",
         "Evolución 10°–11°",
         "EFA vs Improve",
+        "Interna vs EFA",
         "Historia longitudinal",
     ]
 )
@@ -5391,6 +5817,15 @@ with view_improve_efa:
         improve_efa_growth,
     )
 
+
+
+with view_internal_efa:
+    render_internal_vs_efa(
+        internal_efa_summary,
+        internal_efa_distribution,
+        internal_efa_coverage,
+        internal_efa_agreement,
+    )
 
 
 with view_story:
