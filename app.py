@@ -4900,9 +4900,86 @@ def _story_level_from_pct(value) -> str:
     return "Nivel 4"
 
 
+def _render_internal_story(
+    internal_summary: pd.DataFrame,
+    grade: int,
+    test: str,
+    level: str,
+    key: str,
+):
+    if internal_summary is None or internal_summary.empty:
+        return
+
+    d = internal_summary[
+        (internal_summary["Grado_num"] == grade)
+        & (internal_summary["Prueba"].astype(str) == test)
+        & (internal_summary["Nivel_EFA"].astype(str) == level)
+    ].copy()
+
+    if d.empty:
+        return
+
+    trim_order = ["TRIMESTRE 1", "TRIMESTRE 2", "TRIMESTRE 3"]
+    d["Trimestre"] = pd.Categorical(
+        d["Trimestre"],
+        categories=trim_order,
+        ordered=True,
+    )
+    d = d.sort_values("Trimestre")
+
+    st.markdown("### Evaluación interna · trayectoria durante el año")
+    fig = px.line(
+        d,
+        x="Trimestre",
+        y="Promedio_interno",
+        markers=True,
+        text=d["Promedio_interno"].map(
+            lambda x: f"{x:.2f}"
+        ),
+        custom_data=["Estudiantes"],
+        category_orders={"Trimestre": trim_order},
+        title=(
+            f"Desempeño interno de estudiantes en {level} de {test}"
+        ),
+    )
+    fig.update_yaxes(
+        range=[1, 4.15],
+        title="Desempeño interno",
+        tickmode="array",
+        tickvals=[1, 2, 3, 4],
+        ticktext=[
+            "Progreso limitado",
+            "Emergente",
+            "En aceleración",
+            "Avanzado",
+        ],
+    )
+    fig.update_xaxes(title=None)
+    fig.update_traces(
+        textposition="top center",
+        cliponaxis=False,
+        hovertemplate=(
+            "Trimestre: %{x}<br>"
+            "Desempeño interno: %{y:.2f}<br>"
+            "n: %{customdata[0]}"
+            "<extra></extra>"
+        ),
+    )
+    fig.update_layout(
+        height=420,
+        plot_bgcolor="rgba(0,0,0,0)",
+    )
+    st.plotly_chart(
+        fig,
+        use_container_width=True,
+        key=key,
+    )
+
+
 def render_student_story(
     profiles: pd.DataFrame,
     profiles_3_9: pd.DataFrame,
+    internal_summary: pd.DataFrame,
 ):
     st.markdown("## Historia de un perfil representativo")
     st.caption(
@@ -5091,6 +5168,14 @@ def render_student_story(
                 use_container_width=True,
                 key="story_efa_profile_3_9",
             )
+
+        _render_internal_story(
+            internal_summary,
+            selected_grade,
+            selected_test,
+            selected_level,
+            "story_internal_3_9",
+        )
 
         st.markdown("### 2. Resultados adicionales disponibles")
 
@@ -5421,6 +5506,14 @@ def render_student_story(
             use_container_width=True,
             key="story_efa_profile",
         )
+
+    _render_internal_story(
+        internal_summary,
+        selected_grade,
+        selected_test,
+        selected_level,
+        "story_internal_10_11",
+    )
 
     st.markdown("### 2. La trayectoria global en Improve")
 
@@ -5832,4 +5925,5 @@ with view_story:
     render_student_story(
         student_story_profiles,
         student_story_3_9,
+        internal_efa_summary,
     )
