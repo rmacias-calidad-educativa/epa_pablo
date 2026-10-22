@@ -4630,6 +4630,164 @@ def render_internal_vs_efa(
             )
 
             st.markdown(
+                "### Promedio de Evaluar para Avanzar según nivel de logro interno"
+            )
+            st.caption(
+                "Lectura de cierre (Trimestre 3). Para cada nivel de logro "
+                "interno se muestra el promedio EFA del área equivalente entre "
+                "los estudiantes emparejados por correo. La reconstrucción "
+                "usa los agregados públicos del cruce y conserva el tamaño "
+                "de cada grupo."
+            )
+
+            t3_summary = summary[
+                (summary["Prueba"].astype(str) == test)
+                & (
+                    summary["Trimestre"].astype(str)
+                    == "TRIMESTRE 3"
+                )
+            ][
+                [
+                    "Grado_num",
+                    "Nivel_EFA",
+                    "Promedio_EFA",
+                ]
+            ].copy()
+
+            t3_distribution = distribution[
+                (distribution["Prueba"].astype(str) == test)
+                & (
+                    distribution["Trimestre"].astype(str)
+                    == "TRIMESTRE 3"
+                )
+            ][
+                [
+                    "Grado_num",
+                    "Nivel_EFA",
+                    "Interna_nivel",
+                    "Estudiantes",
+                ]
+            ].copy()
+
+            reverse = t3_distribution.merge(
+                t3_summary,
+                on=["Grado_num", "Nivel_EFA"],
+                how="left",
+            )
+            reverse["Peso_EFA"] = (
+                reverse["Estudiantes"]
+                * reverse["Promedio_EFA"]
+            )
+
+            reverse = (
+                reverse.groupby(
+                    ["Grado_num", "Interna_nivel"],
+                    as_index=False,
+                )
+                .agg(
+                    Estudiantes=("Estudiantes", "sum"),
+                    Suma_ponderada=("Peso_EFA", "sum"),
+                )
+            )
+            reverse["Promedio EFA"] = (
+                reverse["Suma_ponderada"]
+                / reverse["Estudiantes"].replace(0, np.nan)
+            )
+            reverse["Nivel interno"] = pd.Categorical(
+                reverse["Interna_nivel"],
+                categories=internal_order,
+                ordered=True,
+            )
+            reverse = reverse.sort_values(
+                ["Grado_num", "Nivel interno"]
+            )
+
+            if not reverse.empty:
+                fig_reverse = px.bar(
+                    reverse,
+                    x="Nivel interno",
+                    y="Promedio EFA",
+                    facet_col="Grado_num",
+                    facet_col_wrap=3,
+                    text=reverse["Promedio EFA"].map(
+                        lambda x: f"{x:.1f}%"
+                    ),
+                    custom_data=["Estudiantes"],
+                    category_orders={
+                        "Nivel interno": internal_order,
+                    },
+                    title=(
+                        f"{test} · promedio EFA dentro de cada nivel "
+                        "de logro interno · Trimestre 3"
+                    ),
+                )
+                fig_reverse.update_yaxes(
+                    range=[0, 100],
+                    title="Promedio EFA (%)",
+                )
+                fig_reverse.update_xaxes(title=None)
+                fig_reverse.update_traces(
+                    textposition="outside",
+                    cliponaxis=False,
+                    hovertemplate=(
+                        "Nivel interno: %{x}<br>"
+                        "Promedio EFA: %{y:.1f}%<br>"
+                        "n emparejado: %{customdata[0]}"
+                        "<extra></extra>"
+                    ),
+                )
+                fig_reverse.for_each_annotation(
+                    lambda a: a.update(
+                        text=a.text.replace(
+                            "Grado_num=", "Grado "
+                        )
+                        + "°"
+                    )
+                )
+                fig_reverse.update_layout(
+                    height=max(
+                        620,
+                        310 * int(np.ceil(len(grades) / 3)),
+                    ),
+                    plot_bgcolor="rgba(0,0,0,0)",
+                    showlegend=False,
+                )
+                st.plotly_chart(
+                    fig_reverse,
+                    use_container_width=True,
+                    key=f"internal_to_efa_{test}",
+                )
+
+                reverse_table = reverse[
+                    [
+                        "Grado_num",
+                        "Nivel interno",
+                        "Estudiantes",
+                        "Promedio EFA",
+                    ]
+                ].copy()
+                reverse_table["Grado"] = (
+                    reverse_table["Grado_num"]
+                    .map(lambda x: f"{int(x)}°")
+                )
+                reverse_table["Promedio EFA"] = (
+                    reverse_table["Promedio EFA"]
+                    .map(lambda x: f"{x:.1f}%")
+                )
+                st.dataframe(
+                    reverse_table[
+                        [
+                            "Grado",
+                            "Nivel interno",
+                            "Estudiantes",
+                            "Promedio EFA",
+                        ]
+                    ],
+                    use_container_width=True,
+                    hide_index=True,
+                )
+
+            st.markdown(
                 "### Desempeño interno promedio según nivel EFA"
             )
             st.caption(
