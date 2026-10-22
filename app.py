@@ -4618,6 +4618,13 @@ def render_internal_vs_efa(
         "TRIMESTRE 2",
         "TRIMESTRE 3",
     ]
+    grade_ranges = {
+        "Matemáticas": list(range(3, 12)),
+        "Lenguaje": list(range(3, 12)),
+        "Ciencias naturales": list(range(5, 12)),
+        "Ciencias sociales": list(range(5, 12)),
+        "Inglés": list(range(9, 12)),
+    }
 
     for tab, test in zip(test_tabs, tests_available):
         with tab:
@@ -4625,8 +4632,22 @@ def render_internal_vs_efa(
                 summary["Prueba"].astype(str) == test
             ].copy()
 
-            grades = sorted(
-                d["Grado_num"].dropna().astype(int).unique().tolist()
+            grades = grade_ranges.get(
+                test,
+                sorted(
+                    d["Grado_num"]
+                    .dropna()
+                    .astype(int)
+                    .unique()
+                    .tolist()
+                ),
+            )
+            grade_labels = [f"{g}°" for g in grades]
+
+            st.caption(
+                "Los grados se mantienen fijos según la aplicabilidad de la "
+                "prueba. Si un grado no tiene datos suficientes en un bloque, "
+                "se conserva su posición como sin dato."
             )
 
             st.markdown(
@@ -4635,9 +4656,7 @@ def render_internal_vs_efa(
             st.caption(
                 "Lectura de cierre (Trimestre 3). Para cada nivel de logro "
                 "interno se muestra el promedio EFA del área equivalente entre "
-                "los estudiantes emparejados por correo. La reconstrucción "
-                "usa los agregados públicos del cruce y conserva el tamaño "
-                "de cada grupo."
+                "los estudiantes emparejados por correo."
             )
 
             t3_summary = summary[
@@ -4693,6 +4712,31 @@ def render_internal_vs_efa(
                 reverse["Suma_ponderada"]
                 / reverse["Estudiantes"].replace(0, np.nan)
             )
+
+            missing_reverse = [
+                g for g in grades
+                if g not in set(
+                    reverse["Grado_num"].dropna().astype(int)
+                )
+            ]
+            if missing_reverse:
+                reverse = pd.concat(
+                    [
+                        reverse,
+                        pd.DataFrame([
+                            {
+                                "Grado_num": g,
+                                "Interna_nivel": "Progreso limitado",
+                                "Estudiantes": 0,
+                                "Suma_ponderada": np.nan,
+                                "Promedio EFA": np.nan,
+                            }
+                            for g in missing_reverse
+                        ]),
+                    ],
+                    ignore_index=True,
+                )
+
             reverse["Nivel interno"] = pd.Categorical(
                 reverse["Interna_nivel"],
                 categories=internal_order,
@@ -4703,18 +4747,26 @@ def render_internal_vs_efa(
             )
 
             if not reverse.empty:
+                reverse["Etiqueta"] = reverse[
+                    "Promedio EFA"
+                ].map(
+                    lambda x: (
+                        f"{x:.1f}%"
+                        if pd.notna(x)
+                        else "Sin dato"
+                    )
+                )
                 fig_reverse = px.bar(
                     reverse,
                     x="Nivel interno",
                     y="Promedio EFA",
                     facet_col="Grado_num",
                     facet_col_wrap=3,
-                    text=reverse["Promedio EFA"].map(
-                        lambda x: f"{x:.1f}%"
-                    ),
+                    text="Etiqueta",
                     custom_data=["Estudiantes"],
                     category_orders={
                         "Nivel interno": internal_order,
+                        "Grado_num": grades,
                     },
                     title=(
                         f"{test} · promedio EFA dentro de cada nivel "
@@ -4759,6 +4811,8 @@ def render_internal_vs_efa(
                 )
 
                 reverse_table = reverse[
+                    reverse["Promedio EFA"].notna()
+                ][
                     [
                         "Grado_num",
                         "Nivel interno",
@@ -4796,6 +4850,32 @@ def render_internal_vs_efa(
                 "interno aumenta de forma consistente con EFA."
             )
 
+            missing_d = [
+                g for g in grades
+                if g not in set(
+                    d["Grado_num"].dropna().astype(int)
+                )
+            ]
+            if missing_d:
+                d = pd.concat(
+                    [
+                        d,
+                        pd.DataFrame([
+                            {
+                                "Grado_num": g,
+                                "Nivel_EFA_num": 1,
+                                "Nivel_EFA": "Nivel 1",
+                                "Estudiantes": 0,
+                                "Promedio_interno": np.nan,
+                                "Promedio_EFA": np.nan,
+                                "Trimestre": "TRIMESTRE 1",
+                            }
+                            for g in missing_d
+                        ]),
+                    ],
+                    ignore_index=True,
+                )
+
             d["Nivel_EFA"] = pd.Categorical(
                 d["Nivel_EFA"],
                 categories=LEVEL_ORDER,
@@ -4809,6 +4889,13 @@ def render_internal_vs_efa(
             d = d.sort_values(
                 ["Grado_num", "Trimestre", "Nivel_EFA_num"]
             )
+            d["Etiqueta"] = d["Promedio_interno"].map(
+                lambda x: (
+                    f"{x:.2f}"
+                    if pd.notna(x)
+                    else "Sin dato"
+                )
+            )
 
             fig = px.line(
                 d,
@@ -4818,13 +4905,12 @@ def render_internal_vs_efa(
                 facet_col="Grado_num",
                 facet_col_wrap=3,
                 markers=True,
-                text=d["Promedio_interno"].map(
-                    lambda x: f"{x:.2f}"
-                ),
+                text="Etiqueta",
                 custom_data=["Estudiantes", "Promedio_EFA"],
                 category_orders={
                     "Nivel_EFA": LEVEL_ORDER,
                     "Trimestre": trim_order,
+                    "Grado_num": grades,
                 },
                 title=(
                     f"{test} · desempeño interno por nivel EFA y trimestre"
@@ -4856,7 +4942,10 @@ def render_internal_vs_efa(
                 )
             )
             fig.update_layout(
-                height=max(620, 310 * int(np.ceil(len(grades) / 3))),
+                height=max(
+                    620,
+                    310 * int(np.ceil(len(grades) / 3)),
+                ),
                 plot_bgcolor="rgba(0,0,0,0)",
                 legend_title_text="Trimestre",
             )
@@ -4882,6 +4971,32 @@ def render_internal_vs_efa(
                 )
             ].copy()
 
+            missing_dist = [
+                g for g in grades
+                if g not in set(
+                    dist["Grado_num"].dropna().astype(int)
+                )
+            ]
+            if missing_dist:
+                dist = pd.concat(
+                    [
+                        dist,
+                        pd.DataFrame([
+                            {
+                                "Grado_num": g,
+                                "Nivel_EFA_num": 1,
+                                "Nivel_EFA": "Nivel 1",
+                                "Interna_nivel": "Progreso limitado",
+                                "Estudiantes": 0,
+                                "Total_grupo": 0,
+                                "Porcentaje": np.nan,
+                            }
+                            for g in missing_dist
+                        ]),
+                    ],
+                    ignore_index=True,
+                )
+
             if not dist.empty:
                 dist["Nivel_EFA"] = pd.Categorical(
                     dist["Nivel_EFA"],
@@ -4904,6 +5019,7 @@ def render_internal_vs_efa(
                     category_orders={
                         "Nivel_EFA": LEVEL_ORDER,
                         "Interna_nivel": internal_order,
+                        "Grado_num": grades,
                     },
                     title=(
                         f"{test} · distribución del desempeño interno "
@@ -4940,48 +5056,75 @@ def render_internal_vs_efa(
                 coverage["Prueba"].astype(str) == test
             ].copy()
 
-            if not cov.empty:
-                cov = cov.sort_values("Grado_num")
-                cov["Grado"] = cov["Grado_num"].map(
-                    lambda x: f"{int(x)}°"
+            grade_template = pd.DataFrame(
+                {"Grado_num": grades}
+            )
+            cov = grade_template.merge(
+                cov,
+                on="Grado_num",
+                how="left",
+            )
+            cov["Emparejados"] = pd.to_numeric(
+                cov["Emparejados"],
+                errors="coerce",
+            ).fillna(0).astype(int)
+            cov["EFA_estudiantes"] = pd.to_numeric(
+                cov["EFA_estudiantes"],
+                errors="coerce",
+            ).fillna(0).astype(int)
+            cov["Grado"] = cov["Grado_num"].map(
+                lambda x: f"{int(x)}°"
+            )
+            cov["Etiqueta"] = cov["Cobertura_pct"].map(
+                lambda x: (
+                    f"{x:.1f}%"
+                    if pd.notna(x)
+                    else "Sin dato"
                 )
-                fig_cov = px.bar(
-                    cov,
-                    x="Grado",
-                    y="Cobertura_pct",
-                    text=cov["Cobertura_pct"].map(
-                        lambda x: f"{x:.1f}%"
-                    ),
-                    custom_data=[
-                        "Emparejados",
-                        "EFA_estudiantes",
-                    ],
-                    title=f"{test} · cobertura de emparejamiento por correo",
-                )
-                fig_cov.update_yaxes(
-                    range=[0, 100],
-                    title="% emparejado",
-                )
-                fig_cov.update_traces(
-                    textposition="outside",
-                    cliponaxis=False,
-                    hovertemplate=(
-                        "Grado: %{x}<br>"
-                        "Cobertura: %{y:.1f}%<br>"
-                        "Emparejados: %{customdata[0]}<br>"
-                        "EFA: %{customdata[1]}"
-                        "<extra></extra>"
-                    ),
-                )
-                fig_cov.update_layout(
-                    height=420,
-                    plot_bgcolor="rgba(0,0,0,0)",
-                )
-                st.plotly_chart(
-                    fig_cov,
-                    use_container_width=True,
-                    key=f"internal_efa_coverage_{test}",
-                )
+            )
+
+            fig_cov = px.bar(
+                cov,
+                x="Grado",
+                y="Cobertura_pct",
+                text="Etiqueta",
+                custom_data=[
+                    "Emparejados",
+                    "EFA_estudiantes",
+                ],
+                category_orders={
+                    "Grado": grade_labels,
+                },
+                title=f"{test} · cobertura de emparejamiento por correo",
+            )
+            fig_cov.update_yaxes(
+                range=[0, 100],
+                title="% emparejado",
+            )
+            fig_cov.update_xaxes(
+                categoryorder="array",
+                categoryarray=grade_labels,
+            )
+            fig_cov.update_traces(
+                textposition="outside",
+                cliponaxis=False,
+                hovertemplate=(
+                    "Grado: %{x}<br>"
+                    "Cobertura: %{y:.1f}%<br>"
+                    "Emparejados: %{customdata[0]}<br>"
+                    "EFA: %{customdata[1]}"
+                    "<extra></extra>"
+                ),
+            )
+            fig_cov.update_layout(
+                height=420,
+                plot_bgcolor="rgba(0,0,0,0)",
+            )
+            st.plotly_chart(
+                fig_cov,
+                use_container_width=True,
+                key=f"internal_efa_coverage_{test}",
+            )
 
             if not agreement.empty:
                 agr = agreement[
@@ -4991,58 +5134,78 @@ def render_internal_vs_efa(
                         == "TRIMESTRE 3"
                     )
                 ].copy()
-                if not agr.empty:
-                    agr["Grado"] = agr["Grado_num"].map(
-                        lambda x: f"{int(x)}°"
+
+                agr = grade_template.merge(
+                    agr,
+                    on="Grado_num",
+                    how="left",
+                )
+                agr["Grado"] = agr["Grado_num"].map(
+                    lambda x: f"{int(x)}°"
+                )
+                agr_long = agr.melt(
+                    id_vars=["Grado"],
+                    value_vars=[
+                        "Coincidencia_exacta_pct",
+                        "Dentro_un_nivel_pct",
+                    ],
+                    var_name="Lectura",
+                    value_name="Porcentaje",
+                )
+                agr_long["Lectura"] = agr_long[
+                    "Lectura"
+                ].replace({
+                    "Coincidencia_exacta_pct": "Mismo nivel",
+                    "Dentro_un_nivel_pct": "Máximo ±1 nivel",
+                })
+                agr_long["Etiqueta"] = agr_long[
+                    "Porcentaje"
+                ].map(
+                    lambda x: (
+                        f"{x:.1f}%"
+                        if pd.notna(x)
+                        else "Sin dato"
                     )
-                    agr_long = agr.melt(
-                        id_vars=["Grado"],
-                        value_vars=[
-                            "Coincidencia_exacta_pct",
-                            "Dentro_un_nivel_pct",
-                        ],
-                        var_name="Lectura",
-                        value_name="Porcentaje",
-                    )
-                    agr_long["Lectura"] = agr_long[
-                        "Lectura"
-                    ].replace({
-                        "Coincidencia_exacta_pct": "Mismo nivel",
-                        "Dentro_un_nivel_pct": "Máximo ±1 nivel",
-                    })
-                    st.markdown("### Qué tan cerca quedan ambas escalas")
-                    fig_agr = px.bar(
-                        agr_long,
-                        x="Grado",
-                        y="Porcentaje",
-                        color="Lectura",
-                        barmode="group",
-                        text=agr_long["Porcentaje"].map(
-                            lambda x: f"{x:.1f}%"
-                        ),
-                        title=(
-                            f"{test} · cercanía entre nivel interno y EFA · "
-                            "Trimestre 3"
-                        ),
-                    )
-                    fig_agr.update_yaxes(
-                        range=[0, 100],
-                        title="% estudiantes",
-                    )
-                    fig_agr.update_traces(
-                        textposition="outside",
-                        cliponaxis=False,
-                    )
-                    fig_agr.update_layout(
-                        height=450,
-                        plot_bgcolor="rgba(0,0,0,0)",
-                        legend_title_text="",
-                    )
-                    st.plotly_chart(
-                        fig_agr,
-                        use_container_width=True,
-                        key=f"internal_efa_agreement_{test}",
-                    )
+                )
+
+                st.markdown("### Qué tan cerca quedan ambas escalas")
+                fig_agr = px.bar(
+                    agr_long,
+                    x="Grado",
+                    y="Porcentaje",
+                    color="Lectura",
+                    barmode="group",
+                    text="Etiqueta",
+                    category_orders={
+                        "Grado": grade_labels,
+                    },
+                    title=(
+                        f"{test} · cercanía entre nivel interno y EFA · "
+                        "Trimestre 3"
+                    ),
+                )
+                fig_agr.update_yaxes(
+                    range=[0, 100],
+                    title="% estudiantes",
+                )
+                fig_agr.update_xaxes(
+                    categoryorder="array",
+                    categoryarray=grade_labels,
+                )
+                fig_agr.update_traces(
+                    textposition="outside",
+                    cliponaxis=False,
+                )
+                fig_agr.update_layout(
+                    height=450,
+                    plot_bgcolor="rgba(0,0,0,0)",
+                    legend_title_text="",
+                )
+                st.plotly_chart(
+                    fig_agr,
+                    use_container_width=True,
+                    key=f"internal_efa_agreement_{test}",
+                )
 
 
 def _story_level_from_pct(value) -> str:
