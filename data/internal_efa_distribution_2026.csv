@@ -997,4 +997,447 @@ Grado_num,Prueba,Trimestre,Nivel_EFA_num,Nivel_EFA,Interna_nivel,Estudiantes,Tot
 9,Inglés,TRIMESTRE 2,2,Nivel 2,Avanzado,22,118,18.64406779661017
 9,Inglés,TRIMESTRE 2,2,Nivel 2,Emergente,33,118,27.966101694915253
 9,Inglés,TRIMESTRE 2,2,Nivel 2,En aceleración,60,118,50.847457627118644
-9,Inglés,TRIMESTRE 2,2,Nivel 2,Progreso limitado,3,118,2.5423728813559325
+9,Inglés,TRIMESTRE 2,2,Nivel 2,Progreso limitado,3,118,2.54237288135593259,Inglés,TRIMESTRE 2,3,Nivel 3,Avanzado,9,28,32.142857142857146
+9,Inglés,TRIMESTRE 2,3,Nivel 3,Emergente,11,28,39.285714285714285
+9,Inglés,TRIMESTRE 2,3,Nivel 3,En aceleración,7,28,25.0
+9,Inglés,TRIMESTRE 2,3,Nivel 3,Progreso limitado,1,28,3.571428571428571
+9,Inglés,TRIMESTRE 3,1,Nivel 1,Avanzado,1,27,3.7037037037037033
+9,Inglés,TRIMESTRE 3,1,Nivel 1,Emergente,11,27,40.74074074074074
+9,Inglés,TRIMESTRE 3,1,Nivel 1,En aceleración,13,27,48.148148148148145
+9,Inglés,TRIMESTRE 3,1,Nivel 1,Progreso limitado,2,27,7.4074074074074066
+9,Inglés,TRIMESTRE 3,2,Nivel 2,Avanzado,27,118,22.88135593220339
+9,Inglés,TRIMESTRE 3,2,Nivel 2,Emergente,27,118,22.88135593220339
+9,Inglés,TRIMESTRE 3,2,Nivel 2,En aceleración,62,118,52.54237288135594
+9,Inglés,TRIMESTRE 3,2,Nivel 2,Progreso limitado,2,118,1.694915254237288
+9,Inglés,TRIMESTRE 3,3,Nivel 3,Avanzado,5,29,17.24137931034483
+9,Inglés,TRIMESTRE 3,3,Nivel 3,Emergente,6,29,20.689655172413794
+9,Inglés,TRIMESTRE 3,3,Nivel 3,En aceleración,18,29,62.06896551724138
+9,Lenguaje,TRIMESTRE 1,1,Nivel 1,Emergente,4,4,100.0
+9,Lenguaje,TRIMESTRE 1,2,Nivel 2,Avanzado,2,36,5.555555555555555
+9,Lenguaje,TRIMESTRE 1,2,Nivel 2,Emergente,18,36,50.0
+9,Lenguaje,TRIMESTRE 1,2,Nivel 2,En aceleración,13,36,36.11111111111111
+9,Lenguaje,TRIMESTRE 1,2,Nivel 2,Progreso limitado,3,36,8.333333333333332
+9,Lenguaje,TRIMESTRE 1,3,Nivel 3,Avanzado,3,93,3.225806451612903
+9,Lenguaje,TRIMESTRE 1,3,Nivel 3,Emergente,47,93,50.53763440860215
+9,Lenguaje,TRIMESTRE 1,3,Nivel 3,En aceleración,37,93,39.784946236559136
+9,Lenguaje,TRIMESTRE 1,3,Nivel 3,Progreso limitado,6,93,6.451612903225806
+9,Lenguaje,TRIMESTRE 1,4,Nivel 4,Avanzado,4,52,7.6923076923076925
+9,Lenguaje,TRIMESTRE 1,4,Nivel 4,Emergente,23,52,44.230769230769226
+9,Lenguaje,TRIMESTRE 1,4,Nivel 4,En aceleración,23,52,44.230769230769226
+9,Lenguaje,TRIMESTRE 1,4,Nivel 4,Progreso limitado,2,52,3.8461538461538463
+9,Lenguaje,TRIMESTRE 2,1,Nivel 1,Emergente,1,4,25.0
+9,Lenguaje,TRIMESTRE 2,1,Nivel 1,En aceleración,1,4,25.0
+9,Lenguaje,TRIMESTRE 2,1,Nivel 1,Progreso limitado,2,4,50.0
+9,Lenguaje,TRIMESTRE 2,2,Nivel 2,Avanzado,1,36,2.7777777777777777
+9,Lenguaje,TRIMESTRE 2,2,Nivel 2,Emergente,21,36,58.333333333333336
+9,Lenguaje,TRIMESTRE 2,2,Nivel 2,En aceleración,12,36,33.33333333333333
+9,Lenguaje,TRIMESTRE 2,2,Nivel 2,Progreso limitado,2,36,5.555555555555555
+9,Lenguaje,TRIMESTRE 2,3,Nivel 3,Avanzado,9,91,9.89010989010989
+9,Lenguaje,TRIMESTRE 2,3,Nivel 3,Emergente,31,91,34.065934065934066
+9,Lenguaje,TRIMESTRE 2,3,Nivel 3,En aceleración,46,91,50.54945054945055
+9,Lenguaje,TRIMESTRE 2,3,Nivel 3,Progreso limitado,5,91,5.4945054945054945
+9,Lenguaje,TRIMESTRE 2,4,Nivel 4,Avanzado,6,49,12.244897959183673
+9,Lenguaje,TRIMESTRE 2,4,Nivel 4,Emergente,15,49,30.612244897959183
+9,Lenguaje,TRIMESTRE 2,4,Nivel 4,En aceleración,27,49,55.10204081632652
+9,Lenguaje,TRIMESTRE 2,4,Nivel 4,Progreso limitado,1,49,2.0408163265306123
+9,Lenguaje,TRIMESTRE 3,1,Nivel 1,Emergente,1,4,25.0
+9,Lenguaje,TRIMESTRE 3,1,Nivel 1,En aceleración,1,4,25.0
+9,Lenguaje,TRIMESTRE 3,1,Nivel 1,Progreso limitado,2,4,50.0
+9,Lenguaje,TRIMESTRE 3,2,Nivel 2,Avanzado,1,35,2.857142857142857
+9,Lenguaje,TRIMESTRE 3,2,Nivel 2,Emergente,15,35,42.857142857142854
+9,Lenguaje,TRIMESTRE 3,2,Nivel 2,En aceleración,16,35,45.714285714285715
+9,Lenguaje,TRIMESTRE 3,2,Nivel 2,Progreso limitado,3,35,8.571428571428571
+9,Lenguaje,TRIMESTRE 3,3,Nivel 3,Avanzado,4,90,4.444444444444445
+9,Lenguaje,TRIMESTRE 3,3,Nivel 3,Emergente,37,90,41.11111111111111
+9,Lenguaje,TRIMESTRE 3,3,Nivel 3,En aceleración,35,90,38.88888888888889
+9,Lenguaje,TRIMESTRE 3,3,Nivel 3,Progreso limitado,14,90,15.555555555555555
+9,Lenguaje,TRIMESTRE 3,4,Nivel 4,Avanzado,2,50,4.0
+9,Lenguaje,TRIMESTRE 3,4,Nivel 4,Emergente,20,50,40.0
+9,Lenguaje,TRIMESTRE 3,4,Nivel 4,En aceleración,19,50,38.0
+9,Lenguaje,TRIMESTRE 3,4,Nivel 4,Progreso limitado,9,50,18.0
+9,Matemáticas,TRIMESTRE 1,1,Nivel 1,Emergente,1,1,100.0
+9,Matemáticas,TRIMESTRE 1,2,Nivel 2,Avanzado,1,25,4.0
+9,Matemáticas,TRIMESTRE 1,2,Nivel 2,Emergente,11,25,44.0
+9,Matemáticas,TRIMESTRE 1,2,Nivel 2,En aceleración,6,25,24.0
+9,Matemáticas,TRIMESTRE 1,2,Nivel 2,Progreso limitado,7,25,28.000000000000004
+9,Matemáticas,TRIMESTRE 1,3,Nivel 3,Avanzado,16,106,15.09433962264151
+9,Matemáticas,TRIMESTRE 1,3,Nivel 3,Emergente,35,106,33.0188679245283
+9,Matemáticas,TRIMESTRE 1,3,Nivel 3,En aceleración,35,106,33.0188679245283
+9,Matemáticas,TRIMESTRE 1,3,Nivel 3,Progreso limitado,20,106,18.867924528301888
+9,Matemáticas,TRIMESTRE 1,4,Nivel 4,Avanzado,16,54,29.629629629629626
+9,Matemáticas,TRIMESTRE 1,4,Nivel 4,Emergente,13,54,24.074074074074073
+9,Matemáticas,TRIMESTRE 1,4,Nivel 4,En aceleración,18,54,33.33333333333333
+9,Matemáticas,TRIMESTRE 1,4,Nivel 4,Progreso limitado,7,54,12.962962962962962
+9,Matemáticas,TRIMESTRE 2,1,Nivel 1,Progreso limitado,1,1,100.0
+9,Matemáticas,TRIMESTRE 2,2,Nivel 2,Avanzado,1,25,4.0
+9,Matemáticas,TRIMESTRE 2,2,Nivel 2,Emergente,16,25,64.0
+9,Matemáticas,TRIMESTRE 2,2,Nivel 2,En aceleración,6,25,24.0
+9,Matemáticas,TRIMESTRE 2,2,Nivel 2,Progreso limitado,2,25,8.0
+9,Matemáticas,TRIMESTRE 2,3,Nivel 3,Avanzado,15,104,14.423076923076922
+9,Matemáticas,TRIMESTRE 2,3,Nivel 3,Emergente,50,104,48.07692307692308
+9,Matemáticas,TRIMESTRE 2,3,Nivel 3,En aceleración,31,104,29.807692307692307
+9,Matemáticas,TRIMESTRE 2,3,Nivel 3,Progreso limitado,8,104,7.6923076923076925
+9,Matemáticas,TRIMESTRE 2,4,Nivel 4,Avanzado,13,51,25.49019607843137
+9,Matemáticas,TRIMESTRE 2,4,Nivel 4,Emergente,19,51,37.254901960784316
+9,Matemáticas,TRIMESTRE 2,4,Nivel 4,En aceleración,14,51,27.450980392156865
+9,Matemáticas,TRIMESTRE 2,4,Nivel 4,Progreso limitado,5,51,9.803921568627452
+9,Matemáticas,TRIMESTRE 3,1,Nivel 1,Emergente,1,1,100.0
+9,Matemáticas,TRIMESTRE 3,2,Nivel 2,Avanzado,2,25,8.0
+9,Matemáticas,TRIMESTRE 3,2,Nivel 2,Emergente,10,25,40.0
+9,Matemáticas,TRIMESTRE 3,2,Nivel 2,En aceleración,4,25,16.0
+9,Matemáticas,TRIMESTRE 3,2,Nivel 2,Progreso limitado,9,25,36.0
+9,Matemáticas,TRIMESTRE 3,3,Nivel 3,Avanzado,13,104,12.5
+9,Matemáticas,TRIMESTRE 3,3,Nivel 3,Emergente,36,104,34.61538461538461
+9,Matemáticas,TRIMESTRE 3,3,Nivel 3,En aceleración,29,104,27.884615384615387
+9,Matemáticas,TRIMESTRE 3,3,Nivel 3,Progreso limitado,26,104,25.0
+9,Matemáticas,TRIMESTRE 3,4,Nivel 4,Avanzado,13,53,24.528301886792452
+9,Matemáticas,TRIMESTRE 3,4,Nivel 4,Emergente,13,53,24.528301886792452
+9,Matemáticas,TRIMESTRE 3,4,Nivel 4,En aceleración,17,53,32.075471698113205
+9,Matemáticas,TRIMESTRE 3,4,Nivel 4,Progreso limitado,10,53,18.867924528301888
+10,Ciencias naturales,TRIMESTRE 1,1,Nivel 1,Avanzado,3,10,30.0
+10,Ciencias naturales,TRIMESTRE 1,1,Nivel 1,Emergente,7,10,70.0
+10,Ciencias naturales,TRIMESTRE 1,2,Nivel 2,Avanzado,6,30,20.0
+10,Ciencias naturales,TRIMESTRE 1,2,Nivel 2,Emergente,14,30,46.666666666666664
+10,Ciencias naturales,TRIMESTRE 1,2,Nivel 2,En aceleración,8,30,26.666666666666668
+10,Ciencias naturales,TRIMESTRE 1,2,Nivel 2,Progreso limitado,2,30,6.666666666666667
+10,Ciencias naturales,TRIMESTRE 1,3,Nivel 3,Avanzado,24,69,34.78260869565217
+10,Ciencias naturales,TRIMESTRE 1,3,Nivel 3,Emergente,29,69,42.028985507246375
+10,Ciencias naturales,TRIMESTRE 1,3,Nivel 3,En aceleración,15,69,21.73913043478261
+10,Ciencias naturales,TRIMESTRE 1,3,Nivel 3,Progreso limitado,1,69,1.4492753623188406
+10,Ciencias naturales,TRIMESTRE 1,4,Nivel 4,Avanzado,11,37,29.72972972972973
+10,Ciencias naturales,TRIMESTRE 1,4,Nivel 4,Emergente,13,37,35.13513513513514
+10,Ciencias naturales,TRIMESTRE 1,4,Nivel 4,En aceleración,13,37,35.13513513513514
+10,Ciencias naturales,TRIMESTRE 2,1,Nivel 1,Emergente,7,10,70.0
+10,Ciencias naturales,TRIMESTRE 2,1,Nivel 1,En aceleración,3,10,30.0
+10,Ciencias naturales,TRIMESTRE 2,2,Nivel 2,Avanzado,7,32,21.875
+10,Ciencias naturales,TRIMESTRE 2,2,Nivel 2,Emergente,14,32,43.75
+10,Ciencias naturales,TRIMESTRE 2,2,Nivel 2,En aceleración,10,32,31.25
+10,Ciencias naturales,TRIMESTRE 2,2,Nivel 2,Progreso limitado,1,32,3.125
+10,Ciencias naturales,TRIMESTRE 2,3,Nivel 3,Avanzado,31,68,45.588235294117645
+10,Ciencias naturales,TRIMESTRE 2,3,Nivel 3,Emergente,22,68,32.35294117647059
+10,Ciencias naturales,TRIMESTRE 2,3,Nivel 3,En aceleración,15,68,22.058823529411764
+10,Ciencias naturales,TRIMESTRE 2,4,Nivel 4,Avanzado,17,36,47.22222222222222
+10,Ciencias naturales,TRIMESTRE 2,4,Nivel 4,Emergente,9,36,25.0
+10,Ciencias naturales,TRIMESTRE 2,4,Nivel 4,En aceleración,10,36,27.77777777777778
+10,Ciencias naturales,TRIMESTRE 3,1,Nivel 1,Avanzado,2,10,20.0
+10,Ciencias naturales,TRIMESTRE 3,1,Nivel 1,Emergente,8,10,80.0
+10,Ciencias naturales,TRIMESTRE 3,2,Nivel 2,Avanzado,9,32,28.125
+10,Ciencias naturales,TRIMESTRE 3,2,Nivel 2,Emergente,12,32,37.5
+10,Ciencias naturales,TRIMESTRE 3,2,Nivel 2,En aceleración,10,32,31.25
+10,Ciencias naturales,TRIMESTRE 3,2,Nivel 2,Progreso limitado,1,32,3.125
+10,Ciencias naturales,TRIMESTRE 3,3,Nivel 3,Avanzado,14,69,20.28985507246377
+10,Ciencias naturales,TRIMESTRE 3,3,Nivel 3,Emergente,29,69,42.028985507246375
+10,Ciencias naturales,TRIMESTRE 3,3,Nivel 3,En aceleración,24,69,34.78260869565217
+10,Ciencias naturales,TRIMESTRE 3,3,Nivel 3,Progreso limitado,2,69,2.898550724637681
+10,Ciencias naturales,TRIMESTRE 3,4,Nivel 4,Avanzado,15,36,41.66666666666667
+10,Ciencias naturales,TRIMESTRE 3,4,Nivel 4,Emergente,10,36,27.77777777777778
+10,Ciencias naturales,TRIMESTRE 3,4,Nivel 4,En aceleración,11,36,30.555555555555557
+10,Ciencias sociales,TRIMESTRE 1,1,Nivel 1,Emergente,4,12,33.33333333333333
+10,Ciencias sociales,TRIMESTRE 1,1,Nivel 1,En aceleración,8,12,66.66666666666666
+10,Ciencias sociales,TRIMESTRE 1,2,Nivel 2,Avanzado,3,26,11.538461538461538
+10,Ciencias sociales,TRIMESTRE 1,2,Nivel 2,Emergente,4,26,15.384615384615385
+10,Ciencias sociales,TRIMESTRE 1,2,Nivel 2,En aceleración,17,26,65.38461538461539
+10,Ciencias sociales,TRIMESTRE 1,2,Nivel 2,Progreso limitado,2,26,7.6923076923076925
+10,Ciencias sociales,TRIMESTRE 1,3,Nivel 3,Avanzado,14,57,24.561403508771928
+10,Ciencias sociales,TRIMESTRE 1,3,Nivel 3,Emergente,11,57,19.298245614035086
+10,Ciencias sociales,TRIMESTRE 1,3,Nivel 3,En aceleración,31,57,54.385964912280706
+10,Ciencias sociales,TRIMESTRE 1,3,Nivel 3,Progreso limitado,1,57,1.7543859649122806
+10,Ciencias sociales,TRIMESTRE 1,4,Nivel 4,Avanzado,12,43,27.906976744186046
+10,Ciencias sociales,TRIMESTRE 1,4,Nivel 4,Emergente,7,43,16.27906976744186
+10,Ciencias sociales,TRIMESTRE 1,4,Nivel 4,En aceleración,24,43,55.81395348837209
+10,Ciencias sociales,TRIMESTRE 2,1,Nivel 1,Emergente,3,12,25.0
+10,Ciencias sociales,TRIMESTRE 2,1,Nivel 1,En aceleración,9,12,75.0
+10,Ciencias sociales,TRIMESTRE 2,2,Nivel 2,Avanzado,6,27,22.22222222222222
+10,Ciencias sociales,TRIMESTRE 2,2,Nivel 2,Emergente,7,27,25.925925925925924
+10,Ciencias sociales,TRIMESTRE 2,2,Nivel 2,En aceleración,13,27,48.148148148148145
+10,Ciencias sociales,TRIMESTRE 2,2,Nivel 2,Progreso limitado,1,27,3.7037037037037033
+10,Ciencias sociales,TRIMESTRE 2,3,Nivel 3,Avanzado,13,56,23.214285714285715
+10,Ciencias sociales,TRIMESTRE 2,3,Nivel 3,Emergente,9,56,16.071428571428573
+10,Ciencias sociales,TRIMESTRE 2,3,Nivel 3,En aceleración,33,56,58.92857142857143
+10,Ciencias sociales,TRIMESTRE 2,3,Nivel 3,Progreso limitado,1,56,1.7857142857142856
+10,Ciencias sociales,TRIMESTRE 2,4,Nivel 4,Avanzado,18,43,41.86046511627907
+10,Ciencias sociales,TRIMESTRE 2,4,Nivel 4,Emergente,2,43,4.651162790697675
+10,Ciencias sociales,TRIMESTRE 2,4,Nivel 4,En aceleración,22,43,51.162790697674424
+10,Ciencias sociales,TRIMESTRE 2,4,Nivel 4,Progreso limitado,1,43,2.3255813953488373
+10,Ciencias sociales,TRIMESTRE 3,1,Nivel 1,Avanzado,2,9,22.22222222222222
+10,Ciencias sociales,TRIMESTRE 3,1,Nivel 1,En aceleración,5,9,55.55555555555556
+10,Ciencias sociales,TRIMESTRE 3,1,Nivel 1,Progreso limitado,2,9,22.22222222222222
+10,Ciencias sociales,TRIMESTRE 3,2,Nivel 2,Avanzado,7,23,30.434782608695656
+10,Ciencias sociales,TRIMESTRE 3,2,Nivel 2,Emergente,6,23,26.08695652173913
+10,Ciencias sociales,TRIMESTRE 3,2,Nivel 2,En aceleración,10,23,43.47826086956522
+10,Ciencias sociales,TRIMESTRE 3,3,Nivel 3,Avanzado,15,54,27.77777777777778
+10,Ciencias sociales,TRIMESTRE 3,3,Nivel 3,Emergente,16,54,29.629629629629626
+10,Ciencias sociales,TRIMESTRE 3,3,Nivel 3,En aceleración,16,54,29.629629629629626
+10,Ciencias sociales,TRIMESTRE 3,3,Nivel 3,Progreso limitado,7,54,12.962962962962962
+10,Ciencias sociales,TRIMESTRE 3,4,Nivel 4,Avanzado,16,43,37.2093023255814
+10,Ciencias sociales,TRIMESTRE 3,4,Nivel 4,Emergente,10,43,23.25581395348837
+10,Ciencias sociales,TRIMESTRE 3,4,Nivel 4,En aceleración,14,43,32.55813953488372
+10,Ciencias sociales,TRIMESTRE 3,4,Nivel 4,Progreso limitado,3,43,6.976744186046512
+10,Inglés,TRIMESTRE 1,1,Nivel 1,Avanzado,1,3,33.33333333333333
+10,Inglés,TRIMESTRE 1,1,Nivel 1,En aceleración,2,3,66.66666666666666
+10,Inglés,TRIMESTRE 1,2,Nivel 2,Avanzado,9,41,21.951219512195124
+10,Inglés,TRIMESTRE 1,2,Nivel 2,Emergente,14,41,34.146341463414636
+10,Inglés,TRIMESTRE 1,2,Nivel 2,En aceleración,17,41,41.46341463414634
+10,Inglés,TRIMESTRE 1,2,Nivel 2,Progreso limitado,1,41,2.4390243902439024
+10,Inglés,TRIMESTRE 1,3,Nivel 3,Avanzado,30,72,41.66666666666667
+10,Inglés,TRIMESTRE 1,3,Nivel 3,Emergente,8,72,11.11111111111111
+10,Inglés,TRIMESTRE 1,3,Nivel 3,En aceleración,32,72,44.44444444444444
+10,Inglés,TRIMESTRE 1,3,Nivel 3,Progreso limitado,2,72,2.7777777777777777
+10,Inglés,TRIMESTRE 1,4,Nivel 4,Avanzado,16,25,64.0
+10,Inglés,TRIMESTRE 1,4,Nivel 4,Emergente,2,25,8.0
+10,Inglés,TRIMESTRE 1,4,Nivel 4,En aceleración,7,25,28.000000000000004
+10,Inglés,TRIMESTRE 2,1,Nivel 1,Avanzado,1,3,33.33333333333333
+10,Inglés,TRIMESTRE 2,1,Nivel 1,En aceleración,2,3,66.66666666666666
+10,Inglés,TRIMESTRE 2,2,Nivel 2,Avanzado,4,38,10.526315789473683
+10,Inglés,TRIMESTRE 2,2,Nivel 2,Emergente,8,38,21.052631578947366
+10,Inglés,TRIMESTRE 2,2,Nivel 2,En aceleración,26,38,68.42105263157895
+10,Inglés,TRIMESTRE 2,3,Nivel 3,Avanzado,29,74,39.189189189189186
+10,Inglés,TRIMESTRE 2,3,Nivel 3,Emergente,13,74,17.56756756756757
+10,Inglés,TRIMESTRE 2,3,Nivel 3,En aceleración,32,74,43.24324324324324
+10,Inglés,TRIMESTRE 2,4,Nivel 4,Avanzado,14,25,56.00000000000001
+10,Inglés,TRIMESTRE 2,4,Nivel 4,Emergente,1,25,4.0
+10,Inglés,TRIMESTRE 2,4,Nivel 4,En aceleración,10,25,40.0
+10,Inglés,TRIMESTRE 3,1,Nivel 1,Avanzado,1,3,33.33333333333333
+10,Inglés,TRIMESTRE 3,1,Nivel 1,En aceleración,2,3,66.66666666666666
+10,Inglés,TRIMESTRE 3,2,Nivel 2,Avanzado,3,39,7.6923076923076925
+10,Inglés,TRIMESTRE 3,2,Nivel 2,Emergente,8,39,20.51282051282051
+10,Inglés,TRIMESTRE 3,2,Nivel 2,En aceleración,25,39,64.1025641025641
+10,Inglés,TRIMESTRE 3,2,Nivel 2,Progreso limitado,3,39,7.6923076923076925
+10,Inglés,TRIMESTRE 3,3,Nivel 3,Avanzado,25,74,33.78378378378378
+10,Inglés,TRIMESTRE 3,3,Nivel 3,Emergente,8,74,10.81081081081081
+10,Inglés,TRIMESTRE 3,3,Nivel 3,En aceleración,40,74,54.054054054054056
+10,Inglés,TRIMESTRE 3,3,Nivel 3,Progreso limitado,1,74,1.3513513513513513
+10,Inglés,TRIMESTRE 3,4,Nivel 4,Avanzado,13,25,52.0
+10,Inglés,TRIMESTRE 3,4,Nivel 4,Emergente,1,25,4.0
+10,Inglés,TRIMESTRE 3,4,Nivel 4,En aceleración,11,25,44.0
+10,Lenguaje,TRIMESTRE 1,1,Nivel 1,Avanzado,1,14,7.142857142857142
+10,Lenguaje,TRIMESTRE 1,1,Nivel 1,Emergente,6,14,42.857142857142854
+10,Lenguaje,TRIMESTRE 1,1,Nivel 1,En aceleración,3,14,21.428571428571427
+10,Lenguaje,TRIMESTRE 1,1,Nivel 1,Progreso limitado,4,14,28.57142857142857
+10,Lenguaje,TRIMESTRE 1,2,Nivel 2,Avanzado,6,71,8.450704225352112
+10,Lenguaje,TRIMESTRE 1,2,Nivel 2,Emergente,35,71,49.29577464788733
+10,Lenguaje,TRIMESTRE 1,2,Nivel 2,En aceleración,25,71,35.2112676056338
+10,Lenguaje,TRIMESTRE 1,2,Nivel 2,Progreso limitado,5,71,7.042253521126761
+10,Lenguaje,TRIMESTRE 1,3,Nivel 3,Avanzado,5,51,9.803921568627452
+10,Lenguaje,TRIMESTRE 1,3,Nivel 3,Emergente,18,51,35.294117647058826
+10,Lenguaje,TRIMESTRE 1,3,Nivel 3,En aceleración,22,51,43.13725490196079
+10,Lenguaje,TRIMESTRE 1,3,Nivel 3,Progreso limitado,6,51,11.76470588235294
+10,Lenguaje,TRIMESTRE 1,4,Nivel 4,Avanzado,2,10,20.0
+10,Lenguaje,TRIMESTRE 1,4,Nivel 4,Emergente,5,10,50.0
+10,Lenguaje,TRIMESTRE 1,4,Nivel 4,En aceleración,3,10,30.0
+10,Lenguaje,TRIMESTRE 2,1,Nivel 1,Avanzado,4,14,28.57142857142857
+10,Lenguaje,TRIMESTRE 2,1,Nivel 1,Emergente,3,14,21.428571428571427
+10,Lenguaje,TRIMESTRE 2,1,Nivel 1,En aceleración,7,14,50.0
+10,Lenguaje,TRIMESTRE 2,2,Nivel 2,Avanzado,12,70,17.142857142857142
+10,Lenguaje,TRIMESTRE 2,2,Nivel 2,Emergente,17,70,24.285714285714285
+10,Lenguaje,TRIMESTRE 2,2,Nivel 2,En aceleración,40,70,57.14285714285714
+10,Lenguaje,TRIMESTRE 2,2,Nivel 2,Progreso limitado,1,70,1.4285714285714286
+10,Lenguaje,TRIMESTRE 2,3,Nivel 3,Avanzado,6,51,11.76470588235294
+10,Lenguaje,TRIMESTRE 2,3,Nivel 3,Emergente,14,51,27.450980392156865
+10,Lenguaje,TRIMESTRE 2,3,Nivel 3,En aceleración,30,51,58.82352941176471
+10,Lenguaje,TRIMESTRE 2,3,Nivel 3,Progreso limitado,1,51,1.9607843137254901
+10,Lenguaje,TRIMESTRE 2,4,Nivel 4,Avanzado,3,10,30.0
+10,Lenguaje,TRIMESTRE 2,4,Nivel 4,Emergente,2,10,20.0
+10,Lenguaje,TRIMESTRE 2,4,Nivel 4,En aceleración,5,10,50.0
+10,Lenguaje,TRIMESTRE 3,1,Nivel 1,Avanzado,1,13,7.6923076923076925
+10,Lenguaje,TRIMESTRE 3,1,Nivel 1,Emergente,4,13,30.76923076923077
+10,Lenguaje,TRIMESTRE 3,1,Nivel 1,En aceleración,8,13,61.53846153846154
+10,Lenguaje,TRIMESTRE 3,2,Nivel 2,Avanzado,3,70,4.285714285714286
+10,Lenguaje,TRIMESTRE 3,2,Nivel 2,Emergente,16,70,22.857142857142858
+10,Lenguaje,TRIMESTRE 3,2,Nivel 2,En aceleración,39,70,55.714285714285715
+10,Lenguaje,TRIMESTRE 3,2,Nivel 2,Progreso limitado,12,70,17.142857142857142
+10,Lenguaje,TRIMESTRE 3,3,Nivel 3,Avanzado,4,53,7.547169811320755
+10,Lenguaje,TRIMESTRE 3,3,Nivel 3,Emergente,21,53,39.62264150943396
+10,Lenguaje,TRIMESTRE 3,3,Nivel 3,En aceleración,23,53,43.39622641509434
+10,Lenguaje,TRIMESTRE 3,3,Nivel 3,Progreso limitado,5,53,9.433962264150944
+10,Lenguaje,TRIMESTRE 3,4,Nivel 4,Avanzado,1,10,10.0
+10,Lenguaje,TRIMESTRE 3,4,Nivel 4,Emergente,5,10,50.0
+10,Lenguaje,TRIMESTRE 3,4,Nivel 4,En aceleración,4,10,40.0
+10,Matemáticas,TRIMESTRE 1,1,Nivel 1,Avanzado,1,20,5.0
+10,Matemáticas,TRIMESTRE 1,1,Nivel 1,Emergente,10,20,50.0
+10,Matemáticas,TRIMESTRE 1,1,Nivel 1,En aceleración,7,20,35.0
+10,Matemáticas,TRIMESTRE 1,1,Nivel 1,Progreso limitado,2,20,10.0
+10,Matemáticas,TRIMESTRE 1,2,Nivel 2,Avanzado,14,80,17.5
+10,Matemáticas,TRIMESTRE 1,2,Nivel 2,Emergente,28,80,35.0
+10,Matemáticas,TRIMESTRE 1,2,Nivel 2,En aceleración,35,80,43.75
+10,Matemáticas,TRIMESTRE 1,2,Nivel 2,Progreso limitado,3,80,3.75
+10,Matemáticas,TRIMESTRE 1,3,Nivel 3,Avanzado,15,49,30.612244897959183
+10,Matemáticas,TRIMESTRE 1,3,Nivel 3,Emergente,9,49,18.367346938775512
+10,Matemáticas,TRIMESTRE 1,3,Nivel 3,En aceleración,23,49,46.93877551020408
+10,Matemáticas,TRIMESTRE 1,3,Nivel 3,Progreso limitado,2,49,4.081632653061225
+10,Matemáticas,TRIMESTRE 2,1,Nivel 1,Avanzado,1,19,5.263157894736842
+10,Matemáticas,TRIMESTRE 2,1,Nivel 1,Emergente,8,19,42.10526315789473
+10,Matemáticas,TRIMESTRE 2,1,Nivel 1,En aceleración,9,19,47.368421052631575
+10,Matemáticas,TRIMESTRE 2,1,Nivel 1,Progreso limitado,1,19,5.263157894736842
+10,Matemáticas,TRIMESTRE 2,2,Nivel 2,Avanzado,16,79,20.253164556962027
+10,Matemáticas,TRIMESTRE 2,2,Nivel 2,Emergente,24,79,30.37974683544304
+10,Matemáticas,TRIMESTRE 2,2,Nivel 2,En aceleración,37,79,46.835443037974684
+10,Matemáticas,TRIMESTRE 2,2,Nivel 2,Progreso limitado,2,79,2.5316455696202533
+10,Matemáticas,TRIMESTRE 2,3,Nivel 3,Avanzado,25,50,50.0
+10,Matemáticas,TRIMESTRE 2,3,Nivel 3,Emergente,7,50,14.000000000000002
+10,Matemáticas,TRIMESTRE 2,3,Nivel 3,En aceleración,18,50,36.0
+10,Matemáticas,TRIMESTRE 3,1,Nivel 1,Avanzado,2,19,10.526315789473683
+10,Matemáticas,TRIMESTRE 3,1,Nivel 1,Emergente,8,19,42.10526315789473
+10,Matemáticas,TRIMESTRE 3,1,Nivel 1,En aceleración,8,19,42.10526315789473
+10,Matemáticas,TRIMESTRE 3,1,Nivel 1,Progreso limitado,1,19,5.263157894736842
+10,Matemáticas,TRIMESTRE 3,2,Nivel 2,Avanzado,17,81,20.98765432098765
+10,Matemáticas,TRIMESTRE 3,2,Nivel 2,Emergente,19,81,23.456790123456788
+10,Matemáticas,TRIMESTRE 3,2,Nivel 2,En aceleración,38,81,46.913580246913575
+10,Matemáticas,TRIMESTRE 3,2,Nivel 2,Progreso limitado,7,81,8.641975308641975
+10,Matemáticas,TRIMESTRE 3,3,Nivel 3,Avanzado,20,50,40.0
+10,Matemáticas,TRIMESTRE 3,3,Nivel 3,Emergente,9,50,18.0
+10,Matemáticas,TRIMESTRE 3,3,Nivel 3,En aceleración,19,50,38.0
+10,Matemáticas,TRIMESTRE 3,3,Nivel 3,Progreso limitado,2,50,4.0
+11,Ciencias naturales,TRIMESTRE 1,1,Nivel 1,Emergente,2,2,100.0
+11,Ciencias naturales,TRIMESTRE 1,2,Nivel 2,Avanzado,12,23,52.17391304347826
+11,Ciencias naturales,TRIMESTRE 1,2,Nivel 2,Emergente,6,23,26.08695652173913
+11,Ciencias naturales,TRIMESTRE 1,2,Nivel 2,En aceleración,5,23,21.73913043478261
+11,Ciencias naturales,TRIMESTRE 1,3,Nivel 3,Avanzado,10,23,43.47826086956522
+11,Ciencias naturales,TRIMESTRE 1,3,Nivel 3,Emergente,2,23,8.695652173913043
+11,Ciencias naturales,TRIMESTRE 1,3,Nivel 3,En aceleración,11,23,47.82608695652174
+11,Ciencias naturales,TRIMESTRE 1,4,Nivel 4,Avanzado,2,2,100.0
+11,Ciencias naturales,TRIMESTRE 2,1,Nivel 1,Emergente,2,2,100.0
+11,Ciencias naturales,TRIMESTRE 2,2,Nivel 2,Avanzado,8,23,34.78260869565217
+11,Ciencias naturales,TRIMESTRE 2,2,Nivel 2,Emergente,8,23,34.78260869565217
+11,Ciencias naturales,TRIMESTRE 2,2,Nivel 2,En aceleración,7,23,30.434782608695656
+11,Ciencias naturales,TRIMESTRE 2,3,Nivel 3,Avanzado,14,23,60.86956521739131
+11,Ciencias naturales,TRIMESTRE 2,3,Nivel 3,Emergente,5,23,21.73913043478261
+11,Ciencias naturales,TRIMESTRE 2,3,Nivel 3,En aceleración,4,23,17.391304347826086
+11,Ciencias naturales,TRIMESTRE 2,4,Nivel 4,Avanzado,2,2,100.0
+11,Ciencias naturales,TRIMESTRE 3,1,Nivel 1,En aceleración,2,2,100.0
+11,Ciencias naturales,TRIMESTRE 3,2,Nivel 2,Avanzado,6,23,26.08695652173913
+11,Ciencias naturales,TRIMESTRE 3,2,Nivel 2,Emergente,11,23,47.82608695652174
+11,Ciencias naturales,TRIMESTRE 3,2,Nivel 2,En aceleración,6,23,26.08695652173913
+11,Ciencias naturales,TRIMESTRE 3,3,Nivel 3,Avanzado,13,23,56.52173913043478
+11,Ciencias naturales,TRIMESTRE 3,3,Nivel 3,Emergente,8,23,34.78260869565217
+11,Ciencias naturales,TRIMESTRE 3,3,Nivel 3,En aceleración,2,23,8.695652173913043
+11,Ciencias naturales,TRIMESTRE 3,4,Nivel 4,Avanzado,2,2,100.0
+11,Ciencias sociales,TRIMESTRE 1,1,Nivel 1,Emergente,1,2,50.0
+11,Ciencias sociales,TRIMESTRE 1,1,Nivel 1,En aceleración,1,2,50.0
+11,Ciencias sociales,TRIMESTRE 1,2,Nivel 2,Emergente,1,8,12.5
+11,Ciencias sociales,TRIMESTRE 1,2,Nivel 2,En aceleración,7,8,87.5
+11,Ciencias sociales,TRIMESTRE 1,3,Nivel 3,Avanzado,5,21,23.809523809523807
+11,Ciencias sociales,TRIMESTRE 1,3,Nivel 3,Emergente,4,21,19.047619047619047
+11,Ciencias sociales,TRIMESTRE 1,3,Nivel 3,En aceleración,12,21,57.14285714285714
+11,Ciencias sociales,TRIMESTRE 1,4,Nivel 4,Avanzado,2,17,11.76470588235294
+11,Ciencias sociales,TRIMESTRE 1,4,Nivel 4,Emergente,2,17,11.76470588235294
+11,Ciencias sociales,TRIMESTRE 1,4,Nivel 4,En aceleración,13,17,76.47058823529412
+11,Ciencias sociales,TRIMESTRE 2,1,Nivel 1,Emergente,2,2,100.0
+11,Ciencias sociales,TRIMESTRE 2,2,Nivel 2,Avanzado,1,8,12.5
+11,Ciencias sociales,TRIMESTRE 2,2,Nivel 2,Emergente,3,8,37.5
+11,Ciencias sociales,TRIMESTRE 2,2,Nivel 2,En aceleración,4,8,50.0
+11,Ciencias sociales,TRIMESTRE 2,3,Nivel 3,Avanzado,4,21,19.047619047619047
+11,Ciencias sociales,TRIMESTRE 2,3,Nivel 3,Emergente,8,21,38.095238095238095
+11,Ciencias sociales,TRIMESTRE 2,3,Nivel 3,En aceleración,9,21,42.857142857142854
+11,Ciencias sociales,TRIMESTRE 2,4,Nivel 4,Avanzado,5,17,29.411764705882355
+11,Ciencias sociales,TRIMESTRE 2,4,Nivel 4,Emergente,3,17,17.647058823529413
+11,Ciencias sociales,TRIMESTRE 2,4,Nivel 4,En aceleración,9,17,52.94117647058824
+11,Ciencias sociales,TRIMESTRE 3,2,Nivel 2,Emergente,1,2,50.0
+11,Ciencias sociales,TRIMESTRE 3,2,Nivel 2,En aceleración,1,2,50.0
+11,Ciencias sociales,TRIMESTRE 3,3,Nivel 3,Avanzado,1,4,25.0
+11,Ciencias sociales,TRIMESTRE 3,3,Nivel 3,En aceleración,3,4,75.0
+11,Ciencias sociales,TRIMESTRE 3,4,Nivel 4,En aceleración,1,1,100.0
+11,Inglés,TRIMESTRE 1,1,Nivel 1,Emergente,1,4,25.0
+11,Inglés,TRIMESTRE 1,1,Nivel 1,En aceleración,3,4,75.0
+11,Inglés,TRIMESTRE 1,2,Nivel 2,Avanzado,1,5,20.0
+11,Inglés,TRIMESTRE 1,2,Nivel 2,Emergente,1,5,20.0
+11,Inglés,TRIMESTRE 1,2,Nivel 2,En aceleración,3,5,60.0
+11,Inglés,TRIMESTRE 1,3,Nivel 3,Avanzado,7,20,35.0
+11,Inglés,TRIMESTRE 1,3,Nivel 3,Emergente,2,20,10.0
+11,Inglés,TRIMESTRE 1,3,Nivel 3,En aceleración,11,20,55.00000000000001
+11,Inglés,TRIMESTRE 1,4,Nivel 4,Avanzado,9,18,50.0
+11,Inglés,TRIMESTRE 1,4,Nivel 4,Emergente,3,18,16.666666666666664
+11,Inglés,TRIMESTRE 1,4,Nivel 4,En aceleración,6,18,33.33333333333333
+11,Inglés,TRIMESTRE 2,1,Nivel 1,Emergente,1,4,25.0
+11,Inglés,TRIMESTRE 2,1,Nivel 1,En aceleración,3,4,75.0
+11,Inglés,TRIMESTRE 2,2,Nivel 2,Avanzado,2,5,40.0
+11,Inglés,TRIMESTRE 2,2,Nivel 2,En aceleración,3,5,60.0
+11,Inglés,TRIMESTRE 2,3,Nivel 3,Avanzado,11,20,55.00000000000001
+11,Inglés,TRIMESTRE 2,3,Nivel 3,Emergente,1,20,5.0
+11,Inglés,TRIMESTRE 2,3,Nivel 3,En aceleración,8,20,40.0
+11,Inglés,TRIMESTRE 2,4,Nivel 4,Avanzado,10,18,55.55555555555556
+11,Inglés,TRIMESTRE 2,4,Nivel 4,Emergente,1,18,5.555555555555555
+11,Inglés,TRIMESTRE 2,4,Nivel 4,En aceleración,7,18,38.88888888888889
+11,Inglés,TRIMESTRE 3,1,Nivel 1,Emergente,1,4,25.0
+11,Inglés,TRIMESTRE 3,1,Nivel 1,En aceleración,3,4,75.0
+11,Inglés,TRIMESTRE 3,2,Nivel 2,Avanzado,2,5,40.0
+11,Inglés,TRIMESTRE 3,2,Nivel 2,Emergente,1,5,20.0
+11,Inglés,TRIMESTRE 3,2,Nivel 2,En aceleración,2,5,40.0
+11,Inglés,TRIMESTRE 3,3,Nivel 3,Avanzado,10,20,50.0
+11,Inglés,TRIMESTRE 3,3,Nivel 3,Emergente,1,20,5.0
+11,Inglés,TRIMESTRE 3,3,Nivel 3,En aceleración,8,20,40.0
+11,Inglés,TRIMESTRE 3,3,Nivel 3,Progreso limitado,1,20,5.0
+11,Inglés,TRIMESTRE 3,4,Nivel 4,Avanzado,12,18,66.66666666666666
+11,Inglés,TRIMESTRE 3,4,Nivel 4,Emergente,2,18,11.11111111111111
+11,Inglés,TRIMESTRE 3,4,Nivel 4,En aceleración,3,18,16.666666666666664
+11,Inglés,TRIMESTRE 3,4,Nivel 4,Progreso limitado,1,18,5.555555555555555
+11,Lenguaje,TRIMESTRE 1,1,Nivel 1,Avanzado,1,4,25.0
+11,Lenguaje,TRIMESTRE 1,1,Nivel 1,En aceleración,3,4,75.0
+11,Lenguaje,TRIMESTRE 1,2,Nivel 2,Avanzado,3,12,25.0
+11,Lenguaje,TRIMESTRE 1,2,Nivel 2,Emergente,4,12,33.33333333333333
+11,Lenguaje,TRIMESTRE 1,2,Nivel 2,En aceleración,5,12,41.66666666666667
+11,Lenguaje,TRIMESTRE 1,3,Nivel 3,Avanzado,3,20,15.0
+11,Lenguaje,TRIMESTRE 1,3,Nivel 3,Emergente,4,20,20.0
+11,Lenguaje,TRIMESTRE 1,3,Nivel 3,En aceleración,13,20,65.0
+11,Lenguaje,TRIMESTRE 1,4,Nivel 4,Avanzado,5,14,35.714285714285715
+11,Lenguaje,TRIMESTRE 1,4,Nivel 4,Emergente,1,14,7.142857142857142
+11,Lenguaje,TRIMESTRE 1,4,Nivel 4,En aceleración,8,14,57.14285714285714
+11,Lenguaje,TRIMESTRE 2,1,Nivel 1,Avanzado,1,4,25.0
+11,Lenguaje,TRIMESTRE 2,1,Nivel 1,Emergente,1,4,25.0
+11,Lenguaje,TRIMESTRE 2,1,Nivel 1,En aceleración,2,4,50.0
+11,Lenguaje,TRIMESTRE 2,2,Nivel 2,Avanzado,3,12,25.0
+11,Lenguaje,TRIMESTRE 2,2,Nivel 2,Emergente,4,12,33.33333333333333
+11,Lenguaje,TRIMESTRE 2,2,Nivel 2,En aceleración,5,12,41.66666666666667
+11,Lenguaje,TRIMESTRE 2,3,Nivel 3,Avanzado,11,20,55.00000000000001
+11,Lenguaje,TRIMESTRE 2,3,Nivel 3,Emergente,3,20,15.0
+11,Lenguaje,TRIMESTRE 2,3,Nivel 3,En aceleración,6,20,30.0
+11,Lenguaje,TRIMESTRE 2,4,Nivel 4,Avanzado,4,14,28.57142857142857
+11,Lenguaje,TRIMESTRE 2,4,Nivel 4,Emergente,3,14,21.428571428571427
+11,Lenguaje,TRIMESTRE 2,4,Nivel 4,En aceleración,7,14,50.0
+11,Lenguaje,TRIMESTRE 3,1,Nivel 1,En aceleración,2,4,50.0
+11,Lenguaje,TRIMESTRE 3,1,Nivel 1,Progreso limitado,2,4,50.0
+11,Lenguaje,TRIMESTRE 3,2,Nivel 2,Avanzado,1,12,8.333333333333332
+11,Lenguaje,TRIMESTRE 3,2,Nivel 2,Emergente,1,12,8.333333333333332
+11,Lenguaje,TRIMESTRE 3,2,Nivel 2,En aceleración,8,12,66.66666666666666
+11,Lenguaje,TRIMESTRE 3,2,Nivel 2,Progreso limitado,2,12,16.666666666666664
+11,Lenguaje,TRIMESTRE 3,3,Nivel 3,Avanzado,1,19,5.263157894736842
+11,Lenguaje,TRIMESTRE 3,3,Nivel 3,Emergente,1,19,5.263157894736842
+11,Lenguaje,TRIMESTRE 3,3,Nivel 3,En aceleración,14,19,73.68421052631578
+11,Lenguaje,TRIMESTRE 3,3,Nivel 3,Progreso limitado,3,19,15.789473684210526
+11,Lenguaje,TRIMESTRE 3,4,Nivel 4,Avanzado,2,14,14.285714285714285
+11,Lenguaje,TRIMESTRE 3,4,Nivel 4,Emergente,1,14,7.142857142857142
+11,Lenguaje,TRIMESTRE 3,4,Nivel 4,En aceleración,9,14,64.28571428571429
+11,Lenguaje,TRIMESTRE 3,4,Nivel 4,Progreso limitado,2,14,14.285714285714285
+11,Matemáticas,TRIMESTRE 1,1,Nivel 1,Avanzado,2,4,50.0
+11,Matemáticas,TRIMESTRE 1,1,Nivel 1,Emergente,1,4,25.0
+11,Matemáticas,TRIMESTRE 1,1,Nivel 1,En aceleración,1,4,25.0
+11,Matemáticas,TRIMESTRE 1,2,Nivel 2,Avanzado,1,28,3.571428571428571
+11,Matemáticas,TRIMESTRE 1,2,Nivel 2,Emergente,7,28,25.0
+11,Matemáticas,TRIMESTRE 1,2,Nivel 2,En aceleración,14,28,50.0
+11,Matemáticas,TRIMESTRE 1,2,Nivel 2,Progreso limitado,6,28,21.428571428571427
+11,Matemáticas,TRIMESTRE 1,3,Nivel 3,Avanzado,2,18,11.11111111111111
+11,Matemáticas,TRIMESTRE 1,3,Nivel 3,Emergente,3,18,16.666666666666664
+11,Matemáticas,TRIMESTRE 1,3,Nivel 3,En aceleración,9,18,50.0
+11,Matemáticas,TRIMESTRE 1,3,Nivel 3,Progreso limitado,4,18,22.22222222222222
+11,Matemáticas,TRIMESTRE 1,4,Nivel 4,Emergente,1,1,100.0
+11,Matemáticas,TRIMESTRE 2,1,Nivel 1,Avanzado,2,4,50.0
+11,Matemáticas,TRIMESTRE 2,1,Nivel 1,En aceleración,2,4,50.0
+11,Matemáticas,TRIMESTRE 2,2,Nivel 2,Avanzado,9,28,32.142857142857146
+11,Matemáticas,TRIMESTRE 2,2,Nivel 2,Emergente,5,28,17.857142857142858
+11,Matemáticas,TRIMESTRE 2,2,Nivel 2,En aceleración,14,28,50.0
+11,Matemáticas,TRIMESTRE 2,3,Nivel 3,Avanzado,9,18,50.0
+11,Matemáticas,TRIMESTRE 2,3,Nivel 3,Emergente,1,18,5.555555555555555
+11,Matemáticas,TRIMESTRE 2,3,Nivel 3,En aceleración,8,18,44.44444444444444
+11,Matemáticas,TRIMESTRE 2,4,Nivel 4,En aceleración,1,1,100.0
+11,Matemáticas,TRIMESTRE 3,1,Nivel 1,Avanzado,1,4,25.0
+11,Matemáticas,TRIMESTRE 3,1,Nivel 1,Emergente,1,4,25.0
+11,Matemáticas,TRIMESTRE 3,1,Nivel 1,En aceleración,2,4,50.0
+11,Matemáticas,TRIMESTRE 3,2,Nivel 2,Avanzado,15,28,53.57142857142857
+11,Matemáticas,TRIMESTRE 3,2,Nivel 2,Emergente,3,28,10.714285714285714
+11,Matemáticas,TRIMESTRE 3,2,Nivel 2,En aceleración,9,28,32.142857142857146
+11,Matemáticas,TRIMESTRE 3,2,Nivel 2,Progreso limitado,1,28,3.571428571428571
+11,Matemáticas,TRIMESTRE 3,3,Nivel 3,Avanzado,9,18,50.0
+11,Matemáticas,TRIMESTRE 3,3,Nivel 3,Emergente,1,18,5.555555555555555
+11,Matemáticas,TRIMESTRE 3,3,Nivel 3,En aceleración,7,18,38.88888888888889
+11,Matemáticas,TRIMESTRE 3,3,Nivel 3,Progreso limitado,1,18,5.555555555555555
+11,Matemáticas,TRIMESTRE 3,4,Nivel 4,Emergente,1,1,100.0
