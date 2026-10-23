@@ -78,6 +78,7 @@ Documentación complementaria:
 - [Metodología analítica](docs/METHODOLOGY.md)
 - [Pipeline de datos](docs/DATA_PIPELINE.md)
 - [Arquitectura técnica](docs/ARCHITECTURE.md)
+- [Privacidad y control de divulgación](docs/PRIVACY.md)
 
 ## Arquitectura
 
