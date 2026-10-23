@@ -926,6 +926,16 @@ def render_student_story(
         .tolist()
     )
 
+    # Un acceso directo para recuperar el panorama sin filtros.
+    if st.button(
+        "Ver todas las evidencias (todos los grados, niveles y pruebas)",
+        key="story_select_all",
+        use_container_width=True,
+    ):
+        st.session_state["story_grade"] = "Todos"
+        st.session_state["story_level"] = "Todos"
+        st.session_state["story_test"] = "Todas"
+
     c1, c2, c3 = st.columns(3)
     with c1:
         selected_grade = st.selectbox(
@@ -939,18 +949,12 @@ def render_student_story(
             key="story_grade",
         )
 
-    key_scope = catalog.copy()
-    if selected_grade != "Todos":
-        key_scope = key_scope[
-            key_scope["grado_num"] == int(selected_grade)
-        ]
-
+    # Las opciones se construyen sobre el catálogo completo: un filtro
+    # no oculta alternativas de los demás filtros.
     available_levels = [
         level
         for level in LEVEL_ORDER
-        if level in set(
-            key_scope["Nivel_EFA_filtro"].astype(str)
-        )
+        if level in set(catalog["Nivel_EFA_filtro"].astype(str))
     ]
     with c2:
         selected_level = st.selectbox(
@@ -964,18 +968,10 @@ def render_student_story(
             key="story_level",
         )
 
-    if selected_level != "Todos":
-        key_scope = key_scope[
-            key_scope["Nivel_EFA_filtro"].astype(str)
-            == selected_level
-        ]
-
     available_tests = [
         test
         for test in IMPROVE_EFA_TESTS
-        if test in set(
-            key_scope["Prueba_filtro"].astype(str)
-        )
+        if test in set(catalog["Prueba_filtro"].astype(str))
     ]
     with c3:
         selected_test = st.selectbox(
