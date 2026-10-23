@@ -124,6 +124,733 @@ def _render_internal_story(
     )
 
 
+
+def _filter_story_scope(
+    df: pd.DataFrame,
+    grade,
+    level: str,
+    test: str,
+) -> pd.DataFrame:
+    if df is None or df.empty:
+        return pd.DataFrame()
+
+    out = df.copy()
+    if grade != "Todos":
+        out = out[out["grado_num"] == int(grade)]
+    if level != "Todos":
+        out = out[
+            out["Nivel_EFA_filtro"].astype(str) == str(level)
+        ]
+    if test != "Todas":
+        out = out[
+            out["Prueba_filtro"].astype(str) == str(test)
+        ]
+    return out
+
+
+def _story_profile_catalog(
+    profiles: pd.DataFrame,
+    profiles_3_9: pd.DataFrame,
+) -> pd.DataFrame:
+    parts = []
+
+    if profiles_3_9 is not None and not profiles_3_9.empty:
+        low = profiles_3_9[
+            (profiles_3_9["Fuente"].astype(str) == "Evaluar para Avanzar")
+            & (
+                profiles_3_9["Resultado"].astype(str)
+                == profiles_3_9["Prueba_filtro"].astype(str)
+            )
+        ].copy()
+        if not low.empty:
+            low = low[
+                [
+                    "grado_num",
+                    "Prueba_filtro",
+                    "Nivel_EFA_filtro",
+                    "Grupo_EFA_n",
+                    "Fuentes_maximas",
+                    "Fuentes_requeridas",
+                    "Valor",
+                ]
+            ].rename(
+                columns={
+                    "Grupo_EFA_n": "Grupo_n",
+                    "Valor": "EFA_ancla",
+                }
+            )
+            low["Tramo"] = "3°–9°"
+            parts.append(low)
+
+    if profiles is not None and not profiles.empty:
+        high = profiles[
+            [
+                "grado_num",
+                "Prueba_filtro",
+                "Nivel_EFA_filtro",
+                "Candidatos_completos",
+                "Fuentes_maximas",
+                "Fuentes_requeridas",
+                "EFA_seleccionada_mediana",
+            ]
+        ].copy().rename(
+            columns={
+                "Candidatos_completos": "Grupo_n",
+                "EFA_seleccionada_mediana": "EFA_ancla",
+            }
+        )
+        high["Tramo"] = "10°–11°"
+        parts.append(high)
+
+    if not parts:
+        return pd.DataFrame()
+
+    catalog = pd.concat(parts, ignore_index=True)
+    catalog["Grupo_n"] = pd.to_numeric(
+        catalog["Grupo_n"], errors="coerce"
+    ).fillna(0).astype(int)
+    catalog["EFA_ancla"] = pd.to_numeric(
+        catalog["EFA_ancla"], errors="coerce"
+    )
+    catalog["Fuentes_maximas"] = pd.to_numeric(
+        catalog["Fuentes_maximas"], errors="coerce"
+    ).fillna(0).astype(int)
+    return catalog.drop_duplicates(
+        subset=[
+            "grado_num",
+            "Prueba_filtro",
+            "Nivel_EFA_filtro",
+        ]
+    )
+
+
+def _render_story_overview(
+    profiles: pd.DataFrame,
+    profiles_3_9: pd.DataFrame,
+    story_internal: pd.DataFrame,
+    story_latam_10_11: pd.DataFrame,
+    selected_grade,
+    selected_level: str,
+    selected_test: str,
+):
+    catalog = _story_profile_catalog(
+        profiles,
+        profiles_3_9,
+    )
+    catalog = _filter_story_scope(
+        catalog,
+        selected_grade,
+        selected_level,
+        selected_test,
+    )
+
+    if catalog.empty:
+        st.warning(
+            "No hay cohortes de máxima cobertura para esta selección."
+        )
+        return
+
+    st.markdown("### Panorama de máxima evidencia")
+    st.caption(
+        "Cada punto representa una cohorte agregada definida por "
+        "grado × nivel EFA × prueba EFA. No se promedian cohortes "
+        "superpuestas entre sí; se muestran todas las evidencias "
+        "disponibles para conservar su interpretación."
+    )
+
+    k1, k2, k3, k4 = st.columns(4)
+    k1.metric(
+        "Cohortes disponibles",
+        f"{len(catalog):,}".replace(",", "."),
+    )
+    k2.metric(
+        "Grados representados",
+        f"{catalog['grado_num'].nunique()}",
+    )
+    k3.metric(
+        "Pruebas EFA",
+        f"{catalog['Prueba_filtro'].nunique()}",
+    )
+    k4.metric(
+        "Máximo de fuentes",
+        f"{int(catalog['Fuentes_maximas'].max())}",
+    )
+
+    # Mapa de disponibilidad de fuentes por cohorte.
+    evidence_parts = []
+
+    low_scope = _filter_story_scope(
+        profiles_3_9,
+        selected_grade,
+        selected_level,
+        selected_test,
+    )
+    if not low_scope.empty:
+        low_sources = low_scope[
+            [
+                "grado_num",
+                "Prueba_filtro",
+                "Nivel_EFA_filtro",
+                "Fuente",
+            ]
+        ].drop_duplicates()
+        evidence_parts.append(low_sources)
+
+    high_scope = _filter_story_scope(
+        profiles,
+        selected_grade,
+        selected_level,
+        selected_test,
+    )
+    if not high_scope.empty:
+        base_keys = high_scope[
+            [
+                "grado_num",
+                "Prueba_filtro",
+                "Nivel_EFA_filtro",
+            ]
+        ].drop_duplicates()
+        for source in ["Evaluar para Avanzar", "Improve"]:
+            tmp = base_keys.copy()
+            tmp["Fuente"] = source
+            evidence_parts.append(tmp)
+
+    internal_scope = _filter_story_scope(
+        story_internal,
+        selected_grade,
+        selected_level,
+        selected_test,
+    )
+    if not internal_scope.empty:
+        tmp = internal_scope[
+            [
+                "grado_num",
+                "Prueba_filtro",
+                "Nivel_EFA_filtro",
+            ]
+        ].drop_duplicates()
+        tmp["Fuente"] = "Evaluación interna"
+        evidence_parts.append(tmp)
+
+    latam_high_scope = _filter_story_scope(
+        story_latam_10_11,
+        selected_grade,
+        selected_level,
+        selected_test,
+    )
+    if not latam_high_scope.empty:
+        tmp = latam_high_scope[
+            [
+                "grado_num",
+                "Prueba_filtro",
+                "Nivel_EFA_filtro",
+            ]
+        ].drop_duplicates()
+        tmp["Fuente"] = "LATAM"
+        evidence_parts.append(tmp)
+
+    if evidence_parts:
+        evidence = pd.concat(
+            evidence_parts,
+            ignore_index=True,
+        ).drop_duplicates()
+
+        evidence["Perfil"] = (
+            evidence["grado_num"].astype(str)
+            + "° · "
+            + evidence["Nivel_EFA_filtro"].astype(str)
+            + " · "
+            + evidence["Prueba_filtro"].astype(str)
+        )
+        source_summary = (
+            evidence.groupby(
+                ["grado_num", "Fuente"],
+                as_index=False,
+            )
+            .agg(
+                Cohortes=("Perfil", "nunique")
+            )
+        )
+        pivot = source_summary.pivot(
+            index="grado_num",
+            columns="Fuente",
+            values="Cohortes",
+        ).fillna(0)
+
+        st.markdown("### Cobertura de fuentes")
+        fig_sources = px.imshow(
+            pivot,
+            text_auto=True,
+            aspect="auto",
+            labels={
+                "x": "Fuente",
+                "y": "Grado",
+                "color": "Cohortes",
+            },
+            title=(
+                "Número de cohortes con evidencia disponible "
+                "por grado y fuente"
+            ),
+        )
+        fig_sources.update_yaxes(
+            tickmode="array",
+            tickvals=list(range(len(pivot.index))),
+            ticktext=[f"{int(g)}°" for g in pivot.index],
+        )
+        fig_sources.update_layout(
+            height=max(360, 48 * len(pivot.index) + 180),
+        )
+        st.plotly_chart(
+            fig_sources,
+            use_container_width=True,
+            key="story_overview_sources",
+        )
+
+    st.markdown("### Evaluar para Avanzar · todas las cohortes")
+    efa_catalog = catalog[catalog["EFA_ancla"].notna()].copy()
+    if not efa_catalog.empty:
+        fig_efa = px.scatter(
+            efa_catalog,
+            x="grado_num",
+            y="EFA_ancla",
+            color="Nivel_EFA_filtro",
+            size="Grupo_n",
+            facet_col="Prueba_filtro",
+            facet_col_wrap=2,
+            custom_data=[
+                "Grupo_n",
+                "Fuentes_maximas",
+                "Fuentes_requeridas",
+            ],
+            category_orders={
+                "Nivel_EFA_filtro": LEVEL_ORDER,
+                "Prueba_filtro": IMPROVE_EFA_TESTS,
+            },
+            title=(
+                "Puntaje EFA de cada cohorte con máxima "
+                "cobertura de fuentes"
+            ),
+        )
+        for y in [25, 50, 75]:
+            fig_efa.add_hline(
+                y=y,
+                line_dash="dot",
+                opacity=0.25,
+            )
+        fig_efa.update_xaxes(
+            dtick=1,
+            title="Grado",
+        )
+        fig_efa.update_yaxes(
+            range=[0, 100],
+            title="Puntaje EFA (%)",
+        )
+        fig_efa.update_traces(
+            hovertemplate=(
+                "Grado: %{x}°<br>"
+                "EFA: %{y:.1f}%<br>"
+                "n cohorte: %{customdata[0]}<br>"
+                "Fuentes máximas: %{customdata[1]}<br>"
+                "%{customdata[2]}"
+                "<extra></extra>"
+            )
+        )
+        fig_efa.for_each_annotation(
+            lambda a: a.update(
+                text=a.text.replace(
+                    "Prueba_filtro=", ""
+                )
+            )
+        )
+        fig_efa.update_layout(
+            height=780,
+            plot_bgcolor="rgba(0,0,0,0)",
+            legend_title_text="Nivel EFA",
+        )
+        st.plotly_chart(
+            fig_efa,
+            use_container_width=True,
+            key="story_overview_efa",
+        )
+
+    internal_scope = _filter_story_scope(
+        story_internal,
+        selected_grade,
+        selected_level,
+        selected_test,
+    )
+    if not internal_scope.empty:
+        st.markdown("### Evaluación interna · T1 → T2")
+        internal_scope = internal_scope[
+            internal_scope["Trimestre"]
+            .astype(str)
+            .isin(["TRIMESTRE 1", "TRIMESTRE 2"])
+        ].copy()
+        internal_scope["Trimestre"] = pd.Categorical(
+            internal_scope["Trimestre"],
+            categories=["TRIMESTRE 1", "TRIMESTRE 2"],
+            ordered=True,
+        )
+        fig_internal = px.line(
+            internal_scope.sort_values(
+                [
+                    "Prueba_filtro",
+                    "Nivel_EFA_filtro",
+                    "Trimestre",
+                    "grado_num",
+                ]
+            ),
+            x="grado_num",
+            y="Promedio_interno",
+            color="Nivel_EFA_filtro",
+            line_dash="Trimestre",
+            markers=True,
+            facet_col="Prueba_filtro",
+            facet_col_wrap=2,
+            custom_data=["Estudiantes"],
+            category_orders={
+                "Nivel_EFA_filtro": LEVEL_ORDER,
+                "Prueba_filtro": IMPROVE_EFA_TESTS,
+            },
+            title=(
+                "Desempeño interno promedio de las mismas "
+                "cohortes · Trimestre 1 y 2"
+            ),
+        )
+        fig_internal.update_xaxes(
+            dtick=1,
+            title="Grado",
+        )
+        fig_internal.update_yaxes(
+            range=[1, 4.15],
+            title="Nivel interno promedio",
+            tickmode="array",
+            tickvals=[1, 2, 3, 4],
+            ticktext=[
+                "Progreso limitado",
+                "Emergente",
+                "En aceleración",
+                "Avanzado",
+            ],
+        )
+        fig_internal.update_traces(
+            hovertemplate=(
+                "Grado: %{x}°<br>"
+                "Desempeño interno: %{y:.2f}<br>"
+                "n: %{customdata[0]}"
+                "<extra></extra>"
+            )
+        )
+        fig_internal.for_each_annotation(
+            lambda a: a.update(
+                text=a.text.replace(
+                    "Prueba_filtro=", ""
+                )
+            )
+        )
+        fig_internal.update_layout(
+            height=820,
+            plot_bgcolor="rgba(0,0,0,0)",
+            legend_title_text="",
+        )
+        st.plotly_chart(
+            fig_internal,
+            use_container_width=True,
+            key="story_overview_internal",
+        )
+
+    innovamat = low_scope[
+        low_scope["Fuente"].astype(str) == "Innovamat"
+    ].copy() if not low_scope.empty else pd.DataFrame()
+
+    if not innovamat.empty:
+        st.markdown("### Innovamat · todas las dimensiones disponibles")
+        innovamat["Valor"] = pd.to_numeric(
+            innovamat["Valor"], errors="coerce"
+        )
+        fig_innovamat = px.scatter(
+            innovamat,
+            x="grado_num",
+            y="Valor",
+            color="Nivel_EFA_filtro",
+            facet_col="Resultado",
+            facet_col_wrap=3,
+            custom_data=["n", "Prueba_filtro"],
+            category_orders={
+                "Nivel_EFA_filtro": LEVEL_ORDER,
+            },
+            title=(
+                "Resultados de Innovamat por cohorte, "
+                "grado y dimensión"
+            ),
+        )
+        fig_innovamat.update_xaxes(
+            dtick=1,
+            title="Grado",
+        )
+        fig_innovamat.update_yaxes(
+            range=[0, 100],
+            title="Puntaje equivalente (0–100)",
+        )
+        fig_innovamat.update_traces(
+            hovertemplate=(
+                "Grado: %{x}°<br>"
+                "Resultado: %{y:.1f}<br>"
+                "n: %{customdata[0]}<br>"
+                "Cohorte definida por: %{customdata[1]}"
+                "<extra></extra>"
+            )
+        )
+        fig_innovamat.for_each_annotation(
+            lambda a: a.update(
+                text=a.text.replace(
+                    "Resultado=", ""
+                )
+            )
+        )
+        fig_innovamat.update_layout(
+            height=760,
+            plot_bgcolor="rgba(0,0,0,0)",
+            legend_title_text="Nivel EFA",
+        )
+        st.plotly_chart(
+            fig_innovamat,
+            use_container_width=True,
+            key="story_overview_innovamat",
+        )
+
+    latam_parts = []
+    if not low_scope.empty:
+        latam_low = low_scope[
+            low_scope["Fuente"].astype(str) == "LATAM"
+        ].copy()
+        if not latam_low.empty:
+            latam_parts.append(latam_low)
+
+    if not latam_high_scope.empty:
+        latam_parts.append(latam_high_scope.copy())
+
+    if latam_parts:
+        latam = pd.concat(
+            latam_parts,
+            ignore_index=True,
+        )
+        st.markdown("### LATAM · niveles predominantes")
+        latam["Valor"] = pd.to_numeric(
+            latam["Valor"], errors="coerce"
+        )
+        fig_latam = px.scatter(
+            latam,
+            x="grado_num",
+            y="Valor",
+            color="Nivel_EFA_filtro",
+            symbol="Resultado",
+            facet_col="Prueba_filtro",
+            facet_col_wrap=2,
+            custom_data=["n", "Etiqueta", "Extra"],
+            category_orders={
+                "Nivel_EFA_filtro": LEVEL_ORDER,
+                "Prueba_filtro": IMPROVE_EFA_TESTS,
+            },
+            title=(
+                "Nivel LATAM predominante en las cohortes "
+                "con evidencia disponible"
+            ),
+        )
+        fig_latam.update_xaxes(
+            dtick=1,
+            title="Grado",
+        )
+        fig_latam.update_yaxes(
+            range=[0.5, 4.5],
+            title="Nivel LATAM",
+            tickmode="array",
+            tickvals=[1, 2, 3, 4],
+            ticktext=[
+                "Inicio",
+                "Básico",
+                "Satisfactorio",
+                "Avanzado",
+            ],
+        )
+        fig_latam.update_traces(
+            hovertemplate=(
+                "Grado: %{x}°<br>"
+                "Nivel LATAM: %{customdata[1]}<br>"
+                "n: %{customdata[0]}<br>"
+                "Proporción: %{customdata[2]:.1f}%"
+                "<extra></extra>"
+            )
+        )
+        fig_latam.for_each_annotation(
+            lambda a: a.update(
+                text=a.text.replace(
+                    "Prueba_filtro=", ""
+                )
+            )
+        )
+        fig_latam.update_layout(
+            height=760,
+            plot_bgcolor="rgba(0,0,0,0)",
+            legend_title_text="",
+        )
+        st.plotly_chart(
+            fig_latam,
+            use_container_width=True,
+            key="story_overview_latam",
+        )
+
+    improve_scope = _filter_story_scope(
+        profiles,
+        selected_grade,
+        selected_level,
+        selected_test,
+    )
+    if not improve_scope.empty:
+        st.markdown("### Improve · crecimiento de las cohortes 10°–11°")
+        improve_rows = []
+        metric_map = {
+            "Global": "Puntaje global",
+            "Matemáticas": "Puntaje Matemáticas",
+            "Lenguaje": "Puntaje Lectura crítica",
+            "Ciencias naturales": "Puntaje Ciencias naturales",
+            "Ciencias sociales": "Puntaje Sociales y ciudadanas",
+            "Inglés": "Puntaje Inglés",
+        }
+
+        for _, row in improve_scope.iterrows():
+            grade = int(row["grado_num"])
+            moments = [1, 2] if grade == 10 else [1, 2, 3]
+            for result_name, raw_name in metric_map.items():
+                for moment in moments:
+                    col = (
+                        f"Improve_EV{moment}_"
+                        f"{raw_name}_mediana"
+                    )
+                    value = row.get(col, np.nan)
+                    if pd.isna(value):
+                        continue
+                    improve_rows.append(
+                        {
+                            "grado_num": grade,
+                            "Prueba_filtro": row["Prueba_filtro"],
+                            "Nivel_EFA_filtro": row[
+                                "Nivel_EFA_filtro"
+                            ],
+                            "Resultado": result_name,
+                            "Momento": f"Evaluación {moment}",
+                            "Orden": moment,
+                            "Valor": float(value),
+                            "n": int(
+                                row["Candidatos_completos"]
+                            ),
+                        }
+                    )
+
+        improve_long = pd.DataFrame(improve_rows)
+        if not improve_long.empty:
+            global_imp = improve_long[
+                improve_long["Resultado"] == "Global"
+            ].copy()
+            fig_imp = px.line(
+                global_imp.sort_values(
+                    [
+                        "grado_num",
+                        "Prueba_filtro",
+                        "Nivel_EFA_filtro",
+                        "Orden",
+                    ]
+                ),
+                x="Momento",
+                y="Valor",
+                color="Nivel_EFA_filtro",
+                line_dash="Prueba_filtro",
+                facet_col="grado_num",
+                markers=True,
+                custom_data=["n"],
+                category_orders={
+                    "Nivel_EFA_filtro": LEVEL_ORDER,
+                },
+                title=(
+                    "Trayectoria global de Improve para todas "
+                    "las cohortes disponibles"
+                ),
+            )
+            fig_imp.update_yaxes(
+                title="Puntaje global Improve",
+                rangemode="tozero",
+            )
+            fig_imp.update_traces(
+                hovertemplate=(
+                    "Momento: %{x}<br>"
+                    "Puntaje global: %{y:.1f}<br>"
+                    "n: %{customdata[0]}"
+                    "<extra></extra>"
+                )
+            )
+            fig_imp.for_each_annotation(
+                lambda a: a.update(
+                    text=a.text.replace(
+                        "grado_num=", "Grado "
+                    )
+                    + "°"
+                )
+            )
+            fig_imp.update_layout(
+                height=520,
+                plot_bgcolor="rgba(0,0,0,0)",
+                legend_title_text="",
+            )
+            st.plotly_chart(
+                fig_imp,
+                use_container_width=True,
+                key="story_overview_improve_global",
+            )
+
+            st.caption(
+                "La tabla siguiente conserva todas las pruebas de Improve "
+                "y todos los momentos disponibles para las cohortes "
+                "seleccionadas."
+            )
+            table = improve_long.copy()
+            table["Grado"] = table["grado_num"].map(
+                lambda x: f"{int(x)}°"
+            )
+            table["Valor"] = table["Valor"].map(
+                lambda x: f"{x:.1f}"
+            )
+            st.dataframe(
+                table[
+                    [
+                        "Grado",
+                        "Nivel_EFA_filtro",
+                        "Prueba_filtro",
+                        "Resultado",
+                        "Momento",
+                        "n",
+                        "Valor",
+                    ]
+                ].rename(
+                    columns={
+                        "Nivel_EFA_filtro": "Nivel EFA",
+                        "Prueba_filtro": "Prueba EFA que define la cohorte",
+                        "Resultado": "Resultado Improve",
+                        "Momento": "Momento Improve",
+                        "n": "Estudiantes",
+                    }
+                ),
+                use_container_width=True,
+                hide_index=True,
+            )
+
+    st.caption(
+        "El panorama usa únicamente cohortes con máxima cobertura viable "
+        "de fuentes y al menos 5 estudiantes. Las cohortes pueden "
+        "superponerse entre filtros, por eso no se suman como si fueran "
+        "estudiantes distintos."
+    )
+
+
 def render_student_story(
     profiles: pd.DataFrame,
     profiles_3_9: pd.DataFrame,
@@ -132,8 +859,8 @@ def render_student_story(
 ):
     st.markdown("## Historia de un perfil representativo")
     st.caption(
-        "Selecciona grado, nivel EFA y prueba EFA para reconstruir el "
-        "recorrido disponible en las demás evaluaciones."
+        "Puedes seleccionar una combinación específica o elegir Todos "
+        "para desplegar el panorama completo de evidencias disponibles."
     )
 
     if profiles.empty and profiles_3_9.empty:
@@ -149,67 +876,113 @@ def render_student_story(
         "partir de casos aislados y priorizamos los recorridos más completos."
     )
 
+    catalog = _story_profile_catalog(
+        profiles,
+        profiles_3_9,
+    )
+    if catalog.empty:
+        st.warning(
+            "No hay cohortes con máxima cobertura de fuentes."
+        )
+        return
+
     grades = sorted(
-        set(
-            profiles["grado_num"].dropna().astype(int).tolist()
-            if not profiles.empty
-            else []
-        )
-        | set(
-            profiles_3_9["grado_num"].dropna().astype(int).tolist()
-            if not profiles_3_9.empty
-            else []
-        )
+        catalog["grado_num"]
+        .dropna()
+        .astype(int)
+        .unique()
+        .tolist()
     )
 
     c1, c2, c3 = st.columns(3)
     with c1:
         selected_grade = st.selectbox(
             "Grado",
-            grades,
-            format_func=lambda g: f"{g}°",
+            ["Todos"] + grades,
+            format_func=lambda g: (
+                "Todos los grados"
+                if g == "Todos"
+                else f"{g}°"
+            ),
             key="story_grade",
         )
+
+    key_scope = catalog.copy()
+    if selected_grade != "Todos":
+        key_scope = key_scope[
+            key_scope["grado_num"] == int(selected_grade)
+        ]
+
+    available_levels = [
+        level
+        for level in LEVEL_ORDER
+        if level in set(
+            key_scope["Nivel_EFA_filtro"].astype(str)
+        )
+    ]
+    with c2:
+        selected_level = st.selectbox(
+            "Nivel en Evaluar para Avanzar",
+            ["Todos"] + available_levels,
+            format_func=lambda level: (
+                "Todos los niveles"
+                if level == "Todos"
+                else level
+            ),
+            key="story_level",
+        )
+
+    if selected_level != "Todos":
+        key_scope = key_scope[
+            key_scope["Nivel_EFA_filtro"].astype(str)
+            == selected_level
+        ]
+
+    available_tests = [
+        test
+        for test in IMPROVE_EFA_TESTS
+        if test in set(
+            key_scope["Prueba_filtro"].astype(str)
+        )
+    ]
+    with c3:
+        selected_test = st.selectbox(
+            "Prueba de Evaluar para Avanzar",
+            ["Todas"] + available_tests,
+            format_func=lambda test: (
+                "Todas las pruebas"
+                if test == "Todas"
+                else test
+            ),
+            key="story_test",
+        )
+
+    broad_mode = (
+        selected_grade == "Todos"
+        or selected_level == "Todos"
+        or selected_test == "Todas"
+    )
+    if broad_mode:
+        _render_story_overview(
+            profiles,
+            profiles_3_9,
+            story_internal,
+            story_latam_10_11,
+            selected_grade,
+            selected_level,
+            selected_test,
+        )
+        return
 
     if selected_grade <= 9:
         grade_data = profiles_3_9[
             profiles_3_9["grado_num"] == selected_grade
         ].copy()
 
-        available_levels = [
-            level
-            for level in LEVEL_ORDER
-            if level in set(
-                grade_data["Nivel_EFA_filtro"].astype(str)
-            )
-        ]
-
-        with c2:
-            selected_level = st.selectbox(
-                "Nivel en Evaluar para Avanzar",
-                available_levels,
-                key="story_level",
-            )
-
         level_data = grade_data[
             grade_data["Nivel_EFA_filtro"].astype(str)
             == selected_level
         ].copy()
-
-        available_tests = [
-            test
-            for test in IMPROVE_EFA_TESTS
-            if test in set(
-                level_data["Prueba_filtro"].astype(str)
-            )
-        ]
-
-        with c3:
-            selected_test = st.selectbox(
-                "Prueba de Evaluar para Avanzar",
-                available_tests,
-                key="story_test",
-            )
 
         d = level_data[
             level_data["Prueba_filtro"].astype(str)
@@ -515,40 +1288,10 @@ def render_student_story(
         profiles["grado_num"] == selected_grade
     ].copy()
 
-    available_levels = [
-        level
-        for level in LEVEL_ORDER
-        if level in set(
-            grade_data["Nivel_EFA_filtro"].astype(str)
-        )
-    ]
-
-    with c2:
-        selected_level = st.selectbox(
-            "Nivel en Evaluar para Avanzar",
-            available_levels,
-            key="story_level",
-        )
-
     level_data = grade_data[
         grade_data["Nivel_EFA_filtro"].astype(str)
         == selected_level
     ].copy()
-
-    available_tests = [
-        test
-        for test in IMPROVE_EFA_TESTS
-        if test in set(
-            level_data["Prueba_filtro"].astype(str)
-        )
-    ]
-
-    with c3:
-        selected_test = st.selectbox(
-            "Prueba de Evaluar para Avanzar",
-            available_tests,
-            key="story_test",
-        )
 
     d = level_data[
         level_data["Prueba_filtro"].astype(str)
