@@ -394,7 +394,7 @@ def _render_story_overview(
         )
         fig_sources.update_yaxes(
             tickmode="array",
-            tickvals=list(range(len(pivot.index))),
+            tickvals=list(pivot.index),
             ticktext=[f"{int(g)}°" for g in pivot.index],
         )
         fig_sources.update_layout(
@@ -471,6 +471,38 @@ def _render_story_overview(
             fig_efa,
             use_container_width=True,
             key="story_overview_efa",
+        )
+
+        catalog_table = efa_catalog.copy()
+        catalog_table["Grado"] = catalog_table[
+            "grado_num"
+        ].map(lambda x: f"{int(x)}°")
+        catalog_table["EFA"] = catalog_table[
+            "EFA_ancla"
+        ].map(lambda x: f"{x:.1f}%")
+        st.markdown("#### Cohortes que sostienen el panorama")
+        st.dataframe(
+            catalog_table[
+                [
+                    "Grado",
+                    "Nivel_EFA_filtro",
+                    "Prueba_filtro",
+                    "Grupo_n",
+                    "EFA",
+                    "Fuentes_maximas",
+                    "Fuentes_requeridas",
+                ]
+            ].rename(
+                columns={
+                    "Nivel_EFA_filtro": "Nivel EFA",
+                    "Prueba_filtro": "Prueba EFA",
+                    "Grupo_n": "Estudiantes",
+                    "Fuentes_maximas": "Fuentes máximas",
+                    "Fuentes_requeridas": "Fuentes requeridas",
+                }
+            ),
+            use_container_width=True,
+            hide_index=True,
         )
 
     internal_scope = _filter_story_scope(
