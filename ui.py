@@ -1,28 +1,20 @@
-
 from __future__ import annotations
 
 import pandas as pd
 import streamlit as st
 
-
-LEVEL_ORDER = [
-    "Progreso limitado",
-    "Emergente",
-    "En aceleración",
-    "Avanzado",
-]
-
-LEVEL_COLORS = {
-    "Progreso limitado": "#C0392B",
-    "Emergente": "#E67E22",
-    "En aceleración": "#F1C40F",
-    "Avanzado": "#27AE60",
-}
+from config import LEVEL_COLORS, LEVEL_ORDER
 
 
-def multiselect_filter(label: str, data: pd.DataFrame, column: str, key: str):
+def multiselect_filter(
+    label: str,
+    data: pd.DataFrame,
+    column: str,
+    key: str,
+):
     if column not in data.columns:
         return []
+
     values = (
         data[column]
         .dropna()
@@ -56,7 +48,11 @@ def apply_filters(
     return out
 
 
-def dataframe_download(df: pd.DataFrame, label: str, filename: str):
+def dataframe_download(
+    df: pd.DataFrame,
+    label: str,
+    filename: str,
+):
     csv = df.to_csv(index=False).encode("utf-8-sig")
     st.download_button(
         label=label,
