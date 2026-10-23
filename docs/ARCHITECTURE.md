@@ -36,9 +36,23 @@ Contratos mínimos de los agregados precalculados.
 
 Carga, normalización y cache de los datos consumidos por la aplicación.
 
+### view_*.py
+
+Visualizaciones separadas por dominio:
+
+- general;
+- LATAM;
+- actividad matemática;
+- evolución;
+- Improve;
+- evaluación interna;
+- historia longitudinal.
+
+`views.py` actúa como fachada estable de importación.
+
 ### app.py
 
-Navegación, composición de vistas y visualizaciones.
+Capa ligera de navegación y composición de pestañas.
 
 ## Regla de dependencia
 
@@ -60,25 +74,14 @@ Las capas inferiores no deben importar `app.py`.
 
 ## Estado de modularización
 
-La capa de loaders ya fue extraída de `app.py`.
+La capa de loaders y la capa de visualización ya fueron extraídas de
+`app.py`.
 
-La siguiente deuda técnica es mover gradualmente las funciones de render a
-módulos por dominio:
+La estructura actual mantiene una fachada `views.py` y módulos por dominio.
+Esto permite modificar una vista sin intervenir en la navegación general.
 
-```text
-views/
-├── general.py
-├── antiguedad.py
-├── latam_efa.py
-├── math_activity.py
-├── evolution.py
-├── improve_efa.py
-├── internal_efa.py
-└── story.py
-```
-
-La migración debe hacerse una vista a la vez, con CI verde después de cada
-movimiento.
+La deuda técnica principal se desplaza ahora hacia la automatización completa
+del ETL que genera los agregados de `data/`.
 
 ## Principios
 
