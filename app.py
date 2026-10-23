@@ -19,75 +19,24 @@ from processing import (
     normalize_area,
 )
 
-
-YEAR = 2026
-TESTS = [
-    "Matemáticas",
-    "Ciencias naturales",
-    "Ciencias sociales",
-    "Lenguaje",
-    "Inglés",
-]
-SITES = ["BAQ", "COT", "MOS", "TUN", "USAQ", "ZIPA"]
-ANTIGUEDAD_SITES = ["COT", "MOS", "TUN", "ZIPA"]
-LEVEL_ORDER = [
-    "Nivel 1",
-    "Nivel 2",
-    "Nivel 3",
-    "Nivel 4",
-]
-LEVEL_COLORS = {
-    "Nivel 1": "#C93C3C",
-    "Nivel 2": "#E58B2A",
-    "Nivel 3": "#D8B531",
-    "Nivel 4": "#2E8B57",
-}
-LATAM_ORDER = ["Inicio", "Básico", "Satisfactorio", "Avanzado"]
-LATAM_SCORE = {
-    "Inicio": 1,
-    "Básico": 2,
-    "Satisfactorio": 3,
-    "Avanzado": 4,
-}
-MATH_ACTIVITY_METRICS = [
-    "Actividades realizadas",
-    "Tiempo total (horas)",
-    "Promedio general",
-    "Numeración",
-    "Relaciones y cambio",
-    "Espacio y forma",
-    "Medida",
-    "Estadística y probabilidad",
-]
-MATH_COMPETENCIES = [
-    "Numeración",
-    "Relaciones y cambio",
-    "Espacio y forma",
-    "Medida",
-    "Estadística y probabilidad",
-]
-EVOLUTION_METRICS = [
-    "Puntaje global",
-    "Puntaje Matemáticas",
-    "Puntaje Lectura crítica",
-    "Puntaje Ciencias naturales",
-    "Puntaje Sociales y ciudadanas",
-    "Puntaje Inglés",
-]
-IMPROVE_EFA_TESTS = [
-    "Matemáticas",
-    "Lenguaje",
-    "Ciencias naturales",
-    "Ciencias sociales",
-    "Inglés",
-]
-LEGACY_LEVEL_MAP = {
-    "Progreso limitado": "Nivel 1",
-    "Emergente": "Nivel 2",
-    "En aceleración": "Nivel 3",
-    "Avanzado": "Nivel 4",
-}
-
+from config import (
+    ANTIGUEDAD_SITES,
+    EVOLUTION_METRICS,
+    GRADE_APPLICABILITY,
+    IMPROVE_EFA_TESTS,
+    LATAM_ORDER,
+    LATAM_SCORE,
+    LEGACY_LEVEL_MAP,
+    LEVEL_COLORS,
+    LEVEL_ORDER,
+    MATH_ACTIVITY_METRICS,
+    MATH_COMPETENCIES,
+    MIN_PUBLIC_GROUP_SIZE,
+    SITES,
+    TESTS,
+    YEAR,
+)
+from data_quality import suppress_small_groups
 
 st.set_page_config(
     page_title="Estado de llegada 2026",
@@ -155,6 +104,11 @@ def read_latam_efa_data():
         detail["Estudiantes"] = pd.to_numeric(
             detail["Estudiantes"], errors="coerce"
         ).fillna(0).astype(int)
+        detail = suppress_small_groups(
+            detail,
+            "Estudiantes",
+            MIN_PUBLIC_GROUP_SIZE,
+        )
 
     return detail, summary
 
@@ -298,6 +252,17 @@ def read_improve_efa_data():
                 growth[col], errors="coerce"
             )
         growth["n"] = growth["n"].fillna(0).astype(int)
+
+    levels = suppress_small_groups(
+        levels,
+        "n",
+        MIN_PUBLIC_GROUP_SIZE,
+    )
+    growth = suppress_small_groups(
+        growth,
+        "n",
+        MIN_PUBLIC_GROUP_SIZE,
+    )
 
     return levels, quality, growth
 
@@ -1640,6 +1605,11 @@ def render_origin_patterns(d: pd.DataFrame):
         )
     )
     trend["Pct_50"] *= 100
+    trend = trend[
+        trend["Estudiantes"] >= MIN_PUBLIC_GROUP_SIZE
+    ].copy()
+    if trend.empty:
+        return
 
     grades = sorted(
         [int(g) for g in trend["Grado_num"].dropna().unique()]
@@ -1748,6 +1718,17 @@ def render_top10_origin_by_level(
             )["Estudiantes"]
             .sum()
         )
+        ranking = suppress_small_groups(
+            ranking,
+            "Estudiantes",
+            MIN_PUBLIC_GROUP_SIZE,
+        )
+        if ranking.empty:
+            st.info(
+                "No hay grupos con al menos "
+                f"{MIN_PUBLIC_GROUP_SIZE} estudiantes para mostrar."
+            )
+            return
 
         m1, m2 = st.columns(2)
         m1.metric(
@@ -1839,6 +1820,22 @@ def render_top10_origin_by_level(
             )
             .agg(Estudiantes=("IdentiEstudiante", "nunique"))
         )
+        ranking = suppress_small_groups(
+            ranking,
+            "Estudiantes",
+            MIN_PUBLIC_GROUP_SIZE,
+        )
+
+    st.caption(
+        f"Por privacidad, no se muestran combinaciones con menos de "
+        f"{MIN_PUBLIC_GROUP_SIZE} estudiantes."
+    )
+    if ranking.empty:
+        st.info(
+            "No hay grupos con tamaño suficiente para mostrar "
+            "colegios de origen."
+        )
+        return
 
     st.markdown(
         "#### Top 10 colegios de origen con mayor número de estudiantes en cada nivel"
@@ -4734,13 +4731,7 @@ def render_internal_vs_efa(
         "TRIMESTRE 1",
         "TRIMESTRE 2",
     ]
-    grade_ranges = {
-        "Matemáticas": list(range(3, 12)),
-        "Lenguaje": list(range(3, 12)),
-        "Ciencias naturales": list(range(5, 12)),
-        "Ciencias sociales": list(range(5, 12)),
-        "Inglés": list(range(9, 12)),
-    }
+    grade_ranges = GRADE_APPLICABILITY
 
     for tab, test in zip(test_tabs, tests_available):
         with tab:
@@ -6228,7 +6219,10 @@ def render_student_story(
 st.title("📊 Estado de llegada 2026")
 st.caption(
     "Base precargada actualizada al 19 de octubre de 2026 · "
-    "Análisis general, antigüedad, LATAM, actividad matemática, evolución, relación EFA–Improve, evaluación interna e historia longitudinal."
+    "Análisis general, antigüedad, LATAM, actividad matemática, evolución, "
+    "relación EFA–Improve, evaluación interna e historia longitudinal. "
+    f"Control de divulgación: las vistas sensibles suprimen grupos con n < "
+    f"{MIN_PUBLIC_GROUP_SIZE}."
 )
 
 uploaded = st.file_uploader(
