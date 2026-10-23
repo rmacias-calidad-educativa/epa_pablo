@@ -191,6 +191,15 @@ def render_main_line(
         grouped["Pct_Nivel_2"] = np.nan
         grouped["Pct_Nivel1_2"] = grouped["Pct_50_o_menos"]
 
+    grouped["Pct_mayor_50"] = np.where(
+        grouped["Estudiantes"] > 0,
+        grouped["Mayor_50"] / grouped["Estudiantes"] * 100,
+        np.nan,
+    )
+    grouped["Etiqueta_Pct_mayor_50"] = grouped["Pct_mayor_50"].map(
+        lambda x: "" if pd.isna(x) else f"{x:.0f}%"
+    )
+
     grouped["Etiqueta_Pct_50"] = grouped["Pct_50_o_menos"].map(
         lambda x: "" if pd.isna(x) else f"{x:.0f}%"
     )
@@ -264,6 +273,51 @@ def render_main_line(
         ),
     )
     st.plotly_chart(fig, use_container_width=True)
+
+    # Mismo universo y denominador que la gráfica superior, mostrando
+    # ahora los niveles 3 y 4 (>50% de aciertos).
+    st.markdown("#### % de estudiantes en Nivel 3 + Nivel 4 por grado")
+    fig_high = px.line(
+        grouped.sort_values(["Sede", "Grado_num"]),
+        x="Grado_num",
+        y="Pct_mayor_50",
+        color="Sede",
+        markers=True,
+        text="Etiqueta_Pct_mayor_50",
+        category_orders={"Sede": SITES},
+        custom_data=["Mayor_50", "Estudiantes"],
+        labels={
+            "Sede": "Sede",
+            "Pct_mayor_50": "% en Nivel 3 + Nivel 4",
+        },
+        title="% de estudiantes en Nivel 3 + Nivel 4 por grado",
+    )
+    fig_high = style_clean_axes(fig_high, grades=grades, hide_y=False)
+    fig_high.update_yaxes(
+        range=[0, 100],
+        showticklabels=True,
+        ticksuffix="%",
+        title="% en Nivel 3 + Nivel 4",
+    )
+    fig_high.update_layout(
+        height=600,
+        hovermode="x unified",
+        legend_title_text="Sede",
+    )
+    fig_high.update_traces(
+        textposition="top center",
+        cliponaxis=False,
+        line=dict(width=2.5),
+        marker=dict(size=8),
+        hovertemplate=(
+            "<b>%{fullData.name}</b><br>"
+            "Nivel 3 + Nivel 4: %{y:.1f}%<br>"
+            "Estudiantes en niveles 3 + 4: %{customdata[0]:.0f}<br>"
+            "Total evaluados: %{customdata[1]:.0f}"
+            "<extra></extra>"
+        ),
+    )
+    st.plotly_chart(fig_high, use_container_width=True)
 
 
 def level_counts_by_site_from_raw(data: pd.DataFrame) -> pd.DataFrame:
