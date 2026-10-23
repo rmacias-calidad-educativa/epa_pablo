@@ -19,6 +19,7 @@ from config import (
     MIN_PUBLIC_GROUP_SIZE,
     SITES,
     TESTS,
+    YEAR,
 )
 from data_quality import suppress_small_groups
 
