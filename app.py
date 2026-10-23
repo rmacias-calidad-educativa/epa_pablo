@@ -1,29 +1,10 @@
 
 from __future__ import annotations
 
-import numpy as np
 import pandas as pd
-import plotly.express as px
-import plotly.graph_objects as go
 import streamlit as st
 
-from config import (
-    ANTIGUEDAD_SITES,
-    EVOLUTION_METRICS,
-    GRADE_APPLICABILITY,
-    IMPROVE_EFA_TESTS,
-    LATAM_ORDER,
-    LATAM_SCORE,
-    LEVEL_COLORS,
-    LEVEL_ORDER,
-    MATH_ACTIVITY_METRICS,
-    MATH_COMPETENCIES,
-    MIN_PUBLIC_GROUP_SIZE,
-    SITES,
-    TESTS,
-    YEAR,
-)
-from data_quality import suppress_small_groups
+from config import MIN_PUBLIC_GROUP_SIZE, TESTS
 from loaders import (
     process_raw,
     read_default_data,
