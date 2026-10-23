@@ -1,0 +1,197 @@
+grado_num,Prueba_filtro,Nivel_EFA_filtro,Grupo_EFA_n,Fuentes_maximas,Fuentes_requeridas,Candidatos_max_fuentes,Trimestre,Estudiantes,Promedio_interno
+3,Matemáticas,Nivel 1,18,3,Evaluar para Avanzar + Evaluación interna + Innovamat,179,TRIMESTRE 1,18,2.611111111111111
+3,Matemáticas,Nivel 1,18,3,Evaluar para Avanzar + Evaluación interna + Innovamat,179,TRIMESTRE 2,18,2.5555555555555554
+3,Matemáticas,Nivel 2,73,3,Evaluar para Avanzar + Evaluación interna + Innovamat,179,TRIMESTRE 1,73,2.904109589041096
+3,Matemáticas,Nivel 2,73,3,Evaluar para Avanzar + Evaluación interna + Innovamat,179,TRIMESTRE 2,73,2.6301369863013697
+3,Matemáticas,Nivel 3,71,3,Evaluar para Avanzar + Evaluación interna + Innovamat,179,TRIMESTRE 1,71,3.211267605633803
+3,Matemáticas,Nivel 3,71,3,Evaluar para Avanzar + Evaluación interna + Innovamat,179,TRIMESTRE 2,71,3.0704225352112675
+3,Matemáticas,Nivel 4,15,3,Evaluar para Avanzar + Evaluación interna + Innovamat,179,TRIMESTRE 1,15,3.4
+3,Matemáticas,Nivel 4,15,3,Evaluar para Avanzar + Evaluación interna + Innovamat,179,TRIMESTRE 2,15,3.2
+3,Lenguaje,Nivel 1,47,3,Evaluar para Avanzar + Evaluación interna + Innovamat,179,TRIMESTRE 1,47,2.9574468085106385
+3,Lenguaje,Nivel 1,47,3,Evaluar para Avanzar + Evaluación interna + Innovamat,179,TRIMESTRE 2,47,2.9361702127659575
+3,Lenguaje,Nivel 2,83,3,Evaluar para Avanzar + Evaluación interna + Innovamat,179,TRIMESTRE 1,83,3.216867469879518
+3,Lenguaje,Nivel 2,83,3,Evaluar para Avanzar + Evaluación interna + Innovamat,179,TRIMESTRE 2,83,3.180722891566265
+3,Lenguaje,Nivel 3,30,3,Evaluar para Avanzar + Evaluación interna + Innovamat,179,TRIMESTRE 1,30,3.3
+3,Lenguaje,Nivel 3,30,3,Evaluar para Avanzar + Evaluación interna + Innovamat,179,TRIMESTRE 2,30,3.3
+3,Lenguaje,Nivel 4,13,3,Evaluar para Avanzar + Evaluación interna + Innovamat,179,TRIMESTRE 1,13,3.3846153846153846
+3,Lenguaje,Nivel 4,13,3,Evaluar para Avanzar + Evaluación interna + Innovamat,179,TRIMESTRE 2,13,3.4615384615384617
+4,Matemáticas,Nivel 1,17,3,Evaluar para Avanzar + Evaluación interna + Innovamat,173,TRIMESTRE 1,17,2.4705882352941178
+4,Matemáticas,Nivel 1,17,3,Evaluar para Avanzar + Evaluación interna + Innovamat,173,TRIMESTRE 2,17,2.4705882352941178
+4,Matemáticas,Nivel 2,74,3,Evaluar para Avanzar + Evaluación interna + Innovamat,173,TRIMESTRE 1,74,2.810810810810811
+4,Matemáticas,Nivel 2,74,3,Evaluar para Avanzar + Evaluación interna + Innovamat,173,TRIMESTRE 2,74,2.9594594594594597
+4,Matemáticas,Nivel 3,69,3,Evaluar para Avanzar + Evaluación interna + Innovamat,173,TRIMESTRE 1,69,2.971014492753623
+4,Matemáticas,Nivel 3,69,3,Evaluar para Avanzar + Evaluación interna + Innovamat,173,TRIMESTRE 2,69,3.130434782608696
+4,Matemáticas,Nivel 4,11,3,Evaluar para Avanzar + Evaluación interna + Innovamat,173,TRIMESTRE 1,10,3.0
+4,Matemáticas,Nivel 4,11,3,Evaluar para Avanzar + Evaluación interna + Innovamat,173,TRIMESTRE 2,11,3.727272727272727
+4,Lenguaje,Nivel 1,22,3,Evaluar para Avanzar + Evaluación interna + Innovamat,173,TRIMESTRE 1,22,2.727272727272727
+4,Lenguaje,Nivel 1,22,3,Evaluar para Avanzar + Evaluación interna + Innovamat,173,TRIMESTRE 2,22,2.6818181818181817
+4,Lenguaje,Nivel 2,62,3,Evaluar para Avanzar + Evaluación interna + Innovamat,173,TRIMESTRE 1,62,2.903225806451613
+4,Lenguaje,Nivel 2,62,3,Evaluar para Avanzar + Evaluación interna + Innovamat,173,TRIMESTRE 2,62,2.967741935483871
+4,Lenguaje,Nivel 3,54,3,Evaluar para Avanzar + Evaluación interna + Innovamat,173,TRIMESTRE 1,53,3.30188679245283
+4,Lenguaje,Nivel 3,54,3,Evaluar para Avanzar + Evaluación interna + Innovamat,173,TRIMESTRE 2,54,3.259259259259259
+4,Lenguaje,Nivel 4,28,3,Evaluar para Avanzar + Evaluación interna + Innovamat,173,TRIMESTRE 1,27,3.4444444444444446
+4,Lenguaje,Nivel 4,28,3,Evaluar para Avanzar + Evaluación interna + Innovamat,173,TRIMESTRE 2,28,3.392857142857143
+5,Matemáticas,Nivel 1,7,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,83,TRIMESTRE 1,7,2.857142857142857
+5,Matemáticas,Nivel 1,7,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,83,TRIMESTRE 2,7,3.142857142857143
+5,Matemáticas,Nivel 2,35,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,83,TRIMESTRE 1,35,3.0
+5,Matemáticas,Nivel 2,35,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,83,TRIMESTRE 2,35,3.142857142857143
+5,Matemáticas,Nivel 3,39,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,83,TRIMESTRE 1,39,3.3846153846153846
+5,Matemáticas,Nivel 3,39,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,83,TRIMESTRE 2,39,3.58974358974359
+5,Lenguaje,Nivel 1,19,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,83,TRIMESTRE 1,19,2.6842105263157894
+5,Lenguaje,Nivel 1,19,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,83,TRIMESTRE 2,19,2.8421052631578947
+5,Lenguaje,Nivel 2,37,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,83,TRIMESTRE 1,37,2.864864864864865
+5,Lenguaje,Nivel 2,37,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,83,TRIMESTRE 2,37,2.918918918918919
+5,Lenguaje,Nivel 3,21,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,83,TRIMESTRE 1,21,2.9523809523809526
+5,Lenguaje,Nivel 3,21,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,83,TRIMESTRE 2,21,3.0476190476190474
+5,Ciencias naturales,Nivel 1,8,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,83,TRIMESTRE 1,8,3.125
+5,Ciencias naturales,Nivel 1,8,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,83,TRIMESTRE 2,8,3.25
+5,Ciencias naturales,Nivel 2,33,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,83,TRIMESTRE 1,33,3.5757575757575757
+5,Ciencias naturales,Nivel 2,33,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,83,TRIMESTRE 2,33,3.484848484848485
+5,Ciencias naturales,Nivel 3,34,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,83,TRIMESTRE 1,34,3.6470588235294117
+5,Ciencias naturales,Nivel 3,34,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,83,TRIMESTRE 2,34,3.6470588235294117
+5,Ciencias naturales,Nivel 4,5,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,83,TRIMESTRE 1,5,3.6
+5,Ciencias naturales,Nivel 4,5,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,83,TRIMESTRE 2,5,3.8
+5,Ciencias sociales,Nivel 1,24,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,83,TRIMESTRE 1,24,2.75
+5,Ciencias sociales,Nivel 1,24,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,83,TRIMESTRE 2,24,2.8333333333333335
+5,Ciencias sociales,Nivel 2,28,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,83,TRIMESTRE 1,28,2.892857142857143
+5,Ciencias sociales,Nivel 2,28,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,83,TRIMESTRE 2,28,2.8214285714285716
+5,Ciencias sociales,Nivel 3,14,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,83,TRIMESTRE 1,14,3.2142857142857144
+5,Ciencias sociales,Nivel 3,14,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,83,TRIMESTRE 2,14,3.0
+6,Matemáticas,Nivel 2,8,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,50,TRIMESTRE 1,8,2.875
+6,Matemáticas,Nivel 2,8,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,50,TRIMESTRE 2,8,3.0
+6,Matemáticas,Nivel 3,25,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,50,TRIMESTRE 1,25,3.04
+6,Matemáticas,Nivel 3,25,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,50,TRIMESTRE 2,25,3.36
+6,Matemáticas,Nivel 4,13,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,50,TRIMESTRE 1,13,3.3846153846153846
+6,Matemáticas,Nivel 4,13,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,50,TRIMESTRE 2,13,3.3076923076923075
+6,Lenguaje,Nivel 1,7,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,50,TRIMESTRE 1,7,2.7142857142857144
+6,Lenguaje,Nivel 1,7,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,50,TRIMESTRE 2,7,2.857142857142857
+6,Lenguaje,Nivel 2,20,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,50,TRIMESTRE 1,20,2.9
+6,Lenguaje,Nivel 2,20,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,50,TRIMESTRE 2,20,2.6
+6,Lenguaje,Nivel 3,14,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,50,TRIMESTRE 1,14,3.2142857142857144
+6,Lenguaje,Nivel 3,14,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,50,TRIMESTRE 2,14,2.9285714285714284
+6,Lenguaje,Nivel 4,8,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,50,TRIMESTRE 1,8,3.375
+6,Lenguaje,Nivel 4,8,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,50,TRIMESTRE 2,8,3.25
+6,Ciencias naturales,Nivel 1,5,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,50,TRIMESTRE 1,5,2.8
+6,Ciencias naturales,Nivel 1,5,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,50,TRIMESTRE 2,5,3.0
+6,Ciencias naturales,Nivel 2,16,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,50,TRIMESTRE 1,16,3.4375
+6,Ciencias naturales,Nivel 2,16,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,50,TRIMESTRE 2,16,3.625
+6,Ciencias naturales,Nivel 3,20,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,50,TRIMESTRE 1,20,3.85
+6,Ciencias naturales,Nivel 3,20,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,50,TRIMESTRE 2,20,3.8
+6,Ciencias naturales,Nivel 4,8,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,50,TRIMESTRE 1,8,3.75
+6,Ciencias naturales,Nivel 4,8,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,50,TRIMESTRE 2,8,3.875
+6,Ciencias sociales,Nivel 1,12,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,50,TRIMESTRE 1,12,3.0833333333333335
+6,Ciencias sociales,Nivel 1,12,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,50,TRIMESTRE 2,12,2.9166666666666665
+6,Ciencias sociales,Nivel 2,17,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,50,TRIMESTRE 1,17,2.823529411764706
+6,Ciencias sociales,Nivel 2,17,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,50,TRIMESTRE 2,17,2.6470588235294117
+6,Ciencias sociales,Nivel 3,13,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,50,TRIMESTRE 1,13,3.1538461538461537
+6,Ciencias sociales,Nivel 3,13,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,50,TRIMESTRE 2,13,3.1538461538461537
+6,Ciencias sociales,Nivel 4,7,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,50,TRIMESTRE 1,7,3.0
+6,Ciencias sociales,Nivel 4,7,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,50,TRIMESTRE 2,7,3.2857142857142856
+7,Matemáticas,Nivel 2,11,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,58,TRIMESTRE 1,11,2.1818181818181817
+7,Matemáticas,Nivel 2,11,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,58,TRIMESTRE 2,11,2.0
+7,Matemáticas,Nivel 3,33,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,58,TRIMESTRE 1,33,2.878787878787879
+7,Matemáticas,Nivel 3,33,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,58,TRIMESTRE 2,33,2.909090909090909
+7,Matemáticas,Nivel 4,10,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,58,TRIMESTRE 1,10,3.3
+7,Matemáticas,Nivel 4,10,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,58,TRIMESTRE 2,10,3.3
+7,Lenguaje,Nivel 1,6,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,58,TRIMESTRE 1,6,3.1666666666666665
+7,Lenguaje,Nivel 1,6,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,58,TRIMESTRE 2,6,3.0
+7,Lenguaje,Nivel 2,10,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,58,TRIMESTRE 1,10,2.9
+7,Lenguaje,Nivel 2,10,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,58,TRIMESTRE 2,10,3.2
+7,Lenguaje,Nivel 3,30,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,58,TRIMESTRE 1,30,3.033333333333333
+7,Lenguaje,Nivel 3,30,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,58,TRIMESTRE 2,30,3.2
+7,Ciencias naturales,Nivel 2,13,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,58,TRIMESTRE 1,13,2.8461538461538463
+7,Ciencias naturales,Nivel 2,13,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,58,TRIMESTRE 2,13,2.769230769230769
+7,Ciencias naturales,Nivel 3,16,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,58,TRIMESTRE 1,16,2.8125
+7,Ciencias naturales,Nivel 3,16,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,58,TRIMESTRE 2,16,2.6875
+7,Ciencias naturales,Nivel 4,19,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,58,TRIMESTRE 1,19,3.1578947368421053
+7,Ciencias naturales,Nivel 4,19,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,58,TRIMESTRE 2,19,3.4210526315789473
+7,Ciencias sociales,Nivel 1,5,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,58,TRIMESTRE 1,5,2.4
+7,Ciencias sociales,Nivel 1,5,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,58,TRIMESTRE 2,5,2.6
+7,Ciencias sociales,Nivel 2,13,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,58,TRIMESTRE 1,13,2.8461538461538463
+7,Ciencias sociales,Nivel 2,13,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,58,TRIMESTRE 2,13,2.6153846153846154
+7,Ciencias sociales,Nivel 3,10,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,58,TRIMESTRE 1,10,2.8
+7,Ciencias sociales,Nivel 3,10,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,58,TRIMESTRE 2,10,2.8
+7,Ciencias sociales,Nivel 4,17,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,58,TRIMESTRE 1,17,3.176470588235294
+7,Ciencias sociales,Nivel 4,17,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,58,TRIMESTRE 2,17,3.235294117647059
+8,Matemáticas,Nivel 2,5,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,22,TRIMESTRE 1,5,2.4
+8,Matemáticas,Nivel 2,5,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,22,TRIMESTRE 2,5,2.2
+8,Matemáticas,Nivel 3,13,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,22,TRIMESTRE 1,13,2.6153846153846154
+8,Matemáticas,Nivel 3,13,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,22,TRIMESTRE 2,13,2.0
+8,Lenguaje,Nivel 2,5,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,22,TRIMESTRE 1,5,2.2
+8,Lenguaje,Nivel 2,5,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,22,TRIMESTRE 2,5,2.6
+8,Lenguaje,Nivel 3,13,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,22,TRIMESTRE 1,13,2.3076923076923075
+8,Lenguaje,Nivel 3,13,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,22,TRIMESTRE 2,13,2.923076923076923
+8,Ciencias naturales,Nivel 3,11,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,22,TRIMESTRE 1,11,2.4545454545454546
+8,Ciencias naturales,Nivel 3,11,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,22,TRIMESTRE 2,11,2.727272727272727
+8,Ciencias naturales,Nivel 4,6,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,22,TRIMESTRE 1,6,3.0
+8,Ciencias naturales,Nivel 4,6,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,22,TRIMESTRE 2,6,3.1666666666666665
+8,Ciencias sociales,Nivel 1,5,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,22,TRIMESTRE 1,5,2.6
+8,Ciencias sociales,Nivel 1,5,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,22,TRIMESTRE 2,5,2.4
+8,Ciencias sociales,Nivel 2,9,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,22,TRIMESTRE 1,9,2.888888888888889
+8,Ciencias sociales,Nivel 2,9,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,22,TRIMESTRE 2,9,2.5555555555555554
+8,Ciencias sociales,Nivel 4,5,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,22,TRIMESTRE 1,5,2.6
+8,Ciencias sociales,Nivel 4,5,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,22,TRIMESTRE 2,5,2.2
+9,Matemáticas,Nivel 3,12,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,23,TRIMESTRE 1,12,2.5833333333333335
+9,Matemáticas,Nivel 3,12,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,23,TRIMESTRE 2,12,2.4166666666666665
+9,Matemáticas,Nivel 4,7,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,23,TRIMESTRE 1,7,3.142857142857143
+9,Matemáticas,Nivel 4,7,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,23,TRIMESTRE 2,7,3.142857142857143
+9,Lenguaje,Nivel 2,5,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,23,TRIMESTRE 1,5,2.2
+9,Lenguaje,Nivel 2,5,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,23,TRIMESTRE 2,5,2.6
+9,Lenguaje,Nivel 3,14,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,23,TRIMESTRE 1,14,2.2857142857142856
+9,Lenguaje,Nivel 3,14,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,23,TRIMESTRE 2,14,2.7857142857142856
+9,Ciencias naturales,Nivel 2,10,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,23,TRIMESTRE 1,10,2.8
+9,Ciencias naturales,Nivel 2,10,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,23,TRIMESTRE 2,10,2.5
+9,Ciencias naturales,Nivel 3,12,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,23,TRIMESTRE 1,12,2.9166666666666665
+9,Ciencias naturales,Nivel 3,12,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,23,TRIMESTRE 2,12,3.0833333333333335
+9,Ciencias sociales,Nivel 2,5,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,23,TRIMESTRE 1,5,2.2
+9,Ciencias sociales,Nivel 2,5,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,23,TRIMESTRE 2,5,1.8
+9,Ciencias sociales,Nivel 3,12,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,23,TRIMESTRE 1,12,2.8333333333333335
+9,Ciencias sociales,Nivel 3,12,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,23,TRIMESTRE 2,12,2.75
+9,Ciencias sociales,Nivel 4,5,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,23,TRIMESTRE 1,5,3.8
+9,Ciencias sociales,Nivel 4,5,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,23,TRIMESTRE 2,5,3.6
+9,Inglés,Nivel 1,7,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,23,TRIMESTRE 1,7,3.142857142857143
+9,Inglés,Nivel 1,7,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,23,TRIMESTRE 2,7,3.142857142857143
+9,Inglés,Nivel 2,14,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,23,TRIMESTRE 1,14,3.0
+9,Inglés,Nivel 2,14,4,Evaluar para Avanzar + Evaluación interna + Innovamat + LATAM,23,TRIMESTRE 2,14,3.142857142857143
+10,Matemáticas,Nivel 2,19,4,Evaluar para Avanzar + Evaluación interna + LATAM + Improve,38,TRIMESTRE 1,19,2.6842105263157894
+10,Matemáticas,Nivel 2,19,4,Evaluar para Avanzar + Evaluación interna + LATAM + Improve,38,TRIMESTRE 2,19,2.8421052631578947
+10,Lenguaje,Nivel 2,17,4,Evaluar para Avanzar + Evaluación interna + LATAM + Improve,38,TRIMESTRE 1,17,2.5294117647058822
+10,Lenguaje,Nivel 2,17,4,Evaluar para Avanzar + Evaluación interna + LATAM + Improve,38,TRIMESTRE 2,17,3.0588235294117645
+10,Ciencias naturales,Nivel 2,11,4,Evaluar para Avanzar + Evaluación interna + LATAM + Improve,38,TRIMESTRE 1,11,3.1363636363636362
+10,Ciencias naturales,Nivel 2,11,4,Evaluar para Avanzar + Evaluación interna + LATAM + Improve,38,TRIMESTRE 2,11,3.0
+10,Ciencias naturales,Nivel 3,10,4,Evaluar para Avanzar + Evaluación interna + LATAM + Improve,38,TRIMESTRE 1,10,3.25
+10,Ciencias naturales,Nivel 3,10,4,Evaluar para Avanzar + Evaluación interna + LATAM + Improve,38,TRIMESTRE 2,10,3.0
+10,Ciencias sociales,Nivel 1,6,4,Evaluar para Avanzar + Evaluación interna + LATAM + Improve,38,TRIMESTRE 1,6,3.0
+10,Ciencias sociales,Nivel 1,6,4,Evaluar para Avanzar + Evaluación interna + LATAM + Improve,38,TRIMESTRE 2,6,2.8333333333333335
+10,Ciencias sociales,Nivel 2,9,4,Evaluar para Avanzar + Evaluación interna + LATAM + Improve,38,TRIMESTRE 1,9,2.888888888888889
+10,Ciencias sociales,Nivel 2,9,4,Evaluar para Avanzar + Evaluación interna + LATAM + Improve,38,TRIMESTRE 2,9,3.0
+10,Ciencias sociales,Nivel 3,8,4,Evaluar para Avanzar + Evaluación interna + LATAM + Improve,38,TRIMESTRE 1,8,3.5
+10,Ciencias sociales,Nivel 3,8,4,Evaluar para Avanzar + Evaluación interna + LATAM + Improve,38,TRIMESTRE 2,8,3.25
+10,Inglés,Nivel 2,5,4,Evaluar para Avanzar + Evaluación interna + LATAM + Improve,38,TRIMESTRE 1,5,3.0
+10,Inglés,Nivel 2,5,4,Evaluar para Avanzar + Evaluación interna + LATAM + Improve,38,TRIMESTRE 2,5,3.0
+10,Inglés,Nivel 3,16,4,Evaluar para Avanzar + Evaluación interna + LATAM + Improve,38,TRIMESTRE 1,16,3.4375
+10,Inglés,Nivel 3,16,4,Evaluar para Avanzar + Evaluación interna + LATAM + Improve,38,TRIMESTRE 2,16,3.25
+11,Matemáticas,Nivel 2,20,4,Evaluar para Avanzar + Evaluación interna + LATAM + Improve,51,TRIMESTRE 1,20,2.4
+11,Matemáticas,Nivel 2,20,4,Evaluar para Avanzar + Evaluación interna + LATAM + Improve,51,TRIMESTRE 2,20,3.15
+11,Matemáticas,Nivel 3,16,4,Evaluar para Avanzar + Evaluación interna + LATAM + Improve,51,TRIMESTRE 1,16,2.4375
+11,Matemáticas,Nivel 3,16,4,Evaluar para Avanzar + Evaluación interna + LATAM + Improve,51,TRIMESTRE 2,16,3.375
+11,Lenguaje,Nivel 2,9,4,Evaluar para Avanzar + Evaluación interna + LATAM + Improve,51,TRIMESTRE 1,9,3.111111111111111
+11,Lenguaje,Nivel 2,9,4,Evaluar para Avanzar + Evaluación interna + LATAM + Improve,51,TRIMESTRE 2,9,2.888888888888889
+11,Lenguaje,Nivel 3,16,4,Evaluar para Avanzar + Evaluación interna + LATAM + Improve,51,TRIMESTRE 1,16,2.875
+11,Lenguaje,Nivel 3,16,4,Evaluar para Avanzar + Evaluación interna + LATAM + Improve,51,TRIMESTRE 2,16,3.5625
+11,Lenguaje,Nivel 4,13,4,Evaluar para Avanzar + Evaluación interna + LATAM + Improve,51,TRIMESTRE 1,13,3.230769230769231
+11,Lenguaje,Nivel 4,13,4,Evaluar para Avanzar + Evaluación interna + LATAM + Improve,51,TRIMESTRE 2,13,3.076923076923077
+11,Ciencias naturales,Nivel 2,19,4,Evaluar para Avanzar + Evaluación interna + LATAM + Improve,51,TRIMESTRE 1,19,3.236842105263158
+11,Ciencias naturales,Nivel 2,19,4,Evaluar para Avanzar + Evaluación interna + LATAM + Improve,51,TRIMESTRE 2,19,3.1315789473684212
+11,Ciencias naturales,Nivel 3,18,4,Evaluar para Avanzar + Evaluación interna + LATAM + Improve,51,TRIMESTRE 1,18,3.0833333333333335
+11,Ciencias naturales,Nivel 3,18,4,Evaluar para Avanzar + Evaluación interna + LATAM + Improve,51,TRIMESTRE 2,18,3.2777777777777777
+11,Ciencias sociales,Nivel 2,6,4,Evaluar para Avanzar + Evaluación interna + LATAM + Improve,51,TRIMESTRE 1,6,3.0
+11,Ciencias sociales,Nivel 2,6,4,Evaluar para Avanzar + Evaluación interna + LATAM + Improve,51,TRIMESTRE 2,6,2.8333333333333335
+11,Ciencias sociales,Nivel 3,18,4,Evaluar para Avanzar + Evaluación interna + LATAM + Improve,51,TRIMESTRE 1,18,3.0555555555555554
+11,Ciencias sociales,Nivel 3,18,4,Evaluar para Avanzar + Evaluación interna + LATAM + Improve,51,TRIMESTRE 2,18,2.7777777777777777
+11,Ciencias sociales,Nivel 4,16,4,Evaluar para Avanzar + Evaluación interna + LATAM + Improve,51,TRIMESTRE 1,16,3.0
+11,Ciencias sociales,Nivel 4,16,4,Evaluar para Avanzar + Evaluación interna + LATAM + Improve,51,TRIMESTRE 2,16,3.0625
+11,Inglés,Nivel 3,18,4,Evaluar para Avanzar + Evaluación interna + LATAM + Improve,51,TRIMESTRE 1,18,3.2777777777777777
+11,Inglés,Nivel 3,18,4,Evaluar para Avanzar + Evaluación interna + LATAM + Improve,51,TRIMESTRE 2,18,3.5555555555555554
+11,Inglés,Nivel 4,16,4,Evaluar para Avanzar + Evaluación interna + LATAM + Improve,51,TRIMESTRE 1,16,3.375
+11,Inglés,Nivel 4,16,4,Evaluar para Avanzar + Evaluación interna + LATAM + Improve,51,TRIMESTRE 2,16,3.5
