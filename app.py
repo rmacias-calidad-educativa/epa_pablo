@@ -1,23 +1,11 @@
 
 from __future__ import annotations
 
-import base64
-import gzip
-import io
-import json
-from pathlib import Path
-
 import numpy as np
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 import streamlit as st
-
-from processing import (
-    build_attempt_table,
-    build_dimension_table,
-    normalize_area,
-)
 
 from config import (
     ANTIGUEDAD_SITES,
@@ -26,7 +14,6 @@ from config import (
     IMPROVE_EFA_TESTS,
     LATAM_ORDER,
     LATAM_SCORE,
-    LEGACY_LEVEL_MAP,
     LEVEL_COLORS,
     LEVEL_ORDER,
     MATH_ACTIVITY_METRICS,
