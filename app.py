@@ -416,6 +416,7 @@ def read_internal_efa_data():
 
 @st.cache_data(show_spinner=False)
 def read_student_story_profiles():
+    # Cache schema v2: perfiles con máxima cobertura de fuentes.
     path = Path("data/student_story_profiles_aggregate_2026.csv")
     data = (
         pd.read_csv(path)
@@ -424,6 +425,21 @@ def read_student_story_profiles():
     )
 
     if not data.empty:
+        required_cols = {
+            "grado_num",
+            "Prueba_filtro",
+            "Nivel_EFA_filtro",
+            "Candidatos_completos",
+            "Fuentes_maximas",
+            "Fuentes_requeridas",
+        }
+        missing = required_cols.difference(data.columns)
+        if missing:
+            raise ValueError(
+                "Historia longitudinal 10°–11° usa un archivo desactualizado. "
+                f"Faltan columnas: {sorted(missing)}"
+            )
+
         data["grado_num"] = pd.to_numeric(
             data["grado_num"], errors="coerce"
         ).astype("Int64")
@@ -431,6 +447,9 @@ def read_student_story_profiles():
         data["grado_num"] = data["grado_num"].astype(int)
         data["Candidatos_completos"] = pd.to_numeric(
             data["Candidatos_completos"], errors="coerce"
+        ).fillna(0).astype(int)
+        data["Fuentes_maximas"] = pd.to_numeric(
+            data["Fuentes_maximas"], errors="coerce"
         ).fillna(0).astype(int)
 
         for col in data.columns:
@@ -450,6 +469,7 @@ def read_student_story_profiles():
 
 @st.cache_data(show_spinner=False)
 def read_student_story_3_9():
+    # Cache schema v2: perfiles con máxima cobertura de fuentes.
     path = Path("data/student_story_3_9_aggregate_2026.csv")
     data = (
         pd.read_csv(path)
@@ -458,6 +478,23 @@ def read_student_story_3_9():
     )
 
     if not data.empty:
+        required_cols = {
+            "grado_num",
+            "Prueba_filtro",
+            "Nivel_EFA_filtro",
+            "Grupo_EFA_n",
+            "Fuentes_maximas",
+            "Fuentes_requeridas",
+            "Fuente",
+            "Resultado",
+        }
+        missing = required_cols.difference(data.columns)
+        if missing:
+            raise ValueError(
+                "Historia longitudinal 3°–9° usa un archivo desactualizado. "
+                f"Faltan columnas: {sorted(missing)}"
+            )
+
         data["grado_num"] = pd.to_numeric(
             data["grado_num"], errors="coerce"
         ).astype("Int64")
@@ -465,6 +502,9 @@ def read_student_story_3_9():
         data["grado_num"] = data["grado_num"].astype(int)
         data["Grupo_EFA_n"] = pd.to_numeric(
             data["Grupo_EFA_n"], errors="coerce"
+        ).fillna(0).astype(int)
+        data["Fuentes_maximas"] = pd.to_numeric(
+            data["Fuentes_maximas"], errors="coerce"
         ).fillna(0).astype(int)
         data["n"] = pd.to_numeric(
             data["n"], errors="coerce"
@@ -5472,9 +5512,16 @@ def render_student_story(
             delta=selected_level,
             delta_color="off",
         )
-        max_sources = int(d["Fuentes_maximas"].max())
+        max_sources = int(
+            pd.to_numeric(
+                d.get("Fuentes_maximas", pd.Series([0])),
+                errors="coerce",
+            ).fillna(0).max()
+        )
         required_sources = str(
             d["Fuentes_requeridas"].iloc[0]
+            if "Fuentes_requeridas" in d.columns
+            else "Cobertura máxima de fuentes"
         )
         k3.metric(
             "Fuentes máximas del perfil",
@@ -5793,8 +5840,18 @@ def render_student_story(
     )
     global_change = global_final - global_initial
 
-    max_sources = int(row["Fuentes_maximas"])
-    required_sources = str(row["Fuentes_requeridas"])
+    max_sources = int(
+        pd.to_numeric(
+            pd.Series([row.get("Fuentes_maximas", 0)]),
+            errors="coerce",
+        ).fillna(0).iloc[0]
+    )
+    required_sources = str(
+        row.get(
+            "Fuentes_requeridas",
+            "Cobertura máxima de fuentes",
+        )
+    )
 
     k1, k2, k3, k4, k5 = st.columns(5)
     k1.metric(
