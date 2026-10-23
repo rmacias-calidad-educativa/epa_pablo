@@ -34,11 +34,11 @@ jobs:
 
       - name: Compile Python
         run: |
-          python -m py_compile app.py views.py loaders.py processing.py config.py data_quality.py schemas.py ui.py
+          python -m py_compile app.py views.py view_utils.py view_general.py view_latam.py view_math_activity.py view_evolution.py view_improve.py view_internal.py view_story.py loaders.py processing.py config.py data_quality.py schemas.py ui.py
           python -m py_compile scripts/audit_public_data.py
 
       - name: Static undefined-name check
-        run: ruff check app.py views.py loaders.py processing.py config.py data_quality.py schemas.py ui.py --select F821
+        run: ruff check app.py views.py view_utils.py view_general.py view_latam.py view_math_activity.py view_evolution.py view_improve.py view_internal.py view_story.py loaders.py processing.py config.py data_quality.py schemas.py ui.py --select F821
 
       - name: Audit public data
         run: python scripts/audit_public_data.py
