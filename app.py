@@ -351,4 +351,5 @@ with view_story:
         student_story_3_9,
         student_story_internal,
         student_story_latam_10_11,
+        internal_efa_summary,
     )
