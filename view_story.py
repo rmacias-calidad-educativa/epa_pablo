@@ -276,6 +276,27 @@ def _render_story_overview(
         f"{int(catalog['Fuentes_maximas'].max())}",
     )
 
+    # Los filtros principales mantienen TODAS las evidencias. Este control
+    # afecta solo las gráficas, evitando decenas de paneles superpuestos.
+    plot_tests = [
+        test for test in IMPROVE_EFA_TESTS
+        if test in set(catalog["Prueba_filtro"].astype(str))
+    ]
+    plot_test = st.selectbox(
+        "Prueba que quieres visualizar en las gráficas",
+        plot_tests,
+        key="story_overview_plot_test",
+        help=(
+            "Los indicadores, el mapa de cobertura y las tablas conservan "
+            "todas las pruebas incluidas en los filtros superiores."
+        ),
+    )
+    st.caption(
+        "Las gráficas muestran una prueba EFA a la vez para facilitar la lectura. "
+        "Los datos de las demás pruebas siguen disponibles en las tablas "
+        "y puedes cambiar de prueba aquí."
+    )
+
     # Mapa de disponibilidad de fuentes por cohorte.
     evidence_parts = []
 
@@ -409,14 +430,15 @@ def _render_story_overview(
     st.markdown("### Evaluar para Avanzar · todas las cohortes")
     efa_catalog = catalog[catalog["EFA_ancla"].notna()].copy()
     if not efa_catalog.empty:
+        efa_plot = efa_catalog[
+            efa_catalog["Prueba_filtro"].astype(str) == plot_test
+        ].copy()
         fig_efa = px.scatter(
-            efa_catalog,
+            efa_plot,
             x="grado_num",
             y="EFA_ancla",
             color="Nivel_EFA_filtro",
             size="Grupo_n",
-            facet_col="Prueba_filtro",
-            facet_col_wrap=2,
             custom_data=[
                 "Grupo_n",
                 "Fuentes_maximas",
@@ -463,7 +485,7 @@ def _render_story_overview(
             )
         )
         fig_efa.update_layout(
-            height=780,
+            height=440,
             plot_bgcolor="rgba(0,0,0,0)",
             legend_title_text="Nivel EFA",
         )
@@ -523,8 +545,11 @@ def _render_story_overview(
             categories=["TRIMESTRE 1", "TRIMESTRE 2"],
             ordered=True,
         )
+        internal_plot = internal_scope[
+            internal_scope["Prueba_filtro"].astype(str) == plot_test
+        ].copy()
         fig_internal = px.line(
-            internal_scope.sort_values(
+            internal_plot.sort_values(
                 [
                     "Prueba_filtro",
                     "Nivel_EFA_filtro",
@@ -537,8 +562,6 @@ def _render_story_overview(
             color="Nivel_EFA_filtro",
             line_dash="Trimestre",
             markers=True,
-            facet_col="Prueba_filtro",
-            facet_col_wrap=2,
             custom_data=["Estudiantes"],
             category_orders={
                 "Nivel_EFA_filtro": LEVEL_ORDER,
@@ -581,7 +604,7 @@ def _render_story_overview(
             )
         )
         fig_internal.update_layout(
-            height=820,
+            height=440,
             plot_bgcolor="rgba(0,0,0,0)",
             legend_title_text="",
         )
@@ -600,13 +623,16 @@ def _render_story_overview(
         innovamat["Valor"] = pd.to_numeric(
             innovamat["Valor"], errors="coerce"
         )
+        innovamat_plot = innovamat[
+            innovamat["Prueba_filtro"].astype(str) == plot_test
+        ].copy()
         fig_innovamat = px.scatter(
-            innovamat,
+            innovamat_plot,
             x="grado_num",
             y="Valor",
             color="Nivel_EFA_filtro",
             facet_col="Resultado",
-            facet_col_wrap=3,
+            facet_col_wrap=2,
             custom_data=["n", "Prueba_filtro"],
             category_orders={
                 "Nivel_EFA_filtro": LEVEL_ORDER,
@@ -641,7 +667,7 @@ def _render_story_overview(
             )
         )
         fig_innovamat.update_layout(
-            height=760,
+            height=520,
             plot_bgcolor="rgba(0,0,0,0)",
             legend_title_text="Nivel EFA",
         )
@@ -671,14 +697,15 @@ def _render_story_overview(
         latam["Valor"] = pd.to_numeric(
             latam["Valor"], errors="coerce"
         )
+        latam_plot = latam[
+            latam["Prueba_filtro"].astype(str) == plot_test
+        ].copy()
         fig_latam = px.scatter(
-            latam,
+            latam_plot,
             x="grado_num",
             y="Valor",
             color="Nivel_EFA_filtro",
             symbol="Resultado",
-            facet_col="Prueba_filtro",
-            facet_col_wrap=2,
             custom_data=["n", "Etiqueta", "Extra"],
             category_orders={
                 "Nivel_EFA_filtro": LEVEL_ORDER,
@@ -722,7 +749,7 @@ def _render_story_overview(
             )
         )
         fig_latam.update_layout(
-            height=760,
+            height=440,
             plot_bgcolor="rgba(0,0,0,0)",
             legend_title_text="",
         )
@@ -784,8 +811,11 @@ def _render_story_overview(
             global_imp = improve_long[
                 improve_long["Resultado"] == "Global"
             ].copy()
+            global_imp_plot = global_imp[
+                global_imp["Prueba_filtro"].astype(str) == plot_test
+            ].copy()
             fig_imp = px.line(
-                global_imp.sort_values(
+                global_imp_plot.sort_values(
                     [
                         "grado_num",
                         "Prueba_filtro",
@@ -796,7 +826,6 @@ def _render_story_overview(
                 x="Momento",
                 y="Valor",
                 color="Nivel_EFA_filtro",
-                line_dash="Prueba_filtro",
                 facet_col="grado_num",
                 markers=True,
                 custom_data=["n"],
@@ -829,7 +858,7 @@ def _render_story_overview(
                 )
             )
             fig_imp.update_layout(
-                height=520,
+                height=440,
                 plot_bgcolor="rgba(0,0,0,0)",
                 legend_title_text="",
             )
