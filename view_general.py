@@ -1060,7 +1060,11 @@ def render_top10_origin_by_level(
                     margin=dict(l=12, r=35, t=55, b=15),
                     showlegend=False,
                 )
-                st.plotly_chart(fig, use_container_width=True)
+                st.plotly_chart(
+                    fig,
+                    width="stretch",
+                    key=f"origin_top10_{view_key}_{test_name}_{level}",
+                )
 
 
 def render_dimensions(
