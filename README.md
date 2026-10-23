@@ -88,6 +88,15 @@ epa_pablo/
 ├── processing.py           # cálculo base EFA
 ├── data_quality.py         # validación y control de divulgación
 ├── ui.py                   # utilidades UI reutilizables
+├── views.py                # fachada de vistas
+├── view_general.py
+├── view_latam.py
+├── view_math_activity.py
+├── view_evolution.py
+├── view_improve.py
+├── view_internal.py
+├── view_story.py
+├── view_utils.py
 ├── data/                   # agregados públicos precalculados
 ├── docs/
 │   └── METHODOLOGY.md
@@ -102,9 +111,9 @@ epa_pablo/
 └── requirements-dev.txt
 ```
 
-`app.py` sigue siendo grande y su modularización por vistas es la principal
-deuda técnica restante. La estrategia recomendada es mover una vista a la vez,
-manteniendo tests de regresión.
+`app.py` funciona ahora como una capa ligera de orquestación. La carga de
+datos está separada en `loaders.py` y las visualizaciones se dividen por
+dominio en módulos `view_*.py`.
 
 ## Calidad y privacidad
 
