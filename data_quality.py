@@ -6,16 +6,45 @@ from typing import Iterable
 import pandas as pd
 
 
-DIRECT_IDENTIFIER_TOKENS = {
+DIRECT_IDENTIFIER_EXACT = {
     "correo",
     "email",
+    "e-mail",
     "nombre",
+    "nombres",
     "apellido",
+    "apellidos",
     "documento",
+    "documentodeidentidad",
+    "numerodedocumento",
     "identiestudiante",
     "identificacion",
     "identificación",
+    "studentid",
 }
+
+DIRECT_IDENTIFIER_PREFIXES = (
+    "correoestudiante",
+    "emailestudiante",
+    "nombreestudiante",
+    "apellidoestudiante",
+    "documentoidentidad",
+    "documentodeidentidad",
+    "numeroidentificacion",
+    "numerodeidentificacion",
+    "identiestudiante",
+)
+
+
+def _normalize_column_name(value: object) -> str:
+    return (
+        str(value)
+        .strip()
+        .lower()
+        .replace("_", "")
+        .replace(" ", "")
+        .replace("-", "")
+    )
 
 
 def require_columns(
@@ -45,17 +74,28 @@ def suppress_small_groups(
 
 
 def has_direct_identifier_columns(df: pd.DataFrame) -> list[str]:
-    risky = []
+    """Detecta columnas que parecen contener identificadores individuales.
+
+    No marca métricas agregadas de cobertura de correo porque describen
+    conteos, no valores de correo.
+    """
+    risky: list[str] = []
+    exact_normalized = {
+        _normalize_column_name(x)
+        for x in DIRECT_IDENTIFIER_EXACT
+    }
+
     for col in df.columns:
-        normalized = (
-            str(col)
-            .strip()
-            .lower()
-            .replace("_", "")
-            .replace(" ", "")
-        )
-        if any(token.replace("_", "") in normalized for token in DIRECT_IDENTIFIER_TOKENS):
+        normalized = _normalize_column_name(col)
+        if (
+            normalized in exact_normalized
+            or any(
+                normalized.startswith(prefix)
+                for prefix in DIRECT_IDENTIFIER_PREFIXES
+            )
+        ):
             risky.append(str(col))
+
     return risky
 
 
