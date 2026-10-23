@@ -73,8 +73,11 @@ oficiales de desempeño del ICFES ni como puntos de corte psicométricos externo
 7. **Interna vs EFA**
 8. **Historia longitudinal**
 
-La metodología detallada de emparejamientos e interpretación está en
-[docs/METHODOLOGY.md](docs/METHODOLOGY.md).
+Documentación complementaria:
+
+- [Metodología analítica](docs/METHODOLOGY.md)
+- [Pipeline de datos](docs/DATA_PIPELINE.md)
+- [Arquitectura técnica](docs/ARCHITECTURE.md)
 
 ## Arquitectura
 
