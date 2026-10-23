@@ -53,6 +53,23 @@ st.set_page_config(
     layout="wide",
 )
 
+LOAD_ERRORS: list[str] = []
+
+
+def safe_secondary_load(
+    label: str,
+    loader,
+    outputs: int,
+):
+    try:
+        return loader()
+    except Exception as exc:
+        LOAD_ERRORS.append(f"{label}: {exc}")
+        if outputs == 1:
+            return pd.DataFrame()
+        return tuple(pd.DataFrame() for _ in range(outputs))
+
+
 st.markdown(
     """
     <style>
@@ -117,49 +134,99 @@ if uploaded is not None:
         st.error(f"No fue posible procesar el Excel: {exc}")
         st.stop()
 else:
-    (
-        attempts,
-        levels_public,
-        dimensions,
-        top10_public,
-        age_attempts,
-        age_levels_public,
-        age_dimensions,
-        age_top10_public,
-    ) = read_default_data()
+    try:
+        (
+            attempts,
+            levels_public,
+            dimensions,
+            top10_public,
+            age_attempts,
+            age_levels_public,
+            age_dimensions,
+            age_top10_public,
+        ) = read_default_data()
+    except Exception as exc:
+        st.error(
+            "No fue posible cargar la base principal de EFA. "
+            f"Detalle: {exc}"
+        )
+        st.stop()
 
     if attempts.empty:
         st.info("Carga el Excel para visualizar los resultados.")
         st.stop()
 
-latam_efa_data, latam_efa_summary = read_latam_efa_data()
-math_activity_stats, math_activity_bins, math_activity_summary = (
-    read_math_activity_data()
+latam_efa_data, latam_efa_summary = safe_secondary_load(
+    "LATAM vs EFA",
+    read_latam_efa_data,
+    2,
+)
+(
+    math_activity_stats,
+    math_activity_bins,
+    math_activity_summary,
+) = safe_secondary_load(
+    "Actividad matemática vs EFA",
+    read_math_activity_data,
+    3,
 )
 (
     evolution_summary,
     evolution_trajectory,
     evolution_availability,
     evolution_observed,
-) = read_evolution_10_11_data()
+) = safe_secondary_load(
+    "Evolución 10°–11°",
+    read_evolution_10_11_data,
+    4,
+)
 (
     improve_efa_levels,
     improve_efa_quality,
     improve_efa_growth,
-) = read_improve_efa_data()
+) = safe_secondary_load(
+    "EFA vs Improve",
+    read_improve_efa_data,
+    3,
+)
 (
     internal_efa_summary,
     internal_efa_distribution,
     internal_efa_coverage,
     internal_efa_agreement,
     internal_efa_reverse,
-) = read_internal_efa_data()
-student_story_profiles = read_student_story_profiles()
-student_story_3_9 = read_student_story_3_9()
+) = safe_secondary_load(
+    "Evaluación interna vs EFA",
+    read_internal_efa_data,
+    5,
+)
+student_story_profiles = safe_secondary_load(
+    "Historia longitudinal 10°–11°",
+    read_student_story_profiles,
+    1,
+)
+student_story_3_9 = safe_secondary_load(
+    "Historia longitudinal 3°–9°",
+    read_student_story_3_9,
+    1,
+)
 (
     student_story_internal,
     student_story_latam_10_11,
-) = read_student_story_support()
+) = safe_secondary_load(
+    "Soportes de historia longitudinal",
+    read_student_story_support,
+    2,
+)
+
+if LOAD_ERRORS:
+    st.warning(
+        "Algunas fuentes secundarias no pudieron cargarse. "
+        "Las demás vistas siguen disponibles."
+    )
+    with st.expander("Ver detalle de fuentes no disponibles"):
+        for error in LOAD_ERRORS:
+            st.write(f"• {error}")
 
 (
     view_general,
