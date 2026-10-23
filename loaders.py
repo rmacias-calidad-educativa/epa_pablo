@@ -17,12 +17,13 @@ from config import (
     TESTS,
     YEAR,
 )
-from data_quality import suppress_small_groups
+from data_quality import read_csv_validated, suppress_small_groups
 from processing import (
     build_attempt_table,
     build_dimension_table,
     normalize_area,
 )
+from schemas import SCHEMAS
 
 
 @st.cache_data(show_spinner=False)
@@ -35,15 +36,13 @@ def read_latam_efa_data():
     detail_path = Path("data/latam_efa_aggregate_2026.csv")
     summary_path = Path("data/latam_efa_match_summary_2026.csv")
 
-    detail = (
-        pd.read_csv(detail_path)
-        if detail_path.exists()
-        else pd.DataFrame()
+    detail = read_csv_validated(
+        detail_path,
+        SCHEMAS["latam_detail"],
     )
-    summary = (
-        pd.read_csv(summary_path)
-        if summary_path.exists()
-        else pd.DataFrame()
+    summary = read_csv_validated(
+        summary_path,
+        SCHEMAS["latam_summary"],
     )
 
     if not detail.empty:
@@ -74,20 +73,17 @@ def read_math_activity_data():
     bins_path = Path("data/math_activity_bins_2026.csv")
     summary_path = Path("data/math_activity_match_summary_2026.csv")
 
-    stats = (
-        pd.read_csv(stats_path)
-        if stats_path.exists()
-        else pd.DataFrame()
+    stats = read_csv_validated(
+        stats_path,
+        SCHEMAS["math_stats"],
     )
-    bins = (
-        pd.read_csv(bins_path)
-        if bins_path.exists()
-        else pd.DataFrame()
+    bins = read_csv_validated(
+        bins_path,
+        SCHEMAS["math_bins"],
     )
-    summary = (
-        pd.read_csv(summary_path)
-        if summary_path.exists()
-        else pd.DataFrame()
+    summary = read_csv_validated(
+        summary_path,
+        SCHEMAS["math_summary"],
     )
 
     for df in [stats, bins]:
@@ -116,25 +112,21 @@ def read_evolution_10_11_data():
         "data/evolucion_10_11_observado_2026.csv"
     )
 
-    summary = (
-        pd.read_csv(summary_path)
-        if summary_path.exists()
-        else pd.DataFrame()
+    summary = read_csv_validated(
+        summary_path,
+        SCHEMAS["evolution_summary"],
     )
-    trajectory = (
-        pd.read_csv(trajectory_path)
-        if trajectory_path.exists()
-        else pd.DataFrame()
+    trajectory = read_csv_validated(
+        trajectory_path,
+        SCHEMAS["evolution_trajectory"],
     )
-    availability = (
-        pd.read_csv(availability_path)
-        if availability_path.exists()
-        else pd.DataFrame()
+    availability = read_csv_validated(
+        availability_path,
+        SCHEMAS["evolution_availability"],
     )
-    observed = (
-        pd.read_csv(observed_path)
-        if observed_path.exists()
-        else pd.DataFrame()
+    observed = read_csv_validated(
+        observed_path,
+        SCHEMAS["evolution_observed"],
     )
 
     for df in [summary, trajectory, availability, observed]:
@@ -154,20 +146,17 @@ def read_improve_efa_data():
     quality_path = Path("data/improve_efa_match_quality_2026.csv")
     growth_path = Path("data/improve_growth_by_efa_level_2026.csv")
 
-    levels = (
-        pd.read_csv(levels_path)
-        if levels_path.exists()
-        else pd.DataFrame()
+    levels = read_csv_validated(
+        levels_path,
+        SCHEMAS["improve_levels"],
     )
-    quality = (
-        pd.read_csv(quality_path)
-        if quality_path.exists()
-        else pd.DataFrame()
+    quality = read_csv_validated(
+        quality_path,
+        SCHEMAS["improve_quality"],
     )
-    growth = (
-        pd.read_csv(growth_path)
-        if growth_path.exists()
-        else pd.DataFrame()
+    growth = read_csv_validated(
+        growth_path,
+        SCHEMAS["improve_growth"],
     )
 
     for df in [levels, quality, growth]:
@@ -230,30 +219,25 @@ def read_internal_efa_data():
     agreement_path = Path("data/internal_efa_agreement_2026.csv")
     reverse_path = Path("data/internal_efa_reverse_t1_t2_2026.csv")
 
-    summary = (
-        pd.read_csv(summary_path)
-        if summary_path.exists()
-        else pd.DataFrame()
+    summary = read_csv_validated(
+        summary_path,
+        SCHEMAS["internal_summary"],
     )
-    distribution = (
-        pd.read_csv(distribution_path)
-        if distribution_path.exists()
-        else pd.DataFrame()
+    distribution = read_csv_validated(
+        distribution_path,
+        SCHEMAS["internal_distribution"],
     )
-    coverage = (
-        pd.read_csv(coverage_path)
-        if coverage_path.exists()
-        else pd.DataFrame()
+    coverage = read_csv_validated(
+        coverage_path,
+        SCHEMAS["internal_coverage"],
     )
-    agreement = (
-        pd.read_csv(agreement_path)
-        if agreement_path.exists()
-        else pd.DataFrame()
+    agreement = read_csv_validated(
+        agreement_path,
+        SCHEMAS["internal_agreement"],
     )
-    reverse = (
-        pd.read_csv(reverse_path)
-        if reverse_path.exists()
-        else pd.DataFrame()
+    reverse = read_csv_validated(
+        reverse_path,
+        SCHEMAS["internal_reverse"],
     )
 
     for df in [summary, distribution, coverage, agreement, reverse]:
@@ -338,27 +322,12 @@ def read_internal_efa_data():
 def read_student_story_profiles():
     # Cache schema v2: perfiles con máxima cobertura de fuentes.
     path = Path("data/student_story_profiles_aggregate_2026.csv")
-    data = (
-        pd.read_csv(path)
-        if path.exists()
-        else pd.DataFrame()
+    data = read_csv_validated(
+        path,
+        SCHEMAS["story_profiles"],
     )
 
     if not data.empty:
-        required_cols = {
-            "grado_num",
-            "Prueba_filtro",
-            "Nivel_EFA_filtro",
-            "Candidatos_completos",
-            "Fuentes_maximas",
-            "Fuentes_requeridas",
-        }
-        missing = required_cols.difference(data.columns)
-        if missing:
-            raise ValueError(
-                "Historia longitudinal 10°–11° usa un archivo desactualizado. "
-                f"Faltan columnas: {sorted(missing)}"
-            )
 
         data["grado_num"] = pd.to_numeric(
             data["grado_num"], errors="coerce"
@@ -391,29 +360,12 @@ def read_student_story_profiles():
 def read_student_story_3_9():
     # Cache schema v2: perfiles con máxima cobertura de fuentes.
     path = Path("data/student_story_3_9_aggregate_2026.csv")
-    data = (
-        pd.read_csv(path)
-        if path.exists()
-        else pd.DataFrame()
+    data = read_csv_validated(
+        path,
+        SCHEMAS["story_3_9"],
     )
 
     if not data.empty:
-        required_cols = {
-            "grado_num",
-            "Prueba_filtro",
-            "Nivel_EFA_filtro",
-            "Grupo_EFA_n",
-            "Fuentes_maximas",
-            "Fuentes_requeridas",
-            "Fuente",
-            "Resultado",
-        }
-        missing = required_cols.difference(data.columns)
-        if missing:
-            raise ValueError(
-                "Historia longitudinal 3°–9° usa un archivo desactualizado. "
-                f"Faltan columnas: {sorted(missing)}"
-            )
 
         data["grado_num"] = pd.to_numeric(
             data["grado_num"], errors="coerce"
@@ -451,15 +403,13 @@ def read_student_story_support():
         "data/student_story_latam_10_11_max_sources_2026.csv"
     )
 
-    internal = (
-        pd.read_csv(internal_path)
-        if internal_path.exists()
-        else pd.DataFrame()
+    internal = read_csv_validated(
+        internal_path,
+        SCHEMAS["story_internal"],
     )
-    latam = (
-        pd.read_csv(latam_path)
-        if latam_path.exists()
-        else pd.DataFrame()
+    latam = read_csv_validated(
+        latam_path,
+        SCHEMAS["story_latam_10_11"],
     )
 
     for df in [internal, latam]:
