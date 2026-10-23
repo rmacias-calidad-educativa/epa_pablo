@@ -1,210 +1,193 @@
-# Dashboard de estado de llegada
+# Estado de llegada 2026
 
-Aplicación en **Streamlit** para caracterizar el estado de llegada de estudiantes a partir de una exportación de respuestas por ítem.
+Sistema analítico en **Streamlit** para integrar resultados de aprendizaje de
+Evaluar para Avanzar (EFA), evaluación interna, LATAM, actividad matemática /
+Innovamat e Improve.
 
-## Qué resuelve
+El proyecto evolucionó de un dashboard de una sola prueba hacia una herramienta
+de **triangulación y trayectoria de aprendizaje**.
 
-El dashboard permite analizar:
+## Preguntas que responde
 
-- niveles de desempeño por prueba;
-- diferencias por sede y grado;
-- curso/grupo cuando esa columna exista en la fuente;
-- porcentaje de estudiantes en niveles que requieren mayor apoyo;
-- cobertura de respuesta e ítems no observados;
-- antigüedad en BS;
-- colegio de origen;
-- perfiles individuales por estudiante;
-- auditoría del cálculo de cada intento.
+- ¿Cómo se distribuyen los estudiantes entre los cuatro niveles analíticos de EFA?
+- ¿Qué sedes y grados concentran mayor porcentaje de estudiantes en ≤50%?
+- ¿Cómo se comportan las dimensiones de cada prueba?
+- ¿Qué patrones aparecen según antigüedad y colegio de origen?
+- ¿Cómo se relacionan LATAM e Innovamat con EFA?
+- ¿Cómo cambia Improve entre aplicaciones para los mismos estudiantes?
+- ¿Qué puntaje EFA tienen estudiantes clasificados internamente como Progreso
+  limitado, Emergente, En aceleración o Avanzado?
+- ¿Cómo se ve una historia longitudinal agregada cuando se exige la máxima
+  cobertura viable de fuentes?
 
-## Regla de puntuación
+## Fuentes y aplicabilidad
 
-La puntuación se calcula como:
+EFA se organiza en cinco pruebas canónicas:
 
-`Aciertos / ítems esperados × 100`
+| Prueba | Grados |
+|---|---|
+| Matemáticas | 3°–11° |
+| Lenguaje | 3°–11° |
+| Ciencias naturales | 5°–11° |
+| Ciencias sociales | 5°–11° |
+| Inglés | 9°–11° |
 
-**No** se divide por el número de filas observadas.
+NIZA está excluida de la versión actual del análisis.
 
-Esto es importante porque en la fuente una pregunta sin respuesta puede no aparecer. Por ejemplo, 8 aciertos con solo 10 preguntas observadas en una prueba de 20 ítems produce **40%**, no 80%.
+## Regla de puntuación EFA
 
-### Ítems esperados
+```
+Puntaje = Aciertos / Ítems esperados × 100
+```
 
-| Prueba | Grado | Ítems |
+No se divide por el número de filas observadas. Una respuesta faltante puede no
+existir como fila en la exportación, por lo que el denominador esperado protege
+contra inflación artificial del puntaje.
+
+| Prueba | Grado | Ítems esperados |
 |---|---:|---:|
 | Todas excepto Inglés | todos | 20 |
-| Inglés | 9° | 22 |
-| Inglés | 10° | 22 |
+| Inglés | 9°–10° | 22 |
 | Inglés | 11° | 25 |
 
-### Niveles de desempeño
+## Niveles analíticos
 
-| Rango | Nivel |
+| Banda | Rango |
 |---|---|
-| 0% a 25% | Progreso limitado |
-| >25% a 50% | Emergente |
-| >50% a 75% | En aceleración |
-| >75% a 100% | Avanzado |
+| Nivel 1 | 0–25% |
+| Nivel 2 | >25–50% |
+| Nivel 3 | >50–75% |
+| Nivel 4 | >75–100% |
 
-## Columnas esperadas
+Estas bandas son **internas y descriptivas**. No deben presentarse como niveles
+oficiales de desempeño del ICFES ni como puntos de corte psicométricos externos.
 
-Obligatorias:
+## Vistas principales
 
-- `AttemptId`
-- `Sede`
-- `Grado`
-- `IdentiEstudiante`
-- `Nombre`
-- `Apellido`
-- `QuizName`
-- `Pregunta`
-- `IsCorrect`
+1. **Análisis general**
+2. **Análisis por antigüedad ≤1 año**
+3. **LATAM vs Evaluar para Avanzar**
+4. **Actividad matemática vs EFA**
+5. **Evolución 10°–11°**
+6. **EFA vs Improve**
+7. **Interna vs EFA**
+8. **Historia longitudinal**
 
-Opcionales aprovechadas por el dashboard:
+La metodología detallada de emparejamientos e interpretación está en
+[docs/METHODOLOGY.md](docs/METHODOLOGY.md).
 
-- `AntiguedadBS`
-- `edad_estudiante`
-- `colegio_de_origen`
-- `TimeCompleted`
-- `Curso`, `Grupo`, `Salón` o equivalentes
+## Arquitectura
 
-## Uso local
-
-```bash
-python -m venv .venv
+```text
+epa_pablo/
+├── app.py                  # navegación y vistas Streamlit
+├── config.py               # configuración única del proyecto
+├── processing.py           # cálculo base EFA
+├── data_quality.py         # validación y control de divulgación
+├── ui.py                   # utilidades UI reutilizables
+├── data/                   # agregados públicos precalculados
+├── docs/
+│   └── METHODOLOGY.md
+├── scripts/
+│   └── audit_public_data.py
+├── tests/
+│   ├── test_processing.py
+│   └── test_public_data.py
+├── .github/workflows/
+│   └── ci.yml
+├── requirements.txt
+└── requirements-dev.txt
 ```
 
-Windows:
+`app.py` sigue siendo grande y su modularización por vistas es la principal
+deuda técnica restante. La estrategia recomendada es mover una vista a la vez,
+manteniendo tests de regresión.
+
+## Calidad y privacidad
+
+El repositorio contiene agregados precalculados para permitir una demo sin subir
+bases originales con datos personales.
+
+Reglas:
+
+- no publicar nombres, correos, documentos o identificadores individuales;
+- las historias longitudinales exigen al menos 5 estudiantes;
+- las vistas sensibles suprimen grupos pequeños cuando es posible sin alterar
+  denominadores;
+- ejecutar auditoría de datos antes de cada despliegue.
+
+Auditoría:
 
 ```bash
-.venv\Scripts\activate
+python scripts/audit_public_data.py
 ```
 
-macOS/Linux:
+Modo estricto para detectar cualquier celda con n<5:
 
 ```bash
-source .venv/bin/activate
+python scripts/audit_public_data.py --strict-small-cells
 ```
 
-Instala dependencias:
+**Nota de gobierno:** el repositorio es actualmente público. Los agregados
+históricos que contengan celdas pequeñas pueden persistir en el historial Git
+aunque se eliminen de la rama actual. Para una operación institucional se
+recomienda repositorio privado o una limpieza explícita del historial antes de
+publicar una versión abierta.
+
+## Pruebas automáticas
+
+Instala dependencias de desarrollo:
 
 ```bash
-pip install -r requirements.txt
+pip install -r requirements-dev.txt
 ```
 
 Ejecuta:
 
 ```bash
+pytest -q
+python scripts/audit_public_data.py
+```
+
+GitHub Actions ejecuta automáticamente:
+
+- compilación de Python;
+- auditoría de CSV públicos;
+- tests de cálculo EFA;
+- tests de privacidad/esquema;
+
+en Python 3.12, 3.13 y 3.14.
+
+## Despliegue
+
+```bash
+pip install -r requirements.txt
 streamlit run app.py
 ```
 
-## Despliegue en Streamlit Community Cloud
+En Streamlit Community Cloud, selecciona explícitamente la misma versión de
+Python utilizada para validar el proyecto. La versión de Python se configura en
+**Advanced settings** al desplegar.
 
-1. Sube este proyecto a un repositorio de GitHub.
-2. En Streamlit Community Cloud crea una nueva app.
-3. Selecciona el repositorio.
-4. Define `app.py` como archivo principal.
-5. Despliega.
+## Principios de interpretación
 
-La app solicita el Excel mediante un cargador, por lo que **no es necesario subir al repositorio la base con datos personales**.
+El dashboard es adecuado para:
 
-## Privacidad
+- revisión académica;
+- generación de hipótesis;
+- identificación de grupos que requieren apoyo;
+- contraste entre instrumentos;
+- seguimiento longitudinal agregado.
 
-El `.gitignore` excluye archivos Excel y el contenido de `data/`. Mantén las bases con nombres, identificaciones y colegios de origen fuera del repositorio público.
+No debe utilizarse por sí solo para:
 
-## Estructura
+- inferir causalidad;
+- evaluar el desempeño docente;
+- clasificar formalmente estudiantes;
+- tomar decisiones individuales de alto impacto.
 
-```text
-dashboard_estado_llegada/
-├── app.py
-├── requirements.txt
-├── README.md
-├── .gitignore
-├── data/
-│   └── .gitkeep
-└── src/
-    ├── __init__.py
-    ├── processing.py
-    └── ui.py
-```
+## Estado del proyecto
 
-
-## Lecturas principales del dashboard
-
-La versión actual prioriza dos preguntas de negocio educativo:
-
-1. **¿Cuántos estudiantes están en ≤50% y cuántos en >50% en cada sede y prueba?**
-   - Matriz con las seis sedes siempre visibles.
-   - Filtros por año y grado.
-   - Conteos dentro de cada celda.
-   - Histórico anual por prueba y sede.
-
-2. **¿Existen patrones relacionados con el colegio de origen?**
-   - Distribución por los cuatro niveles de desempeño.
-   - Comparación colegio de origen × área.
-   - Diferencia del %≤50 frente al promedio de la red.
-   - Porcentaje de estudiantes con dos o más pruebas en ≤50%.
-   - Identificación descriptiva de patrones recurrentes en varias áreas.
-
-Los patrones son **descriptivos, no causales**, y deben interpretarse junto con el número de estudiantes representados.
-
-### Nota sobre años disponibles
-
-La fuente actual contiene registros de 2025 y 2026, pero 2025 tiene una cantidad muy reducida de observaciones frente a 2026. La aplicación muestra una advertencia cuando se consulta ese periodo.
-
-
-## Taxonomía de pruebas
-
-Para la visualización analítica, los nombres de prueba se homogeneizan y el grado se trata como una dimensión independiente:
-
-- **Ciencias naturales**: agrupa los registros etiquetados como Ciencias.
-- **Ciencias sociales**: agrupa Competencias ciudadanas, Pensamiento ciudadano y Sociales y ciudadanas.
-- **Matemáticas**: agrupa todas las pruebas de Matemáticas.
-- **Lenguaje**: agrupa todas las pruebas de Lenguaje.
-
-El grado no aparece dentro del rótulo de la prueba. Por ejemplo, `MATEMÁTICAS 7°` se visualiza como **Matemáticas**, mientras el grado 7° aparece en el eje correspondiente.
-
-La visual principal es una gráfica de líneas donde:
-- eje X = grado;
-- eje Y = número de estudiantes con ≤50% de aciertos;
-- cada línea = una de las seis sedes/colegios;
-- filtro = una prueba a la vez, con opción de año;
-- tooltip = estudiantes ≤50%, estudiantes >50%, total y porcentaje ≤50%.
-
-
-## Lectura de niveles y contraste con la red
-
-En cada una de las cinco hojas se hace explícita la equivalencia:
-
-- **≤50% = Progreso limitado + Emergente**
-- **>50% = En aceleración + Avanzado**
-
-Después de la gráfica principal se presenta una barra 100% apilada para cada sede con los cuatro niveles de desempeño:
-
-1. Progreso limitado
-2. Emergente
-3. En aceleración
-4. Avanzado
-
-Cada sede se contrasta con una barra adicional denominada **RED**, que representa el comportamiento conjunto de las seis sedes para los mismos grados seleccionados. También se muestra la diferencia en puntos porcentuales de cada nivel frente a la RED.
-
-## Dimensiones de evaluación
-
-Al final de cada hoja se presenta el comportamiento de las dimensiones/competencias de evaluación a través de los grados. El usuario puede alternar entre:
-
-- **RED**, que combina las seis sedes;
-- una sede específica.
-
-Las cifras sobre los puntos corresponden al porcentaje promedio de acierto de la dimensión.
-
-Para evitar que las omisiones de respuesta inflen artificialmente el porcentaje, el denominador esperado de una dimensión se estima como el máximo número de ítems observados para esa dimensión dentro de la misma prueba original.
-
-En **Inglés**, los valores `Pre A1`, `A1`, `A2` y `B1` no se presentan como dimensiones porque corresponden a niveles de dominio y no a dimensiones de evaluación.
-
-## Datos públicos precargados
-
-El repositorio incluye resúmenes agregados y anonimizados de **2026** para:
-
-- estudiantes ≤50% y >50% por sede, grado y prueba;
-- distribución de los cuatro niveles de desempeño;
-- desempeño por dimensión de evaluación.
-
-Estos archivos no contienen nombres ni identificaciones individuales.
+La versión actual debe entenderse como un **piloto institucional avanzado**.
+El foco de evolución ya no es agregar más visualizaciones, sino mejorar
+reproducibilidad, automatización del pipeline, privacidad y modularidad.
