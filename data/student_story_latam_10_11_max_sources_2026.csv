@@ -1,0 +1,34 @@
+grado_num,Prueba_filtro,Nivel_EFA_filtro,Grupo_EFA_n,Fuentes_maximas,Fuentes_requeridas,Candidatos_max_fuentes,Fuente,Momento,Resultado,n,Valor,Escala_max,Etiqueta,Extra
+10,Matemáticas,Nivel 2,19,4,Evaluar para Avanzar + Evaluación interna + LATAM + Improve,38,LATAM,Histórico,Lenguaje,19,1,4,Inicio,36.8421052631579
+10,Lenguaje,Nivel 2,17,4,Evaluar para Avanzar + Evaluación interna + LATAM + Improve,38,LATAM,Histórico,Lenguaje,17,1,4,Inicio,41.1764705882353
+10,Ciencias naturales,Nivel 2,11,4,Evaluar para Avanzar + Evaluación interna + LATAM + Improve,38,LATAM,Histórico,Lenguaje,11,2,4,Básico,36.36363636363637
+10,Ciencias naturales,Nivel 3,10,4,Evaluar para Avanzar + Evaluación interna + LATAM + Improve,38,LATAM,Histórico,Lenguaje,10,4,4,Avanzado,50.0
+10,Ciencias sociales,Nivel 1,6,4,Evaluar para Avanzar + Evaluación interna + LATAM + Improve,38,LATAM,Histórico,Lenguaje,6,1,4,Inicio,83.33333333333333
+10,Ciencias sociales,Nivel 2,9,4,Evaluar para Avanzar + Evaluación interna + LATAM + Improve,38,LATAM,Histórico,Lenguaje,9,2,4,Básico,33.333333333333336
+10,Ciencias sociales,Nivel 3,8,4,Evaluar para Avanzar + Evaluación interna + LATAM + Improve,38,LATAM,Histórico,Lenguaje,8,3,4,Satisfactorio,37.5
+10,Inglés,Nivel 2,5,4,Evaluar para Avanzar + Evaluación interna + LATAM + Improve,38,LATAM,Histórico,Lenguaje,5,2,4,Básico,40.0
+10,Inglés,Nivel 3,16,4,Evaluar para Avanzar + Evaluación interna + LATAM + Improve,38,LATAM,Histórico,Lenguaje,16,1,4,Inicio,31.25
+11,Matemáticas,Nivel 2,20,4,Evaluar para Avanzar + Evaluación interna + LATAM + Improve,51,LATAM,Histórico,Lenguaje,19,3,4,Satisfactorio,36.8421052631579
+11,Matemáticas,Nivel 2,20,4,Evaluar para Avanzar + Evaluación interna + LATAM + Improve,51,LATAM,Histórico,Matemáticas,20,1,4,Inicio,55.0
+11,Matemáticas,Nivel 3,16,4,Evaluar para Avanzar + Evaluación interna + LATAM + Improve,51,LATAM,Histórico,Lenguaje,15,4,4,Avanzado,46.666666666666664
+11,Matemáticas,Nivel 3,16,4,Evaluar para Avanzar + Evaluación interna + LATAM + Improve,51,LATAM,Histórico,Matemáticas,15,3,4,Satisfactorio,40.0
+11,Lenguaje,Nivel 2,9,4,Evaluar para Avanzar + Evaluación interna + LATAM + Improve,51,LATAM,Histórico,Lenguaje,9,3,4,Satisfactorio,55.55555555555556
+11,Lenguaje,Nivel 2,9,4,Evaluar para Avanzar + Evaluación interna + LATAM + Improve,51,LATAM,Histórico,Matemáticas,9,1,4,Inicio,55.55555555555556
+11,Lenguaje,Nivel 3,16,4,Evaluar para Avanzar + Evaluación interna + LATAM + Improve,51,LATAM,Histórico,Lenguaje,14,4,4,Avanzado,57.142857142857146
+11,Lenguaje,Nivel 3,16,4,Evaluar para Avanzar + Evaluación interna + LATAM + Improve,51,LATAM,Histórico,Matemáticas,16,1,4,Inicio,37.5
+11,Lenguaje,Nivel 4,13,4,Evaluar para Avanzar + Evaluación interna + LATAM + Improve,51,LATAM,Histórico,Lenguaje,13,4,4,Avanzado,38.46153846153846
+11,Lenguaje,Nivel 4,13,4,Evaluar para Avanzar + Evaluación interna + LATAM + Improve,51,LATAM,Histórico,Matemáticas,12,1,4,Inicio,58.333333333333336
+11,Ciencias naturales,Nivel 2,19,4,Evaluar para Avanzar + Evaluación interna + LATAM + Improve,51,LATAM,Histórico,Lenguaje,17,3,4,Satisfactorio,35.294117647058826
+11,Ciencias naturales,Nivel 2,19,4,Evaluar para Avanzar + Evaluación interna + LATAM + Improve,51,LATAM,Histórico,Matemáticas,19,1,4,Inicio,57.89473684210526
+11,Ciencias naturales,Nivel 3,18,4,Evaluar para Avanzar + Evaluación interna + LATAM + Improve,51,LATAM,Histórico,Lenguaje,18,4,4,Avanzado,38.888888888888886
+11,Ciencias naturales,Nivel 3,18,4,Evaluar para Avanzar + Evaluación interna + LATAM + Improve,51,LATAM,Histórico,Matemáticas,17,3,4,Satisfactorio,47.05882352941177
+11,Ciencias sociales,Nivel 2,6,4,Evaluar para Avanzar + Evaluación interna + LATAM + Improve,51,LATAM,Histórico,Lenguaje,6,2,4,Básico,50.0
+11,Ciencias sociales,Nivel 2,6,4,Evaluar para Avanzar + Evaluación interna + LATAM + Improve,51,LATAM,Histórico,Matemáticas,6,1,4,Inicio,66.66666666666667
+11,Ciencias sociales,Nivel 3,18,4,Evaluar para Avanzar + Evaluación interna + LATAM + Improve,51,LATAM,Histórico,Lenguaje,17,4,4,Avanzado,41.1764705882353
+11,Ciencias sociales,Nivel 3,18,4,Evaluar para Avanzar + Evaluación interna + LATAM + Improve,51,LATAM,Histórico,Matemáticas,18,3,4,Satisfactorio,33.333333333333336
+11,Ciencias sociales,Nivel 4,16,4,Evaluar para Avanzar + Evaluación interna + LATAM + Improve,51,LATAM,Histórico,Lenguaje,15,4,4,Avanzado,46.666666666666664
+11,Ciencias sociales,Nivel 4,16,4,Evaluar para Avanzar + Evaluación interna + LATAM + Improve,51,LATAM,Histórico,Matemáticas,15,1,4,Inicio,53.333333333333336
+11,Inglés,Nivel 3,18,4,Evaluar para Avanzar + Evaluación interna + LATAM + Improve,51,LATAM,Histórico,Lenguaje,16,4,4,Avanzado,50.0
+11,Inglés,Nivel 3,18,4,Evaluar para Avanzar + Evaluación interna + LATAM + Improve,51,LATAM,Histórico,Matemáticas,18,2,4,Básico,33.333333333333336
+11,Inglés,Nivel 4,16,4,Evaluar para Avanzar + Evaluación interna + LATAM + Improve,51,LATAM,Histórico,Lenguaje,16,4,4,Avanzado,37.5
+11,Inglés,Nivel 4,16,4,Evaluar para Avanzar + Evaluación interna + LATAM + Improve,51,LATAM,Histórico,Matemáticas,15,1,4,Inicio,53.333333333333336
