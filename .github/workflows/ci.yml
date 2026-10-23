@@ -34,7 +34,7 @@ jobs:
 
       - name: Compile Python
         run: |
-          python -m py_compile app.py processing.py config.py data_quality.py ui.py
+          python -m py_compile app.py loaders.py processing.py config.py data_quality.py ui.py
           python -m py_compile scripts/audit_public_data.py
 
       - name: Audit public data
