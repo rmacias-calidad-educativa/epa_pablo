@@ -917,6 +917,7 @@ def render_student_story(
     profiles_3_9: pd.DataFrame,
     story_internal: pd.DataFrame,
     story_latam_10_11: pd.DataFrame,
+    internal_efa_summary: pd.DataFrame = None,
 ):
     st.markdown("## Historia de un perfil representativo")
     st.caption(
@@ -1356,8 +1357,100 @@ def render_student_story(
     ].copy()
 
     if d.empty:
-        st.warning(
-            "No hay un grupo con recorrido completo para esta combinación."
+        st.info(
+            "Esta combinación no tiene un perfil con todas las fuentes "
+            "emparejadas. Se muestran las evidencias parciales observadas, "
+            "sin atribuir resultados de grupos distintos a un mismo estudiante."
+        )
+        partial = (
+            internal_efa_summary.copy()
+            if internal_efa_summary is not None
+            else pd.DataFrame()
+        )
+        if not partial.empty:
+            partial = partial[
+                (pd.to_numeric(partial["Grado_num"], errors="coerce") == selected_grade)
+                & (partial["Prueba"].astype(str) == selected_test)
+                & (partial["Nivel_EFA"].astype(str) == selected_level)
+                & (partial["Trimestre"].astype(str).isin(
+                    ["TRIMESTRE 1", "TRIMESTRE 2"]
+                ))
+            ].copy()
+        if not partial.empty:
+            partial["Promedio_EFA"] = pd.to_numeric(
+                partial["Promedio_EFA"], errors="coerce"
+            )
+            partial["Promedio_interno"] = pd.to_numeric(
+                partial["Promedio_interno"], errors="coerce"
+            )
+            st.markdown("### Evidencia disponible · EFA y evaluación interna")
+            st.caption(
+                "Estos promedios provienen de estudiantes emparejados entre "
+                "EFA y evaluación interna para cada trimestre. No necesariamente "
+                "son los mismos estudiantes en T1 y T2."
+            )
+            c1, c2 = st.columns(2)
+            c1.metric(
+                "EFA promedio observado",
+                f"{partial['Promedio_EFA'].mean():.1f}%",
+            )
+            c2.metric(
+                "Trimestres disponibles",
+                str(partial["Trimestre"].nunique()),
+            )
+            fig = px.bar(
+                partial.sort_values("Trimestre"),
+                x="Trimestre",
+                y="Promedio_interno",
+                text="Promedio_interno",
+                custom_data=["Estudiantes", "Promedio_EFA"],
+                title="Evaluación interna observada · T1 y T2",
+            )
+            fig.update_traces(
+                texttemplate="%{y:.2f}",
+                textposition="outside",
+                hovertemplate=(
+                    "Trimestre: %{x}<br>Nivel promedio: %{y:.2f}"
+                    "<br>Estudiantes emparejados: %{customdata[0]}"
+                    "<br>Promedio EFA: %{customdata[1]:.1f}%"
+                    "<extra></extra>"
+                ),
+            )
+            fig.update_yaxes(
+                range=[0, 4.3],
+                title="Nivel interno promedio (1–4)",
+            )
+            fig.update_layout(
+                height=410,
+                plot_bgcolor="rgba(0,0,0,0)",
+                showlegend=False,
+            )
+            st.plotly_chart(
+                fig, use_container_width=True,
+                key="story_partial_internal",
+            )
+            st.dataframe(
+                partial[[
+                    "Trimestre", "Estudiantes",
+                    "Promedio_EFA", "Promedio_interno",
+                ]].rename(columns={
+                    "Estudiantes": "Estudiantes emparejados",
+                    "Promedio_EFA": "EFA promedio (%)",
+                    "Promedio_interno": "Nivel interno promedio",
+                }),
+                use_container_width=True,
+                hide_index=True,
+            )
+        else:
+            st.warning(
+                "No hay registros emparejados de EFA y evaluación interna "
+                "para esta combinación en la base agregada actual."
+            )
+        st.caption(
+            "Para identificar al estudiante con la mayor cantidad de "
+            "evidencias individuales, es necesario regenerar el archivo "
+            "de perfiles desde los registros por estudiante, incluyendo "
+            "recorridos incompletos. No se inventan ni mezclan historias."
         )
         return
 
