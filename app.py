@@ -483,6 +483,56 @@ def read_student_story_3_9():
 
 
 @st.cache_data(show_spinner=False)
+def read_student_story_support():
+    internal_path = Path(
+        "data/student_story_internal_max_sources_2026.csv"
+    )
+    latam_path = Path(
+        "data/student_story_latam_10_11_max_sources_2026.csv"
+    )
+
+    internal = (
+        pd.read_csv(internal_path)
+        if internal_path.exists()
+        else pd.DataFrame()
+    )
+    latam = (
+        pd.read_csv(latam_path)
+        if latam_path.exists()
+        else pd.DataFrame()
+    )
+
+    for df in [internal, latam]:
+        if not df.empty:
+            df["grado_num"] = pd.to_numeric(
+                df["grado_num"], errors="coerce"
+            ).astype("Int64")
+            df.dropna(subset=["grado_num"], inplace=True)
+            df["grado_num"] = df["grado_num"].astype(int)
+
+    if not internal.empty:
+        internal["Estudiantes"] = pd.to_numeric(
+            internal["Estudiantes"], errors="coerce"
+        ).fillna(0).astype(int)
+        internal["Promedio_interno"] = pd.to_numeric(
+            internal["Promedio_interno"], errors="coerce"
+        )
+
+    if not latam.empty:
+        latam["n"] = pd.to_numeric(
+            latam["n"], errors="coerce"
+        ).fillna(0).astype(int)
+        latam["Valor"] = pd.to_numeric(
+            latam["Valor"], errors="coerce"
+        )
+        latam["Extra"] = pd.to_numeric(
+            latam["Extra"], errors="coerce"
+        )
+
+    return internal, latam
+
+
+@st.cache_data(show_spinner=False)
 def process_raw(raw: pd.DataFrame):
     attempts = build_attempt_table(raw)
     attempts["Prueba"] = attempts["QuizName"].apply(normalize_area)
@@ -5212,19 +5262,25 @@ def _story_level_from_pct(value) -> str:
 
 
 def _render_internal_story(
-    internal_summary: pd.DataFrame,
+    story_internal: pd.DataFrame,
     grade: int,
     test: str,
     level: str,
     key: str,
 ):
-    if internal_summary is None or internal_summary.empty:
+    if story_internal is None or story_internal.empty:
         return
 
-    d = internal_summary[
-        (internal_summary["Grado_num"] == grade)
-        & (internal_summary["Prueba"].astype(str) == test)
-        & (internal_summary["Nivel_EFA"].astype(str) == level)
+    d = story_internal[
+        (story_internal["grado_num"] == grade)
+        & (
+            story_internal["Prueba_filtro"].astype(str)
+            == test
+        )
+        & (
+            story_internal["Nivel_EFA_filtro"].astype(str)
+            == level
+        )
     ].copy()
 
     if d.empty:
@@ -5241,7 +5297,9 @@ def _render_internal_story(
     )
     d = d.sort_values("Trimestre")
 
-    st.markdown("### Evaluación interna · trayectoria durante el año")
+    st.markdown(
+        "### Evaluación interna · misma cohorte de máxima cobertura"
+    )
     fig = px.line(
         d,
         x="Trimestre",
@@ -5253,7 +5311,7 @@ def _render_internal_story(
         custom_data=["Estudiantes"],
         category_orders={"Trimestre": trim_order},
         title=(
-            f"Desempeño interno de estudiantes en {level} de {test}"
+            f"Desempeño interno · {level} de {test} · T1 → T2"
         ),
     )
     fig.update_yaxes(
@@ -5293,7 +5351,8 @@ def _render_internal_story(
 def render_student_story(
     profiles: pd.DataFrame,
     profiles_3_9: pd.DataFrame,
-    internal_summary: pd.DataFrame,
+    story_internal: pd.DataFrame,
+    story_latam_10_11: pd.DataFrame,
 ):
     st.markdown("## Historia de un perfil representativo")
     st.caption(
@@ -5308,10 +5367,10 @@ def render_student_story(
         return
 
     st.info(
-        "La vista trabaja con perfiles agregados de grupos de al menos "
-        "5 estudiantes. De 3° a 9° se muestran EFA, Innovamat y LATAM "
-        "cuando existe emparejamiento suficiente, sin Improve. "
-        "En 10° y 11° se conserva además la trayectoria de Improve."
+        "La vista incluye únicamente estudiantes con la máxima cantidad "
+        "viable de fuentes para su grado. Se exige un mínimo de 5 estudiantes "
+        "para sostener una combinación. Así evitamos construir historias a "
+        "partir de casos aislados y priorizamos los recorridos más completos."
     )
 
     grades = sorted(
@@ -5413,15 +5472,19 @@ def render_student_story(
             delta=selected_level,
             delta_color="off",
         )
-        sources = [
-            src
-            for src in ["Evaluar para Avanzar", "Innovamat", "LATAM"]
-            if src in set(d["Fuente"].astype(str))
-        ]
+        max_sources = int(d["Fuentes_maximas"].max())
+        required_sources = str(
+            d["Fuentes_requeridas"].iloc[0]
+        )
         k3.metric(
-            "Fuentes disponibles",
-            f"{len(sources)}",
-            help=", ".join(sources),
+            "Fuentes máximas del perfil",
+            f"{max_sources}",
+            help=required_sources,
+        )
+        st.caption(
+            f"**Criterio de inclusión:** {required_sources}. "
+            f"Solo se usan estudiantes que cumplen esta cobertura máxima "
+            f"viable para {selected_grade}°."
         )
 
         st.markdown("### 1. Perfil en Evaluar para Avanzar")
@@ -5484,7 +5547,7 @@ def render_student_story(
             )
 
         _render_internal_story(
-            internal_summary,
+            story_internal,
             selected_grade,
             selected_test,
             selected_level,
@@ -5730,29 +5793,42 @@ def render_student_story(
     )
     global_change = global_final - global_initial
 
-    k1, k2, k3, k4 = st.columns(4)
+    max_sources = int(row["Fuentes_maximas"])
+    required_sources = str(row["Fuentes_requeridas"])
+
+    k1, k2, k3, k4, k5 = st.columns(5)
     k1.metric(
         "Grupo con recorrido completo",
         f"{group_n}",
         help=(
-            "Número de estudiantes usados para construir este perfil "
-            "representativo."
+            "Estudiantes con máxima cobertura de fuentes y recorrido "
+            "completo para construir este perfil."
         ),
     )
     k2.metric(
+        "Fuentes máximas",
+        f"{max_sources}",
+        help=required_sources,
+    )
+    k3.metric(
         f"EFA · {selected_test}",
         f"{anchor_score:.1f}%",
         delta=selected_level,
         delta_color="off",
     )
-    k3.metric(
+    k4.metric(
         "Improve global · inicio",
         f"{global_initial:.1f}",
     )
-    k4.metric(
+    k5.metric(
         f"Improve global · {final_label.lower()}",
         f"{global_final:.1f}",
         delta=f"{global_change:+.1f}",
+    )
+    st.caption(
+        f"**Criterio de inclusión:** {required_sources}. "
+        f"Solo se usan estudiantes con esta cobertura máxima viable "
+        f"para {selected_grade}°."
     )
 
     st.markdown("### 1. El perfil en Evaluar para Avanzar")
@@ -5822,12 +5898,78 @@ def render_student_story(
         )
 
     _render_internal_story(
-        internal_summary,
+        story_internal,
         selected_grade,
         selected_test,
         selected_level,
         "story_internal_10_11",
     )
+
+    latam_story = story_latam_10_11[
+        (story_latam_10_11["grado_num"] == selected_grade)
+        & (
+            story_latam_10_11["Prueba_filtro"].astype(str)
+            == selected_test
+        )
+        & (
+            story_latam_10_11["Nivel_EFA_filtro"].astype(str)
+            == selected_level
+        )
+    ].copy() if (
+        story_latam_10_11 is not None
+        and not story_latam_10_11.empty
+    ) else pd.DataFrame()
+
+    if not latam_story.empty:
+        st.markdown("### LATAM · misma cohorte de máxima cobertura")
+        latam_order = ["Matemáticas", "Lenguaje"]
+        latam_story["Resultado"] = pd.Categorical(
+            latam_story["Resultado"],
+            categories=latam_order,
+            ordered=True,
+        )
+        latam_story = latam_story.sort_values("Resultado")
+        fig_latam_story = px.bar(
+            latam_story,
+            x="Resultado",
+            y="Valor",
+            text="Etiqueta",
+            custom_data=["n", "Extra"],
+            category_orders={"Resultado": latam_order},
+            title="Nivel LATAM predominante del mismo grupo",
+        )
+        fig_latam_story.update_yaxes(
+            range=[0, 4.5],
+            title="Nivel LATAM (1–4)",
+            tickmode="array",
+            tickvals=[1, 2, 3, 4],
+            ticktext=[
+                "Inicio",
+                "Básico",
+                "Satisfactorio",
+                "Avanzado",
+            ],
+        )
+        fig_latam_story.update_traces(
+            textposition="outside",
+            cliponaxis=False,
+            hovertemplate=(
+                "Área: %{x}<br>"
+                "Nivel predominante: %{text}<br>"
+                "n: %{customdata[0]}<br>"
+                "Proporción: %{customdata[1]:.1f}%"
+                "<extra></extra>"
+            ),
+        )
+        fig_latam_story.update_layout(
+            height=420,
+            plot_bgcolor="rgba(0,0,0,0)",
+        )
+        st.plotly_chart(
+            fig_latam_story,
+            use_container_width=True,
+            key="story_latam_10_11",
+        )
 
     st.markdown("### 2. La trayectoria global en Improve")
 
@@ -6100,6 +6242,10 @@ math_activity_stats, math_activity_bins, math_activity_summary = (
 ) = read_internal_efa_data()
 student_story_profiles = read_student_story_profiles()
 student_story_3_9 = read_student_story_3_9()
+(
+    student_story_internal,
+    student_story_latam_10_11,
+) = read_student_story_support()
 
 (
     view_general,
@@ -6241,5 +6387,6 @@ with view_story:
     render_student_story(
         student_story_profiles,
         student_story_3_9,
-        internal_efa_summary,
+        student_story_internal,
+        student_story_latam_10_11,
     )
