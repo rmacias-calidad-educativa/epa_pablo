@@ -1069,17 +1069,6 @@ def render_test_page(
         selected_grades=selected_grades,
     )
 
-    st.divider()
-    render_levels_vs_network(
-        site_data=site_filtered,
-        network_data=grade_filtered_network,
-        aggregated=aggregated,
-        level_summary=levels_public,
-        test_name=test_name,
-        selected_sites=selected_sites,
-        selected_grades=selected_grades,
-    )
-
     if not aggregated:
         with st.expander(
             "Explorar patrones por colegio de origen",
