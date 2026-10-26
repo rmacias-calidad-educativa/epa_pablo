@@ -474,299 +474,6 @@ def render_levels_by_site_vs_network(
     fig.update_traces(textposition="inside")
     st.plotly_chart(fig, use_container_width=True)
 
-    network_pct = (
-        counts[counts["Sede"] == "RED"]
-        .set_index("Nivel")["Porcentaje"]
-        .reindex(LEVEL_ORDER)
-    )
-
-    site_pct = counts[counts["Sede"] != "RED"].copy()
-    site_pct["Diferencia_vs_RED"] = site_pct.apply(
-        lambda r: r["Porcentaje"] - network_pct.loc[r["Nivel"]],
-        axis=1,
-    )
-
-    if not site_pct.empty:
-        delta = (
-            site_pct.pivot(
-                index="Sede",
-                columns="Nivel",
-                values="Diferencia_vs_RED",
-            )
-            .reindex(
-                index=[site for site in entities if site != "RED"],
-                columns=LEVEL_ORDER,
-            )
-        )
-
-        labels = delta.map(
-            lambda x: "" if pd.isna(x) else f"{x:+.1f} pp"
-        )
-
-        max_abs = np.nanmax(np.abs(delta.values))
-        max_abs = max(
-            10,
-            min(40, max_abs if np.isfinite(max_abs) else 10),
-        )
-
-        fig = go.Figure(
-            data=go.Heatmap(
-                z=delta.values,
-                x=delta.columns,
-                y=delta.index,
-                zmid=0,
-                zmin=-max_abs,
-                zmax=max_abs,
-                colorscale=[
-                    [0.0, "#C93C3C"],
-                    [0.5, "#F7F7F7"],
-                    [1.0, "#2E8B57"],
-                ],
-                text=labels.values,
-                texttemplate="%{text}",
-                hovertemplate=(
-                    "Sede: %{y}<br>Nivel: %{x}<br>"
-                    "Diferencia vs RED: %{z:+.1f} pp<extra></extra>"
-                ),
-                colorbar=dict(title="pp vs RED"),
-            )
-        )
-        fig.update_layout(
-            title=(
-                "Contraste por colegio/sede frente a la RED · "
-                "rojo = por debajo · verde = por encima"
-            ),
-            height=max(360, 55 * len(delta.index) + 140),
-            margin=dict(l=18, r=18, t=65, b=25),
-        )
-        st.plotly_chart(fig, use_container_width=True)
-
-
-def level_counts_by_grade_from_raw(data: pd.DataFrame) -> pd.DataFrame:
-    student = build_student_level(data)
-    return (
-        student.groupby(["Grado_num", "Nivel"], as_index=False)
-        .agg(Estudiantes=("IdentiEstudiante", "nunique"))
-    )
-
-
-def render_levels_vs_network(
-    site_data: pd.DataFrame,
-    network_data: pd.DataFrame,
-    aggregated: bool,
-    level_summary: pd.DataFrame | None,
-    test_name: str,
-    selected_sites: list[str],
-    selected_grades: list[int],
-):
-    st.subheader("Vista 2 · Distribución de los 4 niveles por grado")
-    st.caption(
-        "Cada fila representa un grado. La fila RED muestra el comportamiento "
-        "global de las sedes incluidas en esta vista para la misma prueba y los mismos grados seleccionados."
-    )
-
-    if aggregated:
-        if level_summary is None or level_summary.empty:
-            st.info(
-                "La base pública precargada aún no contiene el desglose de los cuatro niveles. "
-                "Carga el Excel completo para habilitar esta comparación."
-            )
-            return
-
-        base = level_summary[
-            level_summary["Prueba"].astype(str) == test_name
-        ].copy()
-
-        if selected_grades:
-            base = base[base["Grado_num"].isin(selected_grades)]
-
-        # Distribución por grado usando únicamente las sedes seleccionadas.
-        grade_counts = (
-            base[base["Sede"].isin(selected_sites)]
-            .groupby(["Grado_num", "Nivel"], as_index=False)["Estudiantes"]
-            .sum()
-        )
-
-        # RED = seis sedes, independientemente del filtro de sede.
-        network_counts = (
-            base.groupby("Nivel", as_index=False)["Estudiantes"]
-            .sum()
-            .assign(Grado_num="RED")
-        )
-    else:
-        grade_counts = level_counts_by_grade_from_raw(site_data)
-        network_counts = (
-            level_counts_by_grade_from_raw(network_data)
-            .groupby("Nivel", as_index=False)["Estudiantes"]
-            .sum()
-            .assign(Grado_num="RED")
-        )
-
-    if grade_counts.empty and network_counts.empty:
-        st.info("No hay datos de niveles para los filtros seleccionados.")
-        return
-
-    grade_counts = grade_counts.copy()
-    grade_counts["Grado"] = grade_counts["Grado_num"].apply(grade_label)
-
-    network_counts = network_counts.copy()
-    network_counts["Grado"] = "RED"
-
-    counts = pd.concat(
-        [
-            grade_counts[["Grado", "Nivel", "Estudiantes"]],
-            network_counts[["Grado", "Nivel", "Estudiantes"]],
-        ],
-        ignore_index=True,
-    )
-
-    grade_entities = [
-        grade_label(g)
-        for g in sorted(
-            grade_counts["Grado_num"].dropna().astype(int).unique()
-        )
-    ]
-    entities = grade_entities + ["RED"]
-
-    full = pd.MultiIndex.from_product(
-        [entities, LEVEL_ORDER],
-        names=["Grado", "Nivel"],
-    ).to_frame(index=False)
-
-    counts = full.merge(
-        counts,
-        on=["Grado", "Nivel"],
-        how="left",
-    )
-    counts["Estudiantes"] = counts["Estudiantes"].fillna(0).astype(int)
-
-    totals = counts.groupby("Grado")["Estudiantes"].transform("sum")
-    counts["Porcentaje"] = np.where(
-        totals > 0,
-        counts["Estudiantes"] / totals * 100,
-        0,
-    )
-    counts["Etiqueta"] = counts.apply(
-        lambda r: (
-            f"{r['Porcentaje']:.0f}%"
-            if r["Porcentaje"] >= 6 and r["Estudiantes"] > 0
-            else ""
-        ),
-        axis=1,
-    )
-
-    fig = px.bar(
-        counts,
-        x="Porcentaje",
-        y="Grado",
-        color="Nivel",
-        orientation="h",
-        barmode="stack",
-        category_orders={
-            "Grado": entities,
-            "Nivel": LEVEL_ORDER,
-        },
-        color_discrete_map=LEVEL_COLORS,
-        text="Etiqueta",
-        hover_data={
-            "Estudiantes": True,
-            "Porcentaje": ":.1f",
-            "Etiqueta": False,
-        },
-        labels={
-            "Porcentaje": "",
-            "Grado": "",
-            "Nivel": "Nivel",
-        },
-        title="Composición de niveles: cada grado frente a la RED",
-    )
-    fig.update_xaxes(
-        range=[0, 100],
-        showticklabels=False,
-        showgrid=False,
-        ticks="",
-        title=None,
-    )
-    fig.update_yaxes(
-        showgrid=False,
-        ticks="",
-        title=None,
-        categoryorder="array",
-        categoryarray=list(reversed(entities)),
-    )
-    fig.update_layout(
-        height=max(430, 62 * len(entities) + 120),
-        plot_bgcolor="rgba(0,0,0,0)",
-        margin=dict(l=18, r=18, t=70, b=20),
-        legend_title_text="Nivel",
-    )
-    fig.update_traces(textposition="inside")
-    st.plotly_chart(fig, use_container_width=True)
-
-    network_pct = (
-        counts[counts["Grado"] == "RED"]
-        .set_index("Nivel")["Porcentaje"]
-        .reindex(LEVEL_ORDER)
-    )
-
-    grade_pct = counts[counts["Grado"] != "RED"].copy()
-    grade_pct["Diferencia_vs_RED"] = grade_pct.apply(
-        lambda r: r["Porcentaje"] - network_pct.loc[r["Nivel"]],
-        axis=1,
-    )
-
-    if not grade_pct.empty:
-        delta = (
-            grade_pct.pivot(
-                index="Grado",
-                columns="Nivel",
-                values="Diferencia_vs_RED",
-            )
-            .reindex(
-                index=grade_entities,
-                columns=LEVEL_ORDER,
-            )
-        )
-
-        labels = delta.map(
-            lambda x: "" if pd.isna(x) else f"{x:+.1f} pp"
-        )
-
-        max_abs = np.nanmax(np.abs(delta.values))
-        max_abs = max(
-            10,
-            min(40, max_abs if np.isfinite(max_abs) else 10),
-        )
-
-        fig = go.Figure(
-            data=go.Heatmap(
-                z=delta.values,
-                x=delta.columns,
-                y=delta.index,
-                zmid=0,
-                zmin=-max_abs,
-                zmax=max_abs,
-                colorscale=[
-                    [0.0, "#C93C3C"],
-                    [0.5, "#F7F7F7"],
-                    [1.0, "#2E8B57"],
-                ],
-                text=labels.values,
-                texttemplate="%{text}",
-                hovertemplate=(
-                    "Grado: %{y}<br>Nivel: %{x}<br>"
-                    "Diferencia vs RED: %{z:+.1f} pp<extra></extra>"
-                ),
-                colorbar=dict(title="pp vs RED"),
-            )
-        )
-        fig.update_layout(
-            title="Contraste por grado frente a la RED · rojo = por debajo · verde = por encima",
-            height=max(360, 55 * len(delta.index) + 140),
-            margin=dict(l=18, r=18, t=65, b=25),
-        )
-        st.plotly_chart(fig, use_container_width=True)
-
 
 def render_origin_patterns(d: pd.DataFrame):
     if (
@@ -941,7 +648,7 @@ def render_top10_origin_by_level(
 
         m1, m2 = st.columns(2)
         m1.metric(
-            "Estudiantes representados en el Top 10",
+            "Estudiantes en combinaciones publicables",
             f"{int(ranking['Estudiantes'].sum()):,}".replace(",", "."),
         )
         m2.metric(
@@ -1036,8 +743,11 @@ def render_top10_origin_by_level(
         )
 
     st.caption(
-        f"Por privacidad, no se muestran combinaciones con menos de "
-        f"{MIN_PUBLIC_GROUP_SIZE} estudiantes."
+        "La visualización solo incluye combinaciones colegio de origen × nivel "
+        f"con al menos {MIN_PUBLIC_GROUP_SIZE} estudiantes. "
+        "Las combinaciones menores se omiten para proteger la privacidad; "
+        "por ello los totales mostrados no representan necesariamente "
+        "a todos los estudiantes de la selección."
     )
     if ranking.empty:
         st.info(
@@ -1076,7 +786,12 @@ def render_top10_origin_by_level(
                 ].copy()
 
                 if d.empty:
-                    st.info(f"Sin datos para {level}.")
+                    st.info(
+                        f"No hay colegios de origen con al menos "
+                        f"{MIN_PUBLIC_GROUP_SIZE} estudiantes visibles "
+                        f"en {level} para los filtros seleccionados. "
+                        "Esto no implica ausencia de estudiantes en ese nivel."
+                    )
                     continue
 
                 d = d.sort_values(
