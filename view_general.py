@@ -262,11 +262,12 @@ def render_main_line(
     fig.update_layout(
         height=600,
         hovermode="x unified",
+        margin=dict(t=65, b=65),
         legend_title_text="Sede",
     )
     fig.update_traces(
         textposition="top center",
-        cliponaxis=False,
+        cliponaxis=True,
         line=dict(width=2.5),
         marker=dict(size=8),
         hovertemplate=(
@@ -278,6 +279,7 @@ def render_main_line(
             "<extra></extra>"
         ),
     )
+    fig.update_yaxes(range=[-5, 105])
     st.plotly_chart(fig, use_container_width=True)
 
     # Mismo universo y denominador que la gráfica superior, mostrando
@@ -308,11 +310,12 @@ def render_main_line(
     fig_high.update_layout(
         height=600,
         hovermode="x unified",
+        margin=dict(t=65, b=65),
         legend_title_text="Sede",
     )
     fig_high.update_traces(
         textposition="top center",
-        cliponaxis=False,
+        cliponaxis=True,
         line=dict(width=2.5),
         marker=dict(size=8),
         hovertemplate=(
@@ -323,6 +326,7 @@ def render_main_line(
             "<extra></extra>"
         ),
     )
+    fig_high.update_yaxes(range=[-5, 105])
     st.plotly_chart(fig_high, use_container_width=True)
 
 
