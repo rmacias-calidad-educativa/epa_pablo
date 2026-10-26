@@ -11,6 +11,7 @@ import streamlit as st
 
 from config import (
     ANTIGUEDAD_SITES,
+    ANTIGUEDAD_FULL_SITES,
     LEGACY_LEVEL_MAP,
     MIN_PUBLIC_GROUP_SIZE,
     SITES,
@@ -442,6 +443,46 @@ def read_student_story_support():
     return internal, latam
 
 
+def _age_scope_mask(frame: pd.DataFrame) -> pd.Series:
+    """Sedes nuevas completas; en las demás, antigüedad individual <= 1."""
+    site = frame["Sede"].astype(str)
+    years = pd.to_numeric(frame["AntiguedadBS"], errors="coerce")
+    return site.isin(ANTIGUEDAD_FULL_SITES) | (
+        site.isin(ANTIGUEDAD_SITES) & years.le(1)
+    )
+
+
+def _include_full_new_sites(
+    temporal: pd.DataFrame,
+    levels: pd.DataFrame,
+    dimensions: pd.DataFrame,
+    origin: pd.DataFrame,
+    age_temporal: pd.DataFrame,
+    age_levels: pd.DataFrame,
+    age_dimensions: pd.DataFrame,
+    age_origin: pd.DataFrame,
+):
+    """Reutiliza agregados generales para BAQ/USAQ sin duplicar sedes."""
+    general_frames = (temporal, levels, dimensions, origin)
+    age_frames = (age_temporal, age_levels, age_dimensions, age_origin)
+    revised = []
+    for general, age in zip(general_frames, age_frames):
+        if general is None or general.empty or "Sede" not in general.columns:
+            revised.append(age)
+            continue
+        full = general[
+            general["Sede"].astype(str).isin(ANTIGUEDAD_FULL_SITES)
+        ].copy()
+        if age is None or age.empty:
+            revised.append(full)
+            continue
+        remaining = age[
+            ~age["Sede"].astype(str).isin(ANTIGUEDAD_FULL_SITES)
+        ].copy()
+        revised.append(pd.concat([remaining, full], ignore_index=True))
+    return tuple(revised)
+
+
 @st.cache_data(show_spinner=False)
 def process_raw(raw: pd.DataFrame):
     attempts = build_attempt_table(raw)
@@ -460,42 +501,12 @@ def process_raw(raw: pd.DataFrame):
             & (dimensions["Sede"].astype(str).isin(SITES))
         ].copy()
 
-    age_attempts = attempts[
-        attempts["Sede"].astype(str).isin(ANTIGUEDAD_SITES)
-        & (
-            pd.to_numeric(
-                attempts["AntiguedadBS"],
-                errors="coerce",
-            )
-            <= 1
-        )
-    ].copy()
+    age_attempts = attempts[_age_scope_mask(attempts)].copy()
 
-    if (
-        not dimensions.empty
-        and "AntiguedadBS" in dimensions.columns
-    ):
-        age_dimensions = dimensions[
-            dimensions["Sede"].astype(str).isin(ANTIGUEDAD_SITES)
-            & (
-                pd.to_numeric(
-                    dimensions["AntiguedadBS"],
-                    errors="coerce",
-                )
-                <= 1
-            )
-        ].copy()
+    if not dimensions.empty and "AntiguedadBS" in dimensions.columns:
+        age_dimensions = dimensions[_age_scope_mask(dimensions)].copy()
     else:
-        raw_age = raw[
-            raw["Sede"].astype(str).isin(ANTIGUEDAD_SITES)
-            & (
-                pd.to_numeric(
-                    raw["AntiguedadBS"],
-                    errors="coerce",
-                )
-                <= 1
-            )
-        ].copy()
+        raw_age = raw[_age_scope_mask(raw)].copy()
         age_dimensions = build_dimension_table(raw_age)
         if not age_dimensions.empty:
             age_dimensions = age_dimensions[
@@ -612,7 +623,7 @@ def read_default_data():
                 top10_origin["Sede"].astype(str).isin(SITES)
             ].copy()
 
-        return (
+        return _include_full_new_sites(
             temporal,
             levels,
             dimensions,
@@ -734,7 +745,7 @@ def read_default_data():
             top10_origin["Sede"].astype(str).isin(SITES)
         ].copy()
 
-    return (
+    return _include_full_new_sites(
         temporal,
         levels,
         dimensions,
