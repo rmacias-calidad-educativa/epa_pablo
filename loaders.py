@@ -480,7 +480,7 @@ def _include_full_new_sites(
             ~age["Sede"].astype(str).isin(ANTIGUEDAD_FULL_SITES)
         ].copy()
         revised.append(pd.concat([remaining, full], ignore_index=True))
-    return tuple(revised)
+    return (temporal, levels, dimensions, origin, *revised)
 
 
 @st.cache_data(show_spinner=False)
