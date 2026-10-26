@@ -198,13 +198,13 @@ def render_main_line(
     )
     grouped["Etiqueta_Pct_mayor_50"] = grouped.apply(
         lambda row: "" if pd.isna(row["Pct_mayor_50"]) else
-        f"{row['Pct_mayor_50']:.0f}% (n={int(row['Estudiantes'])})",
+        f"{row['Pct_mayor_50']:.0f}%",
         axis=1,
     )
 
     grouped["Etiqueta_Pct_50"] = grouped.apply(
         lambda row: "" if pd.isna(row["Pct_50_o_menos"]) else
-        f"{row['Pct_50_o_menos']:.0f}% (n={int(row['Estudiantes'])})",
+        f"{row['Pct_50_o_menos']:.0f}%",
         axis=1,
     )
 
