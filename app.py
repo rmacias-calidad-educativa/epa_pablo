@@ -252,8 +252,8 @@ with view_general:
 
 with view_age:
     st.info(
-        "Esta ventana analiza exclusivamente estudiantes de COT, MOS, TUN y ZIPA "
-        "con 1 año o menos de antigüedad. Todas las gráficas, distribuciones y "
+        "Esta ventana incluye a todos los estudiantes de Portal de Génova (BAQ) y Usaquén (USAQ), "
+        "y a los estudiantes de COT, MOS, TUN y ZIPA con 1 año o menos. Las gráficas y "
         "comparaciones se recalculan dentro de esta cohorte."
     )
 
@@ -272,7 +272,7 @@ with view_age:
                     aggregated=aggregated,
                     view_key="antiguedad",
                     cohort_caption=(
-                        "COT, MOS, TUN y ZIPA · 1 año o menos de antigüedad"
+                        "BAQ y USAQ: todos · COT, MOS, TUN y ZIPA: ≤1 año"
                     ),
                 )
 
