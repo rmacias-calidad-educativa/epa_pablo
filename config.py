@@ -11,7 +11,8 @@ TESTS = [
 ]
 
 SITES = ["BAQ", "COT", "MOS", "TUN", "USAQ", "ZIPA"]
-ANTIGUEDAD_SITES = ["COT", "MOS", "TUN", "ZIPA"]
+ANTIGUEDAD_FULL_SITES = ["BAQ", "USAQ"]  # Portal de Génova y Usaquén
+ANTIGUEDAD_SITES = ["BAQ", "COT", "MOS", "TUN", "USAQ", "ZIPA"]
 
 LEVEL_ORDER = [
     "Nivel 1",
