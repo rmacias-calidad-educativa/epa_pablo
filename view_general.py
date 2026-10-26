@@ -196,12 +196,16 @@ def render_main_line(
         grouped["Mayor_50"] / grouped["Estudiantes"] * 100,
         np.nan,
     )
-    grouped["Etiqueta_Pct_mayor_50"] = grouped["Pct_mayor_50"].map(
-        lambda x: "" if pd.isna(x) else f"{x:.0f}%"
+    grouped["Etiqueta_Pct_mayor_50"] = grouped.apply(
+        lambda row: "" if pd.isna(row["Pct_mayor_50"]) else
+        f"{row['Pct_mayor_50']:.0f}% (n={int(row['Estudiantes'])})",
+        axis=1,
     )
 
-    grouped["Etiqueta_Pct_50"] = grouped["Pct_50_o_menos"].map(
-        lambda x: "" if pd.isna(x) else f"{x:.0f}%"
+    grouped["Etiqueta_Pct_50"] = grouped.apply(
+        lambda row: "" if pd.isna(row["Pct_50_o_menos"]) else
+        f"{row['Pct_50_o_menos']:.0f}% (n={int(row['Estudiantes'])})",
+        axis=1,
     )
 
     total_low = int(grouped["Menor_igual_50"].sum())
@@ -240,6 +244,7 @@ def render_main_line(
             "Pct_Nivel_1",
             "Pct_Nivel_2",
             "Pct_Nivel1_2",
+            "Estudiantes",
         ],
         labels={
             "Sede": "Sede",
@@ -268,7 +273,8 @@ def render_main_line(
             "<b>%{fullData.name}</b><br>"
             "Nivel 1: %{customdata[0]:.1f}%<br>"
             "Nivel 2: %{customdata[1]:.1f}%<br>"
-            "Nivel 1 + Nivel 2: %{customdata[2]:.1f}%"
+            "Nivel 1 + Nivel 2: %{customdata[2]:.1f}%<br>"
+            "Total evaluados (n): %{customdata[3]:.0f}"
             "<extra></extra>"
         ),
     )
