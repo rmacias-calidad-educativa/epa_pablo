@@ -565,6 +565,7 @@ def render_top10_origin_by_level(
     top10_public: pd.DataFrame | None,
     view_key: str,
 ):
+    MIN_ORIGIN_GROUP_SIZE = 3
     st.divider()
     st.subheader("Colegios de origen por nivel de desempeño")
     st.caption(
@@ -637,12 +638,12 @@ def render_top10_origin_by_level(
         ranking = suppress_small_groups(
             ranking,
             "Estudiantes",
-            MIN_PUBLIC_GROUP_SIZE,
+            MIN_ORIGIN_GROUP_SIZE,
         )
         if ranking.empty:
             st.info(
                 "No hay grupos con al menos "
-                f"{MIN_PUBLIC_GROUP_SIZE} estudiantes para mostrar."
+                f"{MIN_ORIGIN_GROUP_SIZE} estudiantes para mostrar."
             )
             return
 
@@ -739,12 +740,12 @@ def render_top10_origin_by_level(
         ranking = suppress_small_groups(
             ranking,
             "Estudiantes",
-            MIN_PUBLIC_GROUP_SIZE,
+            MIN_ORIGIN_GROUP_SIZE,
         )
 
     st.caption(
         "La visualización solo incluye combinaciones colegio de origen × nivel "
-        f"con al menos {MIN_PUBLIC_GROUP_SIZE} estudiantes. "
+        f"con al menos {MIN_ORIGIN_GROUP_SIZE} estudiantes. "
         "Las combinaciones menores se omiten para proteger la privacidad; "
         "por ello los totales mostrados no representan necesariamente "
         "a todos los estudiantes de la selección."
@@ -788,7 +789,7 @@ def render_top10_origin_by_level(
                 if d.empty:
                     st.info(
                         f"No hay colegios de origen con al menos "
-                        f"{MIN_PUBLIC_GROUP_SIZE} estudiantes visibles "
+                        f"{MIN_ORIGIN_GROUP_SIZE} estudiantes visibles "
                         f"en {level} para los filtros seleccionados. "
                         "Esto no implica ausencia de estudiantes en ese nivel."
                     )
