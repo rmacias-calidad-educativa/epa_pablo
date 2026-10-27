@@ -157,21 +157,24 @@ def _render_complete_internal(frame):
     if d.empty:
         st.info("No hay registros en la selección.")
         return
+    # Los grados se seleccionan con el filtro, pero las barras corresponden
+    # exclusivamente a campos de aprendizaje dentro de cada sede.
     d = d.groupby(
-        ["Sede", "Grado", "Campo", "Trimestre", "Nivel"], as_index=False
+        ["Sede", "Campo", "Trimestre", "Nivel"], as_index=False
     )["Estudiantes"].sum()
     for trimester in TRIMESTERS:
-        st.markdown("### " + ("Trimestre 1" if trimester.endswith("1")
-                             else "Trimestre 2"))
+        st.markdown(
+            "### " + ("Trimestre 1" if trimester.endswith("1")
+                      else "Trimestre 2")
+        )
         subset = d[d["Trimestre"] == trimester]
         for site in sites:
             site_df = subset[subset["Sede"] == site].copy()
             if site_df.empty:
-                st.caption(f"{site}: sin registros para este trimestre.")
+                st.caption(f"{site}: sin registros en este trimestre.")
                 continue
             st.markdown(f"#### {site}")
-            site_df["Grupo"] = site_df["Grado"] + " · " + site_df["Campo"]
-            site_df["Total"] = site_df.groupby("Grupo")[
+            site_df["Total"] = site_df.groupby("Campo")[
                 "Estudiantes"
             ].transform("sum")
             site_df["Porcentaje"] = (
@@ -180,32 +183,38 @@ def _render_complete_internal(frame):
             site_df["Etiqueta"] = site_df["Porcentaje"].apply(
                 lambda v: f"{v:.1f}%" if v >= 6 else ""
             )
-            groups = site_df[["Grupo", "Grado"]].drop_duplicates()
-            groups["orden"] = groups["Grado"].map(
-                {g: i for i, g in enumerate(GRADE_LABELS)}
-            )
-            order = groups.sort_values(["orden", "Grupo"])["Grupo"].tolist()
+            order = sorted(site_df["Campo"].astype(str).unique().tolist())
             fig = px.bar(
-                site_df, x="Porcentaje", y="Grupo", color="Nivel",
-                orientation="h", barmode="stack", text="Etiqueta",
+                site_df,
+                x="Porcentaje",
+                y="Campo",
+                color="Nivel",
+                orientation="h",
+                barmode="stack",
+                text="Etiqueta",
                 custom_data=["Estudiantes", "Total"],
                 category_orders={
-                    "Nivel": LEVELS, "Grupo": list(reversed(order)),
+                    "Nivel": LEVELS,
+                    "Campo": list(reversed(order)),
                 },
                 color_discrete_map=COLORS,
-                labels={"Grupo": "Grado · campo", "Porcentaje": "%"},
+                labels={
+                    "Campo": "Campo de aprendizaje",
+                    "Porcentaje": "Porcentaje de estudiantes",
+                },
             )
             fig.update_xaxes(range=[0, 100], ticksuffix="%")
             fig.update_traces(
                 textposition="inside",
                 hovertemplate=(
                     "%{y}<br>%{fullData.name}: %{x:.1f}%"
-                    "<br>n=%{customdata[0]:.0f} de %{customdata[1]:.0f}"
+                    "<br>Registros: %{customdata[0]:.0f}"
+                    " de %{customdata[1]:.0f}"
                     "<extra></extra>"
                 ),
             )
             fig.update_layout(
-                height=max(350, len(order) * 30 + 130),
+                height=max(350, len(order) * 34 + 140),
                 legend=dict(orientation="h", y=1.08),
                 margin=dict(l=10, r=20, t=75, b=25),
             )
@@ -214,8 +223,9 @@ def _render_complete_internal(frame):
                 key=f"int_full_{trimester}_{site}",
             )
     st.caption(
-        "Los grados sin observaciones no se inventan: se muestran únicamente "
-        "los cruces disponibles en el archivo cargado."
+        "Cada barra corresponde a un campo de aprendizaje de la sede. "
+        "Los grados seleccionados se agregan dentro de cada campo; "
+        "una barra no representa necesariamente estudiantes únicos entre grados."
     )
 
 
