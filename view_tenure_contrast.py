@@ -28,7 +28,7 @@ def _student_id_key(values: pd.Series) -> pd.Series:
     """Normaliza IDs que Excel importa como números terminados en .0."""
     return (
         values.astype("string").str.strip()
-        .str.replace(r"\\.0+$", "", regex=True)
+        .str.replace(r"\.0+$", "", regex=True)
         .replace({"": pd.NA, "nan": pd.NA, "<NA>": pd.NA})
     )
 
