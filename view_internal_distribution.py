@@ -7,6 +7,8 @@ from __future__ import annotations
 
 import pandas as pd
 import plotly.express as px
+import plotly.graph_objects as go
+from plotly.subplots import make_subplots
 import streamlit as st
 
 LEVELS = [
@@ -162,66 +164,89 @@ def _render_complete_internal(frame):
     d = d.groupby(
         ["Sede", "Campo", "Trimestre", "Nivel"], as_index=False
     )["Estudiantes"].sum()
+    # Comparación simultánea: paneles de sedes en una misma figura.
+    # Cada barra es un Área, sin combinar su nombre con el grado.
     for trimester in TRIMESTERS:
         st.markdown(
             "### " + ("Trimestre 1" if trimester.endswith("1")
                       else "Trimestre 2")
         )
-        subset = d[d["Trimestre"] == trimester]
-        for site in sites:
+        subset = d[d["Trimestre"] == trimester].copy()
+        present_sites = [
+            site for site in sites
+            if not subset[subset["Sede"] == site].empty
+        ]
+        if not present_sites:
+            st.info("No hay registros en este trimestre.")
+            continue
+        columns = min(3, len(present_sites))
+        rows = (len(present_sites) + columns - 1) // columns
+        fig = make_subplots(
+            rows=rows, cols=columns,
+            subplot_titles=[site.upper() for site in present_sites],
+            horizontal_spacing=0.13,
+            vertical_spacing=0.13 if rows > 1 else 0.06,
+        )
+        max_areas = 0
+        for index, site in enumerate(present_sites):
+            row_no, col_no = divmod(index, columns)
             site_df = subset[subset["Sede"] == site].copy()
-            if site_df.empty:
-                st.caption(f"{site}: sin registros en este trimestre.")
-                continue
-            st.markdown(f"#### {site}")
             site_df["Total"] = site_df.groupby("Campo")[
                 "Estudiantes"
             ].transform("sum")
             site_df["Porcentaje"] = (
                 site_df["Estudiantes"] / site_df["Total"] * 100
             )
-            site_df["Etiqueta"] = site_df["Porcentaje"].apply(
-                lambda v: f"{v:.1f}%" if v >= 6 else ""
-            )
             order = sorted(site_df["Campo"].astype(str).unique().tolist())
-            fig = px.bar(
-                site_df,
-                x="Porcentaje",
-                y="Campo",
-                color="Nivel",
-                orientation="h",
-                barmode="stack",
-                text="Etiqueta",
-                custom_data=["Estudiantes", "Total"],
-                category_orders={
-                    "Nivel": LEVELS,
-                    "Campo": list(reversed(order)),
-                },
-                color_discrete_map=COLORS,
-                labels={
-                    "Campo": "Campo de aprendizaje",
-                    "Porcentaje": "Porcentaje de estudiantes",
-                },
+            max_areas = max(max_areas, len(order))
+            for level in LEVELS:
+                part = site_df[site_df["Nivel"] == level].set_index("Campo")
+                part = part.reindex(order)
+                vals = part["Porcentaje"].fillna(0).tolist()
+                counts = part["Estudiantes"].fillna(0).tolist()
+                totals = part["Total"].fillna(0).tolist()
+                fig.add_trace(
+                    go.Bar(
+                        x=vals, y=order,
+                        name=level,
+                        orientation="h",
+                        marker_color=COLORS[level],
+                        text=[
+                            f"{value:.1f}%" if value >= 8 else ""
+                            for value in vals
+                        ],
+                        textposition="inside",
+                        customdata=list(zip(counts, totals)),
+                        hovertemplate=(
+                            "%{y}<br>%{fullData.name}: %{x:.1f}%"
+                            "<br>n=%{customdata[0]:.0f}"
+                            " de %{customdata[1]:.0f}"
+                            "<extra></extra>"
+                        ),
+                        showlegend=index == 0,
+                    ),
+                    row=row_no + 1, col=col_no + 1,
+                )
+            fig.update_xaxes(
+                range=[0, 100], ticksuffix="%",
+                row=row_no + 1, col=col_no + 1,
             )
-            fig.update_xaxes(range=[0, 100], ticksuffix="%")
-            fig.update_traces(
-                textposition="inside",
-                hovertemplate=(
-                    "%{y}<br>%{fullData.name}: %{x:.1f}%"
-                    "<br>Registros: %{customdata[0]:.0f}"
-                    " de %{customdata[1]:.0f}"
-                    "<extra></extra>"
-                ),
+            fig.update_yaxes(
+                categoryorder="array",
+                categoryarray=list(reversed(order)),
+                tickfont=dict(size=9),
+                row=row_no + 1, col=col_no + 1,
             )
-            fig.update_layout(
-                height=max(350, len(order) * 34 + 140),
-                legend=dict(orientation="h", y=1.08),
-                margin=dict(l=10, r=20, t=75, b=25),
-            )
-            st.plotly_chart(
-                fig, use_container_width=True,
-                key=f"int_full_{trimester}_{site}",
-            )
+        fig.update_layout(
+            barmode="stack",
+            height=rows * max(440, max_areas * 36 + 140),
+            legend=dict(orientation="h", y=1.08, x=0),
+            margin=dict(l=15, r=15, t=100, b=35),
+        )
+        st.plotly_chart(
+            fig, use_container_width=True,
+            key=f"int_sites_compare_{trimester}",
+        )
     st.caption(
         "Cada barra corresponde a un campo de aprendizaje de la sede. "
         "Los grados seleccionados se agregan dentro de cada campo; "
