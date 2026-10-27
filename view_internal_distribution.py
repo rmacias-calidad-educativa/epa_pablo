@@ -55,7 +55,7 @@ def _normalize_grade(value):
         return "Jardín"
     if norm in {"TRANSICION", "GRADO0", "0"}:
         return "Transición"
-    match = re.search(r"\\d+", norm)
+    match = re.search(r"\d+", norm)
     if match and 1 <= int(match.group()) <= 11:
         return str(int(match.group()))
     words = {
