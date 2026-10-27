@@ -18,6 +18,7 @@ from loaders import (
     read_student_story_profiles,
     read_student_story_support,
 )
+from view_internal_distribution import render_internal_distribution_only
 from views import (
     render_evolution_10_11,
     render_improve_efa_relation,
@@ -217,6 +218,7 @@ if LOAD_ERRORS:
     view_evolution,
     view_improve_efa,
     view_internal_efa,
+    view_internal_distribution,
     view_story,
 ) = st.tabs(
     [
@@ -227,6 +229,7 @@ if LOAD_ERRORS:
         "Evolución 10°–11°",
         "EFA vs Improve",
         "Interna vs EFA",
+        "Evaluación interna · T1 y T2",
         "Historia longitudinal",
     ]
 )
@@ -343,6 +346,10 @@ with view_internal_efa:
         internal_efa_agreement,
         internal_efa_reverse,
     )
+
+
+with view_internal_distribution:
+    render_internal_distribution_only(internal_efa_distribution)
 
 
 with view_story:
