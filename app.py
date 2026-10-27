@@ -19,6 +19,7 @@ from loaders import (
     read_student_story_support,
 )
 from view_internal_distribution import render_internal_distribution_only
+from view_internal_tenure import render_internal_tenure
 from view_tenure_contrast import render_tenure_contrast
 from views import (
     render_evolution_10_11,
@@ -284,7 +285,12 @@ with view_age:
 
 
 with view_tenure_contrast:
-    render_tenure_contrast(attempts, aggregated)
+    render_internal_tenure()
+    with st.expander(
+        "Contraste específico de EFA con archivos individuales (opcional)",
+        expanded=False,
+    ):
+        render_tenure_contrast(attempts, aggregated)
 
 
 with view_latam:
