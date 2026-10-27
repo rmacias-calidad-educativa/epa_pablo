@@ -19,6 +19,7 @@ from loaders import (
     read_student_story_support,
 )
 from view_internal_distribution import render_internal_distribution_only
+from view_tenure_contrast import render_tenure_contrast
 from views import (
     render_evolution_10_11,
     render_improve_efa_relation,
@@ -213,6 +214,7 @@ if LOAD_ERRORS:
 (
     view_general,
     view_age,
+    view_tenure_contrast,
     view_latam,
     view_math_activity,
     view_evolution,
@@ -224,6 +226,7 @@ if LOAD_ERRORS:
     [
         "Análisis general",
         "Análisis por antigüedad ≤1 año",
+        "≤1 año vs ≥3 años",
         "LATAM vs Evaluar para Avanzar",
         "Actividad matemática vs EFA",
         "Evolución 10°–11°",
@@ -278,6 +281,10 @@ with view_age:
                         "BAQ y USAQ: todos · COT, MOS, TUN y ZIPA: ≤1 año"
                     ),
                 )
+
+
+with view_tenure_contrast:
+    render_tenure_contrast(attempts, aggregated)
 
 
 with view_latam:
