@@ -188,33 +188,72 @@ def render_tenure_contrast(
     attempts: pd.DataFrame,
     aggregated: bool,
 ):
-    st.markdown("## Desempeño EFA · permanencia en el modelo Innova")
+    st.markdown("## Evaluar para Avanzar · contraste por permanencia")
     st.caption(
-        "Contraste descriptivo de estudiantes con un año o menos y con "
-        "tres años o más de permanencia. Los estudiantes con 2 años "
-        "no se incluyen en ninguno de los dos grupos."
+        "Comparación exclusivamente de resultados EFA 2026 entre estudiantes "
+        "con ≤1 año y ≥3 años de permanencia. Los estudiantes con "
+        "2 años se excluyen del contraste. No se utilizan resultados "
+        "de evaluación interna (T1 o T2)."
     )
 
-    roster_upload = st.file_uploader(
-        "Cargar antigüedad individual de estudiantes (CSV)",
-        type=["csv"], key="tenure_individual_roster",
-        help=(
-            "Selecciona el archivo con OrgDefinedId, AntiguedadBS y Name. "
-            "Los identificadores se usan solo para unir registros en la sesión."
-        ),
-    )
-    if aggregated:
-        st.info(
-            "Para comparar los grupos necesitas cargar también el Excel "
-            "original de EFA en el control «Cargar Excel completo» al "
-            "inicio de la aplicación. Los agregados precargados no incluyen "
-            "identificadores para cruzar ambas bases."
+    # EFA es la única variable de resultado de esta pestaña. El archivo
+    # de antigüedad solo aporta la clasificación de permanencia.
+    efa_upload = None
+    left, right = st.columns(2)
+    with left:
+        if aggregated:
+            efa_upload = st.file_uploader(
+                "Resultados individuales de Evaluar para Avanzar 2026 (Excel)",
+                type=["xlsx", "xls"],
+                key="tenure_efa_source",
+                help=(
+                    "Exportación EFA por pregunta e intento, con "
+                    "IdentiEstudiante, Sede, Grado y respuestas. "
+                    "Puedes cargarla aquí sin modificar las demás pestañas."
+                ),
+            )
+        else:
+            st.success(
+                "Resultados individuales EFA disponibles desde la carga "
+                "principal del tablero."
+            )
+    with right:
+        roster_upload = st.file_uploader(
+            "Antigüedad de estudiantes (CSV)",
+            type=["csv"],
+            key="tenure_individual_roster",
+            help=(
+                "Archivo compartido con OrgDefinedId, AntiguedadBS y Name. "
+                "Se usa para unir estudiantes, no como resultado de evaluación."
+            ),
         )
-        return
+    if aggregated:
+        if efa_upload is None:
+            st.info(
+                "Falta la base individual de EFA. Los agregados precargados "
+                "no permiten identificar quién tiene ≥3 años; por eso "
+                "no se pueden mostrar diferencias reales sin el Excel "
+                "de EFA. Cárgalo en esta misma pestaña."
+            )
+            return
+        try:
+            from loaders import read_excel, process_raw
+
+            efa_raw = read_excel(efa_upload.getvalue())
+            attempts, _, _, _ = process_raw(efa_raw)
+        except (ValueError, KeyError, TypeError) as exc:
+            st.error(f"No fue posible leer los resultados de EFA: {exc}")
+            return
+        if attempts.empty:
+            st.warning(
+                "El archivo EFA cargado no contiene resultados válidos de "
+                "2026 para las sedes y pruebas del tablero."
+            )
+            return
     if roster_upload is None:
         st.info(
-            "Carga aquí el CSV de antigüedad para emparejarlo con los "
-            "resultados de EFA mediante OrgDefinedId e IdentiEstudiante."
+            "Falta el CSV de antigüedad para identificar los grupos ≤1 y "
+            "≥3 años de los estudiantes evaluados con EFA."
         )
         return
 
