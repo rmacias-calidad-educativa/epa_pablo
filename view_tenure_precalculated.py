@@ -40,7 +40,7 @@ def read_efa_tenure_aggregate():
     data = data.set_index(keys).loc[
         lambda x: x.index.isin(eligible[eligible.eq(2)].index)
     ].reset_index()
-    data["Puntaje"] = 100 * data["Suma_puntaje"] / data["Estudiantes"]
+    data["Puntaje"] = data["Suma_puntaje"] / data["Estudiantes"]
     data["Niveles_3_4"] = 100 * (data["Nivel_3"] + data["Nivel_4"]) / data["Estudiantes"]
     data["Grado"] = data["Grado_num"].astype(int).astype(str) + "°"
     data["Sede_nombre"] = data["Sede"].map(SITES).fillna(data["Sede"])
