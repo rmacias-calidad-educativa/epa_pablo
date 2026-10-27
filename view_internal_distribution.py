@@ -80,10 +80,11 @@ def _prepare_internal_source(frame):
         "sede": "Sede", "colegio": "Sede",
         "grado": "Grado", "grado_num": "Grado",
         "campo": "Campo", "campo_de_aprendizaje": "Campo",
-        "campo de aprendizaje": "Campo",
+        "campo de aprendizaje": "Campo", "area": "Campo",
         "trimestre": "Trimestre", "periodo": "Trimestre",
         "nivel": "Nivel", "nivel_de_logro": "Nivel",
         "desempeno": "Nivel", "desempeño": "Nivel",
+        "escala despues de potenciacion": "Nivel",
         "estudiantes": "Estudiantes", "conteo": "Estudiantes",
         "n": "Estudiantes",
     }
@@ -108,6 +109,12 @@ def _prepare_internal_source(frame):
     df["Sede"] = df["Sede"].map(
         lambda v: SITE_NAMES.get(_normalize_token(v), str(v).strip())
     )
+    # Con datos individuales, contar una sola vez por estudiante,
+    # sede, trimestre, grado y campo antes de agregar.
+    if "Documento" in df.columns and "Estudiantes" not in df.columns:
+        df = df.drop_duplicates(
+            subset=["Sede", "Trimestre", "Grado", "Campo", "Documento"]
+        )
     if "Estudiantes" in df.columns:
         df["Estudiantes"] = pd.to_numeric(
             df["Estudiantes"], errors="coerce"
@@ -214,10 +221,11 @@ def _render_complete_internal(frame):
 
 def render_internal_distribution_only(distribution: pd.DataFrame):
     uploaded = st.file_uploader(
-        "Cargar evaluación interna completa por sede y campo (CSV o Excel)",
+        "Cargar Boletines 2026 por sede y campo (CSV o Excel)",
         type=["csv", "xlsx"], key="internal_complete_upload",
-        help=("Columnas requeridas: Sede, Grado, Campo, Trimestre, Nivel. "
-              "Opcional: Estudiantes (conteo).")
+        help=("Admite el archivo Boletines 2026 con columnas Sede, Grado, "
+              "Área, Trimestre y Escala DESPUÉS DE POTENCIACIÓN, "
+              "o una tabla agregada con Campo, Nivel y Estudiantes.")
     )
     if uploaded is not None:
         try:
