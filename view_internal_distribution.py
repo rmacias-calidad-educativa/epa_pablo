@@ -21,7 +21,221 @@ COLORS = {
 TRIMESTERS = ["TRIMESTRE 1", "TRIMESTRE 2"]
 
 
+GRADE_LABELS = [
+    "Prejardín", "Jardín", "Transición",
+    *[str(i) for i in range(1, 12)],
+]
+GRADE_ALIASES = {
+    "PREJARDIN": "Prejardín", "PRE-JARDIN": "Prejardín",
+    "JARDIN": "Jardín", "TRANSICION": "Transición",
+    "PREKINDER": "Prejardín", "KINDER": "Jardín",
+}
+LEVEL_ALIASES = {
+    "PROGRESO LIMITADO": "Progreso limitado",
+    "EMERGENTE": "Emergente",
+    "EN ACELERACION": "En aceleración",
+    "AVANZADO": "Avanzado",
+}
+SITE_NAMES = {
+    "COT": "Cota", "MOS": "Mosquera", "BAQ": "Portal de Genovés",
+    "USAQ": "Usaquén", "TUN": "Tunja", "ZIPA": "Zipaquirá",
+}
+
+
+def _normalize_grade(value):
+    import re
+    import unicodedata
+    raw = str(value).strip().upper()
+    norm = "".join(ch for ch in unicodedata.normalize("NFKD", raw)
+                   if not unicodedata.combining(ch))
+    norm = norm.replace(" ", "").replace("°", "")
+    if norm in {"PREJARDIN", "PRE-JARDIN", "PREKINDER"}:
+        return "Prejardín"
+    if norm in {"JARDIN", "KINDER"}:
+        return "Jardín"
+    if norm in {"TRANSICION", "GRADO0", "0"}:
+        return "Transición"
+    match = re.search(r"\\d+", norm)
+    if match and 1 <= int(match.group()) <= 11:
+        return str(int(match.group()))
+    words = {
+        "PRIMERO": "1", "SEGUNDO": "2", "TERCERO": "3",
+        "CUARTO": "4", "QUINTO": "5", "SEXTO": "6",
+        "SEPTIMO": "7", "OCTAVO": "8", "NOVENO": "9",
+        "DECIMO": "10", "UNDECIMO": "11", "ONCE": "11",
+    }
+    return words.get(norm)
+
+
+def _normalize_token(value):
+    import unicodedata
+    return "".join(ch for ch in unicodedata.normalize(
+        "NFKD", str(value).strip().upper()
+    ) if not unicodedata.combining(ch))
+
+
+def _prepare_internal_source(frame):
+    """Acepta registros individuales o conteos agrupados; sin inferir datos."""
+    names = {
+        "sede": "Sede", "colegio": "Sede",
+        "grado": "Grado", "grado_num": "Grado",
+        "campo": "Campo", "campo_de_aprendizaje": "Campo",
+        "campo de aprendizaje": "Campo",
+        "trimestre": "Trimestre", "periodo": "Trimestre",
+        "nivel": "Nivel", "nivel_de_logro": "Nivel",
+        "desempeno": "Nivel", "desempeño": "Nivel",
+        "estudiantes": "Estudiantes", "conteo": "Estudiantes",
+        "n": "Estudiantes",
+    }
+    df = frame.rename(columns={
+        col: names.get(_normalize_token(col).lower(), col)
+        for col in frame.columns
+    }).copy()
+    required = {"Sede", "Grado", "Campo", "Trimestre", "Nivel"}
+    missing = required - set(df.columns)
+    if missing:
+        raise ValueError("Faltan columnas: " + ", ".join(sorted(missing)))
+    df["Grado"] = df["Grado"].map(_normalize_grade)
+    df["Trimestre"] = df["Trimestre"].map(
+        lambda v: "TRIMESTRE 1" if _normalize_token(v) in
+        {"T1", "1", "TRIMESTRE 1", "TRIMESTRE1"} else (
+            "TRIMESTRE 2" if _normalize_token(v) in
+            {"T2", "2", "TRIMESTRE 2", "TRIMESTRE2"} else None)
+    )
+    df["Nivel"] = df["Nivel"].map(
+        lambda v: LEVEL_ALIASES.get(_normalize_token(v))
+    )
+    df["Sede"] = df["Sede"].map(
+        lambda v: SITE_NAMES.get(_normalize_token(v), str(v).strip())
+    )
+    if "Estudiantes" in df.columns:
+        df["Estudiantes"] = pd.to_numeric(
+            df["Estudiantes"], errors="coerce"
+        ).fillna(0)
+    else:
+        df["Estudiantes"] = 1
+    return df[
+        df["Grado"].isin(GRADE_LABELS)
+        & df["Trimestre"].isin(TRIMESTERS)
+        & df["Nivel"].isin(LEVELS)
+        & df["Estudiantes"].gt(0)
+    ].copy()
+
+
+def _render_complete_internal(frame):
+    st.markdown("## Evaluación interna · todas las sedes y grados")
+    st.caption(
+        "Distribuciones por sede, campo de aprendizaje y grado, "
+        "desde prejardín hasta 11.º, para T1 y T2."
+    )
+    d = _prepare_internal_source(frame)
+    if d.empty:
+        st.warning("El archivo no contiene registros compatibles para T1 y T2.")
+        return
+    available_sites = sorted(d["Sede"].unique().tolist())
+    available_grades = [g for g in GRADE_LABELS if g in set(d["Grado"])]
+    available_fields = sorted(d["Campo"].astype(str).unique().tolist())
+    a, b, c = st.columns(3)
+    with a:
+        sites = st.multiselect("Sedes", available_sites,
+                               default=available_sites, key="int_sites")
+    with b:
+        grades = st.multiselect("Grados", GRADE_LABELS,
+                                default=available_grades, key="int_grades")
+    with c:
+        fields = st.multiselect("Campos de aprendizaje", available_fields,
+                                default=available_fields, key="int_fields")
+    d = d[d["Sede"].isin(sites) & d["Grado"].isin(grades)
+          & d["Campo"].isin(fields)].copy()
+    if d.empty:
+        st.info("No hay registros en la selección.")
+        return
+    d = d.groupby(
+        ["Sede", "Grado", "Campo", "Trimestre", "Nivel"], as_index=False
+    )["Estudiantes"].sum()
+    for trimester in TRIMESTERS:
+        st.markdown("### " + ("Trimestre 1" if trimester.endswith("1")
+                             else "Trimestre 2"))
+        subset = d[d["Trimestre"] == trimester]
+        for site in sites:
+            site_df = subset[subset["Sede"] == site].copy()
+            if site_df.empty:
+                st.caption(f"{site}: sin registros para este trimestre.")
+                continue
+            st.markdown(f"#### {site}")
+            site_df["Grupo"] = site_df["Grado"] + " · " + site_df["Campo"]
+            site_df["Total"] = site_df.groupby("Grupo")[
+                "Estudiantes"
+            ].transform("sum")
+            site_df["Porcentaje"] = (
+                site_df["Estudiantes"] / site_df["Total"] * 100
+            )
+            site_df["Etiqueta"] = site_df["Porcentaje"].apply(
+                lambda v: f"{v:.1f}%" if v >= 6 else ""
+            )
+            groups = site_df[["Grupo", "Grado"]].drop_duplicates()
+            groups["orden"] = groups["Grado"].map(
+                {g: i for i, g in enumerate(GRADE_LABELS)}
+            )
+            order = groups.sort_values(["orden", "Grupo"])["Grupo"].tolist()
+            fig = px.bar(
+                site_df, x="Porcentaje", y="Grupo", color="Nivel",
+                orientation="h", barmode="stack", text="Etiqueta",
+                custom_data=["Estudiantes", "Total"],
+                category_orders={
+                    "Nivel": LEVELS, "Grupo": list(reversed(order)),
+                },
+                color_discrete_map=COLORS,
+                labels={"Grupo": "Grado · campo", "Porcentaje": "%"},
+            )
+            fig.update_xaxes(range=[0, 100], ticksuffix="%")
+            fig.update_traces(
+                textposition="inside",
+                hovertemplate=(
+                    "%{y}<br>%{fullData.name}: %{x:.1f}%"
+                    "<br>n=%{customdata[0]:.0f} de %{customdata[1]:.0f}"
+                    "<extra></extra>"
+                ),
+            )
+            fig.update_layout(
+                height=max(350, len(order) * 30 + 130),
+                legend=dict(orientation="h", y=1.08),
+                margin=dict(l=10, r=20, t=75, b=25),
+            )
+            st.plotly_chart(
+                fig, use_container_width=True,
+                key=f"int_full_{trimester}_{site}",
+            )
+    st.caption(
+        "Los grados sin observaciones no se inventan: se muestran únicamente "
+        "los cruces disponibles en el archivo cargado."
+    )
+
+
 def render_internal_distribution_only(distribution: pd.DataFrame):
+    uploaded = st.file_uploader(
+        "Cargar evaluación interna completa por sede y campo (CSV o Excel)",
+        type=["csv", "xlsx"], key="internal_complete_upload",
+        help=("Columnas requeridas: Sede, Grado, Campo, Trimestre, Nivel. "
+              "Opcional: Estudiantes (conteo).")
+    )
+    if uploaded is not None:
+        try:
+            full = (
+                pd.read_csv(uploaded)
+                if uploaded.name.lower().endswith(".csv")
+                else pd.read_excel(uploaded)
+            )
+            _render_complete_internal(full)
+        except (ValueError, KeyError, TypeError) as exc:
+            st.error(f"No fue posible procesar la fuente: {exc}")
+        return
+    st.info(
+        "Para mostrar prejardín a 11.º por sede y campo, carga aquí "
+        "la evaluación interna completa. Mientras tanto se muestran "
+        "solo los cruces disponibles de EFA, que no incluyen las sedes."
+    )
+
     st.markdown("## Evaluación interna · distribución del desempeño")
     st.caption(
         "Comparación de T1 y T2 en barras apiladas al 100 %, por prueba EFA "
