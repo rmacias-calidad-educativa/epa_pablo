@@ -11,7 +11,6 @@ import plotly.express as px
 import streamlit as st
 
 from config import (
-    ANTIGUEDAD_FULL_SITES,
     LEVEL_ORDER,
     MIN_PUBLIC_GROUP_SIZE,
     SITES,
@@ -25,51 +24,122 @@ GROUPS = [GROUP_YOUNG, GROUP_OLD]
 GROUP_COLORS = {GROUP_YOUNG: "#1976B9", GROUP_OLD: "#E19A32"}
 
 
-def _tenure_observations(attempts: pd.DataFrame) -> pd.DataFrame:
-    """Una observación por estudiante, sede, grado y prueba (último intento)."""
+def _student_id_key(values: pd.Series) -> pd.Series:
+    """Normaliza IDs que Excel importa como números terminados en .0."""
+    return (
+        values.astype("string").str.strip()
+        .str.replace(r"\\.0+$", "", regex=True)
+        .replace({"": pd.NA, "nan": pd.NA, "<NA>": pd.NA})
+    )
+
+
+def _prepare_tenure_roster(tenure_roster: pd.DataFrame) -> pd.DataFrame:
+    """Acepta el CSV de permanencia, sin conservar nombres ni correos."""
+    required = {"OrgDefinedId", "AntiguedadBS", "Name"}
+    missing = required - set(tenure_roster.columns)
+    if missing:
+        raise ValueError(
+            "Al archivo de permanencia le faltan columnas: "
+            + ", ".join(sorted(missing))
+        )
+    codes = {
+        "MOSQUERA": "MOS",
+        "COTA": "COT",
+        "ZIPAQUIRA": "ZIPA",
+        "TUNJA": "TUN",
+        "PORTAL DE GENOVES": "BAQ",
+        "USAQUEN 170": "USAQ",
+        "USAQUEN": "USAQ",
+    }
+    import unicodedata
+
+    def norm_site(value):
+        name = "".join(
+            ch for ch in unicodedata.normalize("NFKD", str(value).upper())
+            if not unicodedata.combining(ch)
+        ).strip()
+        return codes.get(name, name)
+
+    result = pd.DataFrame({
+        "_student_key": _student_id_key(tenure_roster["OrgDefinedId"]),
+        "_tenure_site": tenure_roster["Name"].map(norm_site),
+        "_tenure_years": pd.to_numeric(
+            tenure_roster["AntiguedadBS"], errors="coerce"
+        ),
+    })
+    result = result.dropna(subset=["_student_key"])
+    duplicates = result["_student_key"].duplicated(keep=False)
+    if duplicates.any():
+        conflicting = result[duplicates].groupby("_student_key").agg(
+            sites=("_tenure_site", "nunique"),
+            years=("_tenure_years", "nunique"),
+        )
+        if (conflicting["sites"].gt(1) | conflicting["years"].gt(1)).any():
+            raise ValueError(
+                "Existen identificadores duplicados con antigüedades "
+                "o sedes contradictorias en el archivo."
+            )
+        result = result.drop_duplicates("_student_key", keep="first")
+    return result
+
+
+def _tenure_observations(
+    attempts: pd.DataFrame,
+    tenure_roster: pd.DataFrame,
+) -> pd.DataFrame:
+    """Cruce por identificador, validando sede y usando antigüedad individual."""
     required = {
         "Sede", "Grado_num", "Prueba", "IdentiEstudiante",
-        "AntiguedadBS", "Porcentaje_acierto",
+        "Porcentaje_acierto",
     }
     missing = required - set(attempts.columns)
     if missing:
         raise ValueError(
-            "La fuente no contiene las columnas: " + ", ".join(sorted(missing))
+            "La base EFA no contiene: " + ", ".join(sorted(missing))
         )
 
     data = attempts.copy()
+    data["_student_key"] = _student_id_key(data["IdentiEstudiante"])
     data["Sede"] = data["Sede"].astype(str).str.strip().str.upper()
     data["Grado_num"] = pd.to_numeric(data["Grado_num"], errors="coerce")
     data["Porcentaje_acierto"] = pd.to_numeric(
         data["Porcentaje_acierto"], errors="coerce"
     )
-    tenure = pd.to_numeric(data["AntiguedadBS"], errors="coerce")
-    valid_tenure = tenure.ge(0)
-    is_recent_site = data["Sede"].isin(ANTIGUEDAD_FULL_SITES)
-
-    data["Grupo"] = np.select(
-        [
-            is_recent_site,
-            ~is_recent_site & valid_tenure & tenure.le(1),
-            ~is_recent_site & valid_tenure & tenure.ge(3),
-        ],
-        [GROUP_YOUNG, GROUP_YOUNG, GROUP_OLD],
-        default="Sin grupo",
-    )
     if "Año" in data.columns:
         data = data[pd.to_numeric(data["Año"], errors="coerce") == YEAR]
     data = data[
-        data["Grupo"].isin(GROUPS)
-        & data["Sede"].isin(SITES)
+        data["Sede"].isin(SITES)
         & data["Prueba"].isin(TESTS)
-        & data["IdentiEstudiante"].notna()
+        & data["_student_key"].notna()
         & data["Grado_num"].between(3, 11)
         & data["Porcentaje_acierto"].between(0, 100)
     ].copy()
-    if data.empty:
-        return data
 
-    # Dos intentos del mismo estudiante en una prueba no son dos estudiantes.
+    efa_ids = data["_student_key"].nunique()
+    roster = _prepare_tenure_roster(tenure_roster)
+    data = data.merge(
+        roster, on="_student_key", how="left",
+        validate="many_to_one", indicator="_merge_tenure",
+    )
+    matched_ids = data.loc[
+        data["_merge_tenure"] == "both", "_student_key"
+    ].nunique()
+    mismatched_ids = data.loc[
+        (data["_merge_tenure"] == "both")
+        & (data["Sede"] != data["_tenure_site"]), "_student_key"
+    ].nunique()
+    data = data[
+        (data["_merge_tenure"] == "both")
+        & (data["Sede"] == data["_tenure_site"])
+    ].copy()
+    years = data["_tenure_years"]
+    data["Grupo"] = np.select(
+        [years.ge(0) & years.le(1), years.ge(3)],
+        [GROUP_YOUNG, GROUP_OLD],
+        default="Sin grupo",
+    )
+    data = data[data["Grupo"].isin(GROUPS)].copy()
+
     if "TimeCompleted" in data.columns:
         data["_orden_fecha"] = pd.to_datetime(
             data["TimeCompleted"], errors="coerce"
@@ -77,7 +147,7 @@ def _tenure_observations(attempts: pd.DataFrame) -> pd.DataFrame:
         data = data.sort_values("_orden_fecha", kind="stable")
 
     data = data.drop_duplicates(
-        ["IdentiEstudiante", "Sede", "Grado_num", "Prueba"],
+        ["_student_key", "Sede", "Grado_num", "Prueba"],
         keep="last",
     )
     data["Nivel"] = pd.cut(
@@ -87,6 +157,9 @@ def _tenure_observations(attempts: pd.DataFrame) -> pd.DataFrame:
         include_lowest=True,
     )
     data["Nivel_3_4"] = data["Porcentaje_acierto"] > 50
+    data.attrs["efa_ids"] = efa_ids
+    data.attrs["matched_ids"] = matched_ids
+    data.attrs["mismatched_ids"] = mismatched_ids
     return data
 
 
@@ -97,7 +170,7 @@ def _summarize(data: pd.DataFrame) -> pd.DataFrame:
             as_index=False, observed=True,
         )
         .agg(
-            Estudiantes=("IdentiEstudiante", "nunique"),
+            Estudiantes=("_student_key", "nunique"),
             Puntaje=("Porcentaje_acierto", "mean"),
             En_3_4=("Nivel_3_4", "sum"),
         )
@@ -115,46 +188,67 @@ def render_tenure_contrast(
     st.markdown("## Desempeño EFA · permanencia en el modelo Innova")
     st.caption(
         "Contraste descriptivo de estudiantes con un año o menos y con "
-        "tres años o más de permanencia. Los estudiantes entre uno y "
-        "tres años no se incluyen en ninguno de los dos grupos."
+        "tres años o más de permanencia. Los estudiantes con 2 años "
+        "no se incluyen en ninguno de los dos grupos."
     )
 
+    roster_upload = st.file_uploader(
+        "Cargar antigüedad individual de estudiantes (CSV)",
+        type=["csv"], key="tenure_individual_roster",
+        help=(
+            "Selecciona el archivo con OrgDefinedId, AntiguedadBS y Name. "
+            "Los identificadores se usan solo para unir registros en la sesión."
+        ),
+    )
     if aggregated:
         st.info(
-            "Los datos precargados no identifican individualmente a los "
-            "estudiantes con 3 años o más. Para calcular esta comparación, "
-            "carga el Excel original de EFA en «Cargar Excel completo» "
-            "al inicio de la aplicación. No se guardará en GitHub."
+            "Para comparar los grupos necesitas cargar también el Excel "
+            "original de EFA en el control «Cargar Excel completo» al "
+            "inicio de la aplicación. Los agregados precargados no incluyen "
+            "identificadores para cruzar ambas bases."
+        )
+        return
+    if roster_upload is None:
+        st.info(
+            "Carga aquí el CSV de antigüedad para emparejarlo con los "
+            "resultados de EFA mediante OrgDefinedId e IdentiEstudiante."
         )
         return
 
     try:
-        data = _tenure_observations(attempts)
-    except (ValueError, KeyError) as exc:
-        st.error(f"No fue posible construir los grupos de antigüedad: {exc}")
+        tenure_roster = pd.read_csv(
+            roster_upload, dtype="string", encoding="utf-8-sig"
+        )
+        data = _tenure_observations(attempts, tenure_roster)
+    except (ValueError, KeyError, pd.errors.ParserError) as exc:
+        st.error(f"No fue posible cruzar EFA y antigüedad: {exc}")
         return
+
+    efa_ids = int(data.attrs.get("efa_ids", 0))
+    matched_ids = int(data.attrs.get("matched_ids", 0))
+    mismatch_ids = int(data.attrs.get("mismatched_ids", 0))
+    st.caption(
+        f"Cruce por identificador: {matched_ids:,} de {efa_ids:,} "
+        "estudiantes EFA encontrados en el archivo de permanencia. "
+        f"Se excluyeron {mismatch_ids:,} identificadores con sedes "
+        "distintas. Los demás no emparejados no se clasifican."
+    )
+    st.caption(
+        "Se utiliza exclusivamente AntiguedadBS de cada estudiante. "
+        "La pertenencia a ≤1 o ≥3 años no se asigna automáticamente por sede. "
+        "Quedan excluidos los estudiantes de 2 años."
+    )
     if data.empty:
         st.warning(
-            "No hay observaciones válidas para los grupos ≤1 y ≥3 años "
-            "en el archivo cargado."
+            "No hay estudiantes de EFA con antigüedad individual válida "
+            "emparejada y sede coincidente para los dos grupos."
         )
         return
 
     eligible_sites = [
         site for site in SITES
-        if site not in ANTIGUEDAD_FULL_SITES
-        and set(data.loc[data["Sede"] == site, "Grupo"]) == set(GROUPS)
+        if set(data.loc[data["Sede"] == site, "Grupo"]) == set(GROUPS)
     ]
-    unavailable_sites = [
-        site for site in ANTIGUEDAD_FULL_SITES
-        if site in set(data["Sede"])
-    ]
-    if unavailable_sites:
-        st.caption(
-            "Usaquén y Portal de Genovés pertenecen íntegramente al "
-            "grupo ≤1 año según la regla institucional. No se presentan "
-            "como si tuvieran estudiantes con ≥3 años."
-        )
 
     test_options = [
         test for test in TESTS if test in set(data["Prueba"])
@@ -230,7 +324,7 @@ def render_tenure_contrast(
 
     total_cells = len(n_by_group)
     retained_cells = len(valid_cells)
-    total_n = selected.groupby("Grupo")["IdentiEstudiante"].nunique()
+    total_n = selected.groupby("Grupo")["_student_key"].nunique()
     m1, m2, m3 = st.columns(3)
     m1.metric("Estudiantes ≤1 año", int(total_n.get(GROUP_YOUNG, 0)))
     m2.metric("Estudiantes ≥3 años", int(total_n.get(GROUP_OLD, 0)))
