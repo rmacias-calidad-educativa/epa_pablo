@@ -134,7 +134,10 @@ def _tenure_observations(
     ].copy()
     years = data["_tenure_years"]
     data["Grupo"] = np.select(
-        [years.ge(0) & years.le(1), years.ge(3)],
+        [
+            (years.ge(0) & years.le(1)).fillna(False).to_numpy(dtype=bool),
+            years.ge(3).fillna(False).to_numpy(dtype=bool),
+        ],
         [GROUP_YOUNG, GROUP_OLD],
         default="Sin grupo",
     )
