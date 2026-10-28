@@ -1075,6 +1075,18 @@ def render_dimensions(
             "RED incluye las seis sedes, incluida la seleccionada."
         )
 
+
+    fig = style_clean_axes(fig, grades=grades, hide_y=True)
+    fig.update_yaxes(range=[0, 100], showticklabels=False)
+    fig.update_layout(
+        height=560,
+        margin=dict(l=18, r=18, t=110, b=35),
+    )
+    st.plotly_chart(
+        fig, use_container_width=True,
+        key=f"dimension_grade_network_{view_key}_{test_name}",
+    )
+    if reference != "RED":
         st.markdown("#### Diferencias frente a la RED por grado y dimensión")
         display = pair.rename(columns={
             "Grado_num": "Grado",
@@ -1099,17 +1111,6 @@ def render_dimensions(
             }),
             use_container_width=True, hide_index=True,
         )
-
-    fig = style_clean_axes(fig, grades=grades, hide_y=True)
-    fig.update_yaxes(range=[0, 100], showticklabels=False)
-    fig.update_layout(
-        height=560,
-        margin=dict(l=18, r=18, t=110, b=35),
-    )
-    st.plotly_chart(
-        fig, use_container_width=True,
-        key=f"dimension_grade_network_{view_key}_{test_name}",
-    )
     st.caption(
         "Los porcentajes corresponden al acierto promedio de cada dimensión "
         "sobre sus ítems esperados. Solo se muestran grupos de al menos "
