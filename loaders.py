@@ -59,11 +59,11 @@ def read_latam_efa_data():
         detail["Estudiantes"] = pd.to_numeric(
             detail["Estudiantes"], errors="coerce"
         ).fillna(0).astype(int)
-        detail = suppress_small_groups(
-            detail,
-            "Estudiantes",
-            MIN_PUBLIC_GROUP_SIZE,
-        )
+        # NO suprimir por puntuación exacta: la base contiene conteos
+        # muy desagregados (sede/grado/categoría/puntaje/nivel).
+        # Filtrar aquí n<5 descarta >90% de los emparejamientos LATAM–EFA.
+        # La supresión debe aplicarse DESPUÉS de agrupar la salida pública.
+        detail = detail[detail["Estudiantes"].gt(0)].copy()
 
     return detail, summary
 
