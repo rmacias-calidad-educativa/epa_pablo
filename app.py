@@ -225,7 +225,7 @@ if LOAD_ERRORS:
     view_story,
 ) = st.tabs(
     [
-        "Análisis general",
+        "Análisis general EFA",
         "Análisis por antigüedad ≤1 año",
         "EFA · ≤1 vs ≥3 años",
         "LATAM vs Evaluar para Avanzar",
