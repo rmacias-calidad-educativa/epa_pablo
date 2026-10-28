@@ -115,15 +115,14 @@ def render_latam_efa_area(
             key=f"latam_grades_{area}",
         )
 
-    filtered = d.copy()
-    if selected_sites:
-        filtered = filtered[
-            filtered["Sede"].astype(str).isin(selected_sites)
-        ]
-    if selected_grades:
-        filtered = filtered[
-            filtered["Grado_num"].isin(selected_grades)
-        ]
+    if not selected_sites or not selected_grades:
+        st.info("Selecciona al menos una sede y un grado.")
+        return
+
+    filtered = d[
+        d["Sede"].astype(str).isin(selected_sites)
+        & d["Grado_num"].isin(selected_grades)
+    ].copy()
 
     if filtered.empty:
         st.warning("Los filtros seleccionados no dejan estudiantes emparejados.")
@@ -142,30 +141,43 @@ def render_latam_efa_area(
         coverage = np.nan
 
     m1, m2, m3, m4 = st.columns(4)
-    m1.metric("Registros LATAM", f"{latam_total:,}".replace(",", "."))
+    m1.metric(
+        "Emparejados EFA · filtros",
+        f"{matched_filtered:,}".replace(",", "."),
+        help="Estudiantes de las sedes y grados seleccionados, antes de la supresión de categorías pequeñas.",
+    )
     m2.metric(
-        "Emparejados EFA",
+        "Emparejados EFA · total del área",
         f"{matched_total:,}".replace(",", "."),
-        help="Cruce por correo mediante la base puente y coincidencia de área.",
+        help="Total de emparejamientos LATAM–EFA para esta área, sin filtros de sede ni grado.",
     )
     m3.metric(
-        "Cobertura",
+        "Cobertura LATAM · total del área",
         f"{coverage:.1f}%" if np.isfinite(coverage) else "—",
+        help="Porcentaje de registros LATAM emparejados con EFA en toda el área, no en los filtros actuales.",
     )
     m4.metric(
-        "ρ Spearman",
+        "ρ Spearman · filtros",
         f"{rho:.2f}" if np.isfinite(rho) else "—",
         help=(
-            "Asociación ordinal entre la categoría LATAM y el porcentaje "
-            "de aciertos en EFA. Se recalcula con los filtros activos."
+            "Correlación ordinal de LATAM con EFA, recalculada sobre "
+            "todos los emparejamientos de las sedes y grados seleccionados."
         ),
     )
 
     st.caption(
-        f"Estudiantes representados en los filtros actuales: "
-        f"{matched_filtered:,}. El emparejamiento se realizó por "
-        "CORREO → ExternalEmail → OrgDefinedId → IdentiEstudiante. "
-        "No se publican correos ni documentos en esta vista."
+        f"Base LATAM del área: {latam_total:,} registros; "
+        f"emparejamientos EFA del área: {matched_total:,}; "
+        f"emparejamientos en filtros actuales: {matched_filtered:,}. "
+        "Los totales generales no cambian al filtrar sedes y grados. "
+        "Cruce: CORREO → ExternalEmail → OrgDefinedId → IdentiEstudiante."
+    )
+    st.caption(
+        "Para evitar perder estudiantes por puntajes repetidos o poco "
+        "frecuentes, se agrupan todos los registros antes de aplicar el "
+        f"mínimo de {MIN_PUBLIC_GROUP_SIZE} estudiantes a cada categoría "
+        "o combinación visible. Los resultados con n inferior se omiten "
+        "de las tablas y gráficas, pero no del total emparejado."
     )
 
     # Lectura principal: promedio EFA dentro de cada categoría LATAM.
@@ -188,6 +200,15 @@ def render_latam_efa_area(
         ordered=True,
     )
     category_avg = category_avg.sort_values("Categoria_LATAM")
+    category_avg = suppress_small_groups(
+        category_avg, "n", MIN_PUBLIC_GROUP_SIZE,
+    )
+    if category_avg.empty:
+        st.info(
+            "No hay categorías LATAM con al menos "
+            f"{MIN_PUBLIC_GROUP_SIZE} estudiantes para mostrar."
+        )
+        return
     category_avg["Categoría LATAM"] = (
         category_avg["Categoria_LATAM"].astype(str)
     )
@@ -263,6 +284,9 @@ def render_latam_efa_area(
     grade_avg = grade_avg.sort_values(
         ["Grado_num", "Categoria_LATAM"]
     )
+    grade_avg = suppress_small_groups(
+        grade_avg, "n", MIN_PUBLIC_GROUP_SIZE,
+    )
     grade_avg["Grado"] = grade_avg["Grado_num"].map(
         lambda g: f"{int(g)}°"
     )
@@ -273,53 +297,59 @@ def render_latam_efa_area(
         lambda x: f"{x:.1f}%" if pd.notna(x) else "—"
     )
 
-    st.markdown("### Promedio EFA por grado y categoría LATAM")
-    st.dataframe(
-        grade_avg[
-            ["Grado", "Categoría LATAM", "n", "Promedio EFA"]
-        ],
-        use_container_width=True,
-        hide_index=True,
-    )
+    if grade_avg.empty:
+        st.info(
+            "No hay desgloses por grado y categoría LATAM con al menos "
+            f"{MIN_PUBLIC_GROUP_SIZE} estudiantes."
+        )
+    else:
+        st.markdown("### Promedio EFA por grado y categoría LATAM")
+        st.dataframe(
+            grade_avg[
+                ["Grado", "Categoría LATAM", "n", "Promedio EFA"]
+            ],
+            use_container_width=True,
+            hide_index=True,
+        )
 
-    fig_grade = px.line(
-        grade_avg,
-        x="Categoria_LATAM",
-        y="Promedio_EFA",
-        color="Grado",
-        markers=True,
-        text=grade_avg["Promedio_EFA"].map(
-            lambda x: f"{x:.0f}%"
-        ),
-        category_orders={"Categoria_LATAM": LATAM_ORDER},
-        custom_data=["n"],
-        labels={
-            "Categoria_LATAM": "Categoría LATAM",
-            "Promedio_EFA": "Promedio EFA",
-        },
-        title="Promedio EFA por categoría LATAM y grado",
-    )
-    fig_grade.update_yaxes(
-        range=[0, 100],
-        ticksuffix="%",
-        title="% promedio de aciertos EFA",
-    )
-    fig_grade.update_traces(
-        textposition="top center",
-        cliponaxis=False,
-        hovertemplate=(
-            "<b>%{fullData.name}</b><br>"
-            "Categoría LATAM: %{x}<br>"
-            "Promedio EFA: %{y:.1f}%<br>"
-            "Estudiantes: %{customdata[0]}<extra></extra>"
-        ),
-    )
-    fig_grade.update_layout(
-        height=540,
-        plot_bgcolor="rgba(0,0,0,0)",
-        legend_title_text="Grado",
-    )
-    st.plotly_chart(fig_grade, use_container_width=True)
+        fig_grade = px.line(
+            grade_avg,
+            x="Categoria_LATAM",
+            y="Promedio_EFA",
+            color="Grado",
+            markers=True,
+            text=grade_avg["Promedio_EFA"].map(
+                lambda x: f"{x:.0f}%"
+            ),
+            category_orders={"Categoria_LATAM": LATAM_ORDER},
+            custom_data=["n"],
+            labels={
+                "Categoria_LATAM": "Categoría LATAM",
+                "Promedio_EFA": "Promedio EFA",
+            },
+            title="Promedio EFA por categoría LATAM y grado",
+        )
+        fig_grade.update_yaxes(
+            range=[0, 100],
+            ticksuffix="%",
+            title="% promedio de aciertos EFA",
+        )
+        fig_grade.update_traces(
+            textposition="top center",
+            cliponaxis=False,
+            hovertemplate=(
+                "<b>%{fullData.name}</b><br>"
+                "Categoría LATAM: %{x}<br>"
+                "Promedio EFA: %{y:.1f}%<br>"
+                "Estudiantes: %{customdata[0]}<extra></extra>"
+            ),
+        )
+        fig_grade.update_layout(
+            height=540,
+            plot_bgcolor="rgba(0,0,0,0)",
+            legend_title_text="Grado",
+        )
+        st.plotly_chart(fig_grade, use_container_width=True)
 
     # La distribución por niveles queda disponible como análisis secundario.
     with st.expander(
@@ -352,43 +382,51 @@ def render_latam_efa_area(
             ["Categoria_LATAM", "Nivel_EFA"]
         )
 
-        fig_levels = px.bar(
-            level_counts,
-            x="Categoria_LATAM",
-            y="Porcentaje",
-            color="Nivel_EFA",
-            barmode="stack",
-            category_orders={
-                "Categoria_LATAM": LATAM_ORDER,
-                "Nivel_EFA": LEVEL_ORDER,
-            },
-            color_discrete_map=LEVEL_COLORS,
-            text=level_counts["Porcentaje"].map(
-                lambda x: f"{x:.0f}%" if x >= 5 else ""
-            ),
-            custom_data=["Estudiantes"],
-            labels={
-                "Categoria_LATAM": "Categoría LATAM",
-                "Porcentaje": "% de estudiantes",
-                "Nivel_EFA": "Nivel EFA",
-            },
-            title=(
-                "Distribución de niveles EFA dentro de las categorías LATAM"
-            ),
-        )
-        fig_levels.update_yaxes(range=[0, 100], ticksuffix="%")
-        fig_levels.update_traces(
-            textposition="inside",
-            hovertemplate=(
-                "Categoría LATAM: %{x}<br>"
-                "Nivel EFA: %{fullData.name}<br>"
-                "Estudiantes: %{customdata[0]}<br>"
-                "Porcentaje: %{y:.1f}%<extra></extra>"
-            ),
-        )
-        fig_levels.update_layout(
-            height=500,
-            plot_bgcolor="rgba(0,0,0,0)",
-            legend_title_text="Nivel EFA",
-        )
-        st.plotly_chart(fig_levels, use_container_width=True)
+        if level_counts["Estudiantes"].lt(MIN_PUBLIC_GROUP_SIZE).any():
+            st.info(
+                "No se muestra esta distribución porque alguna combinación "
+                "de categoría LATAM y nivel EFA contiene menos de "
+                f"{MIN_PUBLIC_GROUP_SIZE} estudiantes. Los promedios por "
+                "categoría anteriores sí incluyen todos los registros."
+            )
+        else:
+            fig_levels = px.bar(
+                level_counts,
+                x="Categoria_LATAM",
+                y="Porcentaje",
+                color="Nivel_EFA",
+                barmode="stack",
+                category_orders={
+                    "Categoria_LATAM": LATAM_ORDER,
+                    "Nivel_EFA": LEVEL_ORDER,
+                },
+                color_discrete_map=LEVEL_COLORS,
+                text=level_counts["Porcentaje"].map(
+                    lambda x: f"{x:.0f}%" if x >= 5 else ""
+                ),
+                custom_data=["Estudiantes"],
+                labels={
+                    "Categoria_LATAM": "Categoría LATAM",
+                    "Porcentaje": "% de estudiantes",
+                    "Nivel_EFA": "Nivel EFA",
+                },
+                title=(
+                    "Distribución de niveles EFA dentro de las categorías LATAM"
+                ),
+            )
+            fig_levels.update_yaxes(range=[0, 100], ticksuffix="%")
+            fig_levels.update_traces(
+                textposition="inside",
+                hovertemplate=(
+                    "Categoría LATAM: %{x}<br>"
+                    "Nivel EFA: %{fullData.name}<br>"
+                    "Estudiantes: %{customdata[0]}<br>"
+                    "Porcentaje: %{y:.1f}%<extra></extra>"
+                ),
+            )
+            fig_levels.update_layout(
+                height=500,
+                plot_bgcolor="rgba(0,0,0,0)",
+                legend_title_text="Nivel EFA",
+            )
+            st.plotly_chart(fig_levels, use_container_width=True)
