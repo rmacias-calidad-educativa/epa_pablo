@@ -847,6 +847,68 @@ def render_top10_origin_by_level(
                 )
 
 
+def dimension_summary_by_grade(
+    data: pd.DataFrame,
+    aggregated: bool,
+) -> pd.DataFrame:
+    """Media por grado y dimensión: ponderada por n para bases precargadas."""
+    keys = ["Grado_num", "Dimension"]
+    if data is None or data.empty:
+        return pd.DataFrame(columns=keys + ["Estudiantes", "Promedio_dimension"])
+
+    df = data.copy()
+    df["Grado_num"] = pd.to_numeric(df["Grado_num"], errors="coerce")
+    df = df.dropna(subset=["Grado_num", "Dimension"])
+    if aggregated:
+        df["Estudiantes"] = pd.to_numeric(
+            df["Estudiantes"], errors="coerce"
+        )
+        df["Promedio_dimension"] = pd.to_numeric(
+            df["Promedio_dimension"], errors="coerce"
+        )
+        df = df[
+            df["Estudiantes"].gt(0)
+            & df["Promedio_dimension"].between(0, 100)
+        ].copy()
+        df["_Suma_ponderada"] = (
+            df["Estudiantes"] * df["Promedio_dimension"]
+        )
+        result = df.groupby(keys, as_index=False).agg(
+            Estudiantes=("Estudiantes", "sum"),
+            Suma_ponderada=("_Suma_ponderada", "sum"),
+        )
+        result["Promedio_dimension"] = (
+            result["Suma_ponderada"] / result["Estudiantes"]
+        )
+        return result[keys + ["Estudiantes", "Promedio_dimension"]]
+
+    df["Porcentaje_dimension"] = pd.to_numeric(
+        df["Porcentaje_dimension"], errors="coerce"
+    )
+    df = df[df["Porcentaje_dimension"].between(0, 100)].copy()
+    return df.groupby(keys, as_index=False).agg(
+        Estudiantes=("IdentiEstudiante", "nunique"),
+        Promedio_dimension=("Porcentaje_dimension", "mean"),
+    )
+
+
+def dimension_site_vs_network(
+    data: pd.DataFrame,
+    reference: str,
+    aggregated: bool,
+) -> tuple[pd.DataFrame, pd.DataFrame]:
+    """RED incluye siempre las seis sedes, no solo las seleccionadas."""
+    network = dimension_summary_by_grade(
+        data[data["Sede"].astype(str).isin(SITES)], aggregated
+    )
+    if reference == "RED":
+        return network, network
+    site = dimension_summary_by_grade(
+        data[data["Sede"].astype(str).eq(reference)], aggregated
+    )
+    return site, network
+
+
 def render_dimensions(
     dimensions: pd.DataFrame,
     test_name: str,
@@ -876,117 +938,184 @@ def render_dimensions(
         return
 
     available_sites = [
-        s for s in SITES
-        if s in d["Sede"].dropna().astype(str).unique()
-        and s in selected_sites
+        site for site in SITES
+        if site in d["Sede"].dropna().astype(str).unique()
+        and site in selected_sites
     ]
     reference = st.selectbox(
         "Vista de dimensiones",
         ["RED"] + available_sites,
         key=f"dimension_reference_{view_key}_{test_name}",
         help=(
-            "RED combina las sedes incluidas en esta vista. Selecciona una sede para ver "
-            "el comportamiento de sus dimensiones a través de los grados."
+            "Selecciona una sede para contrastar cada dimensión con el "
+            "promedio de la RED en el mismo grado. RED incluye las seis sedes "
+            "independientemente del filtro de sedes/colegios."
         ),
     )
 
-    if aggregated:
-        if reference == "RED":
-            plot = (
-                d.groupby(
-                    ["Grado_num", "Dimension"],
-                    as_index=False,
-                )
-                .apply(
-                    lambda g: pd.Series({
-                        "Estudiantes": g["Estudiantes"].sum(),
-                        "Promedio_dimension": np.average(
-                            g["Promedio_dimension"],
-                            weights=g["Estudiantes"],
-                        ),
-                    }),
-                    include_groups=False,
-                )
-            )
-        else:
-            plot = d[d["Sede"] == reference].copy()
-    else:
-        if reference == "RED":
-            plot = (
-                d.groupby(
-                    ["Grado_num", "Dimension"],
-                    as_index=False,
-                )
-                .agg(
-                    Estudiantes=("IdentiEstudiante", "nunique"),
-                    Promedio_dimension=("Porcentaje_dimension", "mean"),
-                )
-            )
-        else:
-            plot = (
-                d[d["Sede"] == reference]
-                .groupby(
-                    ["Grado_num", "Dimension"],
-                    as_index=False,
-                )
-                .agg(
-                    Estudiantes=("IdentiEstudiante", "nunique"),
-                    Promedio_dimension=("Porcentaje_dimension", "mean"),
-                )
-            )
-
-    if plot.empty:
-        st.info("No hay dimensiones para esa selección.")
+    site, network = dimension_site_vs_network(d, reference, aggregated)
+    site = site[site["Estudiantes"].ge(MIN_PUBLIC_GROUP_SIZE)].copy()
+    network = network[network["Estudiantes"].ge(MIN_PUBLIC_GROUP_SIZE)].copy()
+    if site.empty:
+        st.info(
+            "No hay dimensiones con suficientes estudiantes en esta selección."
+        )
         return
 
-    plot["Etiqueta"] = plot["Promedio_dimension"].map(
-        lambda x: f"{x:.0f}%"
-    )
     grades = sorted(
-        [int(g) for g in plot["Grado_num"].dropna().unique()]
+        [int(g) for g in site["Grado_num"].dropna().unique()]
     )
+    if reference == "RED":
+        plot = network.copy()
+        plot["Etiqueta"] = plot["Promedio_dimension"].map(
+            lambda value: f"{value:.0f}%"
+        )
+        fig = px.line(
+            plot.sort_values(["Dimension", "Grado_num"]),
+            x="Grado_num", y="Promedio_dimension",
+            color="Dimension", markers=True, text="Etiqueta",
+            hover_data={
+                "Grado_num": False,
+                "Estudiantes": True,
+                "Promedio_dimension": ":.1f",
+                "Etiqueta": False,
+            },
+            labels={
+                "Dimension": "Dimensión",
+                "Promedio_dimension": "% de acierto",
+            },
+            title="Comportamiento de las dimensiones por grado | RED",
+        )
+        fig.update_traces(
+            textposition="top center", cliponaxis=False,
+            line=dict(width=2.2), marker=dict(size=7),
+        )
+        st.caption(
+            "RED: promedio de las seis sedes en cada grado y dimensión, "
+            "ponderado por número de estudiantes."
+        )
+    else:
+        pair = site.merge(
+            network,
+            on=["Grado_num", "Dimension"],
+            how="inner",
+            suffixes=("_sede", "_red"),
+        )
+        if pair.empty:
+            st.info(
+                "No hay valores comparables de esta sede y de la RED "
+                "para los mismos grados y dimensiones."
+            )
+            return
 
-    fig = px.line(
-        plot.sort_values(["Dimension", "Grado_num"]),
-        x="Grado_num",
-        y="Promedio_dimension",
-        color="Dimension",
-        markers=True,
-        text="Etiqueta",
-        hover_data={
-            "Grado_num": False,
-            "Estudiantes": True,
-            "Promedio_dimension": ":.1f",
-            "Etiqueta": False,
-        },
-        labels={
+        pair["Brecha_pp"] = (
+            pair["Promedio_dimension_sede"] -
+            pair["Promedio_dimension_red"]
+        )
+        fig = go.Figure()
+        dimension_names = sorted(pair["Dimension"].astype(str).unique())
+        palette = px.colors.qualitative.Plotly
+        color_map = {
+            name: palette[i % len(palette)]
+            for i, name in enumerate(dimension_names)
+        }
+        for name in dimension_names:
+            values = pair[pair["Dimension"] == name].sort_values("Grado_num")
+            # Primero RED (línea punteada), luego sede (línea continua).
+            fig.add_trace(go.Scatter(
+                x=values["Grado_num"],
+                y=values["Promedio_dimension_red"],
+                mode="lines+markers",
+                name=f"{name} · RED",
+                legendgroup=name,
+                line=dict(color=color_map[name], width=2, dash="dash"),
+                marker=dict(size=6, symbol="diamond-open"),
+                opacity=0.75,
+                customdata=values[["Estudiantes_red"]].to_numpy(),
+                hovertemplate=(
+                    "<b>RED · " + name + "</b>"
+                    "<br>Grado: %{x}°"
+                    "<br>Promedio: %{y:.1f}%"
+                    "<br>n RED: %{customdata[0]:.0f}<extra></extra>"
+                ),
+            ))
+            fig.add_trace(go.Scatter(
+                x=values["Grado_num"],
+                y=values["Promedio_dimension_sede"],
+                mode="lines+markers+text",
+                name=f"{name} · {reference}",
+                legendgroup=name,
+                line=dict(color=color_map[name], width=3),
+                marker=dict(size=8),
+                text=values["Promedio_dimension_sede"].map(
+                    lambda v: f"{v:.0f}%"
+                ),
+                textposition="top center",
+                textfont=dict(size=11),
+                customdata=values[
+                    ["Estudiantes_sede", "Promedio_dimension_red", "Brecha_pp"]
+                ].to_numpy(),
+                hovertemplate=(
+                    "<b>" + reference + " · " + name + "</b>"
+                    "<br>Grado: %{x}°"
+                    "<br>Sede: %{y:.1f}%"
+                    "<br>RED: %{customdata[1]:.1f}%"
+                    "<br>Diferencia: %{customdata[2]:+.1f} pp"
+                    "<br>n sede: %{customdata[0]:.0f}<extra></extra>"
+                ),
+            ))
+        fig.update_layout(
+            title=f"Dimensiones por grado | {reference} frente a la RED",
+            legend_title_text="Dimensión · referente",
+            legend=dict(orientation="h", x=0, y=1.19),
+        )
+        st.caption(
+            f"Comparación {reference} (líneas continuas) contra RED "
+            "(líneas discontinuas), siempre en el mismo grado y dimensión. "
+            "RED incluye las seis sedes, incluida la seleccionada."
+        )
+
+        st.markdown("#### Diferencias frente a la RED por grado y dimensión")
+        display = pair.rename(columns={
+            "Grado_num": "Grado",
             "Dimension": "Dimensión",
-            "Promedio_dimension": "% de acierto",
-        },
-        title=f"Comportamiento de las dimensiones por grado | {reference}",
-    )
+            "Promedio_dimension_sede": f"{reference} (%)",
+            "Promedio_dimension_red": "RED (%)",
+            "Brecha_pp": "Diferencia (pp)",
+            "Estudiantes_sede": "n sede",
+            "Estudiantes_red": "n RED",
+        })[[
+            "Grado", "Dimensión", f"{reference} (%)", "RED (%)",
+            "Diferencia (pp)", "n sede", "n RED",
+        ]].sort_values(["Grado", "Dimensión"])
+        display["Grado"] = display["Grado"].map(grade_label)
+        st.dataframe(
+            display.style.format({
+                f"{reference} (%)": "{:.1f}",
+                "RED (%)": "{:.1f}",
+                "Diferencia (pp)": "{:+.1f}",
+                "n sede": "{:.0f}",
+                "n RED": "{:.0f}",
+            }),
+            use_container_width=True, hide_index=True,
+        )
+
     fig = style_clean_axes(fig, grades=grades, hide_y=True)
-    fig.update_yaxes(
-        range=[0, 100],
-        showticklabels=False,
-    )
+    fig.update_yaxes(range=[0, 100], showticklabels=False)
     fig.update_layout(
-        height=570,
-        legend_title_text="Dimensión",
+        height=560,
+        margin=dict(l=18, r=18, t=110, b=35),
     )
-    fig.update_traces(
-        textposition="top center",
-        cliponaxis=False,
-        line=dict(width=2.2),
-        marker=dict(size=7),
+    st.plotly_chart(
+        fig, use_container_width=True,
+        key=f"dimension_grade_network_{view_key}_{test_name}",
     )
-    st.plotly_chart(fig, use_container_width=True)
-
     st.caption(
-        "El porcentaje de cada dimensión se calcula sobre los ítems esperados "
-        "para esa competencia. Las cifras sobre los puntos muestran el promedio de acierto."
+        "Los porcentajes corresponden al acierto promedio de cada dimensión "
+        "sobre sus ítems esperados. Solo se muestran grupos de al menos "
+        f"{MIN_PUBLIC_GROUP_SIZE} estudiantes; una diferencia respecto "
+        "a la RED no implica por sí misma significación estadística."
     )
-
 
 def render_test_page(
     attempts: pd.DataFrame,
